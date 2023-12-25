@@ -1,6 +1,7 @@
+'use client'
 import classNames from 'classnames';
 import Image from 'next/image';
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ReactNode } from 'react';
 
 const styles = {
   'b-wide': 'min-w-[200px]',
@@ -12,20 +13,21 @@ const styles = {
 const BASE_CLASS =
   'flex items-center justify-center rounded-xl px-4 py-3 text-center font-semibold';
 
-type Props = PropsWithChildren<{
+type Props = {
   className?: string;
   disabled?: boolean;
   outlined?: boolean;
   loading?: boolean;
   size?: 'small' | 'medium' | 'large';
   urlIcon?: string;
+  iconElement?: ReactNode;
   onClick?: () => void;
   wide?: boolean;
   highlight?: boolean;
   id?: string;
-}>;
+}
 
-export const Button: React.FC<Props> = ({
+export const Button = ({
   disabled,
   size,
   className,
@@ -36,8 +38,9 @@ export const Button: React.FC<Props> = ({
   wide,
   children,
   onClick,
+  iconElement,
   id,
-}) => {
+}: PropsWithChildren<Props>) => {
   const sizes = ['small', 'medium', 'large'];
   const classes = classNames([
     BASE_CLASS,
@@ -45,7 +48,7 @@ export const Button: React.FC<Props> = ({
     loading || disabled ? 'cursor-default opacity-10' : '',
     outlined
       ? 'bg-white text-black border border-gray-200'
-      : 'bg-black text-white',
+      : 'bg-primary-600 text-white',
     highlight && 'bg-white text-black border !border-black',
     wide && 'w-full',
     className,
@@ -83,6 +86,9 @@ export const Button: React.FC<Props> = ({
             />
           )}
           {children}
+          {iconElement && (
+            iconElement
+          )}
         </div>
       )}
     </button>
