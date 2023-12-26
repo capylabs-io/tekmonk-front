@@ -5,7 +5,7 @@ import React from 'react';
 const BASE_CLASS =
   'relative w-full';
 const BASE_INPUT_CLASS =
-  'rounded-xl border border-grey-300 p-3 outline-none min-h-[100px] resize-none';
+  'rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[100px] resize-none';
 type Props = {
   value?: string;
   customClassName?: string;

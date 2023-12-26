@@ -47,9 +47,9 @@ export const Button = ({
     size && sizes.includes(size) ? styles[`b-${size}`] : styles['b-medium'],
     loading || disabled ? 'cursor-default opacity-10' : '',
     outlined
-      ? 'bg-white text-black border border-gray-200'
+      ? 'bg-white text-primary-900 border border-gray-200'
       : 'bg-primary-600 text-white',
-    highlight && 'bg-white text-black border !border-black',
+    highlight && 'bg-white text-primary-900 border !border-black',
     wide && 'w-full',
     className,
   ]);

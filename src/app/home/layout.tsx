@@ -37,7 +37,7 @@ export default function DashboardLayout({
                                     <Image src='/image/profile-pic.png' alt='profile pic' width={32} height={32} />
                                 </div>
                                 <div >
-                                    <p className='text-sm'>{userName}</p>
+                                    <p className='text-sm truncate'>{userName}</p>
                                     <p className='text-sm text-gray-500'>{userRank}</p>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@ export default function DashboardLayout({
                     </div>
                 </div>
             </div>
-            <div className='col-span-6 px-8 py-5'>
+            <div className='col-span-6 py-5 overflow-y-auto'>
                 {children}
             </div>
             <div className='h-full flex flex-col px-10 py-5 border-gray-200 border-l col-span-3'>

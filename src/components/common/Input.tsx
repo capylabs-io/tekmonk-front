@@ -9,20 +9,20 @@ type Props = {
   customInputClassNames?: string;
   customClassNames?: string;
   error?: string;
-  placeHolder?: string;
+  placeholder?: string;
   onChange?: (value: string) => void;
   onBlur?: () => void;
 };
 const BASE_CLASS =
-  'w-full rounded-xl border border-grey-300 p-3 outline-none min-h-[48px]';
+  'w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px]';
 const BASE_INPUT_CLASS =
-  'mr-2 w-full text-lg font-normal outline-none';
+  'mr-2 w-full text-lg font-normal outline-none bg-grey-50';
 export const Input = ({
   value,
   error,
   type = 'text',
   onChange,
-  placeHolder,
+  placeholder,
   onBlur,
   customInputClassNames,customClassNames
 }: Props) => {
@@ -54,7 +54,7 @@ export const Input = ({
             type={showPassword ? 'text' : type}
             lang="en-US"
             className={classNames(BASE_INPUT_CLASS, customInputClassNames)}
-            placeholder={placeHolder || ''}
+            placeholder={placeholder || ''}
             value={value}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
