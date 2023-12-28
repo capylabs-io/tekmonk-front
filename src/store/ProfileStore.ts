@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 type State = {
   isShowing: boolean;
@@ -12,7 +12,7 @@ type Actions = {
 
 export const useProfileStore = create<State & Actions>((set) => ({
   isShowing: false,
-  content: '',
+  content: "",
   show: (content) =>
     set({
       isShowing: true,
@@ -21,6 +21,6 @@ export const useProfileStore = create<State & Actions>((set) => ({
   hide: () =>
     set({
       isShowing: false,
-      content: '',
+      content: "",
     }),
 }));

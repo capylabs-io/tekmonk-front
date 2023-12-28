@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { useLoadingStore } from '@/store/LoadingStore';
+import { useLoadingStore } from "@/store/LoadingStore";
 
 export function Loading() {
   const [isShowing, content] = useLoadingStore((state) => [
@@ -35,9 +35,9 @@ type LoadingProps = {
 };
 
 export const DefaultLoading: React.FC<LoadingProps> = ({
-  width = '16px',
-  height = '16px',
-  color = 'white',
+  width = "16px",
+  height = "16px",
+  color = "white",
 }) => (
   <span
     className="animate-spin rounded-full border-[3px] border-current border-t-transparent"

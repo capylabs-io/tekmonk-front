@@ -1,11 +1,10 @@
-import classNames from 'classnames';
-import { Info } from 'lucide-react';
-import React from 'react';
+import classNames from "classnames";
+import { Info } from "lucide-react";
+import React from "react";
 
-const BASE_CLASS =
-  'relative w-full';
+const BASE_CLASS = "relative w-full";
 const BASE_INPUT_CLASS =
-  'rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[100px] resize-none';
+  "rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[100px] resize-none";
 type Props = {
   value?: string;
   customClassName?: string;
@@ -24,11 +23,12 @@ export const TextArea: React.FC<Props> = ({
   placeHolder,
   disabled,
   onChange,
-  customClassName, customInputClassName,
+  customClassName,
+  customInputClassName,
   ...rest
 }) => {
   const handleOnChange = (value: string) => {
-    onChange && typeof onChange === 'function' && onChange(value);
+    onChange && typeof onChange === "function" && onChange(value);
   };
   return (
     <>
@@ -38,12 +38,13 @@ export const TextArea: React.FC<Props> = ({
           placeholder={placeHolder}
           disabled={disabled}
           className={classNames(
-            BASE_INPUT_CLASS, customInputClassName,
+            BASE_INPUT_CLASS,
+            customInputClassName,
             error &&
-            'border-red-500 focus:border-red-500 text-sm focus:border-2',
+              "border-red-500 focus:border-red-500 text-sm focus:border-2",
             value &&
-            !error &&
-            'border-green-500 focus:green-500 text-sm focus:border-2'
+              !error &&
+              "border-green-500 focus:green-500 text-sm focus:border-2",
           )}
           {...rest}
           onChange={(e) => handleOnChange(e.target.value)}

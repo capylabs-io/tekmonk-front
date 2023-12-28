@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 type State = {
   /**
@@ -18,9 +18,9 @@ type Actions = {
 export const useLoadingStore = create<State & Actions>((set) => ({
   showCount: 0,
   isShowing: false,
-  content: '',
+  content: "",
   showContent: false,
-  show: (content = '') =>
+  show: (content = "") =>
     set((state) => ({
       showCount: state.showCount + 1,
       content,

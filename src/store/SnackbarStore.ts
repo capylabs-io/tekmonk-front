@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export enum SnackbarTypes {
   success,
@@ -21,7 +21,7 @@ type Actions = {
     type: SnackbarTypes,
     title: string,
     message: string,
-    isLastMessage: boolean
+    isLastMessage: boolean,
   ) => void;
   error: (title: string, message: string, isLastMessage?: boolean) => void;
   success: (title: string, message: string, isLastMessage?: boolean) => void;
@@ -31,8 +31,8 @@ type Actions = {
 
 const defaultState: State = {
   isShowing: false,
-  message: 'Message',
-  title: 'Title',
+  message: "Message",
+  title: "Title",
   type: SnackbarTypes.info,
   isLastMessage: false,
 };

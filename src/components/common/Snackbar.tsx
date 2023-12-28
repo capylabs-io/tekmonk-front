@@ -1,17 +1,17 @@
-import classNames from 'classnames';
+import classNames from "classnames";
 import {
   AlertCircle,
   CheckCircle2,
   XCircle,
   AlertTriangle,
   X,
-} from 'lucide-react';
-import React, { useEffect } from 'react';
+} from "lucide-react";
+import React, { useEffect } from "react";
 
-import { SnackbarTypes, useSnackbarStore } from '@/store/SnackbarStore';
+import { SnackbarTypes, useSnackbarStore } from "@/store/SnackbarStore";
 
 const BASE_CLASSES =
-  'inset-x-0 mx-auto w-fit rounded-md p-4 hs-removing:translate-x-10 hs-removing:opacity-0 fixed z-50 transition-all duration-1000 ease-in-out';
+  "inset-x-0 mx-auto w-fit rounded-md p-4 hs-removing:translate-x-10 hs-removing:opacity-0 fixed z-50 transition-all duration-1000 ease-in-out";
 
 export const Snackbar: React.FC = () => {
   const [isShowing, message, title, type, isLastMessage, close] =
@@ -46,15 +46,15 @@ export const Snackbar: React.FC = () => {
   const SNACKBAR_COLOR = (type: SnackbarTypes) => {
     switch (type) {
       case SnackbarTypes.error:
-        return 'bg-red-600 border text-sm text-white';
+        return "bg-red-600 border text-sm text-white";
       case SnackbarTypes.success:
-        return 'bg-primary-600 border text-sm text-white';
+        return "bg-primary-600 border text-sm text-white";
       case SnackbarTypes.info:
-        return 'bg-blue-600 border text-sm text-white';
+        return "bg-blue-600 border text-sm text-white";
       case SnackbarTypes.warning:
-        return 'bg-yellow-600 border text-sm text-white';
+        return "bg-yellow-600 border text-sm text-white";
       default:
-        return 'bg-blue-600 border text-sm text-white';
+        return "bg-blue-600 border text-sm text-white";
     }
   };
 
@@ -64,8 +64,8 @@ export const Snackbar: React.FC = () => {
     <div
       className={classNames(
         BASE_CLASSES,
-        isShowing ? 'top-5' : '-top-[400px]',
-        snackClass
+        isShowing ? "top-5" : "-top-[400px]",
+        snackClass,
       )}
     >
       <div className="flex w-full">
@@ -81,7 +81,7 @@ export const Snackbar: React.FC = () => {
               onClick={close}
               className="inline-flex cursor-pointer rounded-md"
             >
-              <X color='white' size={16} className="mt-1" />
+              <X color="white" size={16} className="mt-1" />
             </button>
           </div>
         </div>
