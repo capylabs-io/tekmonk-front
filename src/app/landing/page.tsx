@@ -27,22 +27,22 @@ export default function Landing() {
           height={32}
         />
       </nav>
-      <div className="w-full relative flex justify-center bg-[url('/image/landing/landing-banner.png')] bg-no-repeat bg-cover max-h-[360px]">
+      <div className="w-full relative flex justify-center bg-[url('/image/landing/landing-banner.png')] bg-no-repeat bg-cover max-h-[300px]">
         <Image
           src="/image/landing/left-banner-pic.png"
           alt="left banner"
-          className="absolute left-0 mt-48"
+          className="absolute left-0 mt-32"
           width={280}
           height={200}
         />
         <Image
           src="/image/landing/right-banner-pic.png"
           alt="right banner"
-          className="absolute right-0 mt-48"
+          className="absolute right-0 mt-32"
           width={280}
           height={200}
         />
-        <div className="z-50 flex flex-col items-center mt-[250px]">
+        <div className="z-50 flex flex-col items-center mt-[210px]">
           <Image
             src="/image/landing/text-logo.png"
             alt="right banner"
@@ -54,7 +54,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center gap-x-8 mt-20">
+      <div className="w-full flex justify-center gap-x-8 mt-28">
         <LandingCard
           imageUrl="/image/landing/landing-pic-1.png"
           title="cửa hàng"

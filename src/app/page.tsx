@@ -63,7 +63,7 @@ export default function Landing() {
             Được tin dùng bởi hàng nghìn học sinh và phụ huynh của Tekmonk
           </div>
         </div>
-        <div className="bg-cover w-full h-[400px] bg-gradient-to-t from-[#E079D4]/80 to-[#EE94E5]/10 fixed bottom-0 flex justify-center items-center gap-x-8 rounded-t-[50%] z-0 scale-105"></div>
+        <div className="bg-cover w-full h-[400px] bg-gradient-to-t from-[#E079D4]/80 to-[#EE94E5]/10 fixed -bottom-8 flex justify-center items-center gap-x-8 rounded-t-[50%] z-0 scale-105"></div>
         <Image
           src="/image/landing/left-stars.png"
           alt="coin"
@@ -99,7 +99,7 @@ export default function Landing() {
           height={160}
           className="fixed -bottom-16 right-20 rotate-[-10deg] scale-125"
         />
-        <div className="w-full text-SubheadXl text-center mt-32 text-primary-950">
+        <div className="w-full text-SubheadXl text-center mt-24 text-primary-950">
           Bắt đầu với vai trò...
         </div>
         <div className="w-full flex justify-center items-center gap-x-8 z-20 mt-5">
