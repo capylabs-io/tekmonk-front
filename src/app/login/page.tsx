@@ -17,7 +17,7 @@ export default function Login() {
                 </div>
                 <div className="text-gray-600 text-sm text-center mt-5">Quên mật khẩu?</div>
             </div>
-            <div className="bg-[url('/image/login-banner.png')] bg-no-repeat !bg-right"></div>
+            <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right"></div>
         </div>
     )
 }

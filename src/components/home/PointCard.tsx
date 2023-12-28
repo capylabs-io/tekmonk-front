@@ -16,7 +16,7 @@ export const PointCard = ({ point , customClassName }: Props) => {
             </span>
             <div className='flex gap-x-1'>
                 <span className='font-bold text-base'>{point}</span>
-                <Image src='/image/coin.png' alt='coin pic' width={24} height={24} />
+                <Image src='/image/home/coin.png' alt='coin pic' width={24} height={24} />
             </div>
         </div>
     )

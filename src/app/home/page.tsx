@@ -14,14 +14,14 @@ export default function home() {
           <TabsTrigger value="play">Sân chơi</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="overflow-y-auto">
-          <New imageUrl='/image/profile-pic.png' thumbnailUrl='/image/new/new-pic.png' userName='Andy Lou' specialName='Bá Vương Học Đường'
+          <New imageUrl="bg-[url('/image/home/profile-pic.png')]" thumbnailUrl='/image/new/new-pic.png' userName='Andy Lou' specialName='Bá Vương Học Đường'
             userRank={
               <span className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}>
                 IV
               </span>
             } createdAt='23s' likedCount='6.2' commentCount='61' />
           <hr className='border-t border-gray-200 my-4' />
-          <New imageUrl='/image/user/profile-pic-2.png' thumbnailUrl='/image/new/new-pic-2.png' userName='Lauren Linh' specialName='Học Bá Thanh Xuân'
+          <New imageUrl="bg-[url('/image/user/profile-pic-2.png')]" thumbnailUrl='/image/new/new-pic-2.png' userName='Lauren Linh' specialName='Học Bá Thanh Xuân'
             userRank={
               <span className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}>
                 IV

@@ -9,7 +9,8 @@ import { useState } from 'react'
 import { CreateProfileModal } from '@/components/home/CreateProfileModal'
 import { useProfileStore } from '@/store/ProfileStore'
 import { MenuLayout } from '@/components/home/MenuLayout'
-export default function DashboardLayout({
+import { useRouter } from 'next/navigation'
+export default function Layout({
     children, // will be a page or nested layout
 }: {
     children: React.ReactNode
@@ -17,6 +18,7 @@ export default function DashboardLayout({
     const [userName, setUserName] = useState('HENRY NGUYEN')
     const [userRank, setUserRank] = useState('BẠC IV')
     const [show, hide] = useProfileStore((state) => [state.show, state.hide])
+    const router = useRouter()
     const handleOpenModal = () => {
         show('aaaa')
     }
@@ -32,10 +34,8 @@ export default function DashboardLayout({
                     <div className='grow-0 px-3 w-full'>
                         <Button className='w-full !rounded-3xl' onClick={handleOpenModal}>Đăng tải</Button>
                         <div className='flex items-center mt-8 w-full justify-between'>
-                            <div className='flex items-center gap-x-2'>
-                                <div className='h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center'>
-                                    <Image src='/image/profile-pic.png' alt='profile pic' width={32} height={32} />
-                                </div>
+                            <div className='flex items-center gap-x-2 cursor-pointer' onClick={() => router.push('/home/profile')}>
+                                <div className="h-10 w-10 rounded-full flex flex-col bg-[url('/image/home/profile-pic.png')] bg-yellow-100 items-center justify-center" />
                                 <div >
                                     <p className='text-sm truncate'>{userName}</p>
                                     <p className='text-sm text-gray-500'>{userRank}</p>
@@ -54,7 +54,7 @@ export default function DashboardLayout({
             <div className='h-full flex flex-col px-10 py-5 border-gray-200 border-l col-span-3'>
                 <PointCard point='9999' />
                 <EventList customClassName='mt-4' listEvent={mockData} />
-                <div className="w-full mt-4 rounded-xl bg-[url('/image/banner-layout.png')] bg-no-repeat bg-cover h-full" />
+                <div className="w-full mt-4 rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
             </div>
             <CreateProfileModal />
         </section>

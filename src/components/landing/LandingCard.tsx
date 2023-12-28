@@ -11,13 +11,13 @@ type Props = {
 }
 
 const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
-export const LandingCard = ({ 
+export const LandingCard = ({
     imageUrl,
-    title,  
+    title,
     subTitle,
     name,
 }: Props) => {
-    const COLOR_BG = (value : string) => {
+    const COLOR_BG = (value: string) => {
         switch (value) {
             case 'left':
                 return 'bg-[#C0FEE7]'
@@ -27,7 +27,7 @@ export const LandingCard = ({
                 return 'bg-[#C6F1FE]'
         }
     }
-    const COLOR_SHADOW = (value : string) => {
+    const COLOR_SHADOW = (value: string) => {
         switch (value) {
             case 'left':
                 return 'shadow-[3px_6px_0_0_#A1D9C4]'
@@ -37,7 +37,7 @@ export const LandingCard = ({
                 return 'shadow-[3px_6px_0_0_#8ED7ED]'
         }
     }
-    const ROTATE_ATTIBUTE = (value : string) => {
+    const ROTATE_ATTIBUTE = (value: string) => {
         switch (value) {
             case 'left':
                 return 'rotate-[-5.772deg]'
@@ -52,8 +52,8 @@ export const LandingCard = ({
     const rotate = ROTATE_ATTIBUTE(name)
     return (
         <div className={classNames(`relative flex flex-col items-center justify-center rounded-3xl ${backgroundColor} w-[332px] min-h-[212px] text-center p-6 gap-y-2 ${shadowColor} ${rotate}`)}>
-        <Image src={imageUrl} alt='landing pic 1' width={120} height={120} className='absolute -top-10' />
-            <div className={`${delaGothicOne.className} font-bold text-2xl uppercase`}>{title}</div>
+            <Image src={imageUrl} alt='landing pic 1' width={120} height={120} className='absolute -top-10' />
+            <div className={`${delaGothicOne.className} font-bold text-2xl uppercase mt-10`}>{title}</div>
             <div>{subTitle}</div>
         </div>
     )
