@@ -9,6 +9,7 @@ import { Progress } from '@/components/common/Progress'
 import { UserStat } from '@/components/profile/UserStat'
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { Dela_Gothic_One } from 'next/font/google'
+import { New } from '@/components/home/New'
 
 const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
 
@@ -234,6 +235,12 @@ export default function Profile() {
                     </div>
                 </TabsContent>
                 <TabsContent value="project" className="overflow-y-auto">
+                    <New imageUrl="bg-[url('/image/home/profile-pic.png')]" thumbnailUrl='/image/new/new-pic.png' userName='Andy Lou' specialName='Bá Vương Học Đường'
+                        userRank={
+                            <span className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}>
+                                IV
+                            </span>
+                        } createdAt='23s' likedCount='6.2' commentCount='61' />
                 </TabsContent>
             </Tabs >
         </>

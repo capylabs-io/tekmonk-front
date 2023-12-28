@@ -31,50 +31,35 @@ export const Snackbar: React.FC = () => {
   const SNACKBAR_ICON = (type: SnackbarTypes) => {
     switch (type) {
       case SnackbarTypes.error:
-        return <XCircle color="red" size={20} />;
+        return <XCircle color="white" size={20} />;
       case SnackbarTypes.success:
-        return <CheckCircle2 className="text-primary-500" size={20} />;
+        return <CheckCircle2 className="white" size={20} />;
       case SnackbarTypes.info:
-        return <AlertCircle color="blue" size={20} />;
+        return <AlertCircle color="white" size={20} />;
       case SnackbarTypes.warning:
-        return <AlertTriangle color="yellow" size={20} />;
+        return <AlertTriangle color="white" size={20} />;
       default:
-        return <AlertCircle color="blue" size={20} />;
-    }
-  };
-  const COLOR = (type: SnackbarTypes) => {
-    switch (type) {
-      case SnackbarTypes.error:
-        return 'red';
-      case SnackbarTypes.success:
-        return 'lightgreen';
-      case SnackbarTypes.info:
-        return 'blue';
-      case SnackbarTypes.warning:
-        return 'yellow';
-      default:
-        return 'blue';
+        return <AlertCircle color="white" size={20} />;
     }
   };
 
   const SNACKBAR_COLOR = (type: SnackbarTypes) => {
     switch (type) {
       case SnackbarTypes.error:
-        return 'bg-red-50 border border-red-200 text-sm text-red-600';
+        return 'bg-red-600 border text-sm text-white';
       case SnackbarTypes.success:
-        return 'bg-green-50 border border-mainGreen text-sm text-mainGreen';
+        return 'bg-primary-600 border text-sm text-white';
       case SnackbarTypes.info:
-        return 'bg-blue-50 border border-blue-200 text-sm text-blue-600';
+        return 'bg-blue-600 border text-sm text-white';
       case SnackbarTypes.warning:
-        return 'bg-yellow-50 border border-yellow-200 text-sm text-yellow-600';
+        return 'bg-yellow-600 border text-sm text-white';
       default:
-        return 'bg-blue-50 border border-blue-200 text-sm text-blue-600';
+        return 'bg-blue-600 border text-sm text-white';
     }
   };
 
   const ICON = SNACKBAR_ICON(type);
   const snackClass = SNACKBAR_COLOR(type);
-  const buttonColor = COLOR(type);
   return (
     <div
       className={classNames(
@@ -87,7 +72,6 @@ export const Snackbar: React.FC = () => {
         <div className="shrink-0">{ICON}</div>
         <div className="-mt-1 ml-3">
           <div className="text-base font-semibold">{title}</div>
-
           <div>{message}</div>
         </div>
         <div className="ml-3">
@@ -95,10 +79,9 @@ export const Snackbar: React.FC = () => {
             <button
               type="button"
               onClick={close}
-              className="inline-flex cursor-pointer rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
-              data-hs-remove-element="#dismiss-alert"
+              className="inline-flex cursor-pointer rounded-md"
             >
-              <X color={buttonColor} size={16} className="mt-1" />
+              <X color='white' size={16} className="mt-1" />
             </button>
           </div>
         </div>

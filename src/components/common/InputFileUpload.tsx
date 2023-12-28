@@ -1,27 +1,3 @@
-// import classNames from "classnames"
-// import * as React from "react"
-
-// export interface InputProps
-//   extends React.InputHTMLAttributes<HTMLInputElement> {}
-//  const BASE_CLASS = 'flex min-h-[48px] w-full rounded-xl border border-grey-300 bg-grey-50 border-input p-3 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50'
-// const InputFileUpdload  = React.forwardRef<HTMLInputElement, InputProps>(
-//   ({ className, type, ...props }, ref) => {
-//     return (
-//       <input
-//         type={type}
-//         className={classNames(
-//           BASE_CLASS,
-//           className
-//         )}
-//         ref={ref}
-//         {...props}
-//       />
-//     )
-//   }
-// )
-// InputFileUpdload.displayName = "Input"
-
-// export { InputFileUpdload }
 'use client'
 import classNames from 'classnames';
 import { Eye, EyeOff, ImagePlus } from 'lucide-react';
@@ -45,7 +21,7 @@ export const InputFileUpdload = ({
     customInputClassNames, customClassNames
 }: Props) => {
     const [showPassword, setshowPassword] = useState(false)
-    const hiddenFileInput = useRef(null);
+    const hiddenFileInput = React.useRef<HTMLInputElement>(null)
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newVal = e.target.value;
         onChange && onChange(newVal);
@@ -54,7 +30,7 @@ export const InputFileUpdload = ({
         onBlur && onBlur();
     };
     const handleClick = () => {
-        hiddenFileInput.current?.click();
+         hiddenFileInput.current!.click();
       };
     const handleShowPassword = () => {
         setshowPassword(prev => !prev)
