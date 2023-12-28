@@ -1,7 +1,8 @@
+"use client";
 import React from 'react'
 import Image from 'next/image'
-import { Dela_Gothic_One } from 'next/font/google'
 import classNames from 'classnames'
+import { delaGothicOne } from '@/app/layout'
 
 type Props = {
     imageUrl: string,
@@ -10,7 +11,6 @@ type Props = {
     name: string,
 }
 
-const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
 export const LandingCard = ({
     imageUrl,
     title,

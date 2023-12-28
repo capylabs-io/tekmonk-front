@@ -1,7 +1,6 @@
+"use client";
+import { delaGothicOne } from '@/app/layout'
 import React from 'react'
-import { Dela_Gothic_One } from 'next/font/google'
-
-const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
 
 type Props = {
     value: string,

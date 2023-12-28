@@ -3,14 +3,19 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 type Props = {
     title: string,
-    imageUrl: string
+    imageUrl: string,
+    onClick?: () => void
 }
 export const FunnelCard = ({
     title,
-    imageUrl
+    imageUrl,
+    onClick
 }: Props) => {
+    const handleFunnelCardClick = () => {
+        onClick && onClick()
+    }
     return (
-        <div className='rounded-xl shadow-[0_8px_0_0_#E4E7EC] p-6 bg-white z-20'>
+        <div className='rounded-xl shadow-[0_8px_0_0_#E4E7EC] p-6 bg-white z-20 hover:bg-white/90 hover:cursor-pointer' onClick={handleFunnelCardClick}>
             <div className='w-full px-4'>
                 <div className='p-5 bg-gradient-to-r from-primary-50 to-[#FBF3FA] rounded-full flex justify-center items-center'>
                     <Image src={imageUrl} alt='card pic' width={88} height={88} />

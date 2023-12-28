@@ -1,19 +1,24 @@
 "use client";
 import Image from 'next/image'
 import React from 'react'
-import { Dela_Gothic_One, Kanit } from 'next/font/google'
+import {  Kanit } from 'next/font/google'
 import { Button } from '@/components/common/Button'
 import { ArrowRight } from 'lucide-react'
 import { LandingCard } from '@/components/landing/LandingCard'
 import { useRouter } from 'next/navigation';
 import { FunnelCard } from '@/components/funnel/FunnelCard';
 
-const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
 const kanit = Kanit({ weight: '400', subsets: ['latin'] })
 export default function Landing() {
     const router = useRouter()
-    const handleOnClick = () => {
-        router.push('/login')
+    const handleCardClick = () => {
+        window.open('https://tekmonk.edu.vn/')
+    }
+    const handleCard1Click = () => {
+        router.push('/landing')
+    }
+    const handleCard2Click = () => {
+        router.push('/recruitment')
     }
     return (
         <>
@@ -36,15 +41,18 @@ export default function Landing() {
                 </div>
                 <div className='bg-cover w-full h-[400px] bg-gradient-to-t from-[#E079D4]/80 to-[#EE94E5]/10 fixed bottom-0 flex justify-center items-center gap-x-8 rounded-t-[50%] z-0 scale-105'>
                 </div>
-                <Image src='/image/landing/left-stars.png' alt='coin' width={60} height={77} className='fixed top-24 left-[20%] scale-110'/>
-                <Image src='/image/landing/middle-stars.png' alt='coin' width={60} height={53} className='fixed top-16 left-[50%] scale-110'/>
-                <Image src='/image/landing/right-stars.png' alt='coin' width={120} height={114} className='fixed top-24 right-[18%] scale-110'/>
-                <Image src='/image/landing/coins-x15.png' alt='coin' width={160} height={160} className='fixed bottom-20 left-20 scale-110'/>
-                <Image src='/image/landing/fire-x15.png' alt='coin' width={160} height={160} className='fixed -bottom-16 right-20 rotate-[-10deg] scale-125'/>
-                <div className='w-full flex justify-center items-center gap-x-8 z-20 mt-40'>
-                    <FunnelCard title='Phụ huynh' imageUrl='/image/home/parent-icon.png' />
-                    <FunnelCard title='Học viên' imageUrl='/image/home/student-icon.png' />
-                    <FunnelCard title='Giáo viên' imageUrl='/image/home/teacher-icon.png' />
+                <Image src='/image/landing/left-stars.png' alt='coin' width={60} height={77} className='fixed top-24 left-[20%] scale-110' />
+                <Image src='/image/landing/middle-stars.png' alt='coin' width={60} height={53} className='fixed top-16 left-[50%] scale-110' />
+                <Image src='/image/landing/right-stars.png' alt='coin' width={120} height={114} className='fixed top-24 right-[18%] scale-110' />
+                <Image src='/image/landing/coins-x15.png' alt='coin' width={160} height={160} className='fixed bottom-20 left-20 scale-110' />
+                <Image src='/image/landing/fire-x15.png' alt='coin' width={160} height={160} className='fixed -bottom-16 right-20 rotate-[-10deg] scale-125' />
+                <div className='w-full text-SubheadXl text-center mt-32 text-primary-950'>
+                    Bắt đầu với vai trò...
+                </div>
+                <div className='w-full flex justify-center items-center gap-x-8 z-20 mt-5'>
+                    <FunnelCard title='Phụ huynh' imageUrl='/image/home/parent-icon.png' onClick={handleCardClick}/>
+                    <FunnelCard title='Học viên' imageUrl='/image/home/student-icon.png' onClick={handleCard1Click}/>
+                    <FunnelCard title='Giáo viên' imageUrl='/image/home/teacher-icon.png' onClick={handleCard2Click}/>
                 </div>
             </div>
         </>

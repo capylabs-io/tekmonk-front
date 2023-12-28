@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from 'react'
 import Image from 'next/image'
 import { useUserStore } from '@/store/UserStore'
@@ -8,10 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/common/Ta
 import { Progress } from '@/components/common/Progress'
 import { UserStat } from '@/components/profile/UserStat'
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
-import { Dela_Gothic_One } from 'next/font/google'
 import { New } from '@/components/home/New'
-
-const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin'] })
+import { delaGothicOne } from '@/app/layout'
 
 export default function Profile() {
     const [userInfo, userCertificate] = useUserStore((state) => [state.userInfo, state.userCertificate])

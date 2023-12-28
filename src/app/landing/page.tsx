@@ -1,17 +1,16 @@
 "use client";
 import Image from 'next/image'
 import React from 'react'
-import { Dela_Gothic_One } from 'next/font/google'
 import { Button } from '@/components/common/Button'
 import { ArrowRight } from 'lucide-react'
 import { LandingCard } from '@/components/landing/LandingCard'
 import { useRouter } from 'next/navigation';
+import { delaGothicOne } from '../layout';
 
-const delaGothicOne = Dela_Gothic_One({ weight: '400', subsets: ['latin']})
 export default function Landing() {
     const router = useRouter()
     const handleOnClick = () => {
-        router.push('/login')
+        router.push('/home')
     }
     return (
         <>
