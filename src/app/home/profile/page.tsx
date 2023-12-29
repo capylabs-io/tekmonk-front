@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/Button";
-import { FileEdit, Settings } from "lucide-react";
+import { FileEdit, Pencil, Settings } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -20,7 +20,7 @@ import {
   PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
-import { New } from "@/components/home/New";
+import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
 
 const delaGothicOne = Dela_Gothic_One({
@@ -201,7 +201,7 @@ export default function Profile() {
           <div className="px-6 mt-3">
             <div className="w-full flex justify-between items-center">
               <span className="text-primary-900">CHỨNG CHỈ</span>
-              <FileEdit size={24} />
+              <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12">
               {certificates.map((certificate) => {
@@ -221,16 +221,16 @@ export default function Profile() {
                   </div>
                 );
               })}
-              <Button outlined className="text-xs text-gray-900 mt-4">
-                Xem tất cả
-              </Button>
             </div>
+            <Button outlined className="text-xs text-gray-900 mt-4 mx-auto">
+              Xem tất cả
+            </Button>
           </div>
           <hr className="border-t border-gray-200 my-4" />
           <div className="px-6 mt-3">
             <div className="w-full flex justify-between items-center">
               <span className="text-primary-900">THÀNH TỰU</span>
-              <FileEdit size={24} />
+              <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12 items-center">
               {achievements.map((achievement) => {
@@ -250,10 +250,10 @@ export default function Profile() {
                   </div>
                 );
               })}
-              <Button outlined className="text-xs text-gray-900 mt-4">
-                Xem tất cả
-              </Button>
             </div>
+            <Button outlined className="text-xs text-gray-900 mt-4 mx-auto">
+              Xem tất cả
+            </Button>
           </div>
           <hr className="border-t border-gray-200 my-4" />
 
@@ -271,7 +271,6 @@ export default function Profile() {
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
                 <PolarGrid />
                 <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis />
                 <Radar
                   name="Mike"
                   dataKey="A"
@@ -284,7 +283,7 @@ export default function Profile() {
           </div>
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
-          <New
+          <Post
             imageUrl="bg-[url('/image/home/profile-pic.png')]"
             thumbnailUrl="/image/new/new-pic.png"
             userName="Andy Lou"

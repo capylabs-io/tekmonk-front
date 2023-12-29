@@ -16,7 +16,7 @@ type Props = {
   commentCount: string;
 };
 
-export const New = ({
+export const Post = ({
   imageUrl,
   thumbnailUrl,
   userName,

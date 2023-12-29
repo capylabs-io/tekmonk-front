@@ -2,7 +2,8 @@
 import React from "react";
 import { MenuCard } from "./MenuCard";
 import classNames from "classnames";
-import { Bell, Home, ShoppingCart, User, Zap } from "lucide-react";
+import { Bell, Goal, Home, Newspaper, ShoppingCart, User, Zap } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type Props = {
   customClassName?: string;
@@ -13,8 +14,9 @@ export const MenuLayout = ({ customClassName }: Props) => {
     <div className={classNames(BASE_CLASS, customClassName)}>
       <MenuCard
         title="Trang chủ"
-        active={true}
+        active={usePathname() === "/home" }
         iconElement={<Home size={20} />}
+        url="/home"
       />
       <MenuCard
         title="Thông báo"
@@ -22,8 +24,14 @@ export const MenuLayout = ({ customClassName }: Props) => {
         iconElement={<Bell size={20} />}
       />
       <MenuCard
-        title="Cửa hàng"
+        title="Nhiệm vụ"
         active={false}
+        iconElement={<Goal size={20} />}
+      />
+      <MenuCard
+        title="Cửa hàng"
+        active={usePathname() === "/shop" }
+        url="/shop"
         iconElement={<ShoppingCart size={20} />}
       />
       <MenuCard
@@ -31,7 +39,18 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={false}
         iconElement={<Zap size={20} />}
       />
-      <MenuCard title="Hồ sơ" active={false} iconElement={<User size={20} />} />
+      <MenuCard
+        title="Tin tức"
+        active={usePathname() === "/news" }
+        iconElement={<Newspaper size={20} />}
+        url="/news"
+      />
+      <MenuCard
+        title="Hồ sơ"
+        active={usePathname() === "/home/profile" }
+        iconElement={<User size={20} />}
+        url="/home/profile"
+      />
     </div>
   );
 };

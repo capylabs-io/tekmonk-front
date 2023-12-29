@@ -5,7 +5,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { New } from "@/components/home/New";
+import { Post } from "@/components/home/Post";
 
 export default function home() {
   return (
@@ -17,7 +17,7 @@ export default function home() {
           <TabsTrigger value="play">Sân chơi</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="overflow-y-auto">
-          <New
+          <Post
             imageUrl="bg-[url('/image/home/profile-pic.png')]"
             thumbnailUrl="/image/new/new-pic.png"
             userName="Andy Lou"
@@ -34,7 +34,7 @@ export default function home() {
             commentCount="61"
           />
           <hr className="border-t border-gray-200 my-4" />
-          <New
+          <Post
             imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
             thumbnailUrl="/image/new/new-pic-2.png"
             userName="Lauren Linh"
