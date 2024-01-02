@@ -16,7 +16,8 @@ import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { FilterGroup } from "@/components/shop/FilterGroup";
 export default function Layout({
   children, // will be a page or nested layout
 }: {
@@ -69,8 +70,14 @@ export default function Layout({
       <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
       <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-l col-span-3">
         <PointCard point="9999" />
-        <EventList customClassName="mt-4" listEvent={mockData} />
-        <div className="w-full mt-4 rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
+
+        {usePathname().includes('/shop/') ?
+          <FilterGroup customClassName="mt-4" /> :
+          <>
+            <EventList customClassName="mt-4" listEvent={mockData} />
+            <div className="w-full mt-4 rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
+          </>
+        }
       </div>
       <CreateProfileModal />
     </section>

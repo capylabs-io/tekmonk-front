@@ -22,6 +22,8 @@ import {
 } from "recharts";
 import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
+import certificates from "@/mock/certificate-mock.json";
+import achievements from "@/mock/achievement-mock.json";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -34,54 +36,6 @@ export default function Profile() {
     state.userInfo,
     state.userCertificate,
   ]);
-  const certificates = [
-    {
-      name: "Lập trình Python - Lớp Cơ bản",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-    },
-    {
-      name: "Lập trình Python -Lớp Nâng Cao",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-    },
-    {
-      name: "Lập trình Blockchain Game",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-    },
-    {
-      name: "Lập trình Web - Lớp Cơ bản",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-    },
-  ];
-  const achievements = [
-    {
-      name: "Học bá lập trình",
-      imageUrl: "/image/profile/achievement1.png",
-    },
-    {
-      name: "Nhà sáng tạo Game",
-      imageUrl: "/image/profile/achievement2.png",
-    },
-    {
-      name: "Bậc thầy sáng tạo",
-      imageUrl: "/image/profile/achievement3.png",
-    },
-    {
-      name: "Pháp sư CSS",
-      imageUrl: "/image/profile/achievement.png",
-    },
-  ];
 
   const data = [
     {

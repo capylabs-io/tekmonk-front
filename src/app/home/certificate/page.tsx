@@ -2,46 +2,9 @@ import { ArrowLeft } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/common/Button";
-
+import certificates from '@/mock/certificate-mock.json'
 function Page() {
-  const certificates = [
-    {
-      name: "Lập trình Python - Lớp Cơ bản",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-      author: "TekMonk",
-      createdAt: "20/11/2023",
-    },
-    {
-      name: "Lập trình Python -Lớp Nâng Cao",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-      author: "TekMonk",
-      createdAt: "20/11/2023",
-    },
-    {
-      name: "Lập trình Blockchain Game",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-      author: "TekMonk",
-      createdAt: "20/11/2023",
-    },
-    {
-      name: "Lập trình Web - Lớp Cơ bản",
-      type: "Khoá học Code",
-      mission: "10",
-      progress: "10%",
-      imageUrl: "/image/profile/certificate-logo.png",
-      author: "TekMonk",
-      createdAt: "20/11/2023",
-    },
-  ];
+
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">

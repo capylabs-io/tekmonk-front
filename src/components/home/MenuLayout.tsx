@@ -30,7 +30,7 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Cửa hàng"
-        active={usePathname() === "/shop" }
+        active={usePathname().includes("/shop") }
         url="/shop"
         iconElement={<ShoppingCart size={20} />}
       />
@@ -41,7 +41,7 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Tin tức"
-        active={usePathname() === "/news" }
+        active={usePathname().includes("/news") }
         iconElement={<Newspaper size={20} />}
         url="/news"
       />
