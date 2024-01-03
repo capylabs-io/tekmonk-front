@@ -14,14 +14,15 @@ export const MenuLayout = ({ customClassName }: Props) => {
     <div className={classNames(BASE_CLASS, customClassName)}>
       <MenuCard
         title="Trang chủ"
-        active={usePathname() === "/home" }
+        active={usePathname() === "/home"}
         iconElement={<Home size={20} />}
         url="/home"
       />
       <MenuCard
+        active={usePathname() === "/notification"}
         title="Thông báo"
-        active={false}
         iconElement={<Bell size={20} />}
+        url="/notification"
       />
       <MenuCard
         title="Nhiệm vụ"
@@ -30,7 +31,7 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Cửa hàng"
-        active={usePathname().includes("/shop") }
+        active={usePathname().includes("/shop")}
         url="/shop"
         iconElement={<ShoppingCart size={20} />}
       />
@@ -41,13 +42,13 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Tin tức"
-        active={usePathname().includes("/news") }
+        active={usePathname().includes("/news")}
         iconElement={<Newspaper size={20} />}
         url="/news"
       />
       <MenuCard
         title="Hồ sơ"
-        active={usePathname() === "/home/profile" }
+        active={usePathname() === "/home/profile"}
         iconElement={<User size={20} />}
         url="/home/profile"
       />
