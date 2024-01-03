@@ -2,7 +2,15 @@
 import React from "react";
 import { MenuCard } from "./MenuCard";
 import classNames from "classnames";
-import { Bell, Goal, Home, Newspaper, ShoppingCart, User, Zap } from "lucide-react";
+import {
+  Bell,
+  Goal,
+  Home,
+  Newspaper,
+  ShoppingCart,
+  User,
+  Zap,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 type Props = {

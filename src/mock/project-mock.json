@@ -1,7 +1,12 @@
 [
   {
     "name": "INTO THE BREACH",
-    "author": "Henry Nguyen",
+    "author": {
+      "id": "1",
+      "username": "Henry Nguyen",
+      "userRank": "IV",
+      "specialName": "Bá Vương Học Đường"
+    },
     "thumbnailUrl": "/image/user/profile-pic-2.png",
     "imageUrls": [
       "/image/project/project-pic-1.png",
@@ -17,7 +22,12 @@
 
   {
     "name": "Stardew Valley",
-    "author": "Henry Nguyen",
+    "author": {
+      "id": "1",
+      "username": "Henry Nguyen",
+      "userRank": "IV",
+      "specialName": "Bá Vương Học Đường"
+    },
     "thumbnailUrl": "/image/project/project02.png",
     "imageUrls": [
       "/image/project/project-pic-1.png",
@@ -33,7 +43,12 @@
 
   {
     "name": "Metal Slug Tactics",
-    "author": "Henry Nguyen",
+    "author": {
+      "id": "1",
+      "username": "Henry Nguyen",
+      "userRank": "IV",
+      "specialName": "Bá Vương Học Đường"
+    },
     "thumbnailUrl": "/image/project/project01.png",
     "imageUrls": [
       "/image/project/project-pic-1.png",
@@ -49,7 +64,12 @@
 
   {
     "name": "Pokemon Go",
-    "author": "Henry Nguyen",
+    "author": {
+      "id": "1",
+      "username": "Henry Nguyen",
+      "userRank": "IV",
+      "specialName": "Bá Vương Học Đường"
+    },
     "thumbnailUrl": "/image/project/project03.png",
     "imageUrls": [
       "/image/project/project-pic-1.png",
@@ -65,7 +85,12 @@
 
   {
     "name": "The Sims 4",
-    "author": "Henry Nguyen",
+    "author": {
+      "id": "1",
+      "username": "Henry Nguyen",
+      "userRank": "IV",
+      "specialName": "Bá Vương Học Đường"
+    },
     "thumbnailUrl": "/image/project/project04.png",
     "imageUrls": [
       "/image/project/project-pic-1.png",

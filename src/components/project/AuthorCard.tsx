@@ -16,13 +16,15 @@ type Props = {
 };
 const BASE_CLASS =
   "rounded-xl border border-gray-200 py-4 flex flex-col text-primary-900";
-export const AuthorCard = ({ imageUrl,
+export const AuthorCard = ({
+  imageUrl,
   userName,
   userRank,
   specialName,
-  likedCount, 
+  likedCount,
   projectCount,
-  customClassName }: Props) => {
+  customClassName,
+}: Props) => {
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>
       <div className="w-full flex justify-between px-4 items-center">
@@ -45,13 +47,13 @@ export const AuthorCard = ({ imageUrl,
             <div className="text-bodySm text-gray-500">Lượt yêu thích</div>
           </div>
           <div className="w-full">
-            <div className="text-Heading3xl text-primary-900">{projectCount}</div>
+            <div className="text-Heading3xl text-primary-900">
+              {projectCount}
+            </div>
             <div className="text-bodySm text-gray-500">Dự án</div>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 };

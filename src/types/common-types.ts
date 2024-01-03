@@ -18,3 +18,14 @@ export interface Certificate {
   mission: string;
   imageUrl?: string;
 }
+export interface Project {
+  name: string;
+  author: User;
+  thumbnailUrl: string;
+  imageUrls: string[];
+  createdAt: string;
+  projectCategories: string[];
+  description: string;
+  likeCount: string;
+  commentCount: string;
+}

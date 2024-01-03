@@ -32,7 +32,7 @@ export default function Layout({
   const handleOpenModal = () => {
     show("aaaa");
   };
-  const projectsSliced = projectsMock.slice(1, 5)
+  const projectsSliced = projectsMock.slice(1, 5);
   return (
     <section className="w-full grid grid-cols-11 h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}

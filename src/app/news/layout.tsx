@@ -70,7 +70,7 @@ export default function Layout({
       <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
       <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-l col-span-3">
         <PointCard point="9999" />
-        <FilterGroup customClassName="mt-4"/>
+        <FilterGroup customClassName="mt-4" />
         <div className="w-full mt-4 rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-contain h-full" />
       </div>
       <CreateProfileModal />

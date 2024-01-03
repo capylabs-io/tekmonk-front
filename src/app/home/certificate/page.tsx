@@ -2,9 +2,8 @@ import { ArrowLeft } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/common/Button";
-import certificates from '@/mock/certificate-mock.json'
+import certificates from "@/mock/certificate-mock.json";
 function Page() {
-
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">
