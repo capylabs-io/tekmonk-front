@@ -34,8 +34,9 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Nhiệm vụ"
-        active={false}
+        active={usePathname().includes("/mission")}
         iconElement={<Goal size={20} />}
+        url="/mission"
       />
       <MenuCard
         title="Cửa hàng"
@@ -45,8 +46,9 @@ export const MenuLayout = ({ customClassName }: Props) => {
       />
       <MenuCard
         title="Bảng xếp hạng"
-        active={false}
+        active={usePathname().includes("/leaderboard")}
         iconElement={<Zap size={20} />}
+        url="/leaderboard"
       />
       <MenuCard
         title="Tin tức"

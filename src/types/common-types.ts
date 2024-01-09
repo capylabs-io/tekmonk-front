@@ -1,3 +1,4 @@
+import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
 export interface Event {
   title: string;
   day: string;
@@ -10,6 +11,8 @@ export interface User {
   username: string;
   userRank: string;
   specialName: string;
+  imageURL?: string;
+  twitterName?: string;
 }
 export interface Certificate {
   name: string;
@@ -28,4 +31,9 @@ export interface Project {
   description: string;
   likeCount: string;
   commentCount: string;
+}
+
+export interface LeaderboardData {
+  user: User;
+  score: string;
 }
