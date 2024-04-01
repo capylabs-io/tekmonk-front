@@ -1,3 +1,4 @@
+"use client";
 import classNames from "classnames";
 import { ArrowRight } from "lucide-react";
 import React from "react";
@@ -19,20 +20,18 @@ export const EventList = ({ customClassName, listEvent }: Props) => {
       <hr className="border-t border-gray-200 my-4" />
       {listEvent?.map((event, index) => {
         return (
-          <>
-            <div key={event?.title}>
-              <EventCard
-                day={event?.day}
-                month={event?.month}
-                weekday={event?.weekday}
-                timeRange={event?.timeRange}
-                title={event?.title}
-              />
-            </div>
+          <div key={index}>
+            <EventCard
+              day={event?.day}
+              month={event?.month}
+              weekday={event?.weekday}
+              timeRange={event?.timeRange}
+              title={event?.title}
+            />
             {index + 1 !== listEvent.length && (
               <hr className="border-t border-gray-200 my-4" />
             )}
-          </>
+          </div>
         );
       })}
     </div>

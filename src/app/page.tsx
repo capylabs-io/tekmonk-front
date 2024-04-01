@@ -2,9 +2,6 @@
 import Image from "next/image";
 import React from "react";
 import { Kanit, Dela_Gothic_One } from "next/font/google";
-import { Button } from "@/components/common/Button";
-import { ArrowRight } from "lucide-react";
-import { LandingCard } from "@/components/landing/LandingCard";
 import { useRouter } from "next/navigation";
 import { FunnelCard } from "@/components/funnel/FunnelCard";
 
