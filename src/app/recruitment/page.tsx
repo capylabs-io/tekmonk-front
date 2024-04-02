@@ -6,7 +6,6 @@ import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
 import { Recruitment } from "@/types/common-types";
 import { Pagination } from "@/components/common/Pagination";
-import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -17,7 +16,7 @@ const delaGothicOne = Dela_Gothic_One({
 const itemsPerPage = 12;
 const API_URL = "http://localhost:3500/posts";
 
-const Recruitment: React.FC = () => {
+function Recruitment() {
   const [recruitments, setRecruitments] = useState<Recruitment[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -119,5 +118,5 @@ const Recruitment: React.FC = () => {
       />
     </div>
   );
-};
-export default WithAuth(Recruitment);
+}
+export default Recruitment;

@@ -10,6 +10,7 @@ import {
 import { Dela_Gothic_One } from "next/font/google";
 import notifications from "@/mock/notification-mock.json";
 import { NotiCard } from "@/components/notification/NotiCard";
+import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -17,7 +18,7 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-export default function Notification() {
+const Notification: React.FC = () => {
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Thông báo</div>
@@ -50,4 +51,6 @@ export default function Notification() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(Notification);

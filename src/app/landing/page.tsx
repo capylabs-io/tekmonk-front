@@ -6,7 +6,6 @@ import { ArrowRight } from "lucide-react";
 import { LandingCard } from "@/components/landing/LandingCard";
 import { useRouter } from "next/navigation";
 import { Dela_Gothic_One } from "next/font/google";
-import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -14,7 +13,7 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-const Landing: React.FC = () => {
+function Landing() {
   const router = useRouter();
   const handleOnClick = () => {
     router.push("/home");
@@ -91,6 +90,6 @@ const Landing: React.FC = () => {
       </div>
     </>
   );
-};
+}
 
-export default WithAuth(Landing);
+export default Landing;

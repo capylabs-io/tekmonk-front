@@ -8,6 +8,7 @@ import {
 } from "@/components/common/Tabs";
 import { Dela_Gothic_One } from "next/font/google";
 import { LeadeboardContent } from "@/components/leaderboard/LeadeboardContent";
+import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -15,7 +16,7 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-export default function Leaderboard() {
+const Leaderboard: React.FC = () => {
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Bảng xếp hạng</div>
@@ -44,4 +45,6 @@ export default function Leaderboard() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(Leaderboard);

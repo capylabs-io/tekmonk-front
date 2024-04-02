@@ -51,14 +51,15 @@ export default function Login() {
 
       switch (roleName) {
         case Role.STUDENT:
-          console.log("vvvvvvv");
-          router.push("/landing");
+          router.push("/home");
           break;
         case Role.TEACHER:
-          router.push("/recruitment");
+          // @TODO: chưa có
+          //router Admin
+          router.push("/");
           break;
         case Role.PARENT:
-          router.push("/landing");
+          router.push("/home");
           break;
         default:
           router.push("/login");

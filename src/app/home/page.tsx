@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Tabs,
@@ -6,8 +7,9 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { Post } from "@/components/home/Post";
+import WithAuth from "@/components/hoc/WithAuth";
 
-export default function home() {
+const home: React.FC = () => {
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>
@@ -57,4 +59,6 @@ export default function home() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(home);

@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
+import React from "react";
 import {
   Tabs,
   TabsContent,
@@ -9,13 +8,15 @@ import {
 } from "@/components/common/Tabs";
 import { Dela_Gothic_One } from "next/font/google";
 import { MissionCard } from "@/components/mission/MissionCard";
+import WithAuth from "@/components/hoc/WithAuth";
+
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-delo",
 });
 
-export default function Mission() {
+const Mission: React.FC = () => {
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Nhiệm vụ</div>
@@ -56,4 +57,6 @@ export default function Mission() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(Mission);

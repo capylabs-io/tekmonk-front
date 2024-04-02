@@ -8,12 +8,13 @@ import BackgroundList from "@/mock/background-mock.json";
 import AvatarList from "@/mock/shop-avatar-mock.json";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
+import WithAuth from "@/components/hoc/WithAuth";
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-delo",
 });
-export default function Shop() {
+const Shop: React.FC = () => {
   const slicedBackgroundList = BackgroundList.slice(0, 4);
   const router = useRouter();
   return (
@@ -83,4 +84,6 @@ export default function Shop() {
       </div>
     </div>
   );
-}
+};
+
+export default WithAuth(Shop);
