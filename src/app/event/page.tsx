@@ -1,3 +1,4 @@
+"use client";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import {
@@ -7,8 +8,12 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { EventCard } from "@/components/event/EventCard";
+import { useEvents } from "@/lib/hooks/useEvent";
+import { Event } from "@/types/common-types";
 
 export default function Event() {
+  const events: Event[] = useEvents();
+
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">
@@ -24,36 +29,14 @@ export default function Event() {
         </TabsList>
         <TabsContent value="current" className="overflow-y-auto">
           <div className="m-8 flex flex-wrap gap-6">
-            <EventCard
-              imageUrl="/image/event/event-pic-5.png"
-              title="Viewing party CKTG 2023 Đồng hành bởi Youtube Gaming"
-              createdAt="19/11/2023"
-              id="1"
-            />
-            <EventCard
-              imageUrl="/image/event/event-pic-1.png"
-              title="Ngày hội Pizza Day của trường Tekmonk"
-              createdAt="10/12/2023"
-              id="2"
-            />
-            <EventCard
-              imageUrl="/image/event/event-pic-2.png"
-              title="Ngày hội phát triển ứng dụng công nghệ cao"
-              createdAt="15/11/2023"
-              id="3"
-            />
-            <EventCard
-              imageUrl="/image/event/event-pic-3.png"
-              title="Lễ hội cắm trại mùa Xuân"
-              createdAt="19/11/2023"
-              id="4"
-            />
-            <EventCard
-              imageUrl="/image/event/event-pic-4.png"
-              title="Tiệc Noel và chào mừng năm mới của Teckmonk"
-              createdAt="19/11/2023"
-              id="5"
-            />
+            {events.map((event, index) => (
+              <EventCard
+                key={index}
+                imageUrl={event.imageUrl}
+                title={event.title}
+                createdAt={event.createdAt}
+              />
+            ))}
           </div>
         </TabsContent>
         <TabsContent value="history" className="overflow-y-auto"></TabsContent>
