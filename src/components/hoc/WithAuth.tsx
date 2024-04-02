@@ -17,7 +17,7 @@ const WithAuth = (WrappedComponent: React.FC) => {
 
     return (
       <>
-        <WrappedComponent />;
+        <WrappedComponent />
         <ToastContainer />
       </>
     );
