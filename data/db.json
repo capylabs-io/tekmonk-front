@@ -1,0 +1,261 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "2",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "3",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "NextJs"]
+    },
+    {
+      "id": "4",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "5",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "6",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "7",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "8",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "9",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "10",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "11",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "12",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 18 ngày", "VueJs"]
+    },
+    {
+      "id": "13",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "14",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "15",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "16",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "17",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "18",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "19",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "20",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "21",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "22",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 111 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "23",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 222 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    },
+    {
+      "id": "24",
+      "imageUrl": "/image/recruitment/recruitment-card-pic.png",
+      "title": "Giáo viên lập trình Frontend ngôn ngữ NextJs (2 năm kinh nghiệm)",
+      "description": "Mức lương: 333 tỷ",
+      "tags": ["Hà Nội", "Còn 24 ngày", "NextJs"]
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "imageUrl": "/image/event/event-pic-5.png",
+      "title": "Viewing party CKTG 2023 Đồng hành bởi Youtube Gaming",
+      "createdAt": "20/11/2023"
+    },
+    {
+      "id": "2",
+      "imageUrl": "/image/event/event-pic-1.png",
+      "title": "Ngày hội Pizza Day của trường Tekmonk",
+      "createdAt": "19/11/2023"
+    },
+    {
+      "id": "3",
+      "imageUrl": "/image/event/event-pic-2.png",
+      "title": "Ngày hội phát triển ứng dụng công nghệ cao",
+      "createdAt": "19/11/2023"
+    },
+    {
+      "id": "4",
+      "imageUrl": "/image/event/event-pic-3.png",
+      "title": "Lễ hội cắm trại mùa Xuân",
+      "createdAt": "19/11/2023"
+    },
+    {
+      "id": "5",
+      "imageUrl": "/image/event/event-pic-4.png",
+      "title": "Tiệc Noel và chào mừng năm mới của Teckmonk",
+      "createdAt": "19/11/2023"
+    }
+  ],
+  "eventDetail": [
+    {
+      "id": "1",
+      "title": "Viewing party CKTG 2023 Đồng hành bởi Youtube Gaming",
+      "eventTime": "Chủ Nhật, 03/12/2023 (15:00 - 23:00)",
+      "eventVenue": "Nhà thi đấu Tây Hồ",
+      "address": "Số 101 Đ. Xuân La, Xuân La, District Tay Ho, Ha Noi City",
+      "month": "THÁNG 12",
+      "day": "03",
+      "weekday": "Chủ Nhật",
+      "content": ""
+    },
+    {
+      "id": "2",
+      "title": "Ngày hội Pizza",
+      "eventTime": "Chủ Nhật, 03/12/2023 (15:00 - 23:00)",
+      "eventVenue": "Nhà thi đấu Tây Hồ",
+      "address": "Số 101 Đ. Xuân La, Xuân La, District Tay Ho, Ha Noi City",
+      "month": "THÁNG 12",
+      "day": "03",
+      "weekday": "Chủ Nhật",
+      "content": ""
+    },
+    {
+      "id": "3",
+      "title": "Ngày hội phát triển",
+      "eventTime": "Chủ Nhật, 03/12/2023 (15:00 - 23:00)",
+      "eventVenue": "Nhà thi đấu Tây Hồ",
+      "address": "Số 101 Đ. Xuân La, Xuân La, District Tay Ho, Ha Noi City",
+      "month": "THÁNG 12",
+      "day": "03",
+      "weekday": "Chủ Nhật",
+      "content": ""
+    },
+    {
+      "id": "4",
+      "title": "Lễ hội cắm trại",
+      "eventTime": "Chủ Nhật, 03/12/2023 (15:00 - 23:00)",
+      "eventVenue": "Nhà thi đấu Tây Hồ",
+      "address": "Số 101 Đ. Xuân La, Xuân La, District Tay Ho, Ha Noi City",
+      "month": "THÁNG 12",
+      "day": "03",
+      "weekday": "Chủ Nhật",
+      "content": ""
+    },
+    {
+      "id": "5",
+      "title": "Tiệc Noel",
+      "eventTime": "Chủ Nhật, 03/12/2023 (15:00 - 23:00)",
+      "eventVenue": "Nhà thi đấu Tây Hồ",
+      "address": "Số 101 Đ. Xuân La, Xuân La, District Tay Ho, Ha Noi City",
+      "month": "THÁNG 12",
+      "day": "03",
+      "weekday": "Chủ Nhật",
+      "content": ""
+    }
+  ]
+}
