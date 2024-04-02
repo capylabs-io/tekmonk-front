@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/Button";
@@ -24,6 +24,7 @@ import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
 import certificates from "@/mock/certificate-mock.json";
 import achievements from "@/mock/achievement-mock.json";
+import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -31,11 +32,24 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-export default function Profile() {
+const Profile: React.FC = () => {
   const [userInfo, userCertificate] = useUserStore((state) => [
     state.userInfo,
     state.userCertificate,
   ]);
+
+  const getMe = useUserStore((state) => state.getMe);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getMe();
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const data = [
     {
@@ -257,4 +271,6 @@ export default function Profile() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(Profile);
