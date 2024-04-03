@@ -10,6 +10,7 @@ type Props = {
   projects: Project[];
   customClassName?: string;
 };
+
 const BASE_CLASS =
   "rounded-xl border border-gray-200 py-4 flex flex-col text-primary-900";
 export const AuthorProjectsCard = ({ projects, customClassName }: Props) => {

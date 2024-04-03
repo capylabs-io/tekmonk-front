@@ -81,6 +81,9 @@ export const LeaderboardTable = ({ data }: Props) => {
           totalPages={2}
           onClickNextPage={handleNextPage}
           onClickPrevPage={handlePrevPage}
+          onPageClick={function (pageNumber: number): void {
+            throw new Error("Function not implemented.");
+          }}
         />
       </TableRow>
       {/* your rank display if you are not in the top 10 */}

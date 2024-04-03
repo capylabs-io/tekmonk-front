@@ -3,6 +3,8 @@ import Image from "next/image";
 import { LeaderboardTopUserCard } from "./LeaderboardTopUserCard";
 import { LeaderboardTable } from "./LeaderboardTable";
 import LeaderboardMock from "@/mock/leaderboard-mock.json";
+import { LeaderboardData } from "@/types/common-types";
+
 export const LeadeboardContent = () => {
   return (
     <div>
@@ -29,7 +31,11 @@ export const LeadeboardContent = () => {
           imageUrl=" bg-[url('/image/leaderboard/user2.png')]"
         />
       </div>
-      <LeaderboardTable data={LeaderboardMock} />
+
+      {/* @TODO: check why as unknown  */}
+      <LeaderboardTable
+        data={LeaderboardMock as unknown as LeaderboardData[]}
+      />
     </div>
   );
 };

@@ -1,19 +1,20 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { toast, ToastContainer } from "react-toastify";
 
 const WithAuth = (WrappedComponent: React.FC) => {
-  return () => {
+  const Comp: React.FC = () => {
     const router = useRouter();
     const [jwt] = useUserStore((state) => [state.jwt]);
 
-    if (!jwt) {
-      toast.error("You must be login first.");
-      router.push("/login");
-      return;
-    }
+    useEffect(() => {
+      if (!jwt) {
+        toast.error("You must be login first.");
+        router.push("/login");
+      }
+    }, []);
 
     return (
       <>
@@ -22,6 +23,8 @@ const WithAuth = (WrappedComponent: React.FC) => {
       </>
     );
   };
+
+  return Comp;
 };
 
 export default WithAuth;
