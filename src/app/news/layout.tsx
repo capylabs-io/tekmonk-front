@@ -20,7 +20,7 @@ export default function Layout({
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const router = useRouter();
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
 
   return (

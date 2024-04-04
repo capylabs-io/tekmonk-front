@@ -1,32 +1,17 @@
 "use client";
 import { Button } from "@/components/common/Button";
-import { EventList } from "@/components/home/EventList";
-import { PointCard } from "@/components/home/PointCard";
-import {
-  Bell,
-  Home,
-  MoreHorizontal,
-  ShoppingCart,
-  User,
-  Zap,
-} from "lucide-react";
 import Image from "next/image";
-import mockData from "@/mock/event-mock.json";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
-export default function Layout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
   return (
     <section className="w-full grid grid-cols-10 h-screen">

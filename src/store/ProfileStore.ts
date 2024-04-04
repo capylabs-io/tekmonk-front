@@ -6,17 +6,16 @@ type State = {
 };
 
 type Actions = {
-  show: (content: string) => void;
+  show: () => void;
   hide: () => void;
 };
 
 export const useProfileStore = create<State & Actions>((set) => ({
   isShowing: false,
   content: "",
-  show: (content) =>
+  show: () =>
     set({
       isShowing: true,
-      content,
     }),
   hide: () =>
     set({

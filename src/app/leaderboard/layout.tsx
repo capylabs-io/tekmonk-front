@@ -15,7 +15,7 @@ export default function Layout({
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
 
   return (

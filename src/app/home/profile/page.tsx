@@ -22,9 +22,10 @@ import {
 } from "recharts";
 import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
-import certificates from "@/mock/certificate-mock.json";
-import achievements from "@/mock/achievement-mock.json";
 import WithAuth from "@/components/hoc/WithAuth";
+import { useAchievements } from "@/lib/hooks/useAchievement";
+import { Achievement, Certificate } from "@/types/common-types";
+import { useCertificates } from "@/lib/hooks/useCertificate";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -50,6 +51,9 @@ const Profile: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  const achievements: Achievement[] = useAchievements();
+  const certificates: Certificate[] = useCertificates();
 
   const data = [
     {
@@ -83,6 +87,7 @@ const Profile: React.FC = () => {
       fullMark: 100,
     },
   ];
+
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Hồ sơ cá nhân</div>
@@ -123,12 +128,9 @@ const Profile: React.FC = () => {
           <div className="px-6 mt-3">
             <div className="text-primary-900">TIẾN TRÌNH</div>
             {userCertificate &&
-              userCertificate.map((certificate) => {
+              userCertificate.map((certificate, index) => {
                 return (
-                  <div
-                    className="flex gap-x-2 items-center"
-                    key={certificate.name}
-                  >
+                  <div className="flex gap-x-2 items-center" key={index}>
                     <Image
                       src={certificate.imageUrl || ""}
                       alt="certificate"
@@ -172,11 +174,11 @@ const Profile: React.FC = () => {
               <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12">
-              {certificates.map((certificate) => {
+              {certificates.map((certificate, index) => {
                 return (
                   <div
                     className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={certificate.name}
+                    key={index}
                   >
                     <Image
                       src={certificate.imageUrl || ""}
@@ -201,11 +203,11 @@ const Profile: React.FC = () => {
               <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12 items-center">
-              {achievements.map((achievement) => {
+              {achievements.map((achievement, index) => {
                 return (
                   <div
                     className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={achievement.name}
+                    key={index}
                   >
                     <Image
                       src={achievement.imageUrl || ""}

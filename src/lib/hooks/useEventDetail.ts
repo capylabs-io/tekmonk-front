@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { EventDetail } from "@/types/common-types";
+import axios from "axios";
 
 const API_URL = "http://localhost:3500/eventDetail";
 
@@ -19,12 +20,9 @@ export const useEventDetail = () => {
   useEffect(() => {
     const fetchEventDetail = async () => {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error("Failed to fetch event details");
-        }
-        const data = await response.json();
-        setEventDetail(data);
+        const response = await axios.get(API_URL);
+
+        setEventDetail(response.data);
       } catch (error) {
         console.error("Error fetching event details:", error);
       }

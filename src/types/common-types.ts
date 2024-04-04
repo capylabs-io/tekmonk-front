@@ -62,3 +62,8 @@ export type EventDetail = {
   weekday: string;
   content: string;
 };
+
+export type Achievement = {
+  name: string;
+  imageUrl: string;
+};

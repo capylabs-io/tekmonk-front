@@ -2,14 +2,6 @@
 import { Button } from "@/components/common/Button";
 import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
-import {
-  Bell,
-  Home,
-  MoreHorizontal,
-  ShoppingCart,
-  User,
-  Zap,
-} from "lucide-react";
 import Image from "next/image";
 import mockData from "@/mock/event-mock.json";
 import projectsMock from "@/mock/project-mock.json";
@@ -27,7 +19,7 @@ export default function Layout({
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
   const projectsSliced = projectsMock.slice(1, 5);
 

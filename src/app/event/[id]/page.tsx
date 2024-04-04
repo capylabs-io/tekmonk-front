@@ -2,7 +2,6 @@
 import React from "react";
 import { ArrowLeft, Clock4, MapPin } from "lucide-react";
 import { useRouter } from "next/router";
-// import { EventDetail } from "@/types/common-types";
 import { useEventDetail } from "@/lib/hooks/useEventDetail";
 
 export default function Page({ params }: { params: { id: string } }) {

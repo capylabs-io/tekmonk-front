@@ -3,7 +3,7 @@ import { Button } from "@/components/common/Button";
 import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
-import mockData from "@/mock/event-mock.json";
+import { useEvents } from "@/lib/hooks/useEvent";
 import projectsMock from "@/mock/project-mock.json";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
@@ -14,6 +14,7 @@ import { AuthorCard } from "@/components/project/AuthorCard";
 import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { Project } from "@/types/common-types";
+
 export default function Layout({
   children, // will be a page or nested layout
 }: {
@@ -23,9 +24,10 @@ export default function Layout({
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
-  const projectsSliced = projectsMock.slice(1, 5) as Project[];
+  const projectsList = projectsMock.slice(1, 5) as Project[];
+  const events = useEvents().slice(1, 4);
 
   return (
     <section className="w-full grid grid-cols-11 h-screen">
@@ -55,7 +57,7 @@ export default function Layout({
         {!usePathname().includes("/project") ? (
           <>
             <PointCard point="9999" />
-            <EventList listEvent={mockData} />
+            <EventList listEvent={events} />
             <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
           </>
         ) : (
@@ -74,7 +76,7 @@ export default function Layout({
               likedCount="134"
               projectCount="5"
             />
-            <AuthorProjectsCard projects={projectsSliced} />
+            <AuthorProjectsCard projects={projectsList} />
           </>
         )}
       </div>

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Event } from "@/types/common-types";
 
 const API_URL = "http://localhost:3500/events";
@@ -10,12 +11,8 @@ export const useEvents = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-          throw new Error("Failed to fetch event cards");
-        }
-        const data = await response.json();
-        setEvents(data);
+        const response = await axios.get(API_URL);
+        setEvents(response.data);
       } catch (error) {
         console.error("Error fetching event cards:", error);
       }

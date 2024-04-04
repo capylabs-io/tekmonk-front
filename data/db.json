@@ -174,31 +174,51 @@
       "id": "1",
       "imageUrl": "/image/event/event-pic-5.png",
       "title": "Viewing party CKTG 2023 Đồng hành bởi Youtube Gaming",
-      "createdAt": "20/11/2023"
+      "createdAt": "20/11/2023",
+      "month": "TH.11",
+      "day": "15",
+      "weekday": "Thứ 4",
+      "timeRange": "8:30 - 21:00"
     },
     {
       "id": "2",
       "imageUrl": "/image/event/event-pic-1.png",
       "title": "Ngày hội Pizza Day của trường Tekmonk",
-      "createdAt": "19/11/2023"
+      "createdAt": "19/11/2023",
+      "month": "TH.11",
+      "day": "20",
+      "weekday": "Chủ Nhật",
+      "timeRange": "CẢ NGÀY"
     },
     {
       "id": "3",
       "imageUrl": "/image/event/event-pic-2.png",
       "title": "Ngày hội phát triển ứng dụng công nghệ cao",
-      "createdAt": "19/11/2023"
+      "createdAt": "19/11/2023",
+      "month": "TH.11",
+      "day": "20",
+      "weekday": "Chủ Nhật",
+      "timeRange": "CẢ NGÀY"
     },
     {
       "id": "4",
       "imageUrl": "/image/event/event-pic-3.png",
       "title": "Lễ hội cắm trại mùa Xuân",
-      "createdAt": "19/11/2023"
+      "createdAt": "19/11/2023",
+      "month": "TH.11",
+      "day": "20",
+      "weekday": "Chủ Nhật",
+      "timeRange": "CẢ NGÀY"
     },
     {
       "id": "5",
       "imageUrl": "/image/event/event-pic-4.png",
       "title": "Tiệc Noel và chào mừng năm mới của Teckmonk",
-      "createdAt": "19/11/2023"
+      "createdAt": "19/11/2023",
+      "month": "TH.11",
+      "day": "20",
+      "weekday": "Chủ Nhật",
+      "timeRange": "CẢ NGÀY"
     }
   ],
   "eventDetail": [
@@ -256,6 +276,70 @@
       "day": "03",
       "weekday": "Chủ Nhật",
       "content": ""
+    }
+  ],
+  "achievements": [
+    {
+      "id": "1",
+      "name": "Học bá lập trình",
+      "imageUrl": "/image/mission/achievement1.png"
+    },
+    {
+      "id": "2",
+      "name": "Nhà sáng tạo Game",
+      "imageUrl": "/image/mission/achievement2.png"
+    },
+    {
+      "id": "3",
+      "name": "Bậc thầy sáng tạo",
+      "imageUrl": "/image/mission/achievement3.png"
+    },
+    {
+      "id": "4",
+      "name": "Pháp sư CSS",
+      "imageUrl": "/image/mission/achievement.png"
+    }
+  ],
+  "certificates": [
+    {
+      "id": 1,
+      "name": "Lập trình Python - Lớp Cơ bản",
+      "type": "Khoá học Code",
+      "mission": "10",
+      "progress": "10%",
+      "imageUrl": "/image/profile/certificate-logo.png",
+      "author": "TekMonk",
+      "createdAt": "20/11/2023"
+    },
+    {
+      "id": 2,
+      "name": "Lập trình Python -Lớp Nâng Cao",
+      "type": "Khoá học Code",
+      "mission": "10",
+      "progress": "10%",
+      "imageUrl": "/image/profile/certificate-logo.png",
+      "author": "TekMonk",
+      "createdAt": "20/11/2023"
+    },
+    {
+      "id": 3,
+      "name": "Lập trình Blockchain Game",
+      "type": "Khoá học Code",
+      "mission": "10",
+      "progress": "10%",
+      "imageUrl": "/image/profile/certificate-logo.png",
+      "author": "TekMonk",
+      "createdAt": "20/11/2023"
+    },
+    {
+      "id": 4,
+      "name": "Lập trình Web - Lớp Cơ bản",
+      "type": "Khoá học Code",
+      "mission": "10",
+      "progress": "10%",
+      "imageUrl": "/image/profile/certificate-logo.png",
+      "author": "TekMonk",
+      "createdAt": "20/11/2023"
     }
   ]
 }
