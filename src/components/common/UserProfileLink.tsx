@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/UserStore";
 import { LogOut } from "lucide-react";
+import { API_LOGIN } from "@/contants/api-url";
 
 type UserProfileLinkProps = {
   userName: string;
@@ -14,13 +15,13 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
   userRank,
 }) => {
   const router = useRouter();
-  const [isMenuOpen, setIsMenuShow] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
-    setIsMenuShow(!isMenuOpen);
+    setIsMenuOpen(!isMenuOpen);
   };
   const handleLogout = () => {
-    router.push("/login");
     useUserStore.getState().clear();
+    router.push("/login");
   };
 
   return (

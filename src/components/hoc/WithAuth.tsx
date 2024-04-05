@@ -7,14 +7,14 @@ import { toast, ToastContainer } from "react-toastify";
 const WithAuth = (WrappedComponent: React.FC) => {
   const Comp: React.FC = () => {
     const router = useRouter();
-    const [jwt] = useUserStore((state) => [state.jwt]);
+    const isConnected = useUserStore((state) => state.isConnected);
 
     useEffect(() => {
-      if (!jwt) {
+      if (!isConnected) {
         toast.error("You must be login first.");
         router.push("/login");
       }
-    }, []);
+    }, [isConnected]);
 
     return (
       <>

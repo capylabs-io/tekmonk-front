@@ -1,4 +1,5 @@
 import tekdojoAxios from "./axios.config";
+import { BASE_URL } from "@/contants/api-url";
 
 type LoginBody = {
   identifier: string;
@@ -7,9 +8,6 @@ type LoginBody = {
     name: string;
   };
 };
-
-// Backend base url
-const BASE_URL = "http://localhost:1337/api";
 
 // set up axios interceptor
 export const postLogin = async (body: LoginBody) => {

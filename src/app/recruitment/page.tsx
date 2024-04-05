@@ -6,6 +6,8 @@ import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
 import { Recruitment } from "@/types/common-types";
 import { Pagination } from "@/components/common/Pagination";
+import axios from "axios";
+import { API_POST } from "@/contants/api-url";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -14,7 +16,6 @@ const delaGothicOne = Dela_Gothic_One({
 });
 
 const itemsPerPage = 12;
-const API_URL = "http://localhost:3500/posts";
 
 function Recruitment() {
   const [recruitments, setRecruitments] = useState<Recruitment[]>([]);
@@ -36,12 +37,9 @@ function Recruitment() {
   useEffect(() => {
     const fetchRecruitments = async () => {
       try {
-        const response = await fetch(`${API_URL}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+        const response = await axios.get(`${API_POST}`);
+        const data = response.data;
 
-        const data = await response.json();
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const currentRecruitments = data.slice(startIndex, endIndex);

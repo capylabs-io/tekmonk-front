@@ -19,6 +19,7 @@ type Props = {
 export const LeaderboardTable = ({ data }: Props) => {
   const handleNextPage = () => {};
   const handlePrevPage = () => {};
+  const handlePageClick = () => {};
   return (
     <Table>
       <TableHeader>
@@ -81,9 +82,7 @@ export const LeaderboardTable = ({ data }: Props) => {
           totalPages={2}
           onClickNextPage={handleNextPage}
           onClickPrevPage={handlePrevPage}
-          onPageClick={function (pageNumber: number): void {
-            throw new Error("Function not implemented.");
-          }}
+          onPageClick={handlePageClick}
         />
       </TableRow>
       {/* your rank display if you are not in the top 10 */}
