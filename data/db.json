@@ -341,5 +341,269 @@
       "author": "TekMonk",
       "createdAt": "20/11/2023"
     }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "name": "INTO THE BREACH",
+      "author": {
+        "id": "1",
+        "username": "Henry Nguyen",
+        "userRank": "IV",
+        "specialName": "Bá Vương Học Đường"
+      },
+      "thumbnailUrl": "/image/user/profile-pic-2.png",
+      "imageUrls": [
+        "/image/project/project-pic-1.png",
+        "/image/project/project-pic-2.png",
+        "/image/project/project-pic-3.png"
+      ],
+      "createdAt": "11/02/2023",
+      "projectCategories": ["GAME", "2D", "TURN-BASED"],
+      "description": "Đây là một dự án game mà mình tự code trong 3 tháng bằng Unity dựa trên game Fortnite mà cháu hay chơi. Mong nhận được sự ủng hộ của mọi người",
+      "likeCount": "6200",
+      "commentCount": "61"
+    },
+
+    {
+      "id": 2,
+      "name": "Stardew Valley",
+      "author": {
+        "id": "1",
+        "username": "Henry Nguyen",
+        "userRank": "IV",
+        "specialName": "Bá Vương Học Đường"
+      },
+      "thumbnailUrl": "/image/project/project02.png",
+      "imageUrls": [
+        "/image/project/project-pic-1.png",
+        "/image/project/project-pic-2.png",
+        "/image/project/project-pic-3.png"
+      ],
+      "createdAt": "11/02/2023",
+      "projectCategories": ["2D", "TURN-BASED"],
+      "description": "Đây là một dự án game mà mình tự code trong 3 tháng bằng Unity dựa trên game Fortnite mà cháu hay chơi. Mong nhận được sự ủng hộ của mọi người",
+      "likeCount": "6200",
+      "commentCount": "61"
+    },
+
+    {
+      "id": 3,
+      "name": "Metal Slug Tactics",
+      "author": {
+        "id": "1",
+        "username": "Henry Nguyen",
+        "userRank": "IV",
+        "specialName": "Bá Vương Học Đường"
+      },
+      "thumbnailUrl": "/image/project/project01.png",
+      "imageUrls": [
+        "/image/project/project-pic-1.png",
+        "/image/project/project-pic-2.png",
+        "/image/project/project-pic-3.png"
+      ],
+      "createdAt": "24/07/2023",
+      "projectCategories": ["2D", "TURN-BASED"],
+      "description": "Đây là một dự án game mà mình tự code trong 3 tháng bằng Unity dựa trên game Fortnite mà cháu hay chơi. Mong nhận được sự ủng hộ của mọi người",
+      "likeCount": "6200",
+      "commentCount": "61"
+    },
+
+    {
+      "id": 4,
+      "name": "Pokemon Go",
+      "author": {
+        "id": "1",
+        "username": "Henry Nguyen",
+        "userRank": "IV",
+        "specialName": "Bá Vương Học Đường"
+      },
+      "thumbnailUrl": "/image/project/project03.png",
+      "imageUrls": [
+        "/image/project/project-pic-1.png",
+        "/image/project/project-pic-2.png",
+        "/image/project/project-pic-3.png"
+      ],
+      "createdAt": "11/02/2020",
+      "projectCategories": ["2D", "TURN-BASED"],
+      "description": "Đây là một dự án game mà mình tự code trong 3 tháng bằng Unity dựa trên game Fortnite mà cháu hay chơi. Mong nhận được sự ủng hộ của mọi người",
+      "likeCount": "6200",
+      "commentCount": "61"
+    },
+
+    {
+      "id": 5,
+      "name": "The Sims 4",
+      "author": {
+        "id": "1",
+        "username": "Henry Nguyen",
+        "userRank": "IV",
+        "specialName": "Bá Vương Học Đường"
+      },
+      "thumbnailUrl": "/image/project/project04.png",
+      "imageUrls": [
+        "/image/project/project-pic-1.png",
+        "/image/project/project-pic-2.png",
+        "/image/project/project-pic-3.png"
+      ],
+      "createdAt": "11/02/2019",
+      "projectCategories": ["2D", "TURN-BASED"],
+      "description": "Đây là một dự án game mà mình tự code trong 3 tháng bằng Unity dựa trên game Fortnite mà cháu hay chơi. Mong nhận được sự ủng hộ của mọi người",
+      "likeCount": "6200",
+      "commentCount": "61"
+    }
+  ],
+  "notifications": [
+    {
+      "id": 1,
+      "title": "đã để lại một bình luận trên bài đăng của bạn",
+      "createdAt": "1h"
+    },
+    { "id": 2, "title": "đã thích bài đăng của bạn", "createdAt": "2h" },
+    { "id": 3, "title": "đã thích bài đăng của bạn", "createdAt": "1w" },
+    {
+      "id": 4,
+      "title": "đã thích bài đăng của bạn",
+      "createdAt": "1w"
+    },
+    { "id": 5, "title": "đã thích bài đăng của bạn", "createdAt": "2w" }
+  ],
+  "leaderboardDatas": [
+    {
+      "user": {
+        "id": "1",
+        "username": "Nguyễn Thành Nam",
+        "userRankNumber": "IV",
+        "userRank": "emerald",
+        "specialName": "Đại Vương",
+        "imageURL": "/image/leaderboard/user1.png",
+        "twitterName": "thanhnam.nguyen"
+      },
+      "score": "10000"
+    },
+    {
+      "user": {
+        "id": "2",
+        "username": "Vương Linh Chi",
+        "userRankNumber": "IV",
+        "userRank": "emerald",
+        "specialName": "Bá Vương Học Đường",
+        "imageURL": "/image/leaderboard/user3.png",
+        "twitterName": "linhchi.vuong"
+      },
+      "score": "9999"
+    },
+    {
+      "user": {
+        "id": "3",
+        "username": "Nguyễn Thái Hoà",
+        "userRankNumber": "IV",
+        "userRank": "emerald",
+        "specialName": "Bá Vương Học Đường",
+        "imageURL": "/image/leaderboard/user1.png",
+        "twitterName": "thaihoa.nguyen"
+      },
+      "score": "9899"
+    }
+  ],
+  "avatarShops": [
+    {
+      "id": "1",
+      "image": "/image/shop/avatar-pic.png",
+      "title": "JUJUTSU GOJO",
+      "price": "750"
+    },
+    {
+      "id": "2",
+      "image": "/image/shop/avatar-pic-2.png",
+      "title": "KRILIN D7 BALLS",
+      "price": "750"
+    },
+    {
+      "id": "3",
+      "image": "/image/shop/avatar-pic-3.png",
+      "title": "MAGICIAN SCHOOL GIRL",
+      "price": "750"
+    },
+    {
+      "id": "4",
+      "image": "/image/shop/avatar-pic-1.png",
+      "title": "SAITAMA",
+      "price": "750"
+    }
+  ],
+  "backgroundShops": [
+    {
+      "id": 1,
+      "image": "/image/shop/background-pic-1.png",
+      "title": "GREENHOUSE OF CITY G...",
+      "price": "750"
+    },
+    {
+      "id": 2,
+      "image": "/image/shop/background-pic-2.png",
+      "title": "AHTOHOBOKA BUNNY",
+      "price": "500"
+    },
+    {
+      "id": 3,
+      "image": "/image/shop/background-pic-3.png",
+      "title": "NOODLE STALL-GRAND...",
+      "price": "500"
+    },
+    {
+      "id": 4,
+      "image": "/image/shop/background-pic-4.png",
+      "title": "MINI BAKERY",
+      "price": "500"
+    },
+    {
+      "id": 5,
+      "image": "/image/shop/background-pic-1.png",
+      "title": "GREENHOUSE OF CITY G...",
+      "price": "750"
+    },
+    {
+      "id": 6,
+      "image": "/image/shop/background-pic-2.png",
+      "title": "AHTOHOBOKA BUNNY",
+      "price": "500"
+    },
+    {
+      "id": 7,
+      "image": "/image/shop/background-pic-3.png",
+      "title": "NOODLE STALL-GRAND...",
+      "price": "500"
+    },
+    {
+      "id": 8,
+      "image": "/image/shop/background-pic-4.png",
+      "title": "MINI BAKERY",
+      "price": "500"
+    },
+    {
+      "id": 9,
+      "image": "/image/shop/background-pic-1.png",
+      "title": "GREENHOUSE OF CITY G...",
+      "price": "750"
+    },
+    {
+      "id": 10,
+      "image": "/image/shop/background-pic-2.png",
+      "title": "AHTOHOBOKA BUNNY",
+      "price": "500"
+    },
+    {
+      "id": 11,
+      "image": "/image/shop/background-pic-3.png",
+      "title": "NOODLE STALL-GRAND...",
+      "price": "500"
+    },
+    {
+      "id": 12,
+      "image": "/image/shop/background-pic-4.png",
+      "title": "MINI BAKERY",
+      "price": "500"
+    }
   ]
 }

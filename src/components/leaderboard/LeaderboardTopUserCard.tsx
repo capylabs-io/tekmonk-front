@@ -74,14 +74,14 @@ export const LeaderboardTopUserCard = ({
       <div
         className={classNames(
           "bg-no-repeat bg-cover bg-center relative flex justify-center items-center",
-          backgroundCard,
+          backgroundCard
         )}
       >
         <div
           className={classNames(
             "rounded-full justify-center bg-no-repeat bg-cover border-[5px]",
             !!imageUrl && imageUrl,
-            userImage,
+            userImage
           )}
         />
         <Image
@@ -107,7 +107,7 @@ export const LeaderboardTopUserCard = ({
         <div
           className={classNames(
             "text-SubheadXl",
-            rank === "first" ? "text-[#FCD53F]" : "text-white",
+            rank === "first" ? "text-[#FCD53F]" : "text-white"
           )}
         >
           {score}

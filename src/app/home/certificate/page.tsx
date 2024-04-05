@@ -1,9 +1,15 @@
+"use client";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/common/Button";
-import certificates from "@/mock/certificate-mock.json";
-function Page() {
+import { Certificate } from "@/types/common-types";
+import { useCertificates } from "@/lib/hooks/useCertificate";
+import WithAuth from "@/components/hoc/WithAuth";
+
+const Page: React.FC = () => {
+  const certificates: Certificate[] = useCertificates();
+
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">
@@ -46,6 +52,6 @@ function Page() {
       })}
     </div>
   );
-}
+};
 
-export default Page;
+export default WithAuth(Page);

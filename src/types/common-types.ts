@@ -1,3 +1,4 @@
+import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
 export type Event = {
   title: string;
@@ -26,8 +27,10 @@ export interface Certificate {
   progress: string;
   mission: string;
   imageUrl?: string;
+  author: string;
+  createdAt: string;
 }
-export interface Project {
+export type Project = {
   name: string;
   author: User;
   thumbnailUrl: string;
@@ -37,12 +40,12 @@ export interface Project {
   description: string;
   likeCount: string;
   commentCount: string;
-}
+};
 
-export interface LeaderboardData {
+export type LeaderboardData = {
   user: User;
   score: string;
-}
+};
 
 // declare type for type, not interface
 export type Recruitment = {
@@ -66,4 +69,22 @@ export type EventDetail = {
 export type Achievement = {
   name: string;
   imageUrl: string;
+};
+
+export type Notification = {
+  title: string;
+  createdAt: string;
+};
+
+export type AvatarShop = {
+  id: string;
+  image: string;
+  title: string;
+  price: string;
+};
+
+export type BackgroundShop = {
+  image: string;
+  title: string;
+  price: string;
 };

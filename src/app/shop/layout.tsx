@@ -3,7 +3,6 @@ import { Button } from "@/components/common/Button";
 import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
-import mockData from "@/mock/event-mock.json";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
@@ -11,6 +10,7 @@ import { MenuLayout } from "@/components/home/MenuLayout";
 import { useRouter, usePathname } from "next/navigation";
 import { FilterGroup } from "@/components/shop/FilterGroup";
 import UserProfileLink from "@/components/common/UserProfileLink";
+import { useEvents } from "@/lib/hooks/useEvent";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -20,6 +20,8 @@ export default function Layout({
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
+  const events = useEvents().slice(1, 4);
+
   const router = useRouter();
   const handleOpenModal = () => {
     show();
@@ -56,7 +58,7 @@ export default function Layout({
           <FilterGroup customClassName="mt-4" />
         ) : (
           <>
-            <EventList customClassName="mt-4" listEvent={mockData} />
+            <EventList customClassName="mt-4" listEvent={events} />
             <div className="w-full mt-4 rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
           </>
         )}

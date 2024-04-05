@@ -8,9 +8,10 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { Dela_Gothic_One } from "next/font/google";
-import notifications from "@/mock/notification-mock.json";
 import { NotiCard } from "@/components/notification/NotiCard";
 import WithAuth from "@/components/hoc/WithAuth";
+import { useNotifications } from "@/lib/hooks/useNotification";
+import { Notification } from "@/types/common-types";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -19,6 +20,8 @@ const delaGothicOne = Dela_Gothic_One({
 });
 
 const Notification: React.FC = () => {
+  const notifications: Notification[] = useNotifications();
+
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Thông báo</div>

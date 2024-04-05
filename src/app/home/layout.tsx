@@ -4,7 +4,6 @@ import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
-import projectsMock from "@/mock/project-mock.json";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
@@ -13,7 +12,7 @@ import { usePathname } from "next/navigation";
 import { AuthorCard } from "@/components/project/AuthorCard";
 import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
 import UserProfileLink from "@/components/common/UserProfileLink";
-import { Project } from "@/types/common-types";
+import { useProjects } from "@/lib/hooks/useProject";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -26,8 +25,8 @@ export default function Layout({
   const handleOpenModal = () => {
     show();
   };
-  const projectsList = projectsMock.slice(1, 5) as Project[];
   const events = useEvents().slice(1, 4);
+  const projects = useProjects().slice(1, 5);
 
   return (
     <section className="w-full grid grid-cols-11 h-screen">
@@ -76,7 +75,7 @@ export default function Layout({
               likedCount="134"
               projectCount="5"
             />
-            <AuthorProjectsCard projects={projectsList} />
+            <AuthorProjectsCard projects={projects} />
           </>
         )}
       </div>
