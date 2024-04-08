@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/UserStore";
 import { LogOut } from "lucide-react";
-import { API_LOGIN } from "@/contants/api-url";
 
 type UserProfileLinkProps = {
   userName: string;
