@@ -1,15 +1,59 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/common/Button";
 import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
+import { Recruitment } from "@/types/common-types";
+import { Pagination } from "@/components/common/Pagination";
+import axios from "axios";
+import { API_POST } from "@/contants/api-url";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-delo",
 });
+
+const itemsPerPage = 12;
+
 function Recruitment() {
+  const [recruitments, setRecruitments] = useState<Recruitment[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const handlePageClick = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  useEffect(() => {
+    const fetchRecruitments = async () => {
+      try {
+        const response = await axios.get(`${API_POST}`);
+        const data = response.data;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const currentRecruitments = data.slice(startIndex, endIndex);
+        setRecruitments(currentRecruitments);
+
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+        setTotalPages(totalPages);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchRecruitments();
+  }, [currentPage]);
+
   return (
     <div className="h-screen relative">
       <nav className="w-full flex justify-between p-4">
@@ -20,9 +64,12 @@ function Recruitment() {
           height={32}
         />
       </nav>
+
       <div className="w-full flex items-center justify-center gap-x-48 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-cover h-[300px]">
         <div className="text-white">
-          <div className={`${delaGothicOne.className} text-5xl !leading-[64px`}>
+          <div
+            className={`${delaGothicOne.className} text-5xl !leading-[64px]`}
+          >
             TUYỂN DỤNG TEKMONK
           </div>
           <div className="text-bodyLg mt-5">
@@ -37,6 +84,7 @@ function Recruitment() {
             </Button>
           </div>
         </div>
+
         <Image
           src="/image/recruitment/recruitment-pic.png"
           alt="left banner"
@@ -45,46 +93,28 @@ function Recruitment() {
           height={200}
         />
       </div>
-      <div className="w-full flex flex-wrap gap-y-8 gap-x-16 justify-center mt-5">
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
-        <RecruitmentCard
-          imageUrl="/image/recruitment/recruitment-card-pic.png"
-          title="Giáo viên lập trình Frontend ngôn ngữ VueJs (2 năm kinh nghiệm)"
-          description="Mức lương: 8-20 tỷ"
-          tags={["Hà Nội", "Còn 18 ngày", "VueJs"]}
-        />
+
+      <div className="w-full flex flex-wrap gap-x-4 gap-y-6 justify-around mt-5 px-5">
+        {recruitments.map((recruitment, index) => (
+          <RecruitmentCard
+            key={index}
+            imageUrl={recruitment.imageUrl}
+            title={recruitment.title}
+            description={recruitment.description}
+            tags={recruitment.tags}
+          />
+        ))}
       </div>
+
+      <Pagination
+        onPageClick={handlePageClick}
+        customClassName="flex justify-center pb-5 pt-10"
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onClickNextPage={handleNextPage}
+        onClickPrevPage={handlePrevPage}
+      />
     </div>
   );
 }
-
 export default Recruitment;

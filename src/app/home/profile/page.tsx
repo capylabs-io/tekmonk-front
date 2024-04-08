@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/Button";
@@ -22,8 +22,10 @@ import {
 } from "recharts";
 import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
-import certificates from "@/mock/certificate-mock.json";
-import achievements from "@/mock/achievement-mock.json";
+import WithAuth from "@/components/hoc/WithAuth";
+import { useAchievements } from "@/lib/hooks/useAchievement";
+import { Achievement, Certificate } from "@/types/common-types";
+import { useCertificates } from "@/lib/hooks/useCertificate";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -31,11 +33,27 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-export default function Profile() {
+const Profile: React.FC = () => {
   const [userInfo, userCertificate] = useUserStore((state) => [
     state.userInfo,
     state.userCertificate,
   ]);
+
+  const getMe = useUserStore((state) => state.getMe);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userData = await getMe();
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const achievements: Achievement[] = useAchievements();
+  const certificates: Certificate[] = useCertificates();
 
   const data = [
     {
@@ -69,6 +87,7 @@ export default function Profile() {
       fullMark: 100,
     },
   ];
+
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Hồ sơ cá nhân</div>
@@ -109,12 +128,9 @@ export default function Profile() {
           <div className="px-6 mt-3">
             <div className="text-primary-900">TIẾN TRÌNH</div>
             {userCertificate &&
-              userCertificate.map((certificate) => {
+              userCertificate.map((certificate, index) => {
                 return (
-                  <div
-                    className="flex gap-x-2 items-center"
-                    key={certificate.name}
-                  >
+                  <div className="flex gap-x-2 items-center" key={index}>
                     <Image
                       src={certificate.imageUrl || ""}
                       alt="certificate"
@@ -158,11 +174,11 @@ export default function Profile() {
               <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12">
-              {certificates.map((certificate) => {
+              {certificates.map((certificate, index) => {
                 return (
                   <div
                     className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={certificate.name}
+                    key={index}
                   >
                     <Image
                       src={certificate.imageUrl || ""}
@@ -187,11 +203,11 @@ export default function Profile() {
               <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12 items-center">
-              {achievements.map((achievement) => {
+              {achievements.map((achievement, index) => {
                 return (
                   <div
                     className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={achievement.name}
+                    key={index}
                   >
                     <Image
                       src={achievement.imageUrl || ""}
@@ -257,4 +273,6 @@ export default function Profile() {
       </Tabs>
     </>
   );
-}
+};
+
+export default WithAuth(Profile);

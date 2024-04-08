@@ -2,24 +2,18 @@
 import { Button } from "@/components/common/Button";
 import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
-import {
-  Bell,
-  Home,
-  MoreHorizontal,
-  ShoppingCart,
-  User,
-  Zap,
-} from "lucide-react";
 import Image from "next/image";
-import mockData from "@/mock/event-mock.json";
-import projectsMock from "@/mock/project-mock.json";
+import { useEvents } from "@/lib/hooks/useEvent";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { AuthorCard } from "@/components/project/AuthorCard";
 import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
+import UserProfileLink from "@/components/common/UserProfileLink";
+import { useProjects } from "@/lib/hooks/useProject";
+
 export default function Layout({
   children, // will be a page or nested layout
 }: {
@@ -28,11 +22,12 @@ export default function Layout({
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
-  const router = useRouter();
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
-  const projectsSliced = projectsMock.slice(1, 5);
+  const events = useEvents().slice(1, 4);
+  const projects = useProjects().slice(1, 5);
+
   return (
     <section className="w-full grid grid-cols-11 h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}
@@ -52,21 +47,7 @@ export default function Layout({
             <Button className="w-full !rounded-3xl" onClick={handleOpenModal}>
               Đăng tải
             </Button>
-            <div className="flex items-center mt-8 w-full justify-between">
-              <div
-                className="flex items-center gap-x-2 cursor-pointer"
-                onClick={() => router.push("/home/profile")}
-              >
-                <div className="h-10 w-10 rounded-full flex flex-col bg-[url('/image/home/profile-pic.png')] bg-yellow-100 items-center justify-center" />
-                <div>
-                  <p className="text-sm truncate">{userName}</p>
-                  <p className="text-sm text-gray-500">{userRank}</p>
-                </div>
-              </div>
-              <button type="button">
-                <MoreHorizontal size={20} />
-              </button>
-            </div>
+            <UserProfileLink userName={userName} userRank={userRank} />
           </div>
         </div>
       </div>
@@ -75,7 +56,7 @@ export default function Layout({
         {!usePathname().includes("/project") ? (
           <>
             <PointCard point="9999" />
-            <EventList listEvent={mockData} />
+            <EventList listEvent={events} />
             <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
           </>
         ) : (
@@ -94,7 +75,7 @@ export default function Layout({
               likedCount="134"
               projectCount="5"
             />
-            <AuthorProjectsCard projects={projectsSliced} />
+            <AuthorProjectsCard projects={projects} />
           </>
         )}
       </div>

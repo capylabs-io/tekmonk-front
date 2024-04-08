@@ -1,33 +1,17 @@
 "use client";
 import { Button } from "@/components/common/Button";
-import { EventList } from "@/components/home/EventList";
-import { PointCard } from "@/components/home/PointCard";
-import {
-  Bell,
-  Home,
-  MoreHorizontal,
-  ShoppingCart,
-  User,
-  Zap,
-} from "lucide-react";
 import Image from "next/image";
-import mockData from "@/mock/event-mock.json";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import { useRouter } from "next/navigation";
-export default function Layout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+import UserProfileLink from "@/components/common/UserProfileLink";
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
-  const router = useRouter();
   const handleOpenModal = () => {
-    show("aaaa");
+    show();
   };
   return (
     <section className="w-full grid grid-cols-10 h-screen">
@@ -48,21 +32,7 @@ export default function Layout({
             <Button className="w-full !rounded-3xl" onClick={handleOpenModal}>
               Đăng tải
             </Button>
-            <div className="flex items-center mt-8 w-full justify-between">
-              <div
-                className="flex items-center gap-x-2 cursor-pointer"
-                onClick={() => router.push("/home/profile")}
-              >
-                <div className="h-10 w-10 rounded-full flex flex-col bg-[url('/image/home/profile-pic.png')] bg-yellow-100 items-center justify-center" />
-                <div>
-                  <p className="text-sm truncate">{userName}</p>
-                  <p className="text-sm text-gray-500">{userRank}</p>
-                </div>
-              </div>
-              <button type="button">
-                <MoreHorizontal size={20} />
-              </button>
-            </div>
+            <UserProfileLink userName={userName} userRank={userRank} />
           </div>
         </div>
       </div>

@@ -3,16 +3,20 @@ import React from "react";
 import Image from "next/image";
 import { Dela_Gothic_One } from "next/font/google";
 import { ArrowLeft } from "lucide-react";
-import BackgroundList from "@/mock/background-mock.json";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
+import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
+
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-delo",
 });
+
 export default function BackgroundShop() {
   const router = useRouter();
+  const backgroundShops = useBackgroundShops();
+
   return (
     <div>
       <div
@@ -43,7 +47,7 @@ export default function BackgroundShop() {
         />
       </div>
       <div className="mt-5 flex flex-wrap gap-4 overflow-hidden px-4">
-        {BackgroundList.map((background, index) => {
+        {backgroundShops.map((background, index) => {
           return (
             <BackgroundCard
               imageUrl={background.image}

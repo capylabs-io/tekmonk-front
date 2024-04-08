@@ -3,11 +3,15 @@ import { ArrowLeft, MessageCircle, Share } from "lucide-react";
 import React, { useState } from "react";
 import Image from "next/image";
 import classNames from "classnames";
-import projectsMock from "@/mock/project-mock.json";
 import { useRouter } from "next/navigation";
+import { useProjects } from "@/lib/hooks/useProject";
+import { Project } from "@/types/common-types";
+
 function Page() {
+  const projects: Project[] = useProjects();
   const [liked, setLiked] = useState(false);
   const router = useRouter();
+
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">
@@ -18,8 +22,8 @@ function Page() {
         />
       </div>
       <div className="mt-8 flex flex-wrap gap-x-2 items-center px-6">
-        {projectsMock &&
-          projectsMock[0].projectCategories.map((category, index) => {
+        {projects &&
+          projects[0]?.projectCategories.map((category, index) => {
             return (
               <div
                 key={index}
@@ -49,7 +53,7 @@ function Page() {
           className="rounded-xl w-full mt-3"
         />
         <div className="flex gap-3 mt-2">
-          {projectsMock[0].imageUrls.map((image, index) => {
+          {projects[0]?.imageUrls.map((image, index) => {
             return (
               <Image
                 key={index}
@@ -68,7 +72,7 @@ function Page() {
           <div
             className={classNames(
               "flex items-center gap-x-1 font-bold ",
-              liked ? "text-red-500" : "text-gray-500",
+              liked ? "text-red-500" : "text-gray-500"
             )}
           >
             <button onClick={() => setLiked((prev) => !prev)}>

@@ -1,8 +1,10 @@
+"use client";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import { EventCard } from "@/components/event/EventCard";
+import WithAuth from "@/components/hoc/WithAuth";
 
-export default function New() {
+const New: React.FC = () => {
   return (
     <div className="mt-3">
       <div className="text-primary-900 flex gap-x-2 px-6 items-center">
@@ -34,4 +36,6 @@ export default function New() {
       </div>
     </div>
   );
-}
+};
+
+export default WithAuth(New);

@@ -12,7 +12,8 @@ const delaGothicOne = Dela_Gothic_One({
   subsets: ["latin"],
   variable: "--font-delo",
 });
-export default function Landing() {
+
+function Landing() {
   const router = useRouter();
   const handleOnClick = () => {
     router.push("/home");
@@ -90,3 +91,5 @@ export default function Landing() {
     </>
   );
 }
+
+export default Landing;

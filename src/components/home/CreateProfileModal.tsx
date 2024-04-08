@@ -12,7 +12,7 @@ export const CreateProfileModal = () => {
     state.hide,
   ]);
   return (
-    isShowing && (
+    isShowing ? (
       <div className="absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
         <div className="relative mx-auto flex w-[688px] flex-col justify-center gap-y-5 rounded-3xl bg-white py-6">
           <button
@@ -90,6 +90,6 @@ export const CreateProfileModal = () => {
           </div>
         </div>
       </div>
-    )
+    ) : (<></>)
   );
 };

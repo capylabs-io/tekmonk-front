@@ -2,9 +2,6 @@
 import Image from "next/image";
 import React from "react";
 import { Kanit, Dela_Gothic_One } from "next/font/google";
-import { Button } from "@/components/common/Button";
-import { ArrowRight } from "lucide-react";
-import { LandingCard } from "@/components/landing/LandingCard";
 import { useRouter } from "next/navigation";
 import { FunnelCard } from "@/components/funnel/FunnelCard";
 
@@ -17,13 +14,20 @@ const delaGothicOne = Dela_Gothic_One({
 
 export default function Landing() {
   const router = useRouter();
+  // phụ huynh
   const handleCardClick = () => {
     window.open("https://tekmonk.edu.vn/");
   };
+  //học viên
   const handleCard1Click = () => {
     router.push("/landing");
   };
+  //giảng viên
   const handleCard2Click = () => {
+    router.push("/landing");
+  };
+  //menu tuyển dụng
+  const handleMenuClick = () => {
     router.push("/recruitment");
   };
   return (
@@ -36,6 +40,22 @@ export default function Landing() {
             width={159}
             height={32}
           />
+          <ul className="flex items-center gap-4">
+            <li className="cursor-pointer hover:text-primary-600">
+              <a href="https://tekmonk.edu.vn/category/san-pham-hoc-vien/">
+                Sản Phẩm
+              </a>
+            </li>
+            <li
+              className="cursor-pointer hover:text-primary-600"
+              onClick={handleMenuClick}
+            >
+              Tuyển dụng
+            </li>
+            <li className="cursor-pointer hover:text-primary-600">
+              <a href="https://tekmonk.edu.vn/gioi-thieu/">Về chúng tôi</a>
+            </li>
+          </ul>
         </nav>
         <div className="w-full relative flex justify-center max-h-[360px] z-20">
           <Image

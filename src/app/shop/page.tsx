@@ -4,18 +4,23 @@ import Image from "next/image";
 import { Dela_Gothic_One } from "next/font/google";
 import { ArrowRight } from "lucide-react";
 import { AvatarCard } from "@/components/shop/AvatarCard";
-import BackgroundList from "@/mock/background-mock.json";
-import AvatarList from "@/mock/shop-avatar-mock.json";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
+import WithAuth from "@/components/hoc/WithAuth";
+import { useAvatarShops } from "@/lib/hooks/useAvatarShop";
+import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
+
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
   variable: "--font-delo",
 });
-export default function Shop() {
-  const slicedBackgroundList = BackgroundList.slice(0, 4);
+
+const Shop: React.FC = () => {
   const router = useRouter();
+  const avatarShops = useAvatarShops();
+  const backgroundShops = useBackgroundShops().slice(0, 4);
+
   return (
     <div>
       <div className="text-primary-900 px-6 text-SubheadLg">
@@ -46,7 +51,7 @@ export default function Shop() {
           <ArrowRight className="text-gray-600" size={24} />
         </div>
         <div className="mt-5 flex gap-x-5 overflow-hidden">
-          {AvatarList.map((avatar, index) => {
+          {avatarShops.map((avatar, index) => {
             return (
               <AvatarCard
                 imageUrl={avatar.image}
@@ -69,7 +74,7 @@ export default function Shop() {
           />
         </div>
         <div className="mt-5 flex gap-x-5 overflow-hidden">
-          {slicedBackgroundList.map((background, index) => {
+          {backgroundShops.map((background, index) => {
             return (
               <BackgroundCard
                 imageUrl={background.image}
@@ -83,4 +88,6 @@ export default function Shop() {
       </div>
     </div>
   );
-}
+};
+
+export default WithAuth(Shop);

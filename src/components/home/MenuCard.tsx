@@ -20,7 +20,7 @@ export const MenuCard = ({ title, active, url, iconElement }: Props) => {
     <div
       className={classNames(
         BASE_CLASS,
-        active && "bg-primary-25 text-primary-600",
+        active && "bg-primary-25 text-primary-600"
       )}
       onClick={handleOnClick}
     >
