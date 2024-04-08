@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
 import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
+import WithAuth from "@/components/hoc/WithAuth";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -13,7 +14,7 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-export default function BackgroundShop() {
+const BackgroundShop: React.FC = () => {
   const router = useRouter();
   const backgroundShops = useBackgroundShops();
 
@@ -60,4 +61,6 @@ export default function BackgroundShop() {
       </div>
     </div>
   );
-}
+};
+
+export default WithAuth(BackgroundShop);
