@@ -8,13 +8,12 @@ const WithAuth = (WrappedComponent: React.FC) => {
   const Comp: React.FC = () => {
     const router = useRouter();
     const isConnected = useUserStore((state) => state.isConnected);
-
     useEffect(() => {
-      if (!isConnected) {
+      if (!isConnected()) {
         toast.error("You must be login first.");
         router.push("/login");
       }
-    }, [isConnected]);
+    }, [isConnected, router]);
 
     return (
       <>
