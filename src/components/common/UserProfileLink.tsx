@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/UserStore";
 import { LogOut } from "lucide-react";
+import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 
 type UserProfileLinkProps = {
   userName: string;
@@ -35,11 +36,12 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
           <p className="text-sm text-gray-500">{userRank}</p>
         </div>
       </div>
-      <button onClick={toggleMenu} className="hover:text-primary-600">
-        <MoreHorizontal size={20} />
-      </button>
-      {isMenuOpen && (
-        <div className="absolute -translate-x-1/2 -top-[70px] left-1/2 rounded-lg pl-4 bg-white shadow-md flex gap-2 items-center z-10">
+
+      <Dialog>
+        <DialogTrigger onClick={toggleMenu} className="hover:text-primary-600">
+          <MoreHorizontal size={20} />
+        </DialogTrigger>
+        <DialogContent className="absolute -translate-x-1/2 -top-[70px] left-1/2 rounded-lg pl-4 bg-white shadow-md flex gap-2 items-center z-10">
           <LogOut size={18} className="text-red-600" />
           <button
             className="w-max text-gray-600 font-normal p-4 pl-2"
@@ -47,8 +49,8 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
           >
             Đăng xuất tài khoản
           </button>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
