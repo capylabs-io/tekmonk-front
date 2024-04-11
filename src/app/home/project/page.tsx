@@ -6,8 +6,9 @@ import classNames from "classnames";
 import { useRouter } from "next/navigation";
 import { useProjects } from "@/lib/hooks/useProject";
 import { Project } from "@/types/common-types";
+import WithAuth from "@/components/hoc/WithAuth";
 
-function Page() {
+const Page: React.FC = () => {
   const projects: Project[] = useProjects();
   const [liked, setLiked] = useState(false);
   const router = useRouter();
@@ -97,6 +98,6 @@ function Page() {
       </div>
     </div>
   );
-}
+};
 
-export default Page;
+export default WithAuth(Page);
