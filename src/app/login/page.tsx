@@ -49,21 +49,11 @@ export default function Login() {
       const userInfo = await login(user);
       const roleName = get(userInfo, "role.name", "").toLowerCase();
 
-      switch (roleName) {
-        case Role.STUDENT:
-          router.push("/home");
-          break;
-        case Role.TEACHER:
-          // @TODO: chưa có
-          //router Admin
-          router.push("/");
-          break;
-        case Role.PARENT:
-          router.push("/home");
-          break;
-        default:
-          router.push("/login");
-          break;
+      if (roleName === Role.STUDENT) {
+        router.push("/home");
+      } else {
+        useUserStore.getState().clear();
+        toast.error("Login Fail");
       }
     } catch (error) {
       toast.error("Login Fail");
