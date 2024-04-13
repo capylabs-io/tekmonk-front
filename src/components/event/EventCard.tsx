@@ -7,7 +7,7 @@ type Props = {
   imageUrl: string;
   title: string;
   createdAt: string;
-  id?: string;
+  id?: number;
 };
 export const EventCard = ({ imageUrl, title, createdAt, id }: Props) => {
   const router = useRouter();
@@ -15,6 +15,7 @@ export const EventCard = ({ imageUrl, title, createdAt, id }: Props) => {
   const handleOnClick = () => {
     id && router.push(`event/${id}`);
   };
+
   return (
     <div className="w-[310px] cursor-pointer" onClick={handleOnClick}>
       <Image
@@ -24,7 +25,7 @@ export const EventCard = ({ imageUrl, title, createdAt, id }: Props) => {
         height={100}
         className="rounded-xl"
       />
-      <div className="w-full mt-2 text-base">{title}</div>
+      <div className="w-full mt-2 text-xl font-bold">{title}</div>
       <div className="w-full mt-2 text-sm text-primary-900">{createdAt}</div>
     </div>
   );
