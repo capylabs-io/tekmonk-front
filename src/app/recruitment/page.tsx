@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/common/Button";
-import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
-import { Recruitment } from "@/types/common-types";
+
+import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Pagination } from "@/components/common/Pagination";
-import axios from "axios";
-import { API_POST } from "@/contants/api-url";
+import { useHirings } from "@/lib/hooks/useNew";
+import { useRouter } from "next/navigation";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -15,13 +15,16 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
-const itemsPerPage = 12;
+const itemsPerPage = 6;
 
-function Recruitment() {
-  const [recruitments, setRecruitments] = useState<Recruitment[]>([]);
+function RecruitmentPage() {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/");
+  };
+
+  const hirings = useHirings();
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -34,34 +37,20 @@ function Recruitment() {
     setCurrentPage((prevPage) => prevPage - 1);
   };
 
-  useEffect(() => {
-    const fetchRecruitments = async () => {
-      try {
-        const response = await axios.get(`${API_POST}`);
-        const data = response.data;
-
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const currentRecruitments = data.slice(startIndex, endIndex);
-        setRecruitments(currentRecruitments);
-
-        const totalPages = Math.ceil(data.length / itemsPerPage);
-        setTotalPages(totalPages);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchRecruitments();
-  }, [currentPage]);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentHirings = hirings.slice(startIndex, endIndex);
+  // const recruitments = news.filter((item) => item.attributes.type === "hiring");
 
   return (
     <div className="h-screen relative">
-      <nav className="w-full flex justify-between p-4">
+      <nav className="w-full flex justify-between p-4 cursor-pointer">
         <Image
           src="/image/app-logo.png"
           alt="app logo"
           width={159}
           height={32}
+          onClick={handleClick}
         />
       </nav>
 
@@ -93,15 +82,14 @@ function Recruitment() {
           height={200}
         />
       </div>
-
       <div className="w-full flex flex-wrap gap-x-4 gap-y-6 justify-around mt-5 px-5">
-        {recruitments.map((recruitment, index) => (
+        {currentHirings.map((recruitment) => (
           <RecruitmentCard
-            key={index}
-            imageUrl={recruitment.imageUrl}
-            title={recruitment.title}
-            description={recruitment.description}
-            tags={recruitment.tags}
+            key={recruitment.id}
+            id={recruitment.id}
+            imageUrl={recruitment.attributes.backgroundImgUrl}
+            title={recruitment.attributes.title}
+            metadata={recruitment.attributes.metadata}
           />
         ))}
       </div>
@@ -110,11 +98,12 @@ function Recruitment() {
         onPageClick={handlePageClick}
         customClassName="flex justify-center pb-5 pt-10"
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={Math.ceil(hirings.length / itemsPerPage)}
         onClickNextPage={handleNextPage}
         onClickPrevPage={handlePrevPage}
       />
     </div>
   );
 }
-export default Recruitment;
+
+export default RecruitmentPage;

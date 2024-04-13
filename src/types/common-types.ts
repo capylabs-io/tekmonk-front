@@ -1,14 +1,6 @@
+import { metadata } from "./../app/layout";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
-export type Event = {
-  title: string;
-  day: string;
-  month: string;
-  weekday: string;
-  timeRange: string;
-  imageUrl: string;
-  createdAt: string;
-};
 export type User = {
   id: string;
   username: string;
@@ -49,21 +41,62 @@ export type LeaderboardData = {
 
 // declare type for type, not interface
 export type Recruitment = {
-  imageUrl: string;
-  title: string;
-  description: string;
-  tags: string[];
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
+};
+
+export type RecruitmentDetail = {
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
+};
+export type Event = {
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
 };
 
 export type EventDetail = {
-  title: string;
-  eventTime: string;
-  eventVenue: string;
-  address: string;
-  month: string;
-  day: string;
-  weekday: string;
-  content: string;
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
 };
 
 export type Achievement = {
@@ -87,4 +120,49 @@ export type BackgroundShop = {
   image: string;
   title: string;
   price: string;
+};
+
+export type New = {
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
+};
+
+export type NewDetail = {
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
+};
+
+export type Hiring = {
+  id: number;
+  attributes: {
+    backgroundImgUrl: string;
+    title: string;
+    content: string;
+    location: string;
+    locationName: string;
+    startTime: string;
+    endTime: string;
+    type: string;
+    metadata: any;
+  };
 };

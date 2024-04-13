@@ -1,36 +1,27 @@
 "use client";
 import { Button } from "@/components/common/Button";
-import { EventList } from "@/components/home/EventList";
-import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
-import { useEvents } from "@/lib/hooks/useEvent";
 import { useRouter } from "next/navigation";
-
-export default function Layout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
   const handleOpenModal = () => {
     show();
   };
-  const events = useEvents().slice(1, 4);
 
   const router = useRouter();
   const handleClick = () => {
-    router.push("/home");
+    router.push("/");
   };
 
   return (
-    <section className="w-full grid grid-cols-11 h-screen">
+    <section className="w-full grid grid-cols-10 h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}
       <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-r col-span-2">
         <div className="grow-0 cursor-pointer">
@@ -53,12 +44,7 @@ export default function Layout({
           </div>
         </div>
       </div>
-      <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
-      <div className="h-full flex flex-col gap-y-4 px-10 py-5 border-gray-200 border-l col-span-3">
-        <PointCard point="9999" />
-        <EventList listEvent={events} />
-        <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
-      </div>
+      <div className="col-span-8 py-5 overflow-y-auto">{children}</div>
       <CreateProfileModal />
     </section>
   );
