@@ -23,7 +23,9 @@ export default function Layout({
   const pathname = usePathname();
 
   const id = Number(pathname.split("/")[2]);
+  // đoạn này chuyển đổi phần tử t3 của mảng sang số nguyên được tách ra bởi dấu /, nếu k có sẽ mang giá trị NaN
   const isCustomLayout = !!id;
+  // check điều kiện nếu tồn tại id thì biến isCustomLayout sẽ bằng true, sẽ chia lại col-span như bên dưới
 
   const bodyClass = isCustomLayout
     ? "col-span-8 py-5 overflow-y-auto"
