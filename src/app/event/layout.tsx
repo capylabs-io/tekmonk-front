@@ -7,6 +7,7 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/contants/role";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
@@ -18,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const router = useRouter();
   const handleClick = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
 
   return (

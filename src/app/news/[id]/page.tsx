@@ -4,6 +4,7 @@ import { ArrowLeft, Clock4, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useNewDetail } from "@/lib/hooks/useNewDetail";
 import { format } from "date-fns";
+import { ROUTES } from "@/contants/role";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const locationName = !newDetail ? "" : newDetail.attributes.locationName;
 
   const handleBackRoute = () => {
-    router.push("/news");
+    router.push(ROUTES.NEWS);
   };
 
   return (

@@ -8,13 +8,14 @@ import { useNews } from "@/lib/hooks/useNew";
 import { New } from "@/types/common-types";
 import { format } from "date-fns";
 import { Pagination } from "@/components/common/Pagination";
+import { ROUTES } from "@/contants/role";
 
 const itemsPerPage = 6;
 
 const New: React.FC = () => {
   const router = useRouter();
   const handleBackRoute = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
   const news: New[] = useNews();
   const [currentPage, setCurrentPage] = useState(1);

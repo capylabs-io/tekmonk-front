@@ -13,6 +13,7 @@ import { AuthorCard } from "@/components/project/AuthorCard";
 import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useProjects } from "@/lib/hooks/useProject";
+import { ROUTES } from "@/contants/role";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -30,7 +31,7 @@ export default function Layout({
 
   const router = useRouter();
   const handleClick = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
 
   return (

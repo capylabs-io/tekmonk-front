@@ -4,6 +4,7 @@ import { ArrowLeft, Clock4, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRecruitmentDetail } from "@/lib/hooks/useRecruitmentDetail";
 import { format } from "date-fns";
+import { ROUTES } from "@/contants/role";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Page({ params }: { params: { id: string } }) {
     : recruitmentDetail.attributes.locationName;
 
   const handleBackRoute = () => {
-    router.push("/recruitment");
+    router.push(ROUTES.RECRUITMENT);
   };
 
   return (

@@ -6,6 +6,7 @@ import { EventCard } from "./EventCard";
 import { Event } from "@/types/common-types";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/contants/role";
 
 type Props = {
   customClassName?: string;
@@ -29,7 +30,7 @@ export const EventList = ({ customClassName, listEvent }: Props) => {
   const dayName = dayNames[currentDay];
 
   const router = useRouter();
-  const handleClick = () => router.push("/event");
+  const handleClick = () => router.push(ROUTES.EVENT);
 
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>

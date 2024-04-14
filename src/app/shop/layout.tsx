@@ -11,6 +11,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { FilterGroup } from "@/components/shop/FilterGroup";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useEvents } from "@/lib/hooks/useEvent";
+import { ROUTES } from "@/contants/role";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -24,7 +25,7 @@ export default function Layout({
 
   const router = useRouter();
   const handleClick = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
 
   const handleOpenModal = () => {

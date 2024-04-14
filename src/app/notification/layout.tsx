@@ -10,6 +10,7 @@ import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useEvents } from "@/lib/hooks/useEvent";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/contants/role";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -26,7 +27,7 @@ export default function Layout({
 
   const router = useRouter();
   const handleClick = () => {
-    router.push("/home");
+    router.push(ROUTES.HOME);
   };
 
   return (
