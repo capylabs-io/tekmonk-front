@@ -7,13 +7,7 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useRouter } from "next/navigation";
-import { ROUTES } from "@/contants/role";
-
-export default function Layout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
   const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
@@ -23,7 +17,7 @@ export default function Layout({
 
   const router = useRouter();
   const handleClick = () => {
-    router.push(ROUTES.HOME);
+    router.push("/");
   };
 
   return (

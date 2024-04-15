@@ -6,6 +6,9 @@ import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/contants/role";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
@@ -13,17 +16,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const handleOpenModal = () => {
     show();
   };
+
+  const router = useRouter();
+  const handleClick = () => {
+    router.push(ROUTES.HOME);
+  };
+
   return (
     <section className="w-full grid grid-cols-10 h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}
       <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-r col-span-2">
-        <div className="grow-0">
+        <div className="grow-0 cursor-pointer">
           <Image
             src="/image/app-logo.png"
             alt="app logo"
             width={159}
             height={32}
             className="ml-1.5"
+            onClick={handleClick}
           />
         </div>
         <div className="flex flex-col mt-4 grow">

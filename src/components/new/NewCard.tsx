@@ -9,11 +9,11 @@ type Props = {
   createdAt: string;
   id?: number;
 };
-export const EventCard = ({ imageUrl, title, createdAt, id }: Props) => {
+export const NewCard = ({ imageUrl, title, createdAt, id }: Props) => {
   const router = useRouter();
 
   const handleOnClick = () => {
-    id && router.push(`event/${id}`);
+    id && router.push(`news/${id}`);
   };
 
   return (

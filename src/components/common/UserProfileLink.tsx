@@ -4,6 +4,7 @@ import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/UserStore";
 import { LogOut } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
+import { ROUTES } from "@/contants/role";
 
 type UserProfileLinkProps = {
   userName: string;
@@ -21,7 +22,7 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
   };
   const handleLogout = () => {
     useUserStore.getState().clear();
-    router.push("/login");
+    router.push(ROUTES.LOGIN);
   };
 
   return (

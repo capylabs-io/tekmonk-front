@@ -4,6 +4,7 @@ import React from "react";
 import { Kanit, Dela_Gothic_One } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { FunnelCard } from "@/components/funnel/FunnelCard";
+import { ROUTES } from "@/contants/role";
 
 const kanit = Kanit({ weight: "400", subsets: ["latin"] });
 const delaGothicOne = Dela_Gothic_One({
@@ -20,15 +21,15 @@ export default function Landing() {
   };
   //học viên
   const handleCard1Click = () => {
-    router.push("/landing");
+    router.push(ROUTES.LANDING);
   };
   //giảng viên
   const handleCard2Click = () => {
-    router.push("/landing");
+    router.push(ROUTES.LANDING);
   };
   //menu tuyển dụng
   const handleMenuClick = () => {
-    router.push("/recruitment");
+    router.push(ROUTES.RECRUITMENT);
   };
   return (
     <>

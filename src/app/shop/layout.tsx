@@ -11,6 +11,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { FilterGroup } from "@/components/shop/FilterGroup";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useEvents } from "@/lib/hooks/useEvent";
+import { ROUTES } from "@/contants/role";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -23,6 +24,10 @@ export default function Layout({
   const events = useEvents().slice(1, 4);
 
   const router = useRouter();
+  const handleClick = () => {
+    router.push(ROUTES.HOME);
+  };
+
   const handleOpenModal = () => {
     show();
   };
@@ -31,13 +36,14 @@ export default function Layout({
     <section className="w-full grid grid-cols-11 h-screen">
       {/* Include shared UI here e.g. a header or sidebar */}
       <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-r col-span-2">
-        <div className="grow-0">
+        <div className="grow-0 cursor-pointer">
           <Image
             src="/image/app-logo.png"
             alt="app logo"
             width={159}
             height={32}
             className="ml-1.5"
+            onClick={handleClick}
           />
         </div>
         <div className="flex flex-col mt-4 grow">

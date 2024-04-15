@@ -2,12 +2,13 @@
 import React from "react";
 import { ArrowLeft, Clock4, MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEventDetail } from "@/lib/hooks/useEventDetail";
+import { useRecruitmentDetail } from "@/lib/hooks/useRecruitmentDetail";
 import { format } from "date-fns";
+import { ROUTES } from "@/contants/role";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const { eventDetail } = useEventDetail(params.id);
+  const { recruitmentDetail } = useRecruitmentDetail(params.id);
 
   const date = new Date();
   const currentDay = date.getDay();
@@ -22,25 +23,29 @@ export default function Page({ params }: { params: { id: string } }) {
   ];
   const dayName = dayNames[currentDay];
 
-  const title = !eventDetail ? "" : eventDetail.attributes.title;
-  const startTime = !eventDetail
+  const title = !recruitmentDetail ? "" : recruitmentDetail.attributes.title;
+  const startTime = !recruitmentDetail
     ? ""
-    : format(new Date(eventDetail.attributes.startTime), "HH:mm");
-  const endTime = !eventDetail
+    : format(new Date(recruitmentDetail.attributes.startTime), "HH:mm");
+  const endTime = !recruitmentDetail
     ? ""
-    : format(new Date(eventDetail.attributes.endTime), "HH:mm");
-  const dateFormat = !eventDetail
+    : format(new Date(recruitmentDetail.attributes.endTime), "HH:mm");
+  const dateFormat = !recruitmentDetail
     ? ""
-    : format(new Date(eventDetail.attributes.endTime), "dd/MM/yyyy");
-  const day = dateFormat.slice(0, 2);
-  const month = dateFormat.slice(3, 5);
+    : format(new Date(recruitmentDetail.attributes.endTime), "dd/MM/yyyy");
 
-  const location = !eventDetail ? "" : eventDetail.attributes.location;
-  const content = !eventDetail ? "" : eventDetail.attributes.content;
-  const locationName = !eventDetail ? "" : eventDetail.attributes.locationName;
+  const location = !recruitmentDetail
+    ? ""
+    : recruitmentDetail.attributes.location;
+  const content = !recruitmentDetail
+    ? ""
+    : recruitmentDetail.attributes.content;
+  const locationName = !recruitmentDetail
+    ? ""
+    : recruitmentDetail.attributes.locationName;
 
   const handleBackRoute = () => {
-    router.back();
+    router.push(ROUTES.RECRUITMENT);
   };
 
   return (
@@ -50,9 +55,9 @@ export default function Page({ params }: { params: { id: string } }) {
         onClick={handleBackRoute}
       >
         <ArrowLeft size={18} className="text-gray-600" />
-        <span>Sự kiện {params?.id}</span>
+        <span>Chi tiết Tuyển dụng</span>
       </div>
-      <div className="w-full flex justify-center bg-[url('/image/event/event-banner.png')] bg-no-repeat bg-cover h-[256px] relative mt-4" />
+      <div className="w-full flex justify-center bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-cover h-[256px] relative mt-4" />
       <div className="w-2/3 mx-auto border-r border-l border-b border-gray-200 h-max">
         <div className="px-4 pt-8 flex justify-between">
           <div>
@@ -69,15 +74,6 @@ export default function Page({ params }: { params: { id: string } }) {
                 <div>{locationName}</div>
                 <div className="text-sm text-gray-500">{location}</div>
               </div>
-            </div>
-          </div>
-          <div className="!rounded-[4px] border w-20 border-gray-200 shadow-[0_3px_0_0_#E4E7EC] text-center h-max">
-            <div className="bg-primary-600 text-white py-1 text-[10px] font-medium !rounded-t-[4px]">
-              THÁNG {month}
-            </div>
-            <div className="px-2 py-1 !rounded-b-[4px]">
-              <div className="text-2xl text-primary-900 font-bold">{day}</div>
-              <div className="text-gray-600 text-[10px]">{dayName}</div>
             </div>
           </div>
         </div>

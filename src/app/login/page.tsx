@@ -7,7 +7,7 @@ import { useUserStore } from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Role } from "@/contants/role";
+import { Role, ROUTES } from "@/contants/role";
 import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
@@ -50,7 +50,7 @@ export default function Login() {
       const roleName = get(userInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        router.push("/home");
+        router.push(ROUTES.HOME);
       } else {
         useUserStore.getState().clear();
         toast.error("Login Fail");

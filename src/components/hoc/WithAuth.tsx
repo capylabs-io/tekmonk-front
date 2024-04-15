@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { toast, ToastContainer } from "react-toastify";
+import { ROUTES } from "@/contants/role";
 
 const WithAuth = (WrappedComponent: React.FC) => {
   const Comp: React.FC = () => {
@@ -11,7 +12,7 @@ const WithAuth = (WrappedComponent: React.FC) => {
     useEffect(() => {
       if (!isConnected()) {
         toast.error("You must be login first.");
-        router.push("/login");
+        router.push(ROUTES.LOGIN);
       }
     }, [isConnected, router]);
 
