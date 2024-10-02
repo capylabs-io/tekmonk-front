@@ -1,5 +1,5 @@
 import tekdojoAxios from "@/requests/axios.config";
-import { postLogin, getMe } from "@/requests/login";
+import { postLogin, getMe, postRegister } from "@/requests/login";
 import { Certificate, User } from "@/types/common-types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -7,12 +7,14 @@ import { persist } from "zustand/middleware";
 // Định nghĩa kiểu State và Actions
 type State = {
   jwt: string | null;
-  userInfo: User | null;
+  // userInfo: User | null;
+  userInfo: any;
   userCertificate: Certificate[] | null;
 };
 
 type Actions = {
   login: (body: any) => Promise<void>;
+  register: (body: any) => Promise<void>;
   clear: () => void;
   getMe: () => Promise<void>;
   isConnected: () => boolean;
@@ -33,6 +35,17 @@ export const useUserStore = create<State & Actions>()(
       isConnected: () => !!get().jwt && !!get().userInfo,
       login: async (body) => {
         const response = await postLogin(body);
+        if (!response) {
+          return;
+        }
+        set({
+          jwt: response.jwt,
+          userInfo: response.user,
+        });
+        return response.user;
+      },
+      register: async (body) => {
+        const response = await postRegister(body);
         if (!response) {
           return;
         }
