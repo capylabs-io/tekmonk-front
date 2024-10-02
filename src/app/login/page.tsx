@@ -48,7 +48,7 @@ export default function Login() {
     try {
       const userInfo = await login(user);
       const roleName = get(userInfo, "role.name", "").toLowerCase();
-
+ //
       if (roleName === Role.STUDENT) {
         router.push("/home");
       } else {
@@ -71,8 +71,13 @@ export default function Login() {
           width={318}
           height={64}
         />
-        <div className="text-primary-900 text-2xl text-center mt-16">
+        <div className="text-primary-900 text-4xl font-bold text-center mt-16">
           Đăng nhập
+        </div>
+        <div className="flex gap-x-1 mt-2">
+          <div>Chưa có tài khoản?</div>
+          <div className="font-bold underline hover:cursor-pointer" onClick={() => router.push('/register')}>Đăng ký</div>
+          <div>ngay</div>
         </div>
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">
           <Input
@@ -88,7 +93,10 @@ export default function Login() {
             value={user.password}
             onChange={handChangePassword}
           />
-          <Button onClick={handleLogin}>Đăng nhập</Button>
+          <Button className="mt-8" onClick={handleLogin}>Đăng nhập</Button>
+          <div className="text-center">
+            Quên mật khẩu?
+          </div>
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">
