@@ -9,17 +9,42 @@ export type Event = {
   imageUrl: string;
   createdAt: string;
 };
+
+type UserRole = {
+  name?: string;
+  code?: string;
+  description?: string;
+}
+
+type UserProfile = {
+  user?: User;
+  schoolName?: string;
+  className?: string;
+  data?: any;
+  schoolLevel?: string;
+  schoolAddress?: string;
+}
+
 export type User = {
   id: string;
   username: string;
   email: string;
-  userRank: string;
-  specialName: string;
-  imageURL?: string;
-  twitterName?: string;
+  provider?: string;
+  confirmed?: string;
+  blocked?: string;
+  metadata?: string;
+  skills?: string[];
+  currentTitle?: string;
+  description?: string;
   role: {
     name: string;
   };
+  userProfiles?: UserProfile[] | UserProfile | any; 
+  phoneNumber?: string;
+  parentName?: string;
+  parentPhoneNumber?: string;
+  fullName?: string;
+  user_role?: UserRole[] | UserRole | any;
 };
 export interface Certificate {
   name: string;

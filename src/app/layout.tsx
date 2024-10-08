@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Dela_Gothic_One } from "next/font/google";
+import { Inter, Dela_Gothic_One , Nunito_Sans} from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -7,7 +7,13 @@ const inter = Inter({ subsets: ["latin"] });
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-delo",
+  variable: "--font-dela",
+});
+
+const nunitoSans = Nunito_Sans({
+  // weight: "600",
+  subsets: ["latin"],
+  variable: "--font-nunito"
 });
 
 export const metadata: Metadata = {
@@ -21,8 +27,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${delaGothicOne.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${nunitoSans.variable} ${delaGothicOne.variable}`}>
+      <body>
+        <div>{children}</div>
+        
+        </body>
     </html>
   );
 }

@@ -23,6 +23,7 @@ type Props = {
   iconElement?: ReactNode;
   onClick?: () => void;
   wide?: boolean;
+  style?: React.CSSProperties;
   highlight?: boolean;
   id?: string;
 };
@@ -39,6 +40,7 @@ export const Button = ({
   children,
   onClick,
   iconElement,
+  style,
   id,
 }: PropsWithChildren<Props>) => {
   const sizes = ["small", "medium", "large"];
@@ -47,7 +49,7 @@ export const Button = ({
     size && sizes.includes(size) ? styles[`b-${size}`] : styles["b-medium"],
     loading || disabled ? "cursor-default opacity-10" : "",
     outlined
-      ? "bg-white text-primary-900 border border-gray-200"
+      ? "bg-white text-primary-900"
       : "bg-primary-600 text-white",
     highlight && "bg-white text-primary-900 border !border-black",
     wide && "w-full",
@@ -64,12 +66,13 @@ export const Button = ({
       type="button"
       disabled={disabled || loading}
       className={classes}
+      style={style}
     >
       {loading ? (
         <span
           className={classNames(
             "inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent",
-            outlined ? "text-black/60" : "text-white/60",
+            outlined ? "text-black/60" : "text-white",
           )}
           role="status"
           aria-label="loading"

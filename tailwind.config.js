@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -95,6 +96,17 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        dela: ['var(--font-dela)', 'cursive'],
+      },
+      boxShadow: {
+        'custom-gray': '-2px -2px 0px rgb(208, 213, 221), 2px 7px 0px rgb(208, 213, 221) ',
+        'custom-primary': '0px 4px 0px rgb(159,42,143)'
+      },
+      screens: {
+        mobile: "440px",
+        tabletHeader: "768px",
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

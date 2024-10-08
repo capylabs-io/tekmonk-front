@@ -7,8 +7,7 @@ import { persist } from "zustand/middleware";
 // Định nghĩa kiểu State và Actions
 type State = {
   jwt: string | null;
-  // userInfo: User | null;
-  userInfo: any;
+  userInfo: User | null;
   userCertificate: Certificate[] | null;
 };
 
