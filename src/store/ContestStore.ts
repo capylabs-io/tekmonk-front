@@ -1,11 +1,12 @@
 //for only contest (register, userProfile, contestEntry)
 
+import { ContestRegister } from "@/requests/contest-register";
 import { create } from "zustand";
 
 
 interface GroupMemberInfo {
     name: string;
-    school: string;
+    schoolName: string;
     phone: string;
     dob: string;
     parentName: string;
@@ -14,7 +15,7 @@ interface GroupMemberInfo {
 
 type State = {
     fullName: string;
-    school: string;
+    schoolName: string;
     phoneNumber: string;
     schoolAddress: string;
     parentName: string;
@@ -24,16 +25,19 @@ type State = {
     password: string;
     confirmPassword: string;
     contest_group_stage: string;
-    groupMemberInfo?: GroupMemberInfo[];
+    isAccepted: boolean;
+    groupMemberInfo: GroupMemberInfo[];
 }
 
 type Actions = {
     register: (body: any) => Promise<void>;
+    change: (key: string, value: any) => void;
+    changeGroupMemberInfo: (index: number, key: string, value: any) => void;
 }
 
 const defaultStates: State = {
     fullName: "",
-    school: "",
+    schoolName: "",
     phoneNumber: "",
     schoolAddress: "",
     parentName: "",
@@ -43,5 +47,29 @@ const defaultStates: State = {
     password: "",
     confirmPassword: "",
     contest_group_stage: "",
+    isAccepted: false,
     groupMemberInfo: []
 }
+
+export const useContestStore = create<State & Actions>()(
+    (set, get) => ({
+        ...defaultStates,
+        register: async (body) => {
+            const response = await ContestRegister(body);
+            if(!response) {
+                console.log("Register failed")
+                return;
+            }
+            console.log("Register success")
+            return response;
+        },
+        change: (key, value) => {
+            set({ [key]: value })
+        },
+        changeGroupMemberInfo: (index, key, value) => {
+            const groupMemberInfo = get().groupMemberInfo;
+            groupMemberInfo[index] = { ...groupMemberInfo[index], [key]: value }
+            set({ groupMemberInfo })
+        }
+    })
+)
