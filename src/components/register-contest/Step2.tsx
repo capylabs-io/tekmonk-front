@@ -1,13 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Input } from "../common/Input";
 import { useContestStore } from "@/store/ContestStore";
-import { Eye, EyeOff } from "lucide-react";
 export default function Step2 () {
-    const [showPassword, setShowPassword] = useState(false)
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
 
     const {
@@ -21,84 +17,63 @@ export default function Step2 () {
         }
     });
     const change = useContestStore(state => state.change);
-
+    const handleChangeEmail = (text: string) => {
+        change("email", text);
+    }
+    const handleChangeUsername = (text: string) => {
+        change("username", text);
+    }
+    const handleChangePassword = (text: string) => {
+        change("password", text);
+    }
+    const handleChangeConfirmPassword = (text: string) => {
+        change("confirmPassword", text);
+    }
     return (
         <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <Label htmlFor="email">Email đăng ký dự thi <span className="text-red-500">*</span></Label>
+                    <Label  className="text-gray-950 text-SubheadSm">Email đăng ký dự thi <span className="text-red-500">*</span></Label>
                     <Input
-                        id="email"
-                        name="email"
                         type="email"
                         placeholder="Câu trả lời"
                         value={email}
-                        onChange={(e) => change(e.target.name, e.target.value)}
-                        required
+                        onChange={handleChangeEmail}
+                        customClassNames="mt-2" 
                     />
                 </div>
                 <div>
-                    <Label htmlFor="username">Tên đăng nhập <span className="text-red-500">*</span></Label>
+                    <Label className="text-gray-950 text-SubheadSm">Tên đăng nhập <span className="text-red-500">*</span></Label>
                     <Input
-                        id="username"
-                        name="username"
                         type="text"
                         placeholder="Câu trả lời"
                         value={username}
-                        onChange={(e) => change(e.target.name, e.target.value)}
-                        required
+                        onChange={handleChangeUsername}
+                        customClassNames="mt-2" 
                     />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative">
-                    <Label htmlFor="password">Mật khẩu <span className="text-red-500">*</span></Label>
+                    <Label className="text-gray-950 text-SubheadSm">Mật khẩu <span className="text-red-500">*</span></Label>
                     <div className="relative">
                         <Input
-                            id="password"
-                            name="password"
-                            type={showPassword ? "text" : "password"}
+                            type="password"
                             value={password}
-                            onChange={(e) => change(e.target.name, e.target.value)}
-                            required
-                            className="pr-10"
+                            onChange={handleChangePassword}
+                            customClassNames="mt-2" 
                         />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        >
-                            {showPassword ? (
-                                <EyeOff className="h-5 w-5 text-gray-400" />
-                            ) : (
-                                <Eye className="h-5 w-5 text-gray-400" />
-                            )}
-                        </button>
                     </div>
                 </div>
                 <div className="relative">
-                    <Label htmlFor="confirmPassword">Nhập lại mật khẩu <span className="text-red-500">*</span></Label>
+                    <Label className="text-gray-950 text-SubheadSm">Nhập lại mật khẩu <span className="text-red-500">*</span></Label>
                     <div className="relative">
                         <Input
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type={showConfirmPassword ? "text" : "password"}
+                            type="password"
                             value={confirmPassword}
-                            onChange={(e) => change(e.target.name, e.target.value)}
-                            required
-                            className="pr-10"
+                            onChange={handleChangeConfirmPassword}
+                            customClassNames="mt-2" 
                         />
-                        <button
-                            type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        >
-                            {showConfirmPassword ? (
-                                <EyeOff className="h-5 w-5 text-gray-400" />
-                            ) : (
-                                <Eye className="h-5 w-5 text-gray-400" />
-                            )}
-                        </button>
                     </div>
                 </div>
             </div>

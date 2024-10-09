@@ -1,7 +1,8 @@
 "use client";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+
 import { useContestStore } from "@/store/ContestStore";
+import { Input } from "../common/Input";
 export default function Step1 () {
     const {
         fullName, schoolName, phoneNumber, schoolAddress, parentName, parentPhoneNumber
@@ -16,77 +17,92 @@ export default function Step1 () {
         }
     });
     const change = useContestStore(state => state.change);
+    const handleChangeFullName = (text: string) => {
+        change("fullName", text);
+    }
+    const handleChangeSchoolName = (text: string) => {
+        change("schoolName", text);
+    }
+    const handleChangePhoneNumber = (text: string) => {
+        change("phoneNumber", text);
+    }
+    const handleChangeSchoolAddress = (text: string) => {
+        change("schoolAddress", text);
+    }
+    const handleChangeParentName = (text: string) => {
+        change("parentName", text);
+    }
+    const handleChangeParentPhoneNumber = (text: string) => {
+        change("parentPhoneNumber", text);
+    }
+
     return (
         <div className="space-y-4">
         <div className="flex gap-4">
             <div className="w-[50%]">
-                <Label htmlFor="fullName">Họ tên học sinh <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Họ tên học sinh <span className="text-red-500">*</span></Label>
                 <Input
-                    id="fullName"
-                    name="fullName"
-                    value={fullName}
-                    onChange={(e) => change(e.target.name, e.target.value)}
-                    placeholder="Câu trả lời"
-                    required
+                
+                        type="text"
+                        value={fullName}
+                        onChange={handleChangeFullName}
+                        placeholder="Câu trả lời"     
+                        customClassNames="mt-2"          
                 />
             </div>
             <div className="w-[50%]">
-                <Label htmlFor="school">Trường học <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Trường học <span className="text-red-500">*</span></Label>
                 <Input
-                    id="school"
-                    name="schoolName"
+                    type="text"
                     value={schoolName}
-                    onChange={(e) => change(e.target.name, e.target.value)}
+                    onChange={handleChangeSchoolName}
                     placeholder="Câu trả lời"
-                    required
+                    customClassNames="mt-2"  
+                    
                 />
             </div>
         </div>
         <div className="flex gap-4">
             <div className="w-[50%]">
-                <Label htmlFor="phoneNumber">Số điện thoại liên hệ <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Số điện thoại liên hệ <span className="text-red-500">*</span></Label>
                 <Input
-                    id="phoneNumber"
-                    name="phoneNumber"
+                    type="number"
                     value={phoneNumber}
-                    onChange={(e) => change(e.target.name, e.target.value)}
+                    onChange={handleChangePhoneNumber}
                     placeholder="00-000-0000"
-                    required
+                    customClassNames="mt-2"  
                 />
             </div>
             <div className="w-[50%]">
-                <Label htmlFor="district">Quận, Huyện của trường  <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Quận, Huyện của trường  <span className="text-red-500">*</span></Label>
                 <Input
-                    id="district"
-                    name="schoolAddress"
+                    type="text"
                     value={schoolAddress}
-                    onChange={(e) => change(e.target.name, e.target.value)}
+                    onChange={handleChangeSchoolAddress}
                     placeholder="Câu trả lời"
-                    required
+                    customClassNames="mt-2"  
                 />
             </div>
         </div>
         <div className="flex gap-4">
             <div className="w-[50%]">
-                <Label htmlFor="parentName">Họ và tên phụ huynh <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Họ và tên phụ huynh <span className="text-red-500">*</span></Label>
                 <Input
-                    id="parentName"
-                    name="parentName"
+                    type="text"
                     value={parentName}
-                    onChange={(e) => change(e.target.name, e.target.value)}
+                    onChange={handleChangeParentName}
                     placeholder="Câu trả lời"
-                    required
+                    customClassNames="mt-2"  
                 />
             </div>
             <div className="w-[50%]">
-                <Label htmlFor="parentPhone">Số điện thoại của phụ huynh <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Số điện thoại của phụ huynh <span className="text-red-500">*</span></Label>
                 <Input
-                    id="parentPhone"
-                    name="parentPhoneNumber"
+                    type="number"
                     value={parentPhoneNumber}
-                    onChange={(e) => change(e.target.name, e.target.value)}
+                    onChange={handleChangeParentPhoneNumber}
                     placeholder="00-000-0000"
-                    required
+                    customClassNames="mt-2"  
                 />
             </div>
         </div>

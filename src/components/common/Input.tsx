@@ -13,7 +13,7 @@ type Props = {
   placeholder?: string;
   name?: string;
   isSearch?: boolean;
-  onChange?: (value: string) => void;
+  onChange?: (value: any) => void;
   onBlur?: () => void;
 };
 const BASE_CLASS =
@@ -31,6 +31,7 @@ export const Input = ({
   isSearch = false,
   customInputClassNames,
   customClassNames,
+  
 }: Props) => {
   const [showPassword, setshowPassword] = useState(false);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
