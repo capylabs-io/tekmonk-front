@@ -29,7 +29,7 @@ export default function InputField({
   customClassNames,
 }: Props) {
   return (
-    <div className={`flex items-center ${customClassNames}`}>
+    <div className={`flex flex-wrap items-center ${customClassNames}`}>
       <label htmlFor="name" className="text-SubheadSm text-primary-950 w-1/4">
         {title}
       </label>
@@ -49,8 +49,8 @@ export default function InputField({
           onBlur={onBlur}
           name={name}
           isSearch={isSearch}
-          customInputClassNames={customInputClassNames}
-          customClassNames={`h-10 flex items-center ${customInputClassNames}`}
+          customInputClassNames={`${customInputClassNames}`}
+          customClassNames={`h-10 flex items-center text-bodyXs ${customInputClassNames}`}
         />
       )}
     </div>

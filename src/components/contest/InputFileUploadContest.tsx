@@ -48,7 +48,7 @@ export const InputFileUploadContest = ({
 
   return (
     <>
-      <div className={classNames("flex w-full items-start mt-5", customClassNames)}>
+      <div className={classNames("flex flex-wrap w-full items-start mt-2 sm:mt-5", customClassNames)}>
         <div className="w-1/4">
           <label
             htmlFor="file_input"
@@ -59,7 +59,7 @@ export const InputFileUploadContest = ({
         </div>
         {/* File Upload Box */}
         <div
-          className="py-4 text-bodyLg flex flex-col items-center gap-3 justify-center relative border border-gray-200 bg-gray-50 rounded-lg w-full cursor-pointer"
+          className="py-4 px-2 text-center text-bodyLg flex flex-col items-center gap-3 justify-center relative border border-gray-200 bg-gray-50 rounded-lg w-full cursor-pointer"
           onClick={handleClick}
         >
           {value ? (

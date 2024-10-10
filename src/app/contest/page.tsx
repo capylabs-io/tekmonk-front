@@ -126,7 +126,7 @@ export default function Contest() {
                 BÁO TIỀN PHONG TỔ CHỨC
               </div>
 
-              <div className="mt-[52px] flex items-center justify-center gap-4">
+              <div className="mt-[52px] flex items-center justify-center flex-wrap gap-4">
                 <FormSubmitContest>
                   <Button
                     className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary"
