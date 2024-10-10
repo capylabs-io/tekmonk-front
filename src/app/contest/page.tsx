@@ -13,6 +13,7 @@ import Share from "@/components/common/Share";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
 import NumberTicker from "@/components/ui/number-ticker";
+import FormSubmitContest from "@/components/contest/FormSubmitContest";
 
 export default function Contest() {
   const [scrollY, setScrollY] = useState(0);
@@ -126,15 +127,17 @@ export default function Contest() {
               </div>
 
               <div className="mt-[52px] flex items-center justify-center gap-4">
-                <Button
-                  className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary"
-                  outlined={false}
-                  style={{
-                    borderRadius: "4rem",
-                  }}
-                >
-                  Nộp bài thi
-                </Button>
+                <FormSubmitContest>
+                  <Button
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary"
+                    outlined={false}
+                    style={{
+                      borderRadius: "4rem",
+                    }}
+                  >
+                    Nộp bài thi
+                  </Button>
+                </FormSubmitContest>
                 <Button
                   className="w-[312px] h-[52px] max-[460px]:w-[280px] shadow-custom-gray"
                   outlined={true}
