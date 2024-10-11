@@ -13,6 +13,7 @@ import Share from "@/components/common/Share";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
 import NumberTicker from "@/components/ui/number-ticker";
+import FormSubmitContest from "@/components/contest/FormSubmitContest";
 import { useRouter } from "next/navigation";
 
 export default function Contest() {
@@ -126,8 +127,6 @@ export default function Contest() {
               <div className="mt-7 text-Subhead3Xl text-primary-950 max-[460px]:text-xl">
                 BÁO TIỀN PHONG TỔ CHỨC
               </div>
-
-              
             </div>
             
               {/* <div
