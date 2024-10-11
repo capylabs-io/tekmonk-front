@@ -129,3 +129,12 @@ export type UploadData= {
   field: string;
   files: File
 }
+
+export type Contest = {
+  id: string;
+  name: string;
+  status: string;
+  thumbnail: Media;
+  endTime: string;
+  startTime: string;
+}

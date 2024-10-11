@@ -2,34 +2,34 @@
 
 import Tag from "@/components/contest/Tag";
 import { Dock, DockIcon } from "@/components/ui/dock";
+import { getOneContestSubmission } from "@/requests/contestSubmit";
+import { ContestSubmission } from "@/types/contestSubmit";
 import { ArrowLeft, Facebook, Instagram } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation"; // Import useParams to get dynamic route params
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
-
+  const { id } = useParams();
+  const [contestDetail, setContestDetail] = useState<ContestSubmission | null>(null);
+  
   useEffect(() => {
-    
-  }, []);
+    if (!id) return;
 
-  const contestDetail = {
-    id: "11111111",
-    author: "Henry Nguyen",
-    tags: ["Tag 1", "Tag 2", "Tag 3"],
-    title: "Tên dự án tại đây",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Malesuada posuere nulla vehicula in congue suspendisse tempor. Amet non nisl dictum aliquam integer habitant lacus. Quis adipiscing gravida curabitur ultricies natoque iaculis suspendisse sed. Ut sed viverra cursus tincidunt molestie at cum.",
-    images: {
-      banner: "/image/contest/banner.png",
-      grid: [
-        "/image/contest/banner.png",
-        "/image/contest/banner.png",
-        "/image/contest/banner.png",
-      ],
-    },
-  };
+    const fetchContestList = async () => {
+      try {
+        const contest = await getOneContestSubmission(id as string); 
+        console.log(contest.data)
+        setContestDetail(contest.data);
+      } catch (error) {
+        console.error("Failed to fetch contest list:", error);
+      }
+    };
+
+    fetchContestList();
+  }, [id]);
 
   return (
     <div>
@@ -42,10 +42,10 @@ const ContestDetail: React.FC = () => {
           />
         </div>
         <div className="py-4">
-          <span className="text-grey-500 text-sm">ID: {contestDetail.id}</span>
-          <p className="text-SubheadSm mb-4">{contestDetail.author}</p>
+          <span className="text-grey-500 text-sm">ID: {contestDetail?.id}</span>
+          <p className="text-SubheadSm mb-4">{contestDetail?.title}</p>
           <div>
-            {contestDetail.tags.map((tag, index) => (
+            {contestDetail?.tags?.map((tag, index) => (
               <Tag
                 key={index}
                 text={tag}
@@ -57,32 +57,34 @@ const ContestDetail: React.FC = () => {
           </div>
           <section className="mt-4">
             <h1 className="text-SubheadLg text-grey-700 uppercase">
-              {contestDetail.title}
+              {contestDetail?.title}
             </h1>
-            <p className="mb-1">{contestDetail.description}</p>
+            <p className="mb-1">{contestDetail?.description}</p>
             <Image
-              src={contestDetail.images.banner}
+              src={contestDetail?.thumbnail?.[0] ?`http://localhost:1337${contestDetail?.thumbnail?.[0].url}` : "/image/contest/tienphongbanner.png"}
               alt="Banner contest"
               width={1440}
               height={480}
               priority
               style={{ borderRadius: "8px" }}
-              quality={80}
+              quality={100}
+              // loading="lazy"
             />
             <div className="flex flex-wrap justify-between mt-2 gap-2">
-              {contestDetail.images.grid.map((item, index) => (
+              {contestDetail?.thumbnail?.map((item, index) => (
                 <div
                   key={index}
                   className="relative w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.5rem)]"
                   style={{ aspectRatio: "16 / 9" }}
                 >
                   <Image
-                    src={item}
+                    src={item.url ?`http://localhost:1337${item.url}` : "/image/contest/tienphongbanner.png"}
                     alt="Ảnh mô tả sản phẩm bài thi"
                     fill
                     style={{ borderRadius: "9px", objectFit: "contain" }}
                     quality={80}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    loading="lazy"
                   />
                 </div>
               ))}
