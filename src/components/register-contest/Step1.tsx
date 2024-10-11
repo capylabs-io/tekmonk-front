@@ -1,12 +1,12 @@
 "use client";
 import { Label } from "@/components/ui/label";
 
-import { useContestStore } from "@/store/ContestStore";
+import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Input } from "../common/Input";
-export default function Step1 () {
+export const Step1 = () => {
     const {
         fullName, schoolName, phoneNumber, schoolAddress, parentName, parentPhoneNumber
-    } = useContestStore(state => {
+    } = useContestRegisterStore(state => {
         return {
             fullName: state.fullName,
             schoolName: state.schoolName,
@@ -16,7 +16,7 @@ export default function Step1 () {
             parentPhoneNumber: state.parentPhoneNumber,
         }
     });
-    const change = useContestStore(state => state.change);
+    const change = useContestRegisterStore(state => state.change);
     const handleChangeFullName = (text: string) => {
         change("fullName", text);
     }
@@ -38,19 +38,19 @@ export default function Step1 () {
 
     return (
         <div className="space-y-4">
-        <div className="flex gap-4">
-            <div className="w-[50%]">
+            <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
+                {/* <div className="flex gap-4"> */}
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Họ tên học sinh <span className="text-red-500">*</span></Label>
                 <Input
-                
                         type="text"
                         value={fullName}
                         onChange={handleChangeFullName}
                         placeholder="Câu trả lời"     
-                        customClassNames="mt-2"          
+                        customClassNames="mt-2 mb-0"          
                 />
             </div>
-            <div className="w-[50%]">
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Trường học <span className="text-red-500">*</span></Label>
                 <Input
                     type="text"
@@ -61,9 +61,9 @@ export default function Step1 () {
                     
                 />
             </div>
-        </div>
-        <div className="flex gap-4">
-            <div className="w-[50%]">
+        {/* </div> */}
+        {/* <div className="flex gap-4"> */}
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Số điện thoại liên hệ <span className="text-red-500">*</span></Label>
                 <Input
                     type="number"
@@ -73,7 +73,7 @@ export default function Step1 () {
                     customClassNames="mt-2"  
                 />
             </div>
-            <div className="w-[50%]">
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Quận, Huyện của trường  <span className="text-red-500">*</span></Label>
                 <Input
                     type="text"
@@ -83,9 +83,9 @@ export default function Step1 () {
                     customClassNames="mt-2"  
                 />
             </div>
-        </div>
-        <div className="flex gap-4">
-            <div className="w-[50%]">
+        {/* </div> */}
+        {/* <div className="flex gap-4"> */}
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Họ và tên phụ huynh <span className="text-red-500">*</span></Label>
                 <Input
                     type="text"
@@ -95,7 +95,7 @@ export default function Step1 () {
                     customClassNames="mt-2"  
                 />
             </div>
-            <div className="w-[50%]">
+            <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Số điện thoại của phụ huynh <span className="text-red-500">*</span></Label>
                 <Input
                     type="number"
@@ -105,7 +105,10 @@ export default function Step1 () {
                     customClassNames="mt-2"  
                 />
             </div>
-        </div>
+        {/* </div> */}
+            </div>
+
+        
     </div>
     )
     

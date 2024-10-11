@@ -1,6 +1,7 @@
 //for only contest (register, userProfile, contestEntry)
 
-import { ContestRegister } from "@/requests/contest-register";
+import { contestRegister } from "@/requests/contest-register";
+import { postRegister } from "@/requests/login";
 import { create } from "zustand";
 
 
@@ -51,11 +52,11 @@ const defaultStates: State = {
     groupMemberInfo: []
 }
 
-export const useContestStore = create<State & Actions>()(
+export const useContestRegisterStore = create<State & Actions>()(
     (set, get) => ({
         ...defaultStates,
         register: async (body) => {
-            const response = await ContestRegister(body);
+            const response = await contestRegister(body);
             if(!response) {
                 console.log("Register failed")
                 return;

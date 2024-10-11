@@ -46,7 +46,7 @@ const CustomCheckbox = ({
   </div>
 );
 
-export default function Step4() {
+export const Step4 = () => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 

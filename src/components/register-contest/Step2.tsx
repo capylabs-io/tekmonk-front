@@ -2,13 +2,13 @@
 
 import { Label } from "@/components/ui/label";
 import { Input } from "../common/Input";
-import { useContestStore } from "@/store/ContestStore";
-export default function Step2 () {
+import { useContestRegisterStore } from "@/store/ContestRegisterStore";
+export const Step2 = () => {
 
 
     const {
         email, username, password, confirmPassword
-    } = useContestStore(state => {
+    } = useContestRegisterStore(state => {
         return {
             email: state.email,
             username: state.username,
@@ -16,7 +16,7 @@ export default function Step2 () {
             confirmPassword: state.confirmPassword,
         }
     });
-    const change = useContestStore(state => state.change);
+    const change = useContestRegisterStore(state => state.change);
     const handleChangeEmail = (text: string) => {
         change("email", text);
     }

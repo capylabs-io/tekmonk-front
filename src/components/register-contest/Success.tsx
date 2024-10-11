@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 
-export default function SuccessComponent () {
+export default function SuccessComponent ({candidateNumber}: {candidateNumber: string}) {
     return (
         <div className="text-center space-y-6">
         <div className="flex justify-center">
@@ -10,11 +10,17 @@ export default function SuccessComponent () {
                 <Check className="w-[84px] h-[84px] text-white" />
             </div>
         </div>
-        <p className="text-bodyLg mx-auto">
+        <div className="text-bodyLg mx-auto">
             Cảm ơn bạn đã đăng ký tham gia "VIETNAM CODING OLYMPIAD 2024"! Chúng tôi sẽ sớm
             gửi thông tin chi tiết về sự kiện qua email. Hãy chuẩn bị cho những thử thách thú vị phía
             trước!
-        </p>
+        </div>
+        <div className="text-bodyLg mx-auto">Số báo danh của bạn là:
+            <span className="font-bold"> {candidateNumber}</span>
+        </div>
+            <div className="italic text-bodyLg mx-auto">
+                Xin vui lòng lưu lại số báo danh để tham gia cuộc thi
+            </div>
     </div>
     )
     

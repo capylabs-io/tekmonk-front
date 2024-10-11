@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/common/Button";
 import Step1 from "@/components/register-contest/Step1";
-import { useContestStore } from "@/store/ContestStore";
+import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import axios from "axios";
 
 export default function Page() {
-    const fullName = useContestStore(state => state.fullName);
+    const fullName = useContestRegisterStore(state => state.fullName);
     console.log("fullName", fullName);
     const data
-     = useContestStore(state => {
+     = useContestRegisterStore(state => {
         return {
             fullName: "vu van hieu",
             schoolName: "THCS nguyen trai",

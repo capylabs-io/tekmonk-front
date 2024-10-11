@@ -5,27 +5,29 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { Check } from "lucide-react";
-import Step1 from "@/components/register-contest/Step1";
-import Step2 from "@/components/register-contest/Step2";
-import Step3 from "@/components/register-contest/Step3";
-import Step4 from "@/components/register-contest/Step4";
-import { useContestStore } from "@/store/ContestStore";
+import {Step1} from "@/components/register-contest/Step1";
+import {Step2} from "@/components/register-contest/Step2";
+import {Step3} from "@/components/register-contest/Step3";
+import {Step4} from "@/components/register-contest/Step4";
+import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
+import { get } from "lodash";
 
 const steps = [
-  { title: "Thông tin", titleHeader: "TẠO TÀI KHOẢN", icon: "1" },
-  { title: "Tài khoản", titleHeader: "LỰA CHỌN BẢNG ĐẤU", icon: "2" },
-  { title: "Bảng thi", titleHeader: "XÁC NHẬN ĐĂNG KÝ THAM GIA", icon: "3" },
-  { title: "Xác nhận", titleHeader: "ĐĂNG KÝ THAM GIA THÀNH CÔNG", icon: "4" },
+  { title: "Thông tin", titleHeader: "THÔNG TIN CÁ NHÂN", icon: "1" },
+  { title: "Tài khoản", titleHeader: "TẠO TÀI KHOẢN", icon: "2" },
+  { title: "Bảng thi", titleHeader: "LỰA CHỌN BẢNG ĐẤU", icon: "3" },
+  { title: "Xác nhận", titleHeader: "XÁC NHẬN ĐĂNG KÝ THAM GIA", icon: "4" },
 ];
 
 export default function RegisterContest() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [candidateNumber, setCandidateNumber] = useState<string>("");
   const router = useRouter();
-  const data = useContestStore((state) => {
+  const data = useContestRegisterStore((state) => {
     return {
       fullName: state.fullName,
       schoolName: state.schoolName,
@@ -41,37 +43,34 @@ export default function RegisterContest() {
     };
   });
 
-  const register = useContestStore((state) => state.register);
-  const handleNext = () => {
-    console.log("data = ", data);
+  const [register] = useContestRegisterStore((state) => [state.register]);
+  const handleNext = async () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      //check log data
-      console.log("data = ", data);
-      register(data);
       setIsSubmitted(true);
+      try {
+        const res = await register(data);
+        setCandidateNumber(get(res, "candidateNumber",""));
+        console.log(res)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+    }else {
+      router.push("/contest");
     }
   };
 
   const handleGoBack = () => {
     setIsSubmitted(false);
     setCurrentStep(0);
-  };
-
-  const handleViewContest = () => {
-    router.push("/contest");
-  };
-
-  const handleLogin = () => {
-    // Implement login logic
-    console.log("Navigate to login page");
   };
 
   const renderStepContent = () => {
@@ -90,20 +89,26 @@ export default function RegisterContest() {
   };
 
   return (
-    <div className="max-w-[1440px] mt-4 min-h-screen mx-auto ">
-      <div
-        className="w-full max-w-[720px] mx-auto h-80 rounded-2xl"
-        style={{
-          backgroundImage: "url('/image/contest/Banner.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+    <div className="max-w-[1440px] mt-4 min-h-screen grid grid-cols-1 mx-auto ">
+      <div className="w-full px-4">
+          <div
+          className="w-full px-4 max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
+          style={{
+            backgroundImage: "url('/image/contest/Banner.png')",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
 
-      <div className="w-full flex items-center justify-center mt-4 mb-5 px-4 sm:px-6 lg:px-8 ">
+        </div>
+      </div>
+      
+
+      <div className="w-full flex items-center justify-center mt-4 mb-5 px-4 sm:px-6 lg:px-8 max-mobile:mt-1">
         <Card className="w-full max-w-[720px] rounded-2xl">
-          <div className="w-full h-16 p-6">
-            <div className=" text-SubheadLg text-primary-900">
+          <div className="w-full min-h-16 p-6 ">
+            <div className=" text-SubheadLg text-primary-900 max-mobile:text-center">
               {steps[currentStep].titleHeader}
             </div>
           </div>
@@ -159,7 +164,7 @@ export default function RegisterContest() {
               </>
             ) : (
               <>
-                <SuccessComponent />
+                <SuccessComponent candidateNumber={candidateNumber}/>
               </>
             )}
           </CardContent>
@@ -170,7 +175,7 @@ export default function RegisterContest() {
                 <Button
                   outlined={true}
                   onClick={handlePrevious}
-                  disabled={currentStep === 0}
+                  // disabled={currentStep === 0}
                 //   highlight={true}
                   className="rounded-[3rem] w-[108px] border-[1px] border-gray-300"
                 
@@ -199,14 +204,14 @@ export default function RegisterContest() {
                 </Button>
                 <div className="flex gap-3">
                   <Button
-                    onClick={handleViewContest}
+                    onClick={() => router.push("/contest")}
                     className="rounded-[3rem] w-[178px] border-[1px] border-gray-300"
                     outlined={true}
                   >
                     Nội dung cuộc thi
                   </Button>
                   <Button
-                    onClick={handleLogin}
+                    onClick={() => router.push("/login")}
                     className="rounded-[3rem] w-[130px]"
                   >
                     Đăng nhập
