@@ -47,11 +47,19 @@ export default function Login() {
 
     try {
       const userInfo = await login(user);
+      
       const roleName = get(userInfo, "role.name", "").toLowerCase();
- //
-      if (roleName === Role.STUDENT) {
+
+      // if (roleName === Role.STUDENT) {
+      //   router.push("/home");
+      // } else {
+      //   useUserStore.getState().clear();
+      //   toast.error("Login Fail");
+      // }
+
+      if(roleName == "authenticated"){
         router.push("/home");
-      } else {
+      }else {
         useUserStore.getState().clear();
         toast.error("Login Fail");
       }
@@ -63,7 +71,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full grid grid-cols-2 h-screen">
+    <div className="w-full grid grid-cols-2 max-[770px]:grid-cols-1 h-screen">
       <div className="flex flex-col justify-center items-center h-screen">
         <Image
           src="/image/app-logox2.png"
@@ -76,7 +84,7 @@ export default function Login() {
         </div>
         <div className="flex gap-x-1 mt-2">
           <div>Chưa có tài khoản?</div>
-          <div className="font-bold underline hover:cursor-pointer" onClick={() => router.push('/register')}>Đăng ký</div>
+          <div className="font-bold underline hover:cursor-pointer" onClick={() => router.push('/register-contest')}>Đăng ký</div>
           <div>ngay</div>
         </div>
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">

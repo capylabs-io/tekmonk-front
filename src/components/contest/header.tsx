@@ -47,12 +47,12 @@ export default function ContestHeader() {
                 max-tabletHeader:pl-4 max-tabletHeader:pr-4  
             ">  
                 <Image  
-                    src="/image/app-logox2.png"  
+                    src="/image/app-logox2.png"
                     alt="app logo"  
                     width={159}  
                     height={32}  
                     className="hover:cursor-pointer h-8 w-40"  
-                    onClick={() => router.push('/home')}  
+                    // onClick={() => router.push('/home')}  
                 />  
                 
                 {/* Menu cho màn hình lớn */}  

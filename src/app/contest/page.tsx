@@ -8,14 +8,16 @@ import {
   CardContestContent,
 } from "@/components/common/CardContest";
 import { LAYERS } from "@/contants/layer";
-import Clock from "@/components/contest/Clock";
+import {Clock} from "@/components/contest/Clock";
 import Share from "@/components/common/Share";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
 import NumberTicker from "@/components/ui/number-ticker";
 import FormSubmitContest from "@/components/contest/FormSubmitContest";
+import { useRouter } from "next/navigation";
 
 export default function Contest() {
+  const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -150,7 +152,7 @@ export default function Contest() {
               </div>
             </div>
             
-              <div
+              {/* <div
                 className="w-full h-auto mt-[52px] sm:h-[150px] flex justify-center items-center gap-4 mx-auto 
                             max-sm:h-[110px]"
               >
@@ -174,27 +176,27 @@ export default function Contest() {
                     className="text-[40px] max-sm:text-[35px] font-normal text-primary-700 font-dela"
                   />
                 </CardContest>
-              </div>
+              </div> */}
             
             <section>
               <BlurFade delay={0.25 + 3 * 0.05} inView>
-                <Clock />
+                <Clock startTime="2024-10-11T07:46:00.000Z" endTime="2024-10-30T07:47:00.000Z"/>
               </BlurFade>
 
               <BlurFade delay={0.25 + 4 * 0.05} inView>
                 <CardContest
-                  className={`mt-12  flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden p-6 z-[${LAYERS.POST}]
+                  className={`mt-12 px-6 flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden p-6 z-[${LAYERS.POST}]
                     
                     max-[685px]:w-[580px]
                     max-[685px]:p-4
                     
-                    max-mobile:w-[380px]
-                    max-mobile:p-0
+                    max-mobile:w-[360px]
+                    max-mobile:px-4
                     max-mobile:rounded-lg
                     
                   `}
                 >
-                  <CardContestContent className="p-0 w-full ">
+                  <CardContestContent className="p-0 w-full">
                     <Image
                       src="/image/contest/Frame-43.png"
                       alt="Contest participants"
@@ -204,70 +206,40 @@ export default function Contest() {
                     />
 
                     <div className="p-6 w-full">
-                      <div className="w-full text-center text-gray-950 text-base mx-auto">
+                      {/* <div className="w-full text-center text-gray-950 text-base mx-auto">
                         Chia sẻ thông tin
                       </div>
                       <div className="mt-6 flex justify-center gap-3 space-x-2">
                         <Share />
-                      </div>
+                      </div> */}
 
-                      <div className="mt-4 font-bold text-[32px] text-primary-900 text-center">
+                      <div className="font-bold text-[32px] text-gray-950 text-center">
                         THỂ LỆ CUỘC THI
                       </div>
 
-                      <div className="text-gray-950 font-medium text-lg max-mobile:text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Amet facilisis metus masuada consectetur. A eget amet
-                        vitae neque euismod eu erat viverra. Aliquam interdum
-                        sapien risus congue facilisis vitae. In mattis tortor
-                        interdum sed. Eget commodo commodo sagittis faucibus
-                        ultrices in imperdiet. Id pulvinar lectus amet laoreet
-                        blandit interdum facilisis. At id faucibus purus egestas
-                        eros sagittis semper. In at quis lectus vitae.
+                      <div className="mt-4 text-gray-950 text-base max-mobile:text-base">
+                      Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.
                       </div>
-                      <div className="mt-2 text-gray-950 font-medium text-lg max-mobile:text-base">
-                        Ac massa elementum leo egestas lectus. Commodo hendrerit
-                        potenti pulvinar gravida nunc. Condimentum neque a orci
-                        eget ridiculus fauciat posuere locus. Cras pellentesque
-                        sed ut mi eget pharetra congue risus. Integer aliquam
-                        eget orci arcu quis accumsan massa amet. Ultricies vel
-                        quis blandit curabitur cursus tellus et in augue. Morbi
-                        enim volutpat enim est tincidunt. Fusce aliquet
-                        consectetur nisl morbi sit convallis. Nunc eget
-                        facilisis facilisis lacus.
+                      <div className="mt-4 ">
+                        <span className="text-gray-950 font-medium text-base max-mobile:text-base">Thời gian: </span><span className="text-black">11/11/2024</span>
                       </div>
-                      <div className="mt-2 text-gray-950 font-medium text-lg max-mobile:text-base">
-                        Ac massa elementum leo egestas lectus. Commodo hendrerit
-                        potenti pulvinar gravida nunc. Condimentum neque a orci
-                        eget ridiculus fauciat posuere locus. Cras pellentesque
-                        sed ut mi eget pharetra congue risus. Integer aliquam
-                        eget orci arcu quis accumsan massa amet. Ultricies vel
-                        quis blandit curabitur cursus tellus et in augue. Morbi
-                        enim volutpat enim est tincidunt. Fusce aliquet
-                        consectetur nisl morbi sit convallis. Nunc eget
-                        facilisis facilisis lacus.
+                      <div className="mt-4 ">
+                        <span className="text-gray-950 font-medium text-base max-mobile:text-base">Địa chỉ: </span>
+                        <span className="text-black">Nhà thi đấu Trịnh Hoài Đức</span>
                       </div>
-                      <div className="mt-2 text-gray-950 font-medium text-lg max-mobile:text-base">
-                        Ac massa elementum leo egestas lectus. Commodo hendrerit
-                        potenti pulvinar gravida nunc. Condimentum neque a orci
-                        eget ridiculus fauciat posuere locus. Cras pellentesque
-                        sed ut mi eget pharetra congue risus. Integer aliquam
-                        eget orci arcu quis accumsan massa amet. Ultricies vel
-                        quis blandit curabitur cursus tellus et in augue. Morbi
-                        enim volutpat enim est tincidunt. Fusce aliquet
-                        consectetur nisl morbi sit convallis. Nunc eget
-                        facilisis facilisis lacus.
+                      <div className="mt-4 ">
+                        <span className="text-gray-950 font-medium text-base max-mobile:text-base">Đối tượng dự thi: </span><span className="text-black">Học sinh từ 6 đến 17 tuổi trên toàn quốc</span>
                       </div>
-                      <div className="mt-2 text-gray-950 font-medium text-lg max-mobile:text-base">
-                        Ac massa elementum leo egestas lectus. Commodo hendrerit
-                        potenti pulvinar gravida nunc. Condimentum neque a orci
-                        eget ridiculus fauciat posuere locus. Cras pellentesque
-                        sed ut mi eget pharetra congue risus. Integer aliquam
-                        eget orci arcu quis accumsan massa amet. Ultricies vel
-                        quis blandit curabitur cursus tellus et in augue. Morbi
-                        enim volutpat enim est tincidunt. Fusce aliquet
-                        consectetur nisl morbi sit convallis. Nunc eget
-                        facilisis facilisis lacus.
+                      <div className="mt-4 ">
+                        <span className="text-gray-950 font-medium text-base max-mobile:text-base">Lệ phí tham dự: </span><span className="text-black">300,000 VND / thí sinh</span>
+                      </div>
+                      <div className="mt-4 ">
+                        <span className="text-gray-950 font-medium text-base max-mobile:text-base">Hạn cuối nhận đăng ký: </span><span className="text-black">31/10/2024</span>
+                      </div>
+                      <div className="mt-4 w-full min-h-[112px] px-[10px] bg-primary-100 flex flex-col  justify-around rounded-md">
+                        <div className="text-base fill-black">Thông tin chuyển khoản: Công ty Cổ phần Tiền Phong</div>
+                        <div className="text-base">STK: 1027549219 - Ngân Hàng TMCP Ngoại thương Việt Nam</div>
+                        <div className="text-base">Cú pháp CK: Tên thí sinh + Số điện thoại</div>
                       </div>
                     </div>
                   </CardContestContent>

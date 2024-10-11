@@ -1,7 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react";
-import { CardContest } from "../common/CardContest"
+import { useEffect, useState } from "react";
+import { CardContest } from "../common/CardContest";
+import { Button } from "../common/Button";
+import { useRouter } from "next/navigation";
 
 interface TimeLeft {
     days: number;
@@ -10,8 +12,8 @@ interface TimeLeft {
     seconds: number;
 }
 
-const calculateTimeLeft = (endDate: Date): TimeLeft => {
-    const difference = +endDate - +new Date();
+const calculateTimeLeft = (targetDate: Date): TimeLeft => {
+    const difference = +targetDate - +new Date();
     let timeLeft: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
     if (difference > 0) {
@@ -21,56 +23,82 @@ const calculateTimeLeft = (endDate: Date): TimeLeft => {
             minutes: Math.floor((difference / 1000 / 60) % 60),
             seconds: Math.floor((difference / 1000) % 60),
         };
-        return timeLeft;
     }
 
     return timeLeft;
 };
-export default function Clock() {
+
+const getRelevantTime = (startTime: string, endTime: string): Date => {
+    const currentTime = new Date();
+    return currentTime < new Date(startTime) ? new Date(startTime) : new Date(endTime);
+}
+
+export const Clock = ({ startTime, endTime }: { startTime: string; endTime: string; }) => {
+    const router = useRouter();
     const [timeLeft, setTimeLeft] = useState(
-        calculateTimeLeft(new Date("2024-12-31"))
-    ); // Set your end date here
-    const ref = useRef<HTMLDivElement>(null);
+        calculateTimeLeft(getRelevantTime(startTime, endTime))
+    );
+    const [isContestStarted, setIsContestStarted] = useState(false);
+
     const timeLeftComponents = [
         { label: "NGÀY", value: timeLeft.days },
         { label: "GIỜ", value: timeLeft.hours },
         { label: "PHÚT", value: timeLeft.minutes },
         { label: "GIÂY", value: timeLeft.seconds },
     ];
+
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setTimeLeft(calculateTimeLeft(new Date("2024-12-31")));
+        const timer = setInterval(() => {
+            const currentTime = new Date();
+            if (currentTime >= new Date(startTime) && !isContestStarted) {
+                setIsContestStarted(true);
+            }
+
+            const targetTime = isContestStarted ? endTime : startTime;
+            setTimeLeft(calculateTimeLeft(new Date(targetTime)));
         }, 1000);
 
-        return () => clearTimeout(timer);
-    });
+        return () => clearInterval(timer);
+    }, [startTime, endTime, isContestStarted]);
+
+    const isRegisterDisabled = new Date() > new Date(endTime);
     return (
-        <div className=" text-center mb-12">
-            <div className="mt-[52px] text-2xl font-bold text-gray-600 
-            
-                max-[545px]:text-xl max-[845px]:text-xl
-            ">
-                Cuộc thi kết thúc sau:
+        <div className="text-center mb-12">
+            <div className="mt-[52px] max-[640px]:flex-col flex items-center justify-center gap-4">
+                <Button
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary"
+                    outlined={false}
+                    style={{ borderRadius: "4rem" }}
+                    onClick={() => router.push("register-contest")}
+                    disabled={isRegisterDisabled} // Vô hiệu hóa nút nếu cần
+                >
+                    Đăng ký
+                </Button>
+                <Button
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] shadow-custom-gray"
+                    outlined={true}
+                    style={{ borderRadius: "4rem" }}
+                >
+                    Tổng hợp bài dự thi
+                </Button>
+            </div>
+            <div className="mt-[52px] text-2xl font-bold text-gray-600 max-[545px]:text-xl max-[845px]:text-xl">
+                {isContestStarted ? "Cuộc thi sẽ kết thúc sau:" : "Cuộc thi bắt đầu sau:"}
             </div>
             <div className="mt-[26px] flex justify-center space-x-4">
                 {timeLeftComponents.map(({ label, value }, index) => (
                     <div key={index} className="flex flex-col items-center">
-                        <CardContest className="w-[200px] h-[200px] 
-                        max-[865px]:w-[120px] max-[865px]:h-[120px]
-                        max-[545px]:w-[80px] max-[845px]:h-[80px]
-                         flex flex-col items-center justify-center relative shadow-custom-gray bg-white">
-                            <div className=" text-SubheadXl max-[865px]:text-sm max-[865px]:font-bold text-gray-500">
+                        <CardContest className="w-[200px] h-[200px] max-[865px]:w-[120px] max-[865px]:h-[120px] max-[545px]:w-[80px] max-[545px]:h-[80px] flex flex-col items-center justify-center relative shadow-custom-gray bg-white">
+                            <div className="text-SubheadXl max-[865px]:text-sm max-[865px]:font-bold max-mobile:text-bodyXs text-gray-500">
                                 {label}
                             </div>
-                            <div className=" text-primary-700 font-dela max-[865px]:text-4xl text-7xl">
-                                {value !== undefined
-                                    ? value.toString().padStart(2, "0")
-                                    : "00"}
+                            <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-7xl">
+                                {value !== undefined ? value.toString().padStart(2, "0") : "00"}
                             </div>
                         </CardContest>
                     </div>
                 ))}
             </div>
         </div>
-    )
+    );
 }
