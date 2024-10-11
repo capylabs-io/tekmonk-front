@@ -5,9 +5,14 @@ import { Dock, DockIcon } from "@/components/ui/dock";
 import { ArrowLeft, Facebook, Instagram } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    
+  }, []);
 
   const contestDetail = {
     id: "11111111",

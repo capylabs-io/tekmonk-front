@@ -113,3 +113,19 @@ export type BackgroundShop = {
   title: string;
   price: string;
 };
+
+export type Media = {
+  id: number;
+  name: string;
+  ext: string;
+  url: string;
+  createAt: string;
+  size: number;
+}
+
+export type UploadData= {
+  ref: string;
+  refId: string;
+  field: string;
+  files: File
+}

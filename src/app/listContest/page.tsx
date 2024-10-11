@@ -3,8 +3,19 @@
 import CardContestItem from "@/components/contest/CardContestItem";
 import Image from "next/image";
 import contestListMock from "@/mock/contestList-mock.json";
+import { useEffect, useState } from "react";
+import tekdojoAxios from "@/requests/axios.config";
 
 const ContestList: React.FC = () => {
+  const [page, setPage] = useState();
+
+
+  useEffect(() => {
+    const submitContestList = tekdojoAxios.get("/api/contest-submissions")
+
+    console.log(submitContestList);
+  }, [])
+
   return (
     <>
       <h1 className="text-primary-900 text-SubheadLg py-5 px-8 w-full">

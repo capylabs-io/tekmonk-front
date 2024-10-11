@@ -48,7 +48,7 @@ export const InputFileUploadContest = ({
 
   return (
     <>
-      <div className={classNames("flex flex-wrap w-full items-start mt-2 sm:mt-5", customClassNames)}>
+      <div className={classNames("flex flex-wrap sm:flex-nowrap w-full items-start mt-2 sm:mt-5", customClassNames)}>
         <div className="w-1/4">
           <label
             htmlFor="file_input"
