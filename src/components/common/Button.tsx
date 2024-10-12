@@ -47,7 +47,7 @@ export const Button = ({
   const classes = classNames([
     BASE_CLASS,
     size && sizes.includes(size) ? styles[`b-${size}`] : styles["b-medium"],
-    loading || disabled ? "cursor-default opacity-10" : "",
+    loading || disabled ? "cursor-default opacity-50" : "",
     outlined
       ? "bg-white text-primary-900"
       : "bg-primary-600 text-white",
