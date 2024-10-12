@@ -144,6 +144,14 @@ h6 {
   width: 100%;
   max-width: 1400px !important;
 }
+
+/*for override date picker*/
+.react-date-picker__wrapper {
+  border: none !important;
+}
+
+
+
 .black {
   border: 1px solid black;
 }
