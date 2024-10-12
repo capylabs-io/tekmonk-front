@@ -2,24 +2,22 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Button } from "@/components/common/Button";
 import {
   CardContest,
   CardContestContent,
 } from "@/components/common/CardContest";
 import { LAYERS } from "@/contants/layer";
 import {Clock} from "@/components/contest/Clock";
-import Share from "@/components/common/Share";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
-import NumberTicker from "@/components/ui/number-ticker";
-import FormSubmitContest from "@/components/contest/FormSubmitContest";
 import { useRouter } from "next/navigation";
 
 export default function Contest() {
   const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const startTime = process.env.NEXT_PUBLIC_START_TIME_CONTEST ? process.env.NEXT_PUBLIC_START_TIME_CONTEST.toString() : "";
+  const endTime = process.env.NEXT_PUBLIC_END_TIME_CONTEST ? process.env.NEXT_PUBLIC_END_TIME_CONTEST.toString() : "";
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -127,8 +125,10 @@ export default function Contest() {
               <div className="mt-7 text-Subhead3Xl text-primary-950 max-[460px]:text-xl">
                 BÁO TIỀN PHONG TỔ CHỨC
               </div>
+
+              
             </div>
-            
+            {/* use later */}
               {/* <div
                 className="w-full h-auto mt-[52px] sm:h-[150px] flex justify-center items-center gap-4 mx-auto 
                             max-sm:h-[110px]"
@@ -157,12 +157,12 @@ export default function Contest() {
             
             <section>
               <BlurFade delay={0.25 + 3 * 0.05} inView>
-                <Clock startTime="2024-10-11T07:46:00.000Z" endTime="2024-10-30T07:47:00.000Z"/>
+                <Clock startTime={startTime} endTime={endTime}/>
               </BlurFade>
 
               <BlurFade delay={0.25 + 4 * 0.05} inView>
                 <CardContest
-                  className={`mt-12 px-6 flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden p-6 z-[${LAYERS.POST}]
+                  className={`mt-12 px-6 flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden shadow-custom-gray p-6 z-[${LAYERS.POST}]
                     
                     max-[685px]:w-[580px]
                     max-[685px]:p-4
