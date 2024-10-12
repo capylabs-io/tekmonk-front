@@ -26,6 +26,7 @@ import WithAuth from "@/components/hoc/WithAuth";
 import { useAchievements } from "@/lib/hooks/useAchievement";
 import { Achievement, Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
+import { get } from "lodash";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",
@@ -103,11 +104,11 @@ const Profile: React.FC = () => {
             <span
               className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
             >
-              {userInfo?.userRank}
+              {get(userInfo,"userRank")}
             </span>
           </div>
           <div className="text-base text-primary-950">
-            {userInfo?.specialName}
+            {get(userInfo,"specialName")}
           </div>
         </div>
         <div className="flex gap-x-2">
