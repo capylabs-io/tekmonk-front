@@ -1,7 +1,6 @@
 //for only contest (register, userProfile, contestEntry)
 
 import { contestRegister } from "@/requests/contest-register";
-import { postRegister } from "@/requests/login";
 import { create } from "zustand";
 
 
@@ -19,6 +18,7 @@ type State = {
     schoolName: string;
     phoneNumber: string;
     schoolAddress: string;
+    className?: string;
     parentName: string;
     parentPhoneNumber: string;
     email: string;
@@ -34,6 +34,7 @@ type Actions = {
     register: (body: any) => Promise<void>;
     change: (key: string, value: any) => void;
     changeGroupMemberInfo: (index: number, key: string, value: any) => void;
+    clear: () => void;
 }
 
 const defaultStates: State = {
@@ -41,6 +42,7 @@ const defaultStates: State = {
     schoolName: "",
     phoneNumber: "",
     schoolAddress: "",
+    className: "",
     parentName: "",
     parentPhoneNumber: "",
     email: "",
@@ -71,6 +73,9 @@ export const useContestRegisterStore = create<State & Actions>()(
             const groupMemberInfo = get().groupMemberInfo;
             groupMemberInfo[index] = { ...groupMemberInfo[index], [key]: value }
             set({ groupMemberInfo })
+        },
+        clear: () => {
+            set({ ...defaultStates })
         }
     })
 )
