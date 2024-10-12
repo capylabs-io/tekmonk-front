@@ -4,6 +4,9 @@ import { Nunito_Sans } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AnimatedGridPattern from "../ui/animated-grid-pattern";
+import { cn } from "@/lib/utils";
+import {LAYERS} from "@/contants/layer";
 
 const nunitoSans = Nunito_Sans({
   // weight: "600",
@@ -23,20 +26,21 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       document.body.classList.remove('overflow-hidden');
     }
   };
-
   return (
-    <div className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col`}>
-      <Image
+    <div className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}>
+      {/* <div className="w-[200px] h-[200px] black"></div> */}
+      
+      {/* <Image
         src="/image/contest/layer_bg.png"
         alt="Background"
         fill
         priority
         quality={40}
         className="object-cover"
-      />
+      /> */}
       
       {/* Header */}
-      <header className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white bg-opacity-80">
+      <header className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
         <Image
           src="/image/app-logox2.png"
           alt="app logo"
@@ -48,7 +52,7 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Desktop Menu */}
         <nav className="hidden sm:flex w-64 h-full items-center justify-around text-gray-950">
-          <div className="text-gray-950 text-bodyLg cursor-pointer" onClick={() => router.push("/rules")}>Thể lệ</div>
+          <div className="text-gray-950 text-bodyLg cursor-pointer" onClick={() => router.push("/contest")}>Thể lệ</div>
           <div className="cursor-pointer" onClick={() => router.push("/contest")}>Bài dự thi</div>
           <div className="cursor-pointer" onClick={() => router.push("/login")}>Đăng nhập</div>
         </nav>
@@ -77,8 +81,8 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <ul className="flex flex-col items-center py-2 text-gray-950">
           <li
-            className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-            onClick={() => router.push("/rules")}
+	  className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
+	  onClick={() => router.push("/contest")}
           >
             Thể lệ
           </li>
@@ -112,10 +116,22 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </div>
+      <AnimatedGridPattern
+        numSquares={1000}
+        maxOpacity={1}
+        duration={1}
+        repeatDelay={0.5}
+        className={cn(
+          "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)]",
+          "h-[200%] inset-y-[-30%] inset-x-0 skew-y-12 w-full", `z-[${LAYERS.BACKGROUND}]`
+        )}
+        width={120}
+        height={120}
+      />
 
       {/* Main Content */}
-      <main className="flex-grow relative z-0 max-w-[1440px] w-full mx-auto border border-t-0 border-gray-300 text-gray-800 bg-white bg-opacity-80">
-        {children}
+      <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
+	{children}
       </main>
     </div>
   );
