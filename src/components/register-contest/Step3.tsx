@@ -8,7 +8,7 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Trash2 } from "lucide-react";
 import { UserPlus } from "lucide-react";
 import DatePicker from 'react-date-picker';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 
@@ -17,7 +17,9 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export const Step3 = () => {
-    const [value, onChange] = useState<Value>(new Date());
+  const [value, onChange] = useState<Value>();
+    useEffect(() => {
+  },[value]);
   const { groupMemberInfo, contest_group_stage } = useContestRegisterStore(
     (state) => {
       return {
@@ -148,13 +150,13 @@ export const Step3 = () => {
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="4" id="category-D1" />
             <Label className="text-bodyLg text-black">
-              Thi cá nhân - Bảng D(Bảng sáng tạo cho học sinh THCS, THPT)
+              Thi cá nhân - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
             </Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="5" id="category-D2" />
             <Label className="text-bodyLg text-black">
-              Thi nhóm - Bảng D(Bảng sáng tạo cho học sinh THCS, THPT)
+              Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
             </Label>
           </div>
         </RadioGroup>
@@ -217,10 +219,10 @@ export const Step3 = () => {
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Số điện thoại liên hệ{" "}
-                      <span className="text-red-500">*</span>
+                      Số điện thoại liên hệ
                     </Label>
                     <Input
+                      type="number"
                       id={`phone-${index}`}
                       value={member.phone}
                       onChange={(e) =>
@@ -235,20 +237,24 @@ export const Step3 = () => {
                       Ngày tháng năm sinh{" "}
                       <span className="text-red-500">*</span>
                     </Label>
-                    <Input
+                    {/* <Input
                       type="date"
                       value={member.dob}
                       onChange={(e) =>
                         updateTeamMember(index, "dob", e.target.value)
                       }
                       className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
-                    />
-                     {/* <DatePicker className="w-full rounded-xl bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none" onChange={onChange} value={value} /> */}
+                    /> */}
+                     <DatePicker
+                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[48px] text-lg focus-visible:outline-none" 
+                      onChange={(value) => {
+                        onChange(value);
+                        updateTeamMember(index, "dob", value);
+                      }} value={value}/>
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Họ và tên phụ huynh{" "}
-                      <span className="text-red-500">*</span>
+                      Họ và tên phụ huynh
                     </Label>
                     <Input
                       value={member.parentName}
@@ -261,10 +267,10 @@ export const Step3 = () => {
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Số điện thoại của phụ huynh{" "}
-                      <span className="text-red-500">*</span>
+                      Số điện thoại của phụ huynh
                     </Label>
                     <Input
+                      type="number"
                       value={member.parentPhoneNumber}
                       onChange={(e) =>
                         updateTeamMember(
@@ -282,14 +288,13 @@ export const Step3 = () => {
             ))}
             {groupMemberInfo.length < 2 && (
               <>
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full mt-2 border-t border-gray-300"></div>
                 <Button
                   variant="outline"
-                  className="w-[205px] mt-3 mx-auto bg-white text-primary-900 border-gray-300 rounded-full px-4 py-2 flex items-center space-x-2"
+                  className="w-[205px] mt-4 mx-auto bg-white text-primary-900 border-gray-300 rounded-full px-4 py-2 flex items-center space-x-2"
                   onClick={addTeamMember}
                 >
                   <UserPlus className="w-5 h-5 text-black" />
-
                   <span className="text-SubheadMd">Thêm thành viên</span>
                 </Button>
               </>

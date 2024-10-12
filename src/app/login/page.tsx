@@ -58,7 +58,7 @@ export default function Login() {
       // }
 
       if(roleName == "authenticated"){
-        router.push("/home");
+        router.push("/contest");
       }else {
         useUserStore.getState().clear();
         toast.error("Login Fail");

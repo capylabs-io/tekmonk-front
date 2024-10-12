@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 import { Kanit, Dela_Gothic_One } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { FunnelCard } from "@/components/funnel/FunnelCard";
@@ -14,6 +14,9 @@ const delaGothicOne = Dela_Gothic_One({
 
 export default function Landing() {
   const router = useRouter();
+  useEffect(() => {
+    router.push("/contest");
+  },[]);
   // phụ huynh
   const handleCardClick = () => {
     window.open("https://tekmonk.edu.vn/");

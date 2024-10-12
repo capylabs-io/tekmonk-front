@@ -1,6 +1,6 @@
 "use client";
 
-import ContestHeader from "@/components/contest/header";
+import ContestHeader from "@/components/contest/ContestHeader";
 import { LAYERS } from "@/contants/layer";
 import AllContestEntries from "./page";
 import AllContestEntriesHeader from "@/components/all-contest-entries/AllContestEntriesHeader";

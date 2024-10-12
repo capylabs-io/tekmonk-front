@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 // import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import {Step1} from "@/components/register-contest/Step1";
 import {Step2} from "@/components/register-contest/Step2";
@@ -14,6 +13,8 @@ import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
 import { get } from "lodash";
+import { toast } from "react-toastify";
+import { useLoadingStore } from "@/store/LoadingStore";
 
 const steps = [
   { title: "Thông tin", titleHeader: "THÔNG TIN CÁ NHÂN", icon: "1" },
@@ -26,6 +27,12 @@ export default function RegisterContest() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [candidateNumber, setCandidateNumber] = useState<string>("");
+  const [isAccepted, setIsAccepted] = useState(false);
+  const [register] = useContestRegisterStore((state) => [state.register]);
+  const [show, hide] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const router = useRouter();
   const data = useContestRegisterStore((state) => {
     return {
@@ -43,21 +50,24 @@ export default function RegisterContest() {
     };
   });
 
-  const [register] = useContestRegisterStore((state) => [state.register]);
   const handleNext = async () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      setIsSubmitted(true);
-      try {
-        const res = await register(data);
-        setCandidateNumber(get(res, "candidateNumber",""));
-        console.log(res)
-        console.log(data)
-      } catch (error) {
-        console.log(error)
+    try {
+      show();
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(currentStep + 1);
+      } else {
+        setIsSubmitted(true);
+          const res = await register(data);
+          setCandidateNumber(get(res, "candidateNumber",""));
+          toast.success("Đăng ký thành công");
+        
       }
+    } catch (error) {
+      toast.error("Đăng ký thất bại");
+    } finally {
+      hide();
     }
+    
   };
 
   const handlePrevious = () => {
@@ -67,12 +77,7 @@ export default function RegisterContest() {
       router.push("/contest");
     }
   };
-
-  const handleGoBack = () => {
-    setIsSubmitted(false);
-    setCurrentStep(0);
-  };
-
+  
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
@@ -82,31 +87,45 @@ export default function RegisterContest() {
       case 2:
         return <Step3 />;
       case 3:
-        return <Step4 />;
+        return <Step4 updateStatus={handleAccept}/>;
       default:
         return null;
     }
   };
 
+  const handleBackToLogin = () => {
+    //clear all data
+    useContestRegisterStore.getState().clear();
+    router.push("/login");
+  }
+
+  const handleBackToContest = () => {
+    useContestRegisterStore.getState().clear();
+    router.push("/contest");
+  }
+  
+  const handleAccept = () => {
+    setIsAccepted(!isAccepted);
+  };
   return (
-    <div className="max-w-[1440px] mt-4 min-h-screen grid grid-cols-1 mx-auto ">
-      <div className="w-full px-4">
-          <div
-          className="w-full px-4 max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
+    <>
+    <div className="h-full overflow-auto">
+    <div className="px-2">
+      <div
+          className="w-full max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
           style={{
             backgroundImage: "url('/image/contest/Banner.png')",
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
-        >
-
-        </div>
-      </div>
+        ></div>
+    </div>
+      
       
 
-      <div className="w-full flex items-center justify-center mt-4 mb-5 px-4 sm:px-6 lg:px-8 max-mobile:mt-1">
-        <Card className="w-full max-w-[720px] rounded-2xl">
+      <div className="p-2">
+        <Card className="w-full max-w-[720px] mt-2 mx-auto rounded-2xl bg-white">
           <div className="w-full min-h-16 p-6 ">
             <div className=" text-SubheadLg text-primary-900 max-mobile:text-center">
               {steps[currentStep].titleHeader}
@@ -185,6 +204,7 @@ export default function RegisterContest() {
                 <Button
                   onClick={handleNext}
                   className="rounded-[3rem] w-[108px]"
+		  disabled={currentStep === 3 && !isAccepted}
                 >
                   {currentStep === steps.length - 1 ? "Xác nhận" : "Tiếp tục"}
                 </Button>
@@ -193,35 +213,30 @@ export default function RegisterContest() {
           ) : (
             <>
               <div className="w-full border-t border-gray-300"></div>
-              <div className="flex h-16 px-6 py-3 justify-between">
-                <Button
-                  onClick={handleGoBack}
-                  disabled={currentStep === 0}
-                  outlined={true}
-                  className="rounded-[3rem] w-[108px] border-[1px] border-gray-300"
-                >
-                  Quay lại
-                </Button>
-                <div className="flex gap-3">
+              <div className="flex h-16 px-6 py-3 gap-2 justify-between">
+                
+                
                   <Button
-                    onClick={() => router.push("/contest")}
+                    onClick={handleBackToContest}
                     className="rounded-[3rem] w-[178px] border-[1px] border-gray-300"
                     outlined={true}
                   >
                     Nội dung cuộc thi
                   </Button>
                   <Button
-                    onClick={() => router.push("/login")}
+                    onClick={handleBackToLogin}
                     className="rounded-[3rem] w-[130px]"
                   >
                     Đăng nhập
                   </Button>
-                </div>
+                
               </div>
             </>
           )}
         </Card>
       </div>
     </div>
+    
+    </>
   );
 }

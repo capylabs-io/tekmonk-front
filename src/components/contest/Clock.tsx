@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { CardContest } from "../common/CardContest";
 import { Button } from "../common/Button";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/UserStore";
+import FormSubmitContest from "./FormSubmitContest";
 
 interface TimeLeft {
     days: number;
@@ -39,6 +41,7 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
         calculateTimeLeft(getRelevantTime(startTime, endTime))
     );
     const [isContestStarted, setIsContestStarted] = useState(false);
+    const isConnected = useUserStore((state) => state.isConnected);
 
     const timeLeftComponents = [
         { label: "NGÀY", value: timeLeft.days },
@@ -65,8 +68,10 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
     return (
         <div className="text-center mb-12">
             <div className="mt-[52px] max-[640px]:flex-col flex items-center justify-center gap-4">
-                <Button
-                    className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary"
+                {!isConnected() ? <>
+                
+                    <Button
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg"
                     outlined={false}
                     style={{ borderRadius: "4rem" }}
                     onClick={() => router.push("register-contest")}
@@ -74,10 +79,24 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
                 >
                     Đăng ký
                 </Button>
+                </> : <>
+                <FormSubmitContest >
+                    <Button
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg"
+                    outlined={false}
+                    style={{ borderRadius: "4rem" }}
+                    // onClick={() => router.push("login")}
+                    disabled={true} // Vô hiệu hóa nút nếu cần
+                    >Nộp bài</Button>
+                </FormSubmitContest>
+                </>}
+                
                 <Button
-                    className="w-[312px] h-[52px] max-[460px]:w-[280px] shadow-custom-gray"
+                    className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg"
                     outlined={true}
                     style={{ borderRadius: "4rem" }}
+		    //disabled={isConnected()}
+		    disabled={true}
                 >
                     Tổng hợp bài dự thi
                 </Button>
@@ -85,14 +104,16 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
             <div className="mt-[52px] text-2xl font-bold text-gray-600 max-[545px]:text-xl max-[845px]:text-xl">
                 {isContestStarted ? "Cuộc thi sẽ kết thúc sau:" : "Cuộc thi bắt đầu sau:"}
             </div>
-            <div className="mt-[26px] flex justify-center space-x-4">
+            <div className="mt-[26px] flex justify-center gap-4">
                 {timeLeftComponents.map(({ label, value }, index) => (
                     <div key={index} className="flex flex-col items-center">
-                        <CardContest className="w-[200px] h-[200px] max-[865px]:w-[120px] max-[865px]:h-[120px] max-[545px]:w-[80px] max-[545px]:h-[80px] flex flex-col items-center justify-center relative shadow-custom-gray bg-white">
-                            <div className="text-SubheadXl max-[865px]:text-sm max-[865px]:font-bold max-mobile:text-bodyXs text-gray-500">
+                        <CardContest className=" w-[200px] h-[168px] flex flex-col items-center justify-center border border-gray-200 relative shadow-custom-gray bg-white
+                        max-[865px]:w-[120px] max-[865px]:h-[120px] 
+                        max-[545px]:w-[80px] max-[545px]:h-[80px] ">
+                            <div className="text-SubheadLg max-[865px]:text-sm max-[865px]:font-bold max-mobile:text-bodyXs text-gray-500">
                                 {label}
                             </div>
-                            <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-7xl">
+                            <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
                                 {value !== undefined ? value.toString().padStart(2, "0") : "00"}
                             </div>
                         </CardContest>
