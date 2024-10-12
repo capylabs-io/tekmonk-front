@@ -20,7 +20,6 @@ export const Step3 = () => {
   const [value, onChange] = useState<Value>();
     useEffect(() => {
   },[value]);
-  console.log("value = ", value);
   const { groupMemberInfo, contest_group_stage } = useContestRegisterStore(
     (state) => {
       return {
