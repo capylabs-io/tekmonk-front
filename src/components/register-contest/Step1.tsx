@@ -5,12 +5,12 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Input } from "../common/Input";
 export const Step1 = () => {
     const {
-        fullName, schoolName, phoneNumber, schoolAddress, parentName, parentPhoneNumber
+        fullName, schoolName, className, schoolAddress, parentName, parentPhoneNumber
     } = useContestRegisterStore(state => {
         return {
             fullName: state.fullName,
             schoolName: state.schoolName,
-            phoneNumber: state.phoneNumber,
+            className: state.className,
             schoolAddress: state.schoolAddress,
             parentName: state.parentName,
             parentPhoneNumber: state.parentPhoneNumber,
@@ -23,8 +23,8 @@ export const Step1 = () => {
     const handleChangeSchoolName = (text: string) => {
         change("schoolName", text);
     }
-    const handleChangePhoneNumber = (text: string) => {
-        change("phoneNumber", text);
+    const handleChangeClassname = (text: string) => {
+        change("className", text);
     }
     const handleChangeSchoolAddress = (text: string) => {
         change("schoolAddress", text);
@@ -43,11 +43,11 @@ export const Step1 = () => {
             <div className="">
                 <Label className="text-gray-950 text-SubheadSm">Họ tên học sinh <span className="text-red-500">*</span></Label>
                 <Input
-                        type="text"
-                        value={fullName}
-                        onChange={handleChangeFullName}
-                        placeholder="Câu trả lời"     
-                        customClassNames="mt-2 mb-0"          
+                    type="text"
+                    value={fullName}
+                    onChange={handleChangeFullName}
+                    placeholder="Câu trả lời"     
+                    customClassNames="mt-2 mb-0"
                 />
             </div>
             <div className="">
@@ -57,24 +57,23 @@ export const Step1 = () => {
                     value={schoolName}
                     onChange={handleChangeSchoolName}
                     placeholder="Câu trả lời"
-                    customClassNames="mt-2"  
-                    
+                    customClassNames="mt-2"
                 />
             </div>
         {/* </div> */}
         {/* <div className="flex gap-4"> */}
             <div className="">
-                <Label className="text-gray-950 text-SubheadSm">Số điện thoại liên hệ <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Tên lớp học<span className="text-red-500">*</span></Label>
                 <Input
-                    type="number"
-                    value={phoneNumber}
-                    onChange={handleChangePhoneNumber}
-                    placeholder="00-000-0000"
+                    type="text"
+                    value={className}
+                    onChange={handleChangeClassname}
+                    placeholder="Câu trả lời"
                     customClassNames="mt-2"  
                 />
             </div>
             <div className="">
-                <Label className="text-gray-950 text-SubheadSm">Quận, Huyện của trường  <span className="text-red-500">*</span></Label>
+                <Label className="text-gray-950 text-SubheadSm">Địa chỉ của trường<span className="text-red-500">*</span></Label>
                 <Input
                     type="text"
                     value={schoolAddress}
