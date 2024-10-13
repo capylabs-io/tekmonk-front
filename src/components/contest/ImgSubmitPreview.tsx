@@ -1,49 +1,32 @@
-import classNames from "classnames";
-import Image from "next/image";
+import React from 'react';
+import { X } from 'lucide-react';
 
-type Props = {
-  imgSrc: string;
+type ImgSubmitPreviewProps = {
+  src: string;
   width: number;
   height: number;
   className?: string;
-  onRemove: () => void; // Add this prop
+  onRemove: () => void;
 };
 
-export const ImgSubmitPreview = ({
-  imgSrc,
-  width,
-  height,
-  className,
-  onRemove,
-}: Props) => {
-  const classes = classNames(["border rounded-md", className]);
-
+export const ImgSubmitPreview: React.FC<ImgSubmitPreviewProps> = ({ src, width, height, className, onRemove }) => {
   return (
-    <div className="relative group">
-      <Image
-        src={imgSrc}
-        alt="Preview Image"
+    <div className={`relative ${className}`}>
+      <img
+        src={src}
         width={width}
         height={height}
-        className={classes}
+        alt="Preview Image"
+        className="object-cover rounded-lg"
+        style={{ width: `${width}px`, height: `${height}px` }}
       />
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-circle-x cursor-pointer absolute -top-2 right-0 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={onRemove} // Add this onClick handler
+      <button
+        onClick={onRemove}
+        className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md"
+        aria-label="Remove image"
       >
-        <circle cx="12" cy="12" r="10" />
-        <path d="m15 9-6 6" />
-        <path d="m9 9 6 6" />
-      </svg>
+        <X size={16} />
+      </button>
     </div>
   );
 };
