@@ -1,75 +1,191 @@
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import Image from "next/image"
+"use client";
+
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { getContestSubmissionPagination } from "@/requests/contestSubmit";
+import { ContestSubmission } from "@/types/contestSubmit";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { useDebounce } from "@/hooks/useDebounceValue";
 
 export default function SearchInterface() {
-    const cards = Array(12).fill({
-        id: "09324",
-        title: "TÊN DỰ ÁN HIỂN THỊ Ở ĐÂY VỚI TỐI ĐA LÀ 2 DÒNG. NẾU NHIỀU HƠN T...",
-        author: "Henry Nguyen",
-        imageUrl: "/image/new/new-pic.png"
-    })
+  const router = useRouter();
 
-    return (
-      <div className="container mx-auto space-y-6">
-        <div
-          className="w-full h-[400px]  black"
-          style={{
-            backgroundImage: "url('/image/contestentries/Banner.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
+  const [searchResults, setSearchResults] = useState<ContestSubmission[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const response = await getContestSubmissionPagination(page, 12, debouncedSearch);
+      setSearchResults(response.data);
+      const totalPages = Math.ceil(response.meta.pagination.total / 12);
+      setTotalPages(totalPages);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [page, debouncedSearch]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  const navigateDetailItem = (id: string) => {
+    router.push(`/all-contest-entries/${id}`);
+  };
+
+  const SkeletonCard = () => (
+    <div className="hover:cursor-pointer">
+      <Card className="overflow-hidden">
+        <CardHeader className="p-0">
+          <Skeleton className="w-full h-72" />
+        </CardHeader>
+      </Card>
+      <CardContent className="p-4">
+        <Skeleton className="h-4 w-1/4 mb-2" />
+        <Skeleton className="h-6 w-full" />
+      </CardContent>
+      <CardFooter className="p-4 pt-0">
+        <Skeleton className="h-4 w-1/3" />
+      </CardFooter>
+    </div>
+  );
+
+  return (
+    <div className="container mx-auto pb-5 space-y-6">
+      <div
+        className="w-full h-[400px]  black"
+        style={{
+          backgroundImage: "url('/image/contestentries/Banner.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
+      <div className="w-[394px] h-12 relative mx-auto">
+        <Input
+          type="text"
+          placeholder="Tìm kiếm theo ID"
+          className="w-full h-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-bodyLg"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <svg
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-        </div>
-        <div className="w-[394px] h-12 relative mx-auto">
-          <Input
-            type="text"
-            placeholder="Tìm kiếm theo ID"
-            className="w-full h-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-bodyLg"
-          />
-          <svg
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </div>
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cards.map((card, index) => (
-            <div key={index} className="hover:cursor-pointer">
-              <Card className="overflow-hidden">
-                <CardHeader className="p-0">
-                  <Image
-                    src={card.imageUrl}
-                    alt="Into the Breach"
-                    width={400}
-                    height={200}
-                    className="w-full h-72 object-cover"
-                  />
-                </CardHeader>
-                
-              </Card>
-              <CardContent className="p-4">
-                  <div className="text-bodySm text-gray-800">
-                    #{card.id}
-                  </div>
-                  <div className="text-SubheadXs text-gray-800">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading
+          ? Array(12)
+              .fill(0)
+              .map((_, index) => <SkeletonCard key={index} />)
+          : searchResults.map((card, index) => (
+              <div
+                key={card.id}
+                className="hover:cursor-pointer"
+                onClick={() => navigateDetailItem(card.id)}
+              >
+                <Card className="overflow-hidden">
+                  <CardHeader className="p-0">
+                    <Image
+                      src={
+                        card.thumbnail?.url
+                          ? `http://localhost:1337${card.thumbnail.url}`
+                          : "/image/new/new-pic.png"
+                      }
+                      alt="Into the Breach"
+                      width={400}
+                      height={200}
+                      loading="lazy"
+                      className="w-full h-72 object-cover"
+                    />
+                  </CardHeader>
+                </Card>
+                <CardContent className="p-4">
+                  <div className="text-bodySm text-gray-800">#{card.id}</div>
+                  <div className="text-SubheadXs text-gray-800 line-clamp-2">
                     {card.title}
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0">
-                  <div className="text-bodySm text-gray-800">{card.author}</div>
+                  <div className="text-bodySm text-gray-800">{"Chưa có"}</div>
                 </CardFooter>
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
       </div>
-    );
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              onClick={() => handlePageChange(Math.max(1, page - 1))}
+              className={page === 1 ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+          {[...Array(totalPages)].map((_, index) => {
+            const pageNumber = index + 1;
+            if (
+              pageNumber === 1 ||
+              pageNumber === totalPages ||
+              (pageNumber >= page - 1 && pageNumber <= page + 1)
+            ) {
+              return (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    href="#"
+                    isActive={pageNumber === page}
+                    onClick={() => handlePageChange(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            } else if (pageNumber === page - 2 || pageNumber === page + 2) {
+              return <PaginationEllipsis key={pageNumber} />;
+            }
+            return null;
+          })}
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
+              className={
+                page === totalPages ? "pointer-events-none opacity-50" : ""
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  );
 }

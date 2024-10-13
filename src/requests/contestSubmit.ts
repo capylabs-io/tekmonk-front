@@ -36,6 +36,21 @@ export const uploadThumbnail = async (refId: string, thumbnail: File): Promise<M
     return response.data;
 };
 
+export const uploadAssets = async (refId: string, img: File): Promise<Media> => {
+    const formData = new FormData();
+    formData.append('ref', REFS["contest-submission"]);
+    formData.append('refId', refId);
+    formData.append('field', 'assets');
+    formData.append('files', img);
+
+    const response = await tekdojoAxios.post(`${BASE_URL}/upload`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+};
+
 export const createContestSubmission = async (contestSubmission: DataContestSubmission) => {
     const response = await tekdojoAxios.post(`${BASE_URL}/contest-submissions`, {
         data: contestSubmission
@@ -43,12 +58,12 @@ export const createContestSubmission = async (contestSubmission: DataContestSubm
     return response.data.data as ContestSubmission;
 };
 
-export const getContestSubmissionPagination = async (page: number, limit: number): Promise<ContestSubmission[]> => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate=thumbnail&page=${page}&limit=${limit}`); // fix later
+export const getContestSubmissionPagination = async (page: number, limit: number, keyword: string) => {
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate=thumbnail&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[0]=id:asc&filters[id][$containsi]=${keyword}`); 
     return response.data;
 };
 
 export const getOneContestSubmission = async (id: string) => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate=thumbnail`);
-    return response.data;
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate=*`);
+    return response.data ;
 }

@@ -13,10 +13,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/contest/InputField";
 import {
   createContestSubmission,
+  uploadAssets,
   uploadSource,
   uploadThumbnail,
 } from "@/requests/contestSubmit";
-import { toast } from "react-toastify";
 import { InputFileUploadContest } from "@/components/contest/InputFileUploadContest";
 import { InputImgUploadContest } from "@/components/contest/InputImgUploadContest";
 import { DialogTitle } from "@radix-ui/react-dialog";
@@ -79,13 +79,12 @@ const FormSubmitContest = React.forwardRef<
       }
 
       for (const img of imgProject) {
-        await uploadThumbnail(result.id, img);
+        await uploadAssets(result.id, img);
       }
 
-      toast.success("Nộp bài thành công");
+      closeDialog();
     } catch (error) {
-      console.error("Error submitting contest:", error);
-      toast.error("Vui lòng thử lại");
+      alert("Có lỗi xảy ra khi nộp bài thi");
     }
   };
 

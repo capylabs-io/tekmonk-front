@@ -3,7 +3,8 @@ import { Media } from "@/types/common-types";
 export type ContestSubmission = {
     id: string;
     title: string;
-    thumbnail?: Media[];
+    assets?: Media[];
+    thumbnail: Media;
     description?: string;
     tags?: string[],
     createdAt: string;
