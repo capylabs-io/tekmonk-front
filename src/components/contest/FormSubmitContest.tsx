@@ -91,7 +91,7 @@ const FormSubmitContest = React.forwardRef<
       }
 
       // closeDialog();
-      // router.push("all-contest-entries/" + result.id);
+      router.push("all-contest-entries/" + result.id);
     } catch (error) {
       alert("Có lỗi xảy ra khi nộp bài thi");
     }

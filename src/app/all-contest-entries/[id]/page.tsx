@@ -25,6 +25,7 @@ const ContestDetail: React.FC = () => {
       setIsLoading(true);
       try {
         const response = await getOneContestSubmission(id as string);
+        console.log(response.data);
         if (response && response.data) {
           setContestDetail(response.data);
         } else {
