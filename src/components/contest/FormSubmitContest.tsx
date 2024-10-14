@@ -21,6 +21,10 @@ import { InputFileUploadContest } from "@/components/contest/InputFileUploadCont
 import { InputImgUploadContest } from "@/components/contest/InputImgUploadContest";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { InputMulImgUploadContest } from "./InputMulImgUploadContest";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/UserStore";
+import { getOneContestEntry } from "@/requests/contestEntry";
+import { getMe } from "@/requests/login";
 
 // Define the validation schema
 const submissionSchema = z.object({
@@ -43,6 +47,7 @@ const FormSubmitContest = React.forwardRef<
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const router = useRouter();
 
   const {
     control,
@@ -62,10 +67,13 @@ const FormSubmitContest = React.forwardRef<
     try {
       const tags = data.tags.split(",").map((tag: string) => tag.trim());
 
+      const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
+
       const contestObj: DataContestSubmission = {
         title: data.title,
         description: data.description,
         tags: { data: tags },
+        contest_entry: contestEntry.id
       };
 
       const result = await createContestSubmission(contestObj);
@@ -82,7 +90,8 @@ const FormSubmitContest = React.forwardRef<
         await uploadAssets(result.id, img);
       }
 
-      closeDialog();
+      // closeDialog();
+      // router.push("all-contest-entries/" + result.id);
     } catch (error) {
       alert("Có lỗi xảy ra khi nộp bài thi");
     }
@@ -140,7 +149,7 @@ const FormSubmitContest = React.forwardRef<
           />
           <div className="w-full border-t border-gray-200 py-2 sm:py-5">
             <InputImgUploadContest
-              title="Ảnh thumbnail"
+              title="Ảnh dự án"
               value={thumbnail}
               onChange={setThumbnail}
               customClassNames="mt-b sm:mb-5"

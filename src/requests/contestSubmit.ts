@@ -1,6 +1,7 @@
 import { BASE_URL } from "@/contants/api-url";
 import { REFS } from "@/contants/ref";
 import tekdojoAxios from "@/requests/axios.config";
+import { useUserStore } from "@/store/UserStore";
 import { Media } from "@/types/common-types";
 import { ContestSubmission, DataContestSubmission } from "@/types/contestSubmit";
 
@@ -59,11 +60,11 @@ export const createContestSubmission = async (contestSubmission: DataContestSubm
 };
 
 export const getContestSubmissionPagination = async (page: number, limit: number, keyword: string) => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate=thumbnail&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[0]=id:asc&filters[id][$containsi]=${keyword}`); 
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate[contest_entry][populate]=user&populate=thumbnail&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[0]=id:asc&filters[id][$containsi]=${keyword}`); 
     return response.data;
 };
 
 export const getOneContestSubmission = async (id: string) => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate=*`);
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate[contest_entry][populate]=user&populate=thumbnail`);
     return response.data ;
 }

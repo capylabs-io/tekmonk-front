@@ -2,9 +2,7 @@
 
 import CardContestItem from "@/components/contest/CardContestItem";
 import Image from "next/image";
-import contestListMock from "@/mock/contestList-mock.json";
 import { useEffect, useState } from "react";
-import tekdojoAxios from "@/requests/axios.config";
 import { getContest } from "@/requests/contest";
 import { Contest } from "@/types/common-types";
 
@@ -46,10 +44,10 @@ const ContestList: React.FC = () => {
             id={contest.id}
             key={index}
             title={contest.name}
-            status={new Date(contest.endTime) > new Date() && new Date(contest.startTime) < new Date() ? true : false}
+            status={new Date(contest.endTime) > new Date() ? true : false}
             thumbnail={contest.thumbnail?.url}
-            endDate={new Date(contest.endTime).toUTCString()}
-            startDate={new Date(contest.startTime).toUTCString()}
+            endDate={new Date(contest.endTime).toLocaleDateString()}
+            startDate={new Date(contest.startTime).toLocaleDateString()}
           />
         ))}
       </div>

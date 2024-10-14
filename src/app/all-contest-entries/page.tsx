@@ -37,7 +37,11 @@ export default function SearchInterface() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const response = await getContestSubmissionPagination(page, 12, debouncedSearch);
+      const response = await getContestSubmissionPagination(
+        page,
+        12,
+        debouncedSearch
+      );
       setSearchResults(response.data);
       const totalPages = Math.ceil(response.meta.pagination.total / 12);
       setTotalPages(totalPages);
@@ -74,19 +78,19 @@ export default function SearchInterface() {
 
   return (
     <div className="container mx-auto pb-5 space-y-6">
-      <div
-        className="w-full h-[400px]  black"
-        style={{
-          backgroundImage: "url('/image/contestentries/Banner.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      ></div>
+      <Image
+        src={`/image/contestentries/Banner.png`}
+        alt={`Banner`}
+        width={960}
+        height={480}
+        priority
+        style={{ objectFit: "contain" }}
+        quality={100}
+      />
       <div className="w-[394px] h-12 relative mx-auto">
         <Input
           type="text"
-          placeholder="Tìm kiếm theo ID"
+          placeholder="Tìm kiếm bài thi theo số báo danh"
           className="w-full h-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-bodyLg"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -104,7 +108,7 @@ export default function SearchInterface() {
         </svg>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 px-4">
         {loading
           ? Array(12)
               .fill(0)
@@ -112,22 +116,22 @@ export default function SearchInterface() {
           : searchResults.map((card, index) => (
               <div
                 key={card.id}
-                className="hover:cursor-pointer"
+                className="hover:cursor-pointer flex flex-col"
                 onClick={() => navigateDetailItem(card.id)}
               >
-                <Card className="overflow-hidden">
-                  <CardHeader className="p-0">
+                <Card className="overflow-hidden flex-1 items-center justify-center">
+                  <CardHeader className="p-0 items-center w-full h-full justify-center">
                     <Image
                       src={
                         card.thumbnail?.url
-                          ? `http://localhost:1337${card.thumbnail.url}`
+                          ? `http://localhost:1337${card?.thumbnail.url}`
                           : "/image/new/new-pic.png"
                       }
                       alt="Into the Breach"
-                      width={400}
-                      height={200}
+                      width={212}
+                      height={148}
                       loading="lazy"
-                      className="w-full h-72 object-cover"
+                      className="object-contain"
                     />
                   </CardHeader>
                 </Card>
@@ -138,7 +142,9 @@ export default function SearchInterface() {
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0">
-                  <div className="text-bodySm text-gray-800">{"Chưa có"}</div>
+                  <div className="text-bodySm text-gray-800">
+                    {card.contest_entry?.user.fullName || "Unknown"}
+                  </div>
                 </CardFooter>
               </div>
             ))}

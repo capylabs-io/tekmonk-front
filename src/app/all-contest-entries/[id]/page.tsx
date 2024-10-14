@@ -77,7 +77,7 @@ const ContestDetail: React.FC = () => {
         </div>
         <div className="py-4">
           <span className="text-grey-500 text-sm">ID: {contestDetail.id}</span>
-          <p className="text-SubheadSm mb-4">{contestDetail.title}</p>
+          <p className="text-SubheadSm mb-4">{contestDetail.contest_entry?.user.fullName}</p>
           <div>
             {contestDetail.tags?.map((tag, index) => (
               <Tag

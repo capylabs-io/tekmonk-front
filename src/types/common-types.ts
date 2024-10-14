@@ -138,3 +138,11 @@ export type Contest = {
   endTime: string;
   startTime: string;
 }
+
+
+export type ContestEntry = {
+  id: string;
+  candidateNumber: string;
+  groupMemberInfo: object | null; 
+  user: User
+}

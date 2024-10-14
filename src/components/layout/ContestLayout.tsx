@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AnimatedGridPattern from "../ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
-import {LAYERS} from "@/contants/layer";
+import { LAYERS } from "@/contants/layer";
 
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
-  variable: "--font-nunito"
+  variable: "--font-nunito",
 });
 
 const ContestLayout = ({ children }: { children: React.ReactNode }) => {
@@ -21,24 +21,26 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
-      document.body.classList.add('overflow-hidden');
+      document.body.classList.add("overflow-hidden");
     } else {
-      document.body.classList.remove('overflow-hidden');
+      document.body.classList.remove("overflow-hidden");
     }
   };
   return (
-    <div className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}>
+    <div
+      className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
+    >
       {/* <div className="w-[200px] h-[200px] black"></div> */}
-      
-      {/* <Image
+
+      <Image
         src="/image/contest/layer_bg.png"
         alt="Background"
         fill
         priority
         quality={40}
-        className="object-cover"
-      /> */}
-      
+        className=""
+      />
+
       {/* Header */}
       <header className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
         <Image
@@ -52,15 +54,38 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
 
         {/* Desktop Menu */}
         <nav className="hidden sm:flex w-64 h-full items-center justify-around text-gray-950">
-          <div className="text-gray-950 text-bodyLg cursor-pointer" onClick={() => router.push("/contest")}>Thể lệ</div>
-          <div className="cursor-pointer" onClick={() => router.push("/contest")}>Bài dự thi</div>
-          <div className="cursor-pointer" onClick={() => router.push("/login")}>Đăng nhập</div>
+          <div
+            className="text-gray-950 text-bodyLg cursor-pointer"
+            onClick={() => router.push("/contest")}
+          >
+            Thể lệ
+          </div>
+          <div
+            className="cursor-pointer"
+            onClick={() => router.push("/contest")}
+          >
+            Bài dự thi
+          </div>
+          <div className="cursor-pointer" onClick={() => router.push("/login")}>
+            Đăng nhập
+          </div>
         </nav>
 
         {/* Mobile Menu Button */}
         <button onClick={toggleMenu} className="sm:hidden text-gray-950">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16m-7 6h7"
+            />
           </svg>
         </button>
       </header>
@@ -81,8 +106,8 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <ul className="flex flex-col items-center py-2 text-gray-950">
           <li
-	  className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-	  onClick={() => router.push("/contest")}
+            className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
+            onClick={() => router.push("/contest")}
           >
             Thể lệ
           </li>
@@ -116,22 +141,23 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
           </div>
         </div>
       </div>
-      <AnimatedGridPattern
+      {/* <AnimatedGridPattern
         numSquares={1000}
         maxOpacity={1}
         duration={1}
         repeatDelay={0.5}
         className={cn(
           "[mask-image:radial-gradient(1000px_circle_at_center,white,transparent)]",
-          "h-[200%] inset-y-[-30%] inset-x-0 skew-y-12 w-full", `z-[${LAYERS.BACKGROUND}]`
+          "h-[200%] inset-y-[-30%] inset-x-0 skew-y-12 w-full",
+          `z-[${LAYERS.BACKGROUND}]`
         )}
         width={120}
         height={120}
-      />
+      /> */}
 
       {/* Main Content */}
       <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
-	{children}
+        {children}
       </main>
     </div>
   );

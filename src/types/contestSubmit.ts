@@ -1,4 +1,4 @@
-import { Media } from "@/types/common-types";
+import { ContestEntry, Media } from "@/types/common-types";
 
 export type ContestSubmission = {
     id: string;
@@ -6,6 +6,7 @@ export type ContestSubmission = {
     assets?: Media[];
     thumbnail: Media;
     description?: string;
+    contest_entry: ContestEntry | null;
     tags?: string[],
     createdAt: string;
     url?: string;
@@ -18,5 +19,5 @@ export type DataContestSubmission = {
     tags?: {
         "data": string[]
     },
-    contest_entry?: string 
+    contest_entry: string | null;
 }
