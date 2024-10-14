@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import {
   Tabs,
   TabsContent,
@@ -8,8 +8,14 @@ import {
 } from "@/components/common/Tabs";
 import { Post } from "@/components/home/Post";
 import WithAuth from "@/components/hoc/WithAuth";
+import { useRouter } from "next/navigation";
 
 const home: React.FC = () => {
+  //set for contest page
+  const router = useRouter();
+  useEffect(() => {
+    router.push('/contest')
+  },[])
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>

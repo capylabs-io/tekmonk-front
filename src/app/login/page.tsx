@@ -50,19 +50,13 @@ export default function Login() {
       
       const roleName = get(userInfo, "role.name", "").toLowerCase();
 
-      // if (roleName === Role.STUDENT) {
-      //   router.push("/home");
-      // } else {
-      //   useUserStore.getState().clear();
-      //   toast.error("Login Fail");
-      // }
-
-      if(roleName == "authenticated"){
+      if (roleName === Role.STUDENT) {
         router.push("/contest");
-      }else {
+      } else {
         useUserStore.getState().clear();
         toast.error("Login Fail");
       }
+
     } catch (error) {
       toast.error("Login Fail");
     } finally {
@@ -71,13 +65,14 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full grid grid-cols-2 max-[770px]:grid-cols-1 h-screen">
+    <div className="w-full grid grid-cols-2 max-[819px]:grid-cols-1 h-screen">
       <div className="flex flex-col justify-center items-center h-screen">
         <Image
-          src="/image/app-logox2.png"
+          src="/image/app-logox4.png"
           alt="app logo"
           width={318}
           height={64}
+          className="text-red-600"
         />
         <div className="text-primary-900 text-4xl font-bold text-center mt-16">
           Đăng nhập
@@ -111,7 +106,7 @@ export default function Login() {
           Quên mật khẩu?
         </div> */}
       </div>
-      <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right"></div>
+      <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right bg-cover"></div>
       <ToastContainer />
       {isShowing && <Loading />}
     </div>
