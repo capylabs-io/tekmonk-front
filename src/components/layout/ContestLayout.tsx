@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AnimatedGridPattern from "../ui/animated-grid-pattern";
 import { cn } from "@/lib/utils";
-import { LAYERS } from "@/contants/layer";
-
+import {LAYERS} from "@/contants/layer";
+import Link from 'next/link'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -27,9 +28,9 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
     }
   };
   return (
-    <div
-      className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
-    >
+    <div className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}>
+      <TooltipProvider>
+      
       {/* <div className="w-[200px] h-[200px] black"></div> */}
 
       <Image
@@ -42,33 +43,34 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       />
 
       {/* Header */}
-      <header className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
+      <div className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
         <Image
           src="/image/app-logox2.png"
           alt="app logo"
           width={159}
           height={32}
           className="hover:cursor-pointer h-8 w-40"
-          onClick={() => router.push("/home")}
+          onClick={() => router.push("/contest")}
         />
 
         {/* Desktop Menu */}
-        <nav className="hidden sm:flex w-64 h-full items-center justify-around text-gray-950">
-          <div
-            className="text-gray-950 text-bodyLg cursor-pointer"
-            onClick={() => router.push("/contest")}
-          >
-            Thể lệ
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => router.push("/contest")}
-          >
-            Bài dự thi
-          </div>
-          <div className="cursor-pointer" onClick={() => router.push("/login")}>
-            Đăng nhập
-          </div>
+         {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
+        <nav className="hidden sm:flex w-96 h-full items-center justify-around text-gray-950">
+          <a href="/contest" className="text-gray-950 text-bodyLg cursor-pointer">Thể lệ</a>
+          
+          <Tooltip>
+          <TooltipTrigger asChild>
+          <div className="cursor-pointer" onClick={() => router.push("/contest")}>Tổng hợp bài dự thi</div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Sắp diễn ra</p>
+            </TooltipContent>
+            
+          </Tooltip>
+          
+
+         
+          <a href='/login' className="cursor-pointer" >Đăng nhập</a>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -88,7 +90,7 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
             />
           </svg>
         </button>
-      </header>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
@@ -100,14 +102,14 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed flex flex-col justify-between z-30 top-16 right-0 w-2/3 h-[calc(100vh-4rem)] bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${
+        className={`fixed flex flex-col justify-between z-30  right-0  h-full bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <ul className="flex flex-col items-center py-2 text-gray-950">
           <li
-            className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-            onClick={() => router.push("/contest")}
+	    className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
+	    onClick={() => router.push("/contest")}
           >
             Thể lệ
           </li>
@@ -119,7 +121,11 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
           </li>
           <li
             className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-            onClick={() => router.push("/login")}
+            onClick={() => {
+              console.log("click");
+              router.push("/login");
+              // toggleMenu();
+            }}
           >
             Đăng nhập
           </li>
@@ -156,6 +162,8 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       /> */}
 
       {/* Main Content */}
+      </TooltipProvider>
+
       <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
         {children}
       </main>

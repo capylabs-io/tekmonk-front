@@ -28,7 +28,7 @@ export default function RegisterContest() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [candidateNumber, setCandidateNumber] = useState<string>("");
   const [isAccepted, setIsAccepted] = useState(false);
-  const [register] = useContestRegisterStore((state) => [state.register]);
+  const [register, clear] = useContestRegisterStore((state) => [state.register, state.clear]);
   const [show, hide] = useLoadingStore((state) => [
     state.show,
     state.hide,
@@ -94,13 +94,12 @@ export default function RegisterContest() {
   };
 
   const handleBackToLogin = () => {
-    //clear all data
-    useContestRegisterStore.getState().clear();
+    clear();
     router.push("/login");
   }
 
   const handleBackToContest = () => {
-    useContestRegisterStore.getState().clear();
+    clear();
     router.push("/contest");
   }
   
@@ -109,7 +108,7 @@ export default function RegisterContest() {
   };
   return (
     <>
-    <div className="h-full overflow-auto">
+    <div className="h-full mt-4 overflow-auto">
     <div className="px-2">
       <div
           className="w-full max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
