@@ -24,8 +24,8 @@ import { InputMulImgUploadContest } from "./InputMulImgUploadContest";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
-import { getMe } from "@/requests/login";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useLoadingStore } from "@/store/LoadingStore";
 
 // Define the validation schema
 const submissionSchema = z.object({
@@ -50,7 +50,7 @@ const FormSubmitContest = React.forwardRef<
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const router = useRouter();
 
-  const { success, error, info, warn } = useSnackbarStore();
+  const { success, error, warn } = useSnackbarStore();
 
   const {
     control,
@@ -69,6 +69,9 @@ const FormSubmitContest = React.forwardRef<
   const onSubmit = async (data: any) => {
     try {
       warn("Warning", "Vui lòng chờ trong giây lát...\n không load lại trình duyệt");
+      closeDialog();
+      useLoadingStore.getState().show();
+
       const tags = data.tags.split(",").map((tag: string) => tag.trim());
 
       const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
@@ -82,34 +85,35 @@ const FormSubmitContest = React.forwardRef<
 
       const result = await createContestSubmission(contestObj);
 
+      const uploadPromises = [];
+
       if (projectFile) {
-        await uploadSource(result.id, projectFile);
+        uploadPromises.push(uploadSource(result.id, projectFile));
       }
 
       if (thumbnail) {
-        await uploadThumbnail(result.id, thumbnail);
+        uploadPromises.push(uploadThumbnail(result.id, thumbnail));
       }
 
-      for (const img of imgProject) {
-        await uploadAssets(result.id, img);
-      }
+      uploadPromises.push(...imgProject.map(img => uploadAssets(result.id, img)));
 
-      closeDialog();
+      await Promise.all(uploadPromises);
+
       success("Success", "Nộp bài thi thành công!");
       router.push("all-contest-entries/" + result.id);
     } catch (err) {
       error("Error", "Có lỗi xảy ra khi nộp bài thi");
+    } finally {
+      useLoadingStore.getState().hide();
     }
   };
 
   const closeDialog = () => {
-    warn("Warning", "Vui lòng chờ...\n Không load lại trình duyệt");
     setIsOpen(false);
   };
 
   const handleFileChange = (file: File | null) => {
     setProjectFile(file);
-    console.log(file);
   };
 
   const handleImgChange = (newImages: File[]) => {

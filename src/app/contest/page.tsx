@@ -12,6 +12,7 @@ import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
 import { useRouter } from "next/navigation";
 import { Snackbar } from "@/components/common/Snackbar";
+import { Loading } from "@/components/common/Loading";
 
 export default function Contest() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function Contest() {
   return (
     isClient && (
       <>
+        <Loading />
         <div ref={ref} className="min-h-screen relative max-width-pc">
           <div className="w-full mx-auto px-4 py-8 relative flex justify-center">
             <div className="max-md:hidden">

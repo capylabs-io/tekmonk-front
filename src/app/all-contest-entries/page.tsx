@@ -36,19 +36,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+enum SearchType {
+  TAG = "tag",
+  CANDIDATE_NUMBER = "candidateNumber",
+}
+
 export default function SearchInterface() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const tag = searchParams.get("tag") || "";
-  const keyword = searchParams.get("search") || "";
-
-  const [search, setSearch] = useState(keyword);
+  const [tag, setTag] = useState(searchParams.get("tag") || "");
+  const [search, setSearch] = useState(searchParams.get("search") || "");
   const debouncedSearch = useDebounce(search, 500);
+  const debouncedTag = useDebounce(tag, 500);
   const [searchResults, setSearchResults] = useState<ContestSubmission[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [searchType, setSearchType] = useState<SearchType>(tag === "" ? SearchType.CANDIDATE_NUMBER : SearchType.TAG);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,8 +62,8 @@ export default function SearchInterface() {
         const response = await getContestSubmissionPagination(
           page,
           12,
-          debouncedSearch,
-          tag
+          searchType === SearchType.CANDIDATE_NUMBER ? debouncedSearch : "",
+          searchType === SearchType.TAG ? debouncedTag : ""
         );
         setSearchResults(response.data);
         const totalPages = Math.ceil(response.meta.pagination.total / 12);
@@ -70,10 +75,21 @@ export default function SearchInterface() {
     };
 
     fetchData();
-  }, [page, debouncedSearch]);
+  }, [page, debouncedSearch, debouncedTag, searchType]);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleSearchValue = (value: string) => {
+    if (searchType === SearchType.TAG) {
+      setTag(value);
+      setSearch("");
+    } else {
+      setSearch(value);
+      setTag("");
+    }
+    setPage(1);
   };
 
   const navigateDetailItem = (id: string) => {
@@ -97,6 +113,10 @@ export default function SearchInterface() {
     </div>
   );
 
+  const handleSearchTypeChange = (value: string) => {
+    setSearchType(value as SearchType);
+  };
+
   return (
     <div className="mx-auto pb-5 space-y-6">
       <Image
@@ -108,12 +128,12 @@ export default function SearchInterface() {
         style={{ objectFit: "contain" }}
         quality={100}
       />
-      <div className="w-[500px] flex items-center border rounded-lg h-12 mx-auto px-3 overflow-hidden">
-        <Select defaultValue={tag == "" ? "candidateNumber" : "tag"}>
-          <SelectTrigger className="w-[240px] border-0 border-r rounded-none focus:outline-none focus:ring-0">
+      <div className="w-[500px] flex items-center border rounded-lg h-12 mx-auto pr-3 overflow-hidden">
+        <Select value={searchType} onValueChange={handleSearchTypeChange}>
+          <SelectTrigger className="w-[240px] border-0 border-r pl-3 rounded-none focus:outline-none focus:ring-0">
             <SelectValue placeholder="Tìm kiếm theo" />
           </SelectTrigger>
-          <SelectContent className="">
+          <SelectContent className="bg-white">
             <SelectGroup>
               <SelectLabel>Loại</SelectLabel>
               <SelectItem value="tag">Tag</SelectItem>
@@ -125,66 +145,72 @@ export default function SearchInterface() {
           type="text"
           placeholder="Tìm kiếm bài thi"
           className="w-full h-full ml-1 py-2 text-bodyLg border-none rounded-none focus-visible:outline-none focus-visible:ring-0"
-          value={tag != "" ? tag : search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchType === SearchType.TAG ? tag : search}
+          onChange={(e) => handleSearchValue(e.target.value)}
         />
-          <svg
-            className="h-8 w-8 text-gray-400"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
+        <svg
+          className="h-8 w-8 text-gray-400"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
         {loading
           ? Array(12)
-              .fill(0)
-              .map((_, index) => <SkeletonCard key={index} />)
+            .fill(0)
+            .map((_, index) => <SkeletonCard key={index} />)
           : searchResults.map((card, _) => (
-              <div
-                key={card.id}
-                className="hover:cursor-pointer flex flex-col"
+            <div
+              key={card.id}
+              className="flex flex-col"
+            >
+              <Card className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
                 onClick={() => navigateDetailItem(card.id)}
               >
-                <Card className="overflow-hidden flex-1 items-center justify-center">
-                  <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
-                    <AspectRatio ratio={16 / 9}>
-                      <ImageCustom
-                        src={
-                          card.thumbnail?.url
-                            ? card?.thumbnail.url
-                            : "/image/new/new-pic.png"
-                        }
-                        alt="Into the Breach"
-                        fill
-                        loading="lazy"
-                        quality={30}
-                        className="object-contain"
-                      />
-                    </AspectRatio>
-                  </CardHeader>
-                </Card>
-                <CardContent className="p-4">
-                  <div className="text-bodySm text-gray-800">
-                    #{card.contest_entry?.candidateNumber}
-                  </div>
-                  <div className="text-SubheadXs text-gray-800 line-clamp-2">
-                    {card.title}
-                  </div>
-                </CardContent>
-                <CardFooter className="p-4 pt-0">
-                  <div className="text-bodySm text-gray-800">
-                    {card.contest_entry?.user.fullName || "Unknown"}
-                  </div>
-                </CardFooter>
-              </div>
-            ))}
+                <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
+                  <AspectRatio ratio={16 / 9}>
+                    <ImageCustom
+                      src={
+                        card.thumbnail?.url
+                          ? card?.thumbnail.url
+                          : "/image/new/new-pic.png"
+                      }
+                      alt="Into the Breach"
+                      fill
+                      loading="lazy"
+                      quality={30}
+                      className="object-contain"
+                    />
+                  </AspectRatio>
+                </CardHeader>
+              </Card>
+              <CardContent className="p-4">
+                <div className="text-bodySm cursor-pointer text-gray-800"
+                  onClick={() => navigateDetailItem(card.id)}
+
+                >
+                  #{card.contest_entry?.candidateNumber}
+                </div>
+                <div className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
+                  onClick={() => navigateDetailItem(card.id)}
+                >
+                  {card.title}
+                </div>
+              </CardContent>
+              <CardFooter className="p-4 pt-0">
+                <div className="text-bodySm text-gray-800">
+                  {card.contest_entry?.user.fullName || "Unknown"}
+                </div>
+              </CardFooter>
+            </div>
+          ))}
       </div>
       {searchResults.length === 0 && !loading && (
         <EmptySearch
