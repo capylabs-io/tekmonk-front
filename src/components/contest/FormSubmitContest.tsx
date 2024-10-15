@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/contest/InputField";
 import {
   createContestSubmission,
+  getContestSubmissionByContestEntry,
   uploadAssets,
   uploadSource,
   uploadThumbnail,
@@ -66,8 +67,21 @@ const FormSubmitContest = React.forwardRef<
     },
   });
 
+  const isExistContestSubmission = async () => {
+    const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
+    const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id);
+    return contestSubmission.data.length > 0;
+  }
+
   const onSubmit = async (data: any) => {
     try {
+
+      if (await isExistContestSubmission()) {
+        warn("Warning", "Bạn đã nộp bài thi rồi!");
+        closeDialog();
+        return;
+      }
+
       warn("Warning", "Vui lòng chờ trong giây lát...\n không load lại trình duyệt");
       closeDialog();
       useLoadingStore.getState().show();
