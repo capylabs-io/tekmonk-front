@@ -8,6 +8,11 @@ const nextConfig = {
               port: '1337',
               pathname: '/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'tekdojo-be.s3.ap-southeast-1.amazonaws.com',
+                pathname: '/**',
+            }
         ],
     },
 }

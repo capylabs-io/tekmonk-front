@@ -120,7 +120,7 @@ const FormSubmitContest = React.forwardRef<
       <DialogTitle className="hidden">Nộp bài thi</DialogTitle>
       <DialogContent aria-describedby="dialog-description"></DialogContent>
       <DialogContentNoClose 
-        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto max-mobile:max-h-screen"
+        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto max-mobile:max-h-screen pt-2 pb-0"
         aria-describedby="dialog-description"
       >
         <div id="dialog-description" className="sr-only">
@@ -194,7 +194,7 @@ const FormSubmitContest = React.forwardRef<
             />
           </div>
         </section>
-        <footer className="flex flex-wrap items-center sm:justify-between p-2 gap-1 sm:px-6 border-t border-gray-200 justify-center">
+        <footer className="flex flex-wrap items-center sm:justify-between p-2 py-4 gap-1 sm:px-6 border-t border-gray-200 justify-center">
           <Button
             className="rounded-[4rem] border border-gray-300 sm:w-[280px]"
             outlined={true}

@@ -110,7 +110,7 @@ const UploadPrompt = () => (
     <p>Kéo thả file dự án để bắt đầu đăng tải</p>
     <p className="text-gray-500">hoặc</p>
     <Button
-      className="h-[52px] rounded-[4rem] px-6"
+      className="rounded-[4rem] px-6 font-sans"
       outlined={false}
       style={{
         borderRadius: "4rem",

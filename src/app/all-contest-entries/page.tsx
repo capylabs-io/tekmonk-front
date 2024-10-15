@@ -23,6 +23,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { useDebounce } from "@/hooks/useDebounceValue";
+import { EmptySearch } from "@/components/common/EmptySearch";
 
 export default function SearchInterface() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function SearchInterface() {
     <div className="hover:cursor-pointer">
       <Card className="overflow-hidden">
         <CardHeader className="p-0">
-          <Skeleton className="w-full h-72" />
+          <Skeleton className="w-full h-48" />
         </CardHeader>
       </Card>
       <CardContent className="p-4">
@@ -113,30 +114,33 @@ export default function SearchInterface() {
           ? Array(12)
               .fill(0)
               .map((_, index) => <SkeletonCard key={index} />)
-          : searchResults.map((card, index) => (
+          : searchResults.map((card, _) => (
               <div
                 key={card.id}
                 className="hover:cursor-pointer flex flex-col"
                 onClick={() => navigateDetailItem(card.id)}
               >
                 <Card className="overflow-hidden flex-1 items-center justify-center">
-                  <CardHeader className="p-0 items-center w-full h-full justify-center">
+                  <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
                     <Image
                       src={
                         card.thumbnail?.url
-                          ? `http://localhost:1337${card?.thumbnail.url}`
+                          ? card?.thumbnail.url
                           : "/image/new/new-pic.png"
                       }
                       alt="Into the Breach"
                       width={212}
                       height={148}
                       loading="lazy"
+                      quality={40}
                       className="object-contain"
                     />
                   </CardHeader>
                 </Card>
                 <CardContent className="p-4">
-                  <div className="text-bodySm text-gray-800">#{card.id}</div>
+                  <div className="text-bodySm text-gray-800">
+                    #{card.contest_entry?.candidateNumber}
+                  </div>
                   <div className="text-SubheadXs text-gray-800 line-clamp-2">
                     {card.title}
                   </div>
@@ -149,6 +153,13 @@ export default function SearchInterface() {
               </div>
             ))}
       </div>
+      {searchResults.length === 0 && !loading && (
+        <EmptySearch
+          message="Oops! Không thể tìm thấy bài thi nào"
+          buttonText="Tải lại"
+          onAction={() => setSearch("")}
+        />
+      )}
       <Pagination>
         <PaginationContent>
           <PaginationItem>

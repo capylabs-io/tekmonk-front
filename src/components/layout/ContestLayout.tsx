@@ -3,22 +3,29 @@
 import { Nunito_Sans } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import AnimatedGridPattern from "../ui/animated-grid-pattern";
-import { cn } from "@/lib/utils";
-import {LAYERS} from "@/contants/layer";
-import Link from 'next/link'
+import { useEffect, useState } from "react";
+import { LAYOUT_MAX_WIDTH } from "@/contants/layout";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useUserStore } from "@/store/UserStore";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
   variable: "--font-nunito",
 });
 
-const ContestLayout = ({ children }: { children: React.ReactNode }) => {
+type ContestLayoutProps = {
+  children: React.ReactNode;
+}
+
+const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const isConnected = useUserStore((state) => state.isConnected);
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
@@ -27,7 +34,12 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       document.body.classList.remove("overflow-hidden");
     }
   };
+  const handleLogout = () => {
+    useUserStore.getState().clear();
+    router.push("/login");
+  }
   return (
+    isClient &&
     <div className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}>
       <TooltipProvider>
       
@@ -68,9 +80,21 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
             
           </Tooltip>
           
-
+          {!isConnected() ? 
+            <div
+              className="cursor-pointer"
+              onClick={() => router.push("/login")}
+            >
+              Đăng nhập
+            </div> : <div
+              className="cursor-pointer text-red-600"
+              onClick={handleLogout}
+            >
+              Đăng xuất
+            </div>
+          }
          
-          <a href='/login' className="cursor-pointer" >Đăng nhập</a>
+          {/* <a href='/login' className="cursor-pointer" >Đăng nhập</a> */}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -119,7 +143,7 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
           >
             Bài dự thi
           </li>
-          <li
+          {/* <li
             className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
             onClick={() => {
               console.log("click");
@@ -128,7 +152,20 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
             }}
           >
             Đăng nhập
-          </li>
+          </li> */}
+          {!isConnected() ? 
+            <div
+              className="cursor-pointer"
+              onClick={() => router.push("/login")}
+            >
+              Đăng nhập
+            </div> : <div
+              className="cursor-pointer text-red-600"
+              onClick={handleLogout}
+            >
+              Đăng xuất
+            </div>
+          }
         </ul>
         {/* Account section */}
         <div className="flex items-center cursor-pointer py-1 px-3 border border-t border-gray-200">
@@ -164,7 +201,7 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Main Content */}
       </TooltipProvider>
 
-      <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
+      <main className={`flex-grow relative z-0 max-w-[${LAYOUT_MAX_WIDTH}px] w-full mx-auto text-gray-800 bg-opacity-80 bg-white border-r border-l min-h-screen`}>
         {children}
       </main>
     </div>

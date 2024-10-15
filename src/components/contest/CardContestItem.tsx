@@ -30,7 +30,7 @@ export default function CardContestItem({
   return (
     <div className="flex flex-col items-center">
       <Image
-        src={thumbnail?`http://localhost:1337${thumbnail}` : "/image/contest/tienphongbanner.png"}
+        src={thumbnail? thumbnail : "/image/contest/tienphongbanner.png"}
         alt="Banner contest"
         width={480}
         height={240}
