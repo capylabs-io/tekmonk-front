@@ -171,24 +171,7 @@ const ContestHeader = () => {
             </li>
           )}
         </ul>
-        {/* Account section */}
-        {isConnected() && (
-          <div className="flex items-center cursor-pointer py-1 px-3 border border-t border-gray-200">
-            <Image
-              className="w-[30px] h-[30px] rounded-full mr-3 border border-gray-100"
-              src="/image/contest/gold.png"
-              alt="User profile picture"
-              width={40}
-              height={40}
-            />
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold flex items-center">
-                {useUserStore.getState().userInfo?.fullName}
-              </span>
-              <span className="text-xs text-gray-500">Xem Profile</span>
-            </div>
-          </div>
-        )}
+        
       </div>
 
       {/* Main Content */}

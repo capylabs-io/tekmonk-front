@@ -153,7 +153,7 @@ const ContestLayout = ({ children }: { children: React.ReactNode }) => {
       </TooltipProvider>
 
       <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
-	{children}
+	      {children}
       </main>
     </div>
   );
