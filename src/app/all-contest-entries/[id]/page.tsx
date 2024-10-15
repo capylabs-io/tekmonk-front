@@ -39,7 +39,6 @@ const ContestDetail: React.FC = () => {
       setIsLoading(true);
       try {
         const response = await getOneContestSubmission(id as string);
-        console.log(response.data);
         if (response && response.data) {
           setContestDetail(response.data);
         } else {
@@ -56,6 +55,10 @@ const ContestDetail: React.FC = () => {
 
     fetchContestDetail();
   }, [id]);
+
+  const hanldeCLickTag = (tag: string) => {
+    router.push(`/all-contest-entries?tag=${tag}`)
+  }
 
   if (isLoading) {
     return (
@@ -124,12 +127,20 @@ const ContestDetail: React.FC = () => {
                       className="mr-2 cursor-pointer"
                       size="medium"
                       type="secondary"
+                      onClick={() => hanldeCLickTag(tag)}
                     />
                   ))}
                 </div>
               </header>
               <p className="my-4 px-8">{contestDetail.description}</p>
-
+              {
+                contestDetail.url && (
+                  <p className="px-8">
+                    <span className="text-grey-500 text-sm">Link bài thi: </span>
+                    <span className="text-grey-500 text-sm">{contestDetail.url}</span>
+                  </p>
+                )
+              }
               <div className="w-full mx-auto pt-4 px-8">
                 <div className="hidden sm:block">
                   <AspectRatio ratio={16 / 9}>

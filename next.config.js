@@ -12,6 +12,11 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'tekdojo-be.s3.ap-southeast-1.amazonaws.com',
                 pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'tekdojo.s3.us-east-1.amazonaws.com',
+                pathname: '/**',
             }
         ],
     },

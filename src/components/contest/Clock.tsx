@@ -86,7 +86,7 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
                     outlined={false}
                     style={{ borderRadius: "4rem" }}
                     // onClick={() => router.push("login")}
-                    disabled={true} // Vô hiệu hóa nút nếu cần
+                    disabled={false} // Vô hiệu hóa nút nếu cần
                     >Nộp bài</Button>
                 </FormSubmitContest>
                 </>}

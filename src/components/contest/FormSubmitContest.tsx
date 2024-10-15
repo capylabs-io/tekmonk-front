@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getMe } from "@/requests/login";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 // Define the validation schema
 const submissionSchema = z.object({
@@ -49,6 +50,8 @@ const FormSubmitContest = React.forwardRef<
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const router = useRouter();
 
+  const { success, error, info, warn } = useSnackbarStore();
+
   const {
     control,
     handleSubmit,
@@ -65,6 +68,7 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
+      warn("Warning", "Vui lòng chờ trong giây lát...\n không load lại trình duyệt");
       const tags = data.tags.split(",").map((tag: string) => tag.trim());
 
       const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
@@ -90,14 +94,16 @@ const FormSubmitContest = React.forwardRef<
         await uploadAssets(result.id, img);
       }
 
-      // closeDialog();
+      closeDialog();
+      success("Success", "Nộp bài thi thành công!");
       router.push("all-contest-entries/" + result.id);
-    } catch (error) {
-      alert("Có lỗi xảy ra khi nộp bài thi");
+    } catch (err) {
+      error("Error", "Có lỗi xảy ra khi nộp bài thi");
     }
   };
 
   const closeDialog = () => {
+    warn("Warning", "Vui lòng chờ...\n Không load lại trình duyệt");
     setIsOpen(false);
   };
 

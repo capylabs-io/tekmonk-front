@@ -59,8 +59,8 @@ export const createContestSubmission = async (contestSubmission: DataContestSubm
     return response.data.data as ContestSubmission;
 };
 
-export const getContestSubmissionPagination = async (page: number, limit: number, keyword: string) => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate[contest_entry][populate]=user&populate=thumbnail&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[0]=id:asc&filters[contest_entry][candidateNumber][$containsi]=${keyword}`); 
+export const getContestSubmissionPagination = async (page: number, limit: number, keyword: string, tag: string) => {
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions?populate[contest_entry][populate]=user&populate=thumbnail&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[0]=id:asc&filters[contest_entry][candidateNumber][$containsi]=${keyword}&filters[tags][$containsi]=${tag}`); 
     return response.data;
 };
 
