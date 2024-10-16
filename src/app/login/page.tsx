@@ -46,27 +46,51 @@ export default function Login() {
     show();
 
     try {
-      const userInfo = await login(user);
+      const resUserInfo = await login(user);
       
-      const roleName = get(userInfo, "role.name", "").toLowerCase();
+      const roleName = get(resUserInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        router.push("/contest");
+        toast.success("Đăng nhập thành công");
       } else {
         useUserStore.getState().clear();
-        toast.error("Login Fail");
+        setUser({
+          identifier: "",
+          password: "",
+        });
+        toast.error("Đăng nhập thất bại");
       }
 
     } catch (error) {
-      toast.error("Login Fail");
+      setUser({
+        identifier: "",
+        password: "",
+      });
+      toast.error("Đăng nhập thất bại");
     } finally {
+      router.push("/contest");
       hide();
     }
   };
 
   return (
     <div className="w-full grid grid-cols-2 max-[819px]:grid-cols-1 h-screen">
-      <div className="flex flex-col justify-center items-center h-screen">
+      <div className="relative flex flex-col justify-center items-center h-screen">
+      <div className="flex w-full gap-2.5 absolute top-10 left-10">
+            <svg
+              className="w-2 fill-primary-700"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 320 512"
+            >
+              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
+            </svg>
+            <div
+              className="text-primary-700 font-semibold text-base hover:cursor-pointer"
+              onClick={() => router.push("/contest")}
+            >
+              Quay lại
+            </div>
+          </div>
         <Image
           src="/image/app-logox4.png"
           alt="app logo"
@@ -107,7 +131,7 @@ export default function Login() {
         </div> */}
       </div>
       <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right bg-cover"></div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>
   );

@@ -6,7 +6,6 @@ import { Button } from "@/components/common/Button";
 import { useUserStore } from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Role } from "@/contants/role";
 import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
@@ -161,7 +160,7 @@ export default function Login() {
         </div> */}
       </div>
       <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right bg-cover"></div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>
   );

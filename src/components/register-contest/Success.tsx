@@ -11,7 +11,7 @@ export default function SuccessComponent ({candidateNumber}: {candidateNumber: s
             </div>
         </div>
         <div className="text-bodyLg mx-auto">
-            Cảm ơn bạn đã đăng ký tham gia "VIETNAM CODING OLYMPIAD 2024"! Chúng tôi sẽ sớm
+            Cảm ơn bạn đã đăng ký tham gia <b>"VIETNAM CODING OLYMPIAD 2024"!</b> Chúng tôi sẽ sớm
             gửi thông tin chi tiết về sự kiện qua email. Hãy chuẩn bị cho những thử thách thú vị phía
             trước!
         </div>

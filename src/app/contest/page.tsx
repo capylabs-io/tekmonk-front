@@ -46,7 +46,7 @@ export default function Contest() {
                 alt="Stylized mobile phone"
                 width={360}
                 height={360}
-                className={`absolute top-16 -left-10 -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-16 -left-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.9}px)`,
                 }}
@@ -57,7 +57,7 @@ export default function Contest() {
                 alt="Cartoon rocket"
                 width={360}
                 height={360}
-                className={`absolute top-16 -right-12 -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-16 -right-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.9}px)`,
                 }}
@@ -68,7 +68,7 @@ export default function Contest() {
                 alt="gold"
                 width={184}
                 height={184}
-                className={`absolute top-[600px] left-0 -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-[600px] -left-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.8}px)`,
                 }}
@@ -79,7 +79,7 @@ export default function Contest() {
                 alt="fire"
                 width={272}
                 height={272}
-                className={`absolute top-[700px] right-0 -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-[700px] -right-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.8}px)`,
                 }}
@@ -90,7 +90,7 @@ export default function Contest() {
                 alt="decor"
                 width={60}
                 height={77}
-                className={`absolute top-10 left-72 -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-10 -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.8}px)`,
                 }}
@@ -111,7 +111,7 @@ export default function Contest() {
                 width={120}
                 height={114}
                 sizes="auto"
-                className={`absolute top-10 right-[10%] -z-[${LAYERS.ICON_CONTEST}]`}
+                className={`absolute top-10 right-0 -z-[${LAYERS.ICON_CONTEST}]`}
                 style={{
                   transform: `translateY(${scrollY * 0.8}px)`,
                 }}

@@ -14,9 +14,6 @@ const delaGothicOne = Dela_Gothic_One({
 
 export default function Landing() {
   const router = useRouter();
-  useEffect(() => {
-    router.push("/contest");
-  },[]);
   // phụ huynh
   const handleCardClick = () => {
     window.open("https://tekmonk.edu.vn/");
@@ -34,6 +31,8 @@ export default function Landing() {
     router.push("/recruitment");
   };
   return (
+    //mặc định chuyển hướng về trang contest
+     1 != 1 ? 
     <>
       <div className="h-screen relative">
         <nav className="w-full flex justify-between p-4">
@@ -143,6 +142,6 @@ export default function Landing() {
           />
         </div>
       </div>
-    </>
+    </> : router.push("/contest")
   );
 }

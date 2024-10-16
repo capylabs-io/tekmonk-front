@@ -6,6 +6,7 @@ export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
+    setIsChecked(false);
     setIsChecked(!isChecked);
     updateStatus();
   };

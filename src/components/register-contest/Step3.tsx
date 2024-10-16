@@ -7,10 +7,12 @@ import { Button } from "@/components/ui/button";
 import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Trash2 } from "lucide-react";
 import { UserPlus } from "lucide-react";
-import DatePicker from 'react-date-picker';
-import { useEffect, useState } from "react";
-import 'react-date-picker/dist/DatePicker.css';
-import 'react-calendar/dist/Calendar.css';
+import DatePicker from "react-date-picker";
+import { use, useEffect, useState } from "react";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
+import { Controller, useFormContext } from "react-hook-form";
+import { WizardSchema } from "@/validation/ContestRegister";
 
 type ValuePiece = Date | null;
 
@@ -18,8 +20,16 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export const Step3 = () => {
   const [value, onChange] = useState<Value>();
-    useEffect(() => {
-  },[value]);
+  const {
+    control,
+    trigger,
+    register,
+    formState: { errors },
+    getValues,
+  } = useFormContext<WizardSchema>();
+
+  const [valueGroup, getValueGroup] = useState<string>(getValues("stepThree.contest_group_stage"));
+  useEffect(() => {}, [value]);
   const { groupMemberInfo, contest_group_stage } = useContestRegisterStore(
     (state) => {
       return {
@@ -58,6 +68,10 @@ export const Step3 = () => {
     change("groupMemberInfo", newGroupMemberInfo);
   };
 
+  
+  const checkContestGroupStage = () => {
+    getValueGroup(getValues("stepThree.contest_group_stage"));
+  }
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Thông tin bảng đấu:</h3>
@@ -124,45 +138,56 @@ export const Step3 = () => {
         <Label className="text-SubheadSm text-gray-950">
           Thí sinh đăng ký bảng đấu <span className="text-red-500">*</span>
         </Label>
-        <RadioGroup
-          value={contest_group_stage}
-          onValueChange={(value) => change("contest_group_stage", value)}
-          className="flex flex-col space-y-2 mt-2"
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="category-A" />
-            <Label className="text-bodyLg text-black ">
-              Bảng A (Khối tiểu học: 8 - 11 tuổi)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="2" id="category-B" />
-            <Label className="text-bodyLg text-black">
-              Bảng B (Khối THCS: 12 - 15 tuổi)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="3" id="category-C" />
-            <Label className="text-bodyLg text-black">
-              Bảng C (Khối THPT: 16 - 18 tuổi)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="4" id="category-D1" />
-            <Label className="text-bodyLg text-black">
-              Thi cá nhân - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
+        <Controller
+          control={control}
+          name="stepThree.contest_group_stage"
+          render={({ field: { value, onChange }, fieldState }) => (
+            <RadioGroup
+              name="stepThree.contest_group_stage"
+              value={value}
+              onValueChange={(value) => {
+                onChange(value);
+                checkContestGroupStage();
+              }}
+              className="flex flex-col space-y-2 mt-2"
+              
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="1" id="category-A" />
+                <Label className="text-bodyLg text-black ">
+                  Bảng A (Khối tiểu học: 8 - 11 tuổi)
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="2" id="category-B" />
+                <Label className="text-bodyLg text-black">
+                  Bảng B (Khối THCS: 12 - 15 tuổi)
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="3" id="category-C" />
+                <Label className="text-bodyLg text-black">
+                  Bảng C (Khối THPT: 16 - 18 tuổi)
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="4" id="category-D1" />
+                <Label className="text-bodyLg text-black">
+                  Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                </Label>
+              </div>
+              {/* <div className="flex items-center space-x-2">
             <RadioGroupItem value="5" id="category-D2" />
             <Label className="text-bodyLg text-black">
               Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
             </Label>
-          </div>
-        </RadioGroup>
+          </div> */}
+            </RadioGroup>
+          )}
+        />
       </div>
 
-      {contest_group_stage === "5" && (
+      {valueGroup == "4" && (
         <>
           <div className="">
             {groupMemberInfo.map((member, index) => (
@@ -182,16 +207,16 @@ export const Step3 = () => {
                   }}
                 >
                   Thông tin thành viên {index + 2}{" "}
-                  
-                    <Trash2 className="h-5 w-5 text-red-600" onClick={() => deleteTeamMember(index)}/>
-                
-                  
+                  <Trash2
+                    className="h-5 w-5 text-red-600"
+                    onClick={() => deleteTeamMember(index)}
+                  />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Họ và tên thí sinh <span className="text-red-500">*</span>
+                      Họ và tên thí sinh 
                     </Label>
                     <Input
                       id={`name-${index}`}
@@ -205,7 +230,7 @@ export const Step3 = () => {
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Trường học <span className="text-red-500">*</span>
+                      Trường học
                     </Label>
                     <Input
                       id={`school-${index}`}
@@ -235,7 +260,7 @@ export const Step3 = () => {
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
                       Ngày tháng năm sinh{" "}
-                      <span className="text-red-500">*</span>
+                      
                     </Label>
                     {/* <Input
                       type="date"
@@ -245,12 +270,14 @@ export const Step3 = () => {
                       }
                       className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
                     /> */}
-                     <DatePicker
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[48px] text-lg focus-visible:outline-none" 
+                    <DatePicker
+                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[48px] text-lg focus-visible:outline-none"
                       onChange={(value) => {
                         onChange(value);
                         updateTeamMember(index, "dob", value);
-                      }} value={value}/>
+                      }}
+                      value={value}
+                    />
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
