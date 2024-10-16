@@ -5,6 +5,7 @@ import { Loading } from "@/components/common/Loading";
 import { ToastContainer } from "react-toastify";
 import DotPattern from "@/components/ui/dot-pattern";
 import { cn } from "@/lib/utils";
+import { Snackbar } from "@/components/common/Snackbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,6 +41,7 @@ export default function RootLayout({
     >
       <body>
         <ToastContainer />
+        <Snackbar />
         <div className="relative">
           {children}
         </div>

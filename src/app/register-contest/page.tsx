@@ -21,6 +21,7 @@ import { ContestRegister } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 const steps = [
   { title: "Thông tin", titleHeader: "THÔNG TIN CÁ NHÂN", icon: "1" },
@@ -41,6 +42,7 @@ export default function RegisterContest() {
     state.clear,
   ]);
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
+  const [error, success] = useSnackbarStore((state) => [state.error, state.success]);
   const data = useContestRegisterStore((state) => {
     return {
       fullName: state.fullName,
@@ -121,12 +123,11 @@ export default function RegisterContest() {
           groupMemberInfo: groupMemberInfo
         });
         setCandidateNumber(get(res, "candidateNumber", ""));
-        toast.success("Đăng ký thành công")
+        success("Xong!","Đăng ký thành công");
         setIsSubmitted(true);
-    } catch (error) {
-      const res = HandleReturnMessgaeErrorAxios(error);
-      toast.error(`${res}`);
-      toast.error(`Đăng ký thất bại`);
+    } catch (err) {
+      const message = HandleReturnMessgaeErrorAxios(err);
+      error("Lỗi", message);
     } finally {
       hide();
     }

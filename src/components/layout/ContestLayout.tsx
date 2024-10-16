@@ -26,6 +26,7 @@ import { useUserStore } from "@/store/UserStore";
 import { toast } from "react-toastify";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -44,6 +45,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     state.clear,
     state.isConnected,
   ]);
+  const [ success ] = useSnackbarStore((state) => [state.success]);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -58,7 +60,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   };
   const handleLogout = () => {
     clear();
-    toast.success("Đăng xuất thành công");
+    success("Success","Đăng xuất thành công");
     router.push("/login");
   };
   const redirectContest = () => {
@@ -91,7 +93,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
           /> */}
 
           {/* Header */}
-          <div className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
+          <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
             <Image
               src="/image/app-logox2.png"
               alt="app logo"
@@ -121,10 +123,10 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
+              {isConnected() && <div className="text-bodyMd hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
-                  className="text-red-600 text-bodyLg  hover:cursor-pointer"
+                  className="text-red-600 text-bodyMd  hover:cursor-pointer"
                   onClick={handleLogout}
                 >
                   Đăng xuất
