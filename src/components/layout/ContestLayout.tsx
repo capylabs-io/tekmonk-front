@@ -98,7 +98,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="cursor-pointer"
+                    className="text-gray-950 text-bodyLg cursor-pointer"
                     onClick={() => router.push("/all-contest-entries")}
                   >
                     Tổng hợp bài dự thi
@@ -108,10 +108,10 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="hover:cursor-pointer">Bài dự thi của tôi</div>}
+              {isConnected() && <div className="text-gray-950 text-bodyLg hover:cursor-pointer">Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
-                  className="text-red-600 hover:cursor-pointer"
+                  className="text-red-600 text-bodyLg  hover:cursor-pointer"
                   onClick={handleLogout}
                 >
                   Đăng xuất
@@ -120,7 +120,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className="hover:cursor-pointer">Đăng nhập</div>
+                <div onClick={() => router.push('/login')} className="text-bodyLg hover:cursor-pointer">Đăng nhập</div>
               )}
             </nav>
 
@@ -148,13 +148,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 </div>
               </DrawerTrigger>
               <DrawerContent className="bg-white !p-0">
-                <div className="mx-auto w-full max-w-sm">
-                  <DrawerHeader>
-                    {/* <DrawerTitle>Chào mừng bạn đến với chúng tôi</DrawerTitle> */}
-                    {/* <DrawerDescription>
-                      Set your daily activity goal.
-                    </DrawerDescription> */}
-                  </DrawerHeader>
+                <div className="w-full max-w-sm">
                   <div className=" pb-0 gap-y-4">
                     <Button
                       outlined={true}
