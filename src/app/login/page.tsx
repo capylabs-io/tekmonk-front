@@ -11,6 +11,7 @@ import { Role } from "@/contants/role";
 import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -25,6 +26,7 @@ export default function Login() {
     state.show,
     state.hide,
   ]);
+  const [error, success] = useSnackbarStore((state) => [state.error, state.success]);
 
   const router = useRouter();
 
@@ -51,24 +53,24 @@ export default function Login() {
       const roleName = get(resUserInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        toast.success("Đăng nhập thành công");
+        success("Xong!","Đăng nhập thành công");
+        router.push("/contest");
       } else {
         useUserStore.getState().clear();
         setUser({
           identifier: "",
           password: "",
         });
-        toast.error("Đăng nhập thất bại");
+        error("Lỗi","Đăng nhập thất bại");
       }
 
-    } catch (error) {
+    } catch (err) {
       setUser({
         identifier: "",
         password: "",
       });
-      toast.error("Đăng nhập thất bại");
+      error("Lỗi","Đăng nhập thất bại");
     } finally {
-      router.push("/contest");
       hide();
     }
   };

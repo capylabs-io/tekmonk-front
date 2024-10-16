@@ -26,6 +26,7 @@ import { useUserStore } from "@/store/UserStore";
 import { toast } from "react-toastify";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -44,6 +45,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     state.clear,
     state.isConnected,
   ]);
+  const [ success ] = useSnackbarStore((state) => [state.success]);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -58,7 +60,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   };
   const handleLogout = () => {
     clear();
-    toast.success("Đăng xuất thành công");
+    success("Success","Đăng xuất thành công");
     router.push("/login");
   };
   const redirectContest = () => {
@@ -121,10 +123,10 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="hover:cursor-pointer " onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
+              {isConnected() && <div className="text-bodyMd hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
-                  className="text-red-600  hover:cursor-pointer"
+                  className="text-red-600 text-bodyMd  hover:cursor-pointer"
                   onClick={handleLogout}
                 >
                   Đăng xuất

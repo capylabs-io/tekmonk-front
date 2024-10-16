@@ -1,1 +1,1 @@
-export const REQUIRED = "This field is required";
+export const REQUIRED = "Yêu cầu phải";
