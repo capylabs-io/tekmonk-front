@@ -20,6 +20,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { ContestRegister } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
+import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 
 const steps = [
   { title: "Thông tin", titleHeader: "THÔNG TIN CÁ NHÂN", icon: "1" },
@@ -77,7 +78,6 @@ export default function RegisterContest() {
   }
   const methods = useForm<WizardSchema>({
     mode: "onChange",
-    // defaultValues,
     resolver: zodResolver(wizardSchema),
   });
 
@@ -111,7 +111,6 @@ export default function RegisterContest() {
           ...get(formData, 'stepThree', {}),
           groupMemberInfo: groupMemberInfo
     });
-    console.log("check 1 = ", data);
     try {
       show();
       
@@ -120,16 +119,14 @@ export default function RegisterContest() {
           ...get(formData, 'stepTwo', {}),
           ...get(formData, 'stepThree', {}),
           groupMemberInfo: groupMemberInfo
-          
         });
         setCandidateNumber(get(res, "candidateNumber", ""));
-        console.log('res', res);
         toast.success("Đăng ký thành công")
         setIsSubmitted(true);
-      // router.push("/contest");
     } catch (error) {
-      console.error(error);
-      toast.error("Đăng ký thất bại");
+      const res = HandleReturnMessgaeErrorAxios(error);
+      toast.error(`${res}`);
+      toast.error(`Đăng ký thất bại`);
     } finally {
       hide();
     }

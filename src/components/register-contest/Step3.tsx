@@ -144,7 +144,7 @@ export const Step3 = () => {
           render={({ field: { value, onChange }, fieldState }) => (
             <RadioGroup
               name="stepThree.contest_group_stage"
-              value={value}
+              value={value ? value : "1"}
               onValueChange={(value) => {
                 onChange(value);
                 checkContestGroupStage();

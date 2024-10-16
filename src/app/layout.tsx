@@ -3,6 +3,8 @@ import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { Loading } from "@/components/common/Loading";
 import { ToastContainer } from "react-toastify";
+import DotPattern from "@/components/ui/dot-pattern";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,7 +40,9 @@ export default function RootLayout({
     >
       <body>
         <ToastContainer />
-        <div>{children}</div>
+        <div className="relative">
+          {children}
+        </div>
         <Loading />
       </body>
     </html>

@@ -37,7 +37,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
        
        <div>
        </div>
-            {/* <ContestHeader/> */}
             <ContestLayout>{children}</ContestLayout>
             
         </div>

@@ -24,6 +24,8 @@ import {
 import { Button } from "../common/Button";
 import { useUserStore } from "@/store/UserStore";
 import { toast } from "react-toastify";
+import DotPattern from "../ui/dot-pattern";
+import { cn } from "@/lib/utils";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -68,14 +70,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
       >
         <TooltipProvider>
-          <Image
+          {/* <Image
             src="/image/contest/layer_bg.png"
             alt="Background"
             fill
             priority
             quality={40}
             className="object-cover absolute z-[-60]"
-          />
+          /> */}
 
           {/* Header */}
           <div className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
@@ -91,14 +93,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3">
-              <div className="text-gray-950 text-bodyLg cursor-pointer" onClick={redirectContest}>
+              <div className="text-gray-950 text-bodyMd cursor-pointer" onClick={redirectContest}>
               Thể lệ
               </div>
 
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="text-gray-950 text-bodyLg cursor-pointer"
+                    className="text-gray-950 text-bodyMd cursor-pointer"
                     onClick={() => router.push("/all-contest-entries")}
                   >
                     Tổng hợp bài dự thi
@@ -108,7 +110,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="text-gray-950 text-bodyLg hover:cursor-pointer">Bài dự thi của tôi</div>}
+              {isConnected() && <div className="text-gray-950 text-bodyMd hover:cursor-pointer">Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyLg  hover:cursor-pointer"
@@ -120,7 +122,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className="text-bodyLg hover:cursor-pointer">Đăng nhập</div>
+                <div onClick={() => router.push('/login')} className="text-bodyMd hover:cursor-pointer">Đăng nhập</div>
               )}
             </nav>
 
