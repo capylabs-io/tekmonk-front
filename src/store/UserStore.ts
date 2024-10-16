@@ -9,6 +9,7 @@ type State = {
   jwt: string | null;
   userInfo: User | null;
   userCertificate: Certificate[] | null;
+  candidateNumber: string | null;
 };
 
 type Actions = {
@@ -24,6 +25,7 @@ const defaultStates: State = {
   jwt: null,
   userInfo: null,
   userCertificate: null,
+  candidateNumber: null,
 };
 
 // Tạo store sử dụng Zustand
@@ -40,6 +42,7 @@ export const useUserStore = create<State & Actions>()(
         set({
           jwt: response.jwt,
           userInfo: response.user,
+          candidateNumber: response?.candidateNumber
         });
         return response.user;
       },

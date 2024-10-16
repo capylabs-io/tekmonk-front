@@ -222,8 +222,8 @@ const prevPage = useProgressNumber((state) => state.prevPage)
       }}
       {...props}
     >
-      {/* <ArrowLeft className="h-4 w-4" /> */}
-      Quay lại
+      <ArrowLeft className="h-4 w-4" />
+      {/* Quay lại */}
       {/* <span className="sr-only">Previous slide</span> */}
     </Button>
   )
@@ -260,10 +260,10 @@ const CarouselNext = React.forwardRef<
       }}
       {...props}
     >
-      {/* <ArrowRight className="h-4 w-4" /> */}
+      <ArrowRight className="h-4 w-4" />
       {/* <div onClick={() => console.log("next")}>123</div> */}
       {/* <span className="sr-only">Next slide</span> */}
-      Tiếp tục
+      {/* Tiếp tục */}
     </Button>
   )
 })

@@ -3,6 +3,7 @@ import { Button } from "@/components/common/Button";
 import classNames from "classnames";
 import { X } from "lucide-react";
 import React from "react";
+import { toast } from "react-toastify";
 
 type Props = {
   title: string;
@@ -14,33 +15,41 @@ type Props = {
   onBlur?: () => void;
 };
 
-const BASE_CLASS =
-  "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 min-h-[64px] flex flex-col items-center justify-center relative text-sm";
+const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE || "10");
+
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 export const InputFileUploadContest = ({
   title,
   value,
-  error,
+  error: initialError,
   onChange,
   onBlur,
   customClassNames,
 }: Props) => {
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
+  const [error, setError] = React.useState(initialError);
 
-  // Handle file selection
+  const handleFileChange = (file: File | null) => {
+    setError("");
+    if (file && file.size > MAX_FILE_SIZE) {
+      setError(`Dung lượng tối đa của file là ${MAX_FILE_SIZE_MB}MB`);
+      onChange?.(null);
+    } else {
+      onChange?.(file);
+    }
+  };
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    onChange && onChange(file); 
+    handleFileChange(file);
   };
 
-  const handleClick = () => {
-    hiddenFileInput.current?.click();
-  };
+  const handleClick = () => hiddenFileInput.current?.click();
 
-  // Thêm hàm xử lý xóa file
   const handleRemoveFile = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onChange && onChange(null);
+    handleFileChange(null);
     if (hiddenFileInput.current) {
       hiddenFileInput.current.value = '';
     }
@@ -63,36 +72,15 @@ export const InputFileUploadContest = ({
           onClick={handleClick}
         >
           {value ? (
-            // Hiển thị tên file và nút xóa
-            <div className="flex items-center gap-2">
-              <p>{value.name}</p>
-              <button
-                onClick={handleRemoveFile}
-                className="p-1 rounded-full bg-gray-200 hover:bg-gray-300"
-              >
-                <X size={16} />
-              </button>
-            </div>
+            <FileInfo file={value} onRemove={handleRemoveFile} />
           ) : (
-            // Hiển thị giao diện upload khi chưa có file
-            <>
-              <p>Kéo thả file dự án để bắt đầu đăng tải</p>
-              <p className="text-gray-500">hoặc</p>
-              <Button
-                className="h-[52px] rounded-[4rem] px-6"
-                outlined={false}
-                style={{
-                  borderRadius: "4rem",
-                }}
-              >
-                Lựa chọn file
-              </Button>
-            </>
+            <UploadPrompt />
           )}
           <input
             type="file"
             name="file_input"
             className="outline-none w-full grow bg-transparent opacity-0 hidden"
+            accept=".zip"
             ref={hiddenFileInput}
             onChange={handleOnChange}
             onBlur={onBlur}
@@ -104,3 +92,31 @@ export const InputFileUploadContest = ({
     </>
   );
 };
+
+const FileInfo = ({ file, onRemove }: { file: File; onRemove: (e: React.MouseEvent) => void }) => (
+  <div className="flex items-center gap-2">
+    <p>{file.name}</p>
+    <button
+      onClick={onRemove}
+      className="p-1 rounded-full bg-gray-200 hover:bg-gray-300"
+    >
+      <X size={16} />
+    </button>
+  </div>
+);
+
+const UploadPrompt = () => (
+  <>
+    <p>Kéo thả file dự án để bắt đầu đăng tải</p>
+    <p className="text-gray-500">hoặc</p>
+    <Button
+      className="rounded-[4rem] px-6 font-sans"
+      outlined={false}
+      style={{
+        borderRadius: "4rem",
+      }}
+    >
+      Lựa chọn file
+    </Button>
+  </>
+);

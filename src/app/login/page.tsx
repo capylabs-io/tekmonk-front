@@ -46,20 +46,19 @@ export default function Login() {
     show();
 
     try {
-      const userInfo = await login(user);
+      const resUserInfo = await login(user);
       
-      const roleName = get(userInfo, "role.name", "").toLowerCase();
+      const roleName = get(resUserInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        toast.success("Login Success");
-        router.push("/contest");
+        toast.success("Đăng nhập thành công");
       } else {
         useUserStore.getState().clear();
         setUser({
           identifier: "",
           password: "",
         });
-        toast.error("Login Fail");
+        toast.error("Đăng nhập thất bại");
       }
 
     } catch (error) {
@@ -67,8 +66,9 @@ export default function Login() {
         identifier: "",
         password: "",
       });
-      toast.error("Login Fail");
+      toast.error("Đăng nhập thất bại");
     } finally {
+      router.push("/contest");
       hide();
     }
   };
@@ -131,7 +131,7 @@ export default function Login() {
         </div> */}
       </div>
       <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right bg-cover"></div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>
   );

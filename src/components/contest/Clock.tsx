@@ -95,7 +95,8 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
                     outlined={true}
                     style={{ borderRadius: "4rem" }}
 		    //disabled={isConnected()}
-		    disabled={true}
+            onClick={() => router.push("all-contest-entries")}
+		    disabled={false}
                 >
                     Tổng hợp bài dự thi
                 </Button>

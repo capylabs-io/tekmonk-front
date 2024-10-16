@@ -12,8 +12,8 @@ type Props = {
   error?: string; // Added error prop
   placeholder?: string;
   name?: string;
-  isSearch?: boolean;
   control?: any; // Added control prop for react-hook-form
+  isRequired?: boolean;
 };
 
 export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
@@ -25,8 +25,8 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
       type = "text",
       control, // Use control from react-hook-form
       placeholder,
+      isRequired,
       name = "",
-      isSearch = false,
       customInputClassNames,
       customClassNames,
     },
@@ -38,6 +38,7 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
       >
         <label htmlFor={name} className="text-SubheadSm text-primary-950 w-1/4">
           {title}
+          <span className="text-red-500">{isRequired? " *" : ""}</span>
         </label>
         <div className="flex flex-col w-full">
           {control ? ( // If control is passed, use Controller

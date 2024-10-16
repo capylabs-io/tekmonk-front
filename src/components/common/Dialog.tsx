@@ -58,7 +58,7 @@ const DialogContentNoClose = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    {/* <DialogOverlay /> */}
     <DialogPrimitive.Content
       ref={ref}
       className={cn(

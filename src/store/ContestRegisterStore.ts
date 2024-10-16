@@ -21,6 +21,8 @@ type State = {
     className?: string;
     parentName: string;
     parentPhoneNumber: string;
+    studentAddress?: string;
+    studentDob?: string;
     email: string;
     username: string;
     password: string;
@@ -45,6 +47,8 @@ const defaultStates: State = {
     className: "",
     parentName: "",
     parentPhoneNumber: "",
+    studentAddress: "",
+    studentDob: "",
     email: "",
     username: "",
     password: "",

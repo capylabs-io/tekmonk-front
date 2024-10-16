@@ -129,3 +129,37 @@ export type UploadData= {
   field: string;
   files: File
 }
+
+export type Contest = {
+  id: string;
+  name: string;
+  status: string;
+  thumbnail: Media;
+  endTime: string;
+  startTime: string;
+}
+
+
+export type ContestEntry = {
+  id: string;
+  candidateNumber: string;
+  groupMemberInfo: object | null; 
+  user: User
+}
+
+export type ContestRegister = {
+  fullName: string;
+  schoolName: string;
+  studentAddress: string;
+  studentDob: string;
+  className: string;
+  schoolAddress: string;
+  parentName: string;
+  parentPhoneNumber: string;
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  groupMemberInfo: object[];
+  contest_group_stage: string;
+}
