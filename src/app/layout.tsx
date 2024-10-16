@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Inter, Dela_Gothic_One , Nunito_Sans} from "next/font/google";
+import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { Loading } from "@/components/common/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,8 +34,8 @@ export default function RootLayout({
     <html lang="en" className={`${nunitoSans.variable} ${delaGothicOne.variable}`}>
       <body>
         <div>{children}</div>
-        
-        </body>
+        <Loading />
+      </body>
     </html>
   );
 }
