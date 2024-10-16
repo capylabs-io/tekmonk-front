@@ -135,7 +135,7 @@ const ContestDetail: React.FC = () => {
                   contestDetail.url && (
                     <p className="px-8">
                       <span className="text-grey-500 text-sm">Link bài thi: </span>
-                      <span className="text-grey-500 text-sm">{contestDetail.url}</span>
+                      <a className="text-blue-500 text-sm " target="_blank" href={contestDetail.url}>{contestDetail.url}</a>
                     </p>
                   )
                 }
