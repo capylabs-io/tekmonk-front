@@ -30,7 +30,11 @@ const nunitoSans = Nunito_Sans({
   variable: "--font-nunito",
 });
 
-const ContestLayout = ({ children }: { children: React.ReactNode }) => {
+type ContestLayoutProps = {
+  children: React.ReactNode;
+}
+
+const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
