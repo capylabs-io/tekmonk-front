@@ -82,7 +82,7 @@ const FormSubmitContest = React.forwardRef<
         return;
       }
 
-      warn("Warning", "Vui lòng chờ trong giây lát...\n không load lại trình duyệt");
+      // warn("Warning", "Vui lòng chờ trong giây lát...\n không load lại trình duyệt");
       closeDialog();
       useLoadingStore.getState().show();
 
@@ -94,6 +94,7 @@ const FormSubmitContest = React.forwardRef<
         title: data.title,
         description: data.description,
         tags: { data: tags },
+        url: data.url,
         contest_entry: contestEntry.id
       };
 
@@ -123,6 +124,7 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const closeDialog = () => {
+    warn("Warning", "Bạn đã nộp bài thi rồi!");
     setIsOpen(false);
   };
 
@@ -144,7 +146,7 @@ const FormSubmitContest = React.forwardRef<
       <DialogTitle className="hidden">Nộp bài thi</DialogTitle>
       <DialogContent aria-describedby="dialog-description"></DialogContent>
       <DialogContentNoClose 
-        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto max-mobile:max-h-screen pt-2 pb-0"
+        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto max-mobile:max-h-screen pt-2 pb-0 max-h-screen overflow-y-auto"
         aria-describedby="dialog-description"
       >
         <div id="dialog-description" className="sr-only">
@@ -218,7 +220,7 @@ const FormSubmitContest = React.forwardRef<
             />
           </div>
         </section>
-        <footer className="flex flex-wrap items-center sm:justify-between p-2 py-4 gap-1 sm:px-6 border-t border-gray-200 justify-center">
+        <footer className="flex flex-wrap items-center sm:justify-between gap-2 p-2 py-4 gap-1 sm:px-6 border-t border-gray-200 justify-center">
           <Button
             className="rounded-[4rem] border border-gray-300 sm:w-[280px]"
             outlined={true}
@@ -228,7 +230,7 @@ const FormSubmitContest = React.forwardRef<
             Huỷ
           </Button>
           <Button
-            className="w-[280px]"
+            className="w-[260px]"
             outlined={false}
             style={{ borderRadius: "4rem" }}
             onClick={handleSubmit(onSubmit)}

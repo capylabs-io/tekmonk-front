@@ -10,6 +10,7 @@ export type ContestSubmission = {
     tags?: string[],
     createdAt: string;
     url?: string;
+    source?: any;
 }
 
 export type DataContestSubmission = {

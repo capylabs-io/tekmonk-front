@@ -36,6 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { useTagStore } from '@/store/TagStore';
 
 enum SearchType {
   TAG = "tag",
@@ -57,6 +58,7 @@ export default function SearchInterface() {
   const [searchType, setSearchType] = useState<SearchType>(SearchType.CANDIDATE_NUMBER);
 
   const [hideLoading, showLoading, loading] = useLoadingStore((state) => [state.hide,state.show, state.isShowing])
+  const { selectedTag, setSelectedTag } = useTagStore();
 
   const fetchData = async () => {
     try {
@@ -103,13 +105,13 @@ export default function SearchInterface() {
 
   useEffect(() => {
     // Check for a stored tag when the component mounts
-    const storedTag = localStorage.getItem('selectedTag');
-    if (storedTag) {
-      setTag(storedTag);
+    if (selectedTag) {
+      setTag(selectedTag);
       setSearchType(SearchType.TAG);
-      localStorage.removeItem('selectedTag'); // Clear the stored tag
+      setSelectedTag(null); // Clear the stored tag after using it
     }
-  }, []);
+  }, [selectedTag, setSelectedTag]);
+
   useEffect(() => {
     fetchData();
   }, [page, debouncedSearch, debouncedTag, searchType]);
@@ -134,7 +136,7 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto pb-5 space-y-6">
+    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen">
       <Image
         src={`/image/contestentries/Banner.png`}
         alt={`Banner`}
@@ -144,7 +146,7 @@ export default function SearchInterface() {
         style={{ objectFit: "contain" }}
         quality={100}
       />
-      <div className="w-[500px] flex items-center border rounded-lg h-12 mx-auto pr-3 overflow-hidden">
+      <div className="sm:w-[500px] flex items-center border rounded-lg h-12 sm:mx-auto pr-3 overflow-hidden mx-3">
         <Select value={searchType} onValueChange={handleSearchTypeChange}>
           <SelectTrigger className="w-[240px] border-0 border-r pl-3 rounded-none focus:outline-none focus:ring-0">
             <SelectValue placeholder="Tìm kiếm theo" />
@@ -207,7 +209,7 @@ export default function SearchInterface() {
                   </AspectRatio>
                 </CardHeader>
               </Card>
-              <CardContent className="p-4">
+              <CardContent className="p-0 py-2">
                 <div className="text-bodySm cursor-pointer text-gray-800"
                   onClick={() => navigateDetailItem(card.id)}
 
@@ -220,7 +222,7 @@ export default function SearchInterface() {
                   {card.title}
                 </div>
               </CardContent>
-              <CardFooter className="p-4 pt-0">
+              <CardFooter className="p-0">
                 <div className="text-bodySm text-gray-800">
                   {card.contest_entry?.user.fullName || "Unknown"}
                 </div>

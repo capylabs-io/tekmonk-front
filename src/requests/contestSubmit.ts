@@ -65,7 +65,7 @@ export const getContestSubmissionPagination = async (page: number, limit: number
 };
 
 export const getOneContestSubmission = async (id: string) => {
-    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate[contest_entry][populate]=user&populate[thumbnail]=*&populate[assets]=*`);
+    const response = await tekdojoAxios.get(`${BASE_URL}/contest-submissions/${id}?populate[contest_entry][populate]=user&populate[thumbnail]=*&populate[assets]=*&populate[source]=*`);
     return response.data ;
 }
 

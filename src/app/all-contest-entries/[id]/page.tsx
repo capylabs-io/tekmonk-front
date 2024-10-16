@@ -22,6 +22,7 @@ import { EmptySearch } from "@/components/common/EmptySearch";
 import { ImageCustom } from "@/components/common/ImageCustom";
 import { Button } from "@/components/common/Button";
 import { useState, useEffect } from "react";
+import { useTagStore } from '@/store/TagStore';
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
@@ -31,32 +32,34 @@ const ContestDetail: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const setSelectedTag = useTagStore((state) => state.setSelectedTag);
+
+  const fetchContestDetail = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getOneContestSubmission(id as string);
+      console.log(response);
+      if (response && response.data) {
+        setContestDetail(response.data);
+      } else {
+        setContestDetail(null);
+      }
+    } catch (error) {
+      console.log(error);
+      setContestDetail(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!id) return;
-
-    const fetchContestDetail = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getOneContestSubmission(id as string);
-        if (response && response.data) {
-          setContestDetail(response.data);
-        } else {
-          setContestDetail(null);
-        }
-      } catch (error) {
-        setContestDetail(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchContestDetail();
   }, [id]);
 
   const handleClickTag = (tag: string) => {
-    // Store the tag in localStorage
-    localStorage.setItem('selectedTag', tag);
+    // Store the tag in Zustand store
+    setSelectedTag(tag);
     // Navigate to the all contest entries page
     router.push('/all-contest-entries');
   }
@@ -91,7 +94,7 @@ const ContestDetail: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-[720px] mx-auto">
+      <div className="max-w-[720px] mx-auto border-r border-l border-gray-200 bg-white h-full">
         <div className="">
           <div className="h-12 mobile:h-16 flex items-center px-8">
             <ArrowLeft
@@ -101,7 +104,7 @@ const ContestDetail: React.FC = () => {
             />
             <span className="text-grey-500 text-sm font-medium ml-2 select-none">Quay lại</span>
           </div>
-          <div className="pb-4">
+          <div className="">
             <section className="">
               <header className="px-8 border-b border-grey-200 pb-4">
                 <p className="mb-3">
@@ -126,15 +129,25 @@ const ContestDetail: React.FC = () => {
                   ))}
                 </div>
               </header>
-              <p className="my-4 px-8">{contestDetail.description}</p>
-              {
-                contestDetail.url && (
-                  <p className="px-8">
-                    <span className="text-grey-500 text-sm">Link bài thi: </span>
-                    <span className="text-grey-500 text-sm">{contestDetail.url}</span>
-                  </p>
-                )
-              }
+              <p className="py-4 px-8">{contestDetail.description}</p>
+              <div className="">
+                {
+                  contestDetail.url && (
+                    <p className="px-8">
+                      <span className="text-grey-500 text-sm">Link bài thi: </span>
+                      <span className="text-grey-500 text-sm">{contestDetail.url}</span>
+                    </p>
+                  )
+                }
+                {
+                  contestDetail.source && (
+                    <p className="px-8">
+                      <span className="text-grey-500 text-sm">Tệp đính kèm: </span>
+                      <a className="text-sm underline text-blue-500" href={contestDetail?.source?.[0]?.url} target="_blank">{contestDetail.title}</a>
+                    </p>
+                  )
+                }
+              </div>
               <div className="w-full mx-auto pt-4 sm:px-8">
                 <div className="hidden sm:block">
                   <AspectRatio ratio={16 / 9}>
@@ -189,14 +202,16 @@ const ContestDetail: React.FC = () => {
           </div>
         </div>
         <hr />
-        <div>
-          <Dock direction="middle" className="m-0 my-4 mx-auto px-3 hidden sm:flex">
+        <div className="py-4">
+          <Dock direction="middle" className="m-0 mx-auto px-3 hidden sm:flex">
             <DockIcon className="bg-black/10 dark:bg-white/10">
               <FacebookShareButton
-                url={"http://localhost:3000/all-contest-entries/101"}
-                // quote={`${shareTitle}\n\n${shareDescription}`}
-                hashtag="#montek"
+                url={shareUrl}
+                hashtag={contestDetail.tags?.map(tag => `#${tag}`).join("")}
                 className="h-full w-full flex justify-center items-center"
+                about={shareTitle}
+                aria-description={shareDescription}
+                content={shareDescription}
               >
                 <Facebook size={16} />
               </FacebookShareButton>
@@ -205,8 +220,8 @@ const ContestDetail: React.FC = () => {
               <TwitterShareButton
                 url={shareUrl}
                 title={shareTitle}
-                via="YourTwitterHandle"
-                hashtags={["contest", "submission"]}
+                via="montek"
+                hashtags={contestDetail.tags?.map(tag => `${tag}`)}
                 className="h-full w-full flex justify-center items-center"
               >
                 <Twitter size={16} />

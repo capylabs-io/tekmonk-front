@@ -24,6 +24,8 @@ import {
 import { Button } from "../common/Button";
 import { useUserStore } from "@/store/UserStore";
 import { toast } from "react-toastify";
+import { getOneContestEntry } from "@/requests/contestEntry";
+import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -62,6 +64,17 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   const redirectContest = () => {
     router.push("/contest");
   }
+
+  const handleRedirectToMyContest = async () => {
+    try {
+      const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
+      const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id); 
+      router.push(`/all-contest-entries/${contestSubmission.data[0].id}`);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     isClient && (
       <div
@@ -108,7 +121,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="hover:cursor-pointer">Bài dự thi của tôi</div>}
+              {isConnected() && <div className="hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
                   className="text-red-600 hover:cursor-pointer"
@@ -209,7 +222,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
           </div>
         </TooltipProvider>
 
-        <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 ">
+        <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80">
           {children}
         </main>
       </div>

@@ -11,7 +11,7 @@ export function Loading() {
   ]);
 
   return isShowing ? (
-    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 blur-sm text-6xl">
+    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
       <div className="flex flex-col items-center">
         <span
           className="inline-block h-14 w-14 animate-spin rounded-full border-[3px] border-current border-t-transparent text-white/80"
