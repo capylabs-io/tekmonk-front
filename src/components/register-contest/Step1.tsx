@@ -50,7 +50,7 @@ export const Step1 = () => {
         {/* <div className="flex gap-4"> */}
         <div className="">
           <Label className="text-gray-950 text-SubheadSm">
-            Họ tên học sinh{" "}
+            Họ tên học sinh{" "}<span className="text-red-500">*</span>
           </Label>
           <Controller
             control={control}

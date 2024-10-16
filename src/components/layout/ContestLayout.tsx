@@ -81,14 +81,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
       >
         <TooltipProvider>
-          <Image
+          {/* <Image
             src="/image/contest/layer_bg.png"
             alt="Background"
             fill
             priority
             quality={40}
             className="object-cover absolute z-[-60]"
-          />
+          /> */}
 
           {/* Header */}
           <div className="relative z-10 h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
@@ -104,14 +104,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3">
-              <div className="text-gray-950 text-bodyLg cursor-pointer" onClick={redirectContest}>
+              <div className="text-gray-950 text-bodyMd cursor-pointer" onClick={redirectContest}>
               Thể lệ
               </div>
 
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="cursor-pointer"
+                    className="text-gray-950 text-bodyMd cursor-pointer"
                     onClick={() => router.push("/all-contest-entries")}
                   >
                     Tổng hợp bài dự thi
@@ -124,7 +124,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
               {isConnected() && <div className="hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
               {isConnected() ? (
                 <div
-                  className="text-red-600 hover:cursor-pointer"
+                  className="text-red-600 text-bodyLg  hover:cursor-pointer"
                   onClick={handleLogout}
                 >
                   Đăng xuất
@@ -133,7 +133,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className="hover:cursor-pointer">Đăng nhập</div>
+                <div onClick={() => router.push('/login')} className="text-bodyMd hover:cursor-pointer">Đăng nhập</div>
               )}
             </nav>
 
@@ -161,13 +161,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 </div>
               </DrawerTrigger>
               <DrawerContent className="bg-white !p-0">
-                <div className="mx-auto w-full max-w-sm">
-                  <DrawerHeader>
-                    {/* <DrawerTitle>Chào mừng bạn đến với chúng tôi</DrawerTitle> */}
-                    {/* <DrawerDescription>
-                      Set your daily activity goal.
-                    </DrawerDescription> */}
-                  </DrawerHeader>
+                <div className="w-full max-w-sm">
                   <div className=" pb-0 gap-y-4">
                     <Button
                       outlined={true}

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const Step1Shema = z.object({
   fullName: z
-    .string()
+    .string({required_error: "Họ tên học sinh là bắt buộc"})
     .min(5, "Họ tên học sinh phải có ít nhất 5 ký tự")
     .min(1, "Họ tên học sinh là bắt buộc"),
   schoolName: z.string().min(1, "Trường học là bắt buộc"),
