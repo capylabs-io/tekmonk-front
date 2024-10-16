@@ -136,7 +136,7 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen">
+    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen shadow-md">
       <Image
         src={`/image/contestentries/Banner.png`}
         alt={`Banner`}
