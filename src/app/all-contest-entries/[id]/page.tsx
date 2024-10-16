@@ -54,8 +54,11 @@ const ContestDetail: React.FC = () => {
     fetchContestDetail();
   }, [id]);
 
-  const hanldeCLickTag = (tag: string) => {
-    router.push(`/all-contest-entries?tag=${tag}`)
+  const handleClickTag = (tag: string) => {
+    // Store the tag in localStorage
+    localStorage.setItem('selectedTag', tag);
+    // Navigate to the all contest entries page
+    router.push('/all-contest-entries');
   }
 
   if (isLoading) {
@@ -118,7 +121,7 @@ const ContestDetail: React.FC = () => {
                       className="mr-2 cursor-pointer"
                       size="medium"
                       type="secondary"
-                      onClick={() => hanldeCLickTag(tag)}
+                      onClick={() => handleClickTag(tag)}
                     />
                   ))}
                 </div>

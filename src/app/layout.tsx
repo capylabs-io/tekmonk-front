@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
 import "./globals.css";
+import { Loading } from "@/components/common/Loading";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +37,9 @@ export default function RootLayout({
       className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
     >
       <body>
-        <ToastContainer></ToastContainer>
+        <ToastContainer />
         <div>{children}</div>
+        <Loading />
       </body>
     </html>
   );

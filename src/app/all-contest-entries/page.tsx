@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLoadingStore } from "@/store/LoadingStore";
 
 enum SearchType {
   TAG = "tag",
@@ -45,40 +46,44 @@ export default function SearchInterface() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [tag, setTag] = useState(searchParams.get("tag") || "");
+  const [tag, setTag] = useState("");
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const debouncedSearch = useDebounce(search, 500);
   const debouncedTag = useDebounce(tag, 500);
   const [searchResults, setSearchResults] = useState<ContestSubmission[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [searchType, setSearchType] = useState<SearchType>(tag === "" ? SearchType.CANDIDATE_NUMBER : SearchType.TAG);
+  // const [loading, setLoading] = useState(true);
+  const [searchType, setSearchType] = useState<SearchType>(SearchType.CANDIDATE_NUMBER);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await getContestSubmissionPagination(
-          page,
-          12,
-          searchType === SearchType.CANDIDATE_NUMBER ? debouncedSearch : "",
-          searchType === SearchType.TAG ? debouncedTag : ""
-        );
-        setSearchResults(response.data);
-        const totalPages = Math.ceil(response.meta.pagination.total / 12);
-        setTotalPages(totalPages);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const [hideLoading, showLoading, loading] = useLoadingStore((state) => [state.hide,state.show, state.isShowing])
 
-    fetchData();
-  }, [page, debouncedSearch, debouncedTag, searchType]);
-
+  const fetchData = async () => {
+    try {
+      showLoading()
+      const response = await getContestSubmissionPagination(
+        page,
+        12,
+        searchType === SearchType.CANDIDATE_NUMBER ? debouncedSearch : "",
+        searchType === SearchType.TAG ? debouncedTag : ""
+      );
+      setSearchResults(response.data);
+      const totalPages = Math.ceil(response.meta.pagination.total / 12);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.log(error);
+    }finally{
+      hideLoading( )
+    }
+  };
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
+  };
+
+  const handleSearchTypeChange = (value: string) => {
+    setSearchType(value as SearchType);
+    setTag("");
+    setSearch("");
   };
 
   const handleSearchValue = (value: string) => {
@@ -96,6 +101,21 @@ export default function SearchInterface() {
     router.push(`/all-contest-entries/${id}`);
   };
 
+  useEffect(() => {
+    // Check for a stored tag when the component mounts
+    const storedTag = localStorage.getItem('selectedTag');
+    if (storedTag) {
+      setTag(storedTag);
+      setSearchType(SearchType.TAG);
+      localStorage.removeItem('selectedTag'); // Clear the stored tag
+    }
+  }, []);
+  useEffect(() => {
+    fetchData();
+  }, [page, debouncedSearch, debouncedTag, searchType]);
+
+ 
+
   const SkeletonCard = () => (
     <div className="hover:cursor-pointer">
       <Card className="overflow-hidden">
@@ -112,10 +132,6 @@ export default function SearchInterface() {
       </CardFooter>
     </div>
   );
-
-  const handleSearchTypeChange = (value: string) => {
-    setSearchType(value as SearchType);
-  };
 
   return (
     <div className="mx-auto pb-5 space-y-6">
@@ -136,8 +152,8 @@ export default function SearchInterface() {
           <SelectContent className="bg-white">
             <SelectGroup>
               <SelectLabel>Loại</SelectLabel>
-              <SelectItem value="tag">Tag</SelectItem>
-              <SelectItem value="candidateNumber">Số báo danh</SelectItem>
+              <SelectItem value={SearchType.TAG}>Tag</SelectItem>
+              <SelectItem value={SearchType.CANDIDATE_NUMBER}>Số báo danh</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
