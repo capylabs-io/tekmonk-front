@@ -11,7 +11,7 @@ type Props = {
 export const EmptySearch = ({
   customClassName = "",
   message = "No results found. Try adjusting your search!",
-  buttonText = "Explore",
+  buttonText ,
   onAction,
 }: Props) => {
   const router = useRouter();
@@ -39,12 +39,15 @@ export const EmptySearch = ({
       <p className="text-lg font-medium text-gray-600 text-center">
         {message}
       </p>
-      <button
+      {
+        buttonText && (
+          <button
         onClick={handleAction}
         className="px-4 py-2 mt-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-all duration-200"
       >
-        {buttonText}
-      </button>
+          {buttonText}
+        </button>
+      )}
     </div>
   );
 };

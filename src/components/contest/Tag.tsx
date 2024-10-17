@@ -7,7 +7,7 @@ type Props = {
   onClick?: () => void;
   className?: string;
   type: "primary" | "secondary";
-  size: "small" | "medium";
+  size: "x-small" | "small" | "medium";
 };
 
 const BASE_CLASS =
@@ -35,8 +35,10 @@ export default function Tag({
 
   const sizeTag = (() => {
     switch (size) {
+      case "x-small":
+        return "text-bodyXs";
       case "small":
-        return "text-xs";
+        return "text-bodySm";
       case "medium":
         return "text-sm";
     }
