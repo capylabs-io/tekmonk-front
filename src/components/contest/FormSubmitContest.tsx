@@ -124,7 +124,7 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const closeDialog = () => {
-    warn("Warning", "Bạn đã nộp bài thi rồi!");
+    // warn("Warning", "Bạn đã nộp bài thi rồi!");
     setIsOpen(false);
   };
 

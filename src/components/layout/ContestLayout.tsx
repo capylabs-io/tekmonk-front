@@ -105,15 +105,15 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
-            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3">
-              <div className="text-gray-950 text-bodyMd cursor-pointer" onClick={redirectContest}>
+            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
+              <div className="text-gray-950  cursor-pointer" onClick={redirectContest}>
               Thể lệ
               </div>
 
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="text-gray-950 text-bodyMd cursor-pointer"
+                    className="text-gray-950  cursor-pointer"
                     onClick={() => router.push("/all-contest-entries")}
                   >
                     Tổng hợp bài dự thi
@@ -135,7 +135,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className="text-bodyMd hover:cursor-pointer">Đăng nhập</div>
+                <div onClick={() => router.push('/login')} className=" hover:cursor-pointer">Đăng nhập</div>
               )}
             </nav>
 
