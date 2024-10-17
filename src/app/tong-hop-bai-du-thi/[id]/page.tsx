@@ -61,7 +61,7 @@ const ContestDetail: React.FC = () => {
     // Store the tag in Zustand store
     setSelectedTag(tag);
     // Navigate to the all contest entries page
-    router.push('/all-contest-entries');
+    router.push('/tong-hop-bai-du-thi');
   }
 
   if (isLoading) {
@@ -82,24 +82,24 @@ const ContestDetail: React.FC = () => {
   if (!contestDetail) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <EmptySearch buttonText="Trở về" message="Không tìm thấy bài thi" onAction={() => router.push("/all-contest-entries")} />
+        <EmptySearch buttonText="Trở về" message="Không tìm thấy bài thi" onAction={() => router.push("/tong-hop-bai-du-thi")} />
       </div>
     );
   }
 
-  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/all-contest-entries/${id}`;
+  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/tong-hop-bai-du-thi/${id}`;
   const shareTitle = contestDetail?.title || "Check out this contest entry!";
   const shareDescription = contestDetail?.description || "An amazing contest submission";
   const shareImage = contestDetail?.assets?.[selectedImageIndex]?.url || `${process.env.NEXT_PUBLIC_BASE_URL}/image/contest/Saly-12.png`;
 
   return (
     <>
-      <div className="max-w-[720px] mx-auto border-r border-l border-gray-200 bg-white h-full">
+      <div className="max-w-[720px] mx-auto border-r border-l border-gray-200 bg-white h-full shadow-md">
         <div className="">
           <div className="h-12 mobile:h-16 flex items-center px-8">
             <ArrowLeft
               size={24}
-              onClick={() => router.push("/all-contest-entries")}
+              onClick={() => router.push("/tong-hop-bai-du-thi")}
               className="cursor-pointer"
             />
             <span className="text-grey-500 text-sm font-medium ml-2 select-none">Quay lại</span>
@@ -135,7 +135,7 @@ const ContestDetail: React.FC = () => {
                   contestDetail.url && (
                     <p className="px-8">
                       <span className="text-grey-500 text-sm">Link bài thi: </span>
-                      <span className="text-grey-500 text-sm">{contestDetail.url}</span>
+                      <a className="text-blue-500 text-sm " target="_blank" href={contestDetail.url}>{contestDetail.url}</a>
                     </p>
                   )
                 }

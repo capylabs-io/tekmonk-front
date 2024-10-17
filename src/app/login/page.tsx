@@ -54,7 +54,7 @@ export default function Login() {
 
       if (roleName === Role.STUDENT) {
         success("Xong!","Đăng nhập thành công");
-        router.push("/contest");
+        router.push("/cuoc-thi");
       } else {
         useUserStore.getState().clear();
         setUser({
@@ -88,7 +88,7 @@ export default function Login() {
             </svg>
             <div
               className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-              onClick={() => router.push("/contest")}
+              onClick={() => router.push("/cuoc-thi")}
             >
               Quay lại
             </div>

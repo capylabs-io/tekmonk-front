@@ -64,14 +64,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     router.push("/login");
   };
   const redirectContest = () => {
-    router.push("/contest");
+    router.push("/cuoc-thi");
   }
 
   const handleRedirectToMyContest = async () => {
     try {
       const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
       const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id); 
-      router.push(`/all-contest-entries/${contestSubmission.data[0].id}`);
+      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
     }
@@ -105,16 +105,16 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
-            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3">
-              <div className="text-gray-950 text-bodyMd cursor-pointer" onClick={redirectContest}>
+            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
+              <div className="text-gray-950  cursor-pointer" onClick={redirectContest}>
               Thể lệ
               </div>
 
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className="text-gray-950 text-bodyMd cursor-pointer"
-                    onClick={() => router.push("/all-contest-entries")}
+                    className="text-gray-950  cursor-pointer"
+                    onClick={() => router.push("/tong-hop-bai-du-thi")}
                   >
                     Tổng hợp bài dự thi
                   </div>
@@ -135,7 +135,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className="text-bodyMd hover:cursor-pointer">Đăng nhập</div>
+                <div onClick={() => router.push('/login')} className=" hover:cursor-pointer">Đăng nhập</div>
               )}
             </nav>
 
@@ -173,7 +173,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Button>
                     <Button
                       outlined={true}
-                      onClick={() => router.push("/all-contest-entries")}
+                      onClick={() => router.push("/tong-hop-bai-du-thi")}
                     >
                       <div className="text-black text-base">
                         Tổng hợp bài dự thi

@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/select";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useTagStore } from '@/store/TagStore';
+import { get } from 'lodash';
 
 enum SearchType {
   TAG = "tag",
@@ -100,7 +101,7 @@ export default function SearchInterface() {
   };
 
   const navigateDetailItem = (id: string) => {
-    router.push(`/all-contest-entries/${id}`);
+    router.push(`/tong-hop-bai-du-thi/${id}`);
   };
 
   useEffect(() => {
@@ -136,7 +137,7 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen">
+    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen shadow-md">
       <Image
         src={`/image/contestentries/Banner.png`}
         alt={`Banner`}
@@ -224,7 +225,7 @@ export default function SearchInterface() {
               </CardContent>
               <CardFooter className="p-0">
                 <div className="text-bodySm text-gray-800">
-                  {card.contest_entry?.user.fullName || "Unknown"}
+                  {get(card, 'contest_entry.user.fullName', 'Unknown')}
                 </div>
               </CardFooter>
             </div>

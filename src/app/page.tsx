@@ -142,6 +142,6 @@ export default function Landing() {
           />
         </div>
       </div>
-    </> : router.push("/contest")
+    </> : router.push("/cuoc-thi")
   );
 }
