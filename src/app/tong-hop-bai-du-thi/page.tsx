@@ -38,6 +38,8 @@ import {
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useTagStore } from '@/store/TagStore';
 import { get } from 'lodash';
+import Tag from "@/components/contest/Tag";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 
 enum SearchType {
   TAG = "tag",
@@ -70,6 +72,7 @@ export default function SearchInterface() {
         searchType === SearchType.CANDIDATE_NUMBER ? debouncedSearch : "",
         searchType === SearchType.TAG ? debouncedTag : ""
       );
+      console.log(response)
       setSearchResults(response.data);
       const totalPages = Math.ceil(response.meta.pagination.total / 12);
       setTotalPages(totalPages);
@@ -102,6 +105,12 @@ export default function SearchInterface() {
 
   const navigateDetailItem = (id: string) => {
     router.push(`/tong-hop-bai-du-thi/${id}`);
+  };
+
+  const handleFilterByTag = (tag: string) => {
+    setTag(tag);
+    setSearchType(SearchType.TAG);
+    setPage(1);
   };
 
   useEffect(() => {
@@ -203,6 +212,7 @@ export default function SearchInterface() {
                       }
                       alt="Into the Breach"
                       fill
+                      sizes="(max-width: 720px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       loading="lazy"
                       quality={30}
                       className="object-contain"
@@ -215,13 +225,24 @@ export default function SearchInterface() {
                   onClick={() => navigateDetailItem(card.id)}
 
                 >
-                  #{card.contest_entry?.candidateNumber}
+                  {card.contest_entry?.candidateNumber}
                 </div>
                 <div className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
                   onClick={() => navigateDetailItem(card.id)}
                 >
                   {card.title}
                 </div>
+                <Carousel className="mt-1">
+                    <CarouselContent className="-ml-4 pl-2">
+                      {get(card, 'tags', [])?.map((tag, index) => (
+                        <CarouselItem key={index} className="w-fit basis-auto select-none pl-2">
+                          <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
+                            <Tag text={tag} type="secondary" size="x-small" onClick={() => handleFilterByTag(tag)} />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                </Carousel>
               </CardContent>
               <CardFooter className="p-0">
                 <div className="text-bodySm text-gray-800">
@@ -232,11 +253,11 @@ export default function SearchInterface() {
           ))}
       </div>
       {searchResults.length === 0 && !loading && (
-        <EmptySearch
-          message="Oops! Không thể tìm thấy bài thi nào"
-          buttonText="Tải lại"
-          onAction={() => setSearch("")}
-        />
+        <div className="h-[300px]">
+            <EmptySearch
+              message="Oops! Không thể tìm thấy bài thi nào"
+            />
+        </div>
       )}
       <Pagination>
         <PaginationContent>
