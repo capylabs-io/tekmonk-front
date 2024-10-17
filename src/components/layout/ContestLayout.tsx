@@ -35,7 +35,7 @@ const nunitoSans = Nunito_Sans({
 
 type ContestLayoutProps = {
   children: React.ReactNode;
-}
+};
 
 const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
@@ -45,7 +45,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     state.clear,
     state.isConnected,
   ]);
-  const [ success ] = useSnackbarStore((state) => [state.success]);
+  const [success] = useSnackbarStore((state) => [state.success]);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -60,21 +60,29 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   };
   const handleLogout = () => {
     clear();
-    success("Success","Đăng xuất thành công");
+    success("Success", "Đăng xuất thành công");
     router.push("/login");
   };
   const redirectContest = () => {
     router.push("/cuoc-thi");
-  }
+  };
 
   const handleRedirectToMyContest = async () => {
     try {
-      const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
-      const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id); 
+      const contestEntry = await getOneContestEntry(
+        useUserStore.getState().candidateNumber || ""
+      );
+      const contestSubmission = await getContestSubmissionByContestEntry(
+        contestEntry.id
+      );
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleRedirectResultContest = () => {
+    router.push("/ket-qua-vong-loai");
   }
 
   return (
@@ -106,8 +114,11 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
-              <div className="text-gray-950  cursor-pointer" onClick={redirectContest}>
-              Thể lệ
+              <div
+                className="text-gray-950  cursor-pointer"
+                onClick={redirectContest}
+              >
+                Thể lệ
               </div>
 
               <Tooltip>
@@ -123,7 +134,20 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && <div className="text-bodyMd hover:cursor-pointer" onClick={handleRedirectToMyContest}>Bài dự thi của tôi</div>}
+              {isConnected() && (
+                <div
+                  className="text-bodyMd hover:cursor-pointer"
+                  onClick={handleRedirectToMyContest}
+                >
+                  Bài dự thi của tôi
+                </div>
+              )}
+              <div
+                  className="text-bodyMd hover:cursor-pointer"
+                  onClick={handleRedirectResultContest}
+                >
+                  Kết quả vòng loại
+                </div>
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyMd  hover:cursor-pointer"
@@ -135,7 +159,12 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // <a href="/login" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
-                <div onClick={() => router.push('/login')} className=" hover:cursor-pointer">Đăng nhập</div>
+                <div
+                  onClick={() => router.push("/login")}
+                  className=" hover:cursor-pointer"
+                >
+                  Đăng nhập
+                </div>
               )}
             </nav>
 
@@ -165,11 +194,13 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
               <DrawerContent className="bg-white !p-0">
                 <div className="w-full max-w-sm">
                   <div className=" pb-0 gap-y-4">
-                    <Button
-                      outlined={true}
-                      onClick={() => router.push("/")}
-                    >
-                      <div className="text-black text-base" onClick={redirectContest}>Thể lệ</div>
+                    <Button outlined={true} onClick={() => router.push("/")}>
+                      <div
+                        className="text-black text-base"
+                        onClick={redirectContest}
+                      >
+                        Thể lệ
+                      </div>
                     </Button>
                     <Button
                       outlined={true}
@@ -186,6 +217,15 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         </div>
                       </Button>
                     )}
+
+                    <Button
+                      outlined={true}
+                      onClick={() => router.push("/ket-qua-vong-loai")}
+                    >
+                      <div className="text-black text-base">
+                        Kết quả vòng loại
+                      </div>
+                    </Button>
 
                     {!isConnected() && (
                       <Button

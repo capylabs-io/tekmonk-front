@@ -8,11 +8,11 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Trash2 } from "lucide-react";
 import { UserPlus } from "lucide-react";
 import DatePicker from "react-date-picker";
-import { use, useEffect, useState } from "react";
-import "react-date-picker/dist/DatePicker.css";
-import "react-calendar/dist/Calendar.css";
+import { useEffect, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { WizardSchema } from "@/validation/ContestRegister";
+import "react-date-picker/dist/DatePicker.css";
+import "react-calendar/dist/Calendar.css";
 
 type ValuePiece = Date | null;
 
@@ -28,13 +28,13 @@ export const Step3 = () => {
     getValues,
   } = useFormContext<WizardSchema>();
 
-  const [valueGroup, getValueGroup] = useState<string>(getValues("stepThree.contest_group_stage"));
-  useEffect(() => {}, [value]);
-  const { groupMemberInfo, contest_group_stage } = useContestRegisterStore(
+  const [valueGroup, getValueGroup] = useState<string>(
+    getValues("stepThree.contest_group_stage")
+  );
+  const { groupMemberInfo } = useContestRegisterStore(
     (state) => {
       return {
         groupMemberInfo: state.groupMemberInfo,
-        contest_group_stage: state.contest_group_stage,
       };
     }
   );
@@ -68,10 +68,9 @@ export const Step3 = () => {
     change("groupMemberInfo", newGroupMemberInfo);
   };
 
-  
   const checkContestGroupStage = () => {
     getValueGroup(getValues("stepThree.contest_group_stage"));
-  }
+  };
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Thông tin bảng đấu:</h3>
@@ -150,7 +149,6 @@ export const Step3 = () => {
                 checkContestGroupStage();
               }}
               className="flex flex-col space-y-2 mt-2"
-              
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="1" id="category-A" />
@@ -173,21 +171,21 @@ export const Step3 = () => {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4" id="category-D1" />
                 <Label className="text-bodyLg text-black">
-                  Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                  Thi cá nhân - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
                 </Label>
               </div>
-              {/* <div className="flex items-center space-x-2">
-            <RadioGroupItem value="5" id="category-D2" />
-            <Label className="text-bodyLg text-black">
-              Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
-            </Label>
-          </div> */}
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="5" id="category-D2" />
+                <Label className="text-bodyLg text-black">
+                  Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                </Label>
+              </div>
             </RadioGroup>
           )}
         />
       </div>
 
-      {valueGroup == "4" && (
+      {valueGroup == "5" && (
         <>
           <div className="">
             {groupMemberInfo.map((member, index) => (
@@ -216,7 +214,7 @@ export const Step3 = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Họ và tên thí sinh 
+                      Họ và tên thí sinh
                     </Label>
                     <Input
                       id={`name-${index}`}
@@ -260,16 +258,7 @@ export const Step3 = () => {
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
                       Ngày tháng năm sinh{" "}
-                      
                     </Label>
-                    {/* <Input
-                      type="date"
-                      value={member.dob}
-                      onChange={(e) =>
-                        updateTeamMember(index, "dob", e.target.value)
-                      }
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
-                    /> */}
                     <DatePicker
                       className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[48px] text-lg focus-visible:outline-none"
                       onChange={(value) => {

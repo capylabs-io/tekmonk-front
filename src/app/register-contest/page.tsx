@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { Step1 } from "@/components/register-contest/Step1";
@@ -13,11 +12,9 @@ import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
 import { get } from "lodash";
-import { toast } from "react-toastify";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useUserStore } from "@/store/UserStore";
 import { FormProvider, useForm } from "react-hook-form";
-import { ContestRegister } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
@@ -42,42 +39,14 @@ export default function RegisterContest() {
     state.clear,
   ]);
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
-  const [error, success] = useSnackbarStore((state) => [state.error, state.success]);
-  const data = useContestRegisterStore((state) => {
-    return {
-      fullName: state.fullName,
-      schoolName: state.schoolName,
-      phoneNumber: state.phoneNumber,
-      schoolAddress: state.schoolAddress,
-      parentName: state.parentName,
-      parentPhoneNumber: state.parentPhoneNumber,
-      studentAddress: state.studentAddress,
-      studentDob: state.studentDob,
-      email: state.email,
-      username: state.username,
-      password: state.password,
-      contest_group_stage: Number(state.contest_group_stage),
-      groupMemberInfo: state.groupMemberInfo,
-    };
-  });
-  const groupMemberInfo = useContestRegisterStore((state) => state.groupMemberInfo);
-  const [activeStep, setActiveStep] = useState(0);
-  const defaultValues: ContestRegister = {
-    fullName: "",
-    schoolName: "",
-    studentAddress: "",
-    studentDob: "",
-    className: "",
-    schoolAddress: "",
-    parentName: "",
-    parentPhoneNumber: "",
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
-    groupMemberInfo: [],
-    contest_group_stage: "",
-  }
+  const [error, success] = useSnackbarStore((state) => [
+    state.error,
+    state.success,
+  ]);
+  const groupMemberInfo = useContestRegisterStore(
+    (state) => state.groupMemberInfo
+  );
+
   const methods = useForm<WizardSchema>({
     mode: "onChange",
     resolver: zodResolver(wizardSchema),
@@ -93,38 +62,37 @@ export default function RegisterContest() {
       case 2:
         return "stepThree";
     }
-  }
+  };
 
   const handleNextStep = async () => {
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
 
-      if (isValid)
-        setCurrentStep(currentStep + 1);
+      if (isValid) setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const handleNext = async (formData: any) => {
-    console.log('formData', formData);
-    console.log('groupMemberInfo', {
-        ...get(formData, 'stepOne', {}),
-          ...get(formData, 'stepTwo', {}),
-          ...get(formData, 'stepThree', {}),
-          groupMemberInfo: groupMemberInfo
+    console.log("formData", formData);
+    console.log("groupMemberInfo", {
+      ...get(formData, "stepOne", {}),
+      ...get(formData, "stepTwo", {}),
+      ...get(formData, "stepThree", {}),
+      groupMemberInfo: groupMemberInfo,
     });
     try {
       show();
-      
-        const res = await register({
-          ...get(formData, 'stepOne', {}),
-          ...get(formData, 'stepTwo', {}),
-          ...get(formData, 'stepThree', {}),
-          groupMemberInfo: groupMemberInfo
-        });
-        setCandidateNumber(get(res, "candidateNumber", ""));
-        success("Xong!","Đăng ký thành công");
-        setIsSubmitted(true);
+
+      const res = await register({
+        ...get(formData, "stepOne", {}),
+        ...get(formData, "stepTwo", {}),
+        ...get(formData, "stepThree", {}),
+        groupMemberInfo: groupMemberInfo,
+      });
+      setCandidateNumber(get(res, "candidateNumber", ""));
+      success("Xong!", "Đăng ký thành công");
+      setIsSubmitted(true);
     } catch (err) {
       const message = HandleReturnMessgaeErrorAxios(err);
       error("Lỗi", message);
@@ -171,12 +139,11 @@ export default function RegisterContest() {
   };
 
   useEffect(() => {
-    if(currentStep == 3) {
+    if (currentStep == 3) {
       setIsAccepted(false);
     }
-  },[currentStep])
-  return (
-    !isConnected() ? 
+  }, [currentStep]);
+  return !isConnected() ? (
     <>
       <div className="h-full mt-4 overflow-auto">
         <div className="px-2">
@@ -195,7 +162,9 @@ export default function RegisterContest() {
           <Card className="w-full max-w-[720px] mt-2 mx-auto rounded-2xl bg-white">
             <div className="w-full min-h-16 p-6 ">
               <div className=" text-SubheadLg text-primary-900 max-mobile:text-center">
-                {steps[currentStep].titleHeader ? steps[currentStep].titleHeader : "Đăng ký tham gia thành công"}
+                {steps[currentStep].titleHeader
+                  ? steps[currentStep].titleHeader
+                  : "Đăng ký tham gia thành công"}
               </div>
             </div>
             <div className="w-full border-t border-gray-300"></div>
@@ -245,9 +214,9 @@ export default function RegisterContest() {
                       ))}
                     </div>
                   </div>
-                      <FormProvider {...methods}>
-                        {renderStepContent()}
-                        </FormProvider>
+                  <FormProvider {...methods}>
+                    {renderStepContent()}
+                  </FormProvider>
                 </>
               ) : (
                 <>
@@ -262,14 +231,16 @@ export default function RegisterContest() {
                   <Button
                     outlined={true}
                     onClick={handlePrevious}
-                    // disabled={currentStep === 0}
-                    //   highlight={true}
                     className="rounded-[3rem] w-[108px] border-[1px] border-gray-300"
                   >
                     Quay lại
                   </Button>
                   <Button
-                    onClick={currentStep === steps.length - 1 ? methods.handleSubmit(handleNext) : handleNextStep}
+                    onClick={
+                      currentStep === steps.length - 1
+                        ? methods.handleSubmit(handleNext)
+                        : handleNextStep
+                    }
                     className="rounded-[3rem] w-[108px]"
                     disabled={currentStep === 3 && !isAccepted}
                   >
@@ -300,6 +271,8 @@ export default function RegisterContest() {
           </Card>
         </div>
       </div>
-    </> : router.push("/cuoc-thi")
+    </>
+  ) : (
+    router.push("/cuoc-thi")
   );
 }
