@@ -95,7 +95,7 @@ export const Clock = ({ startTime, endTime }: { startTime: string; endTime: stri
                     outlined={true}
                     style={{ borderRadius: "4rem" }}
 		    //disabled={isConnected()}
-            onClick={() => router.push("all-contest-entries")}
+            onClick={() => router.push("tong-hop-bai-du-thi")}
 		    disabled={false}
                 >
                     Tổng hợp bài dự thi
