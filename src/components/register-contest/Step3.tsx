@@ -1,7 +1,6 @@
 "use client";
 
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { useContestRegisterStore } from "@/store/ContestRegisterStore";
@@ -9,10 +8,11 @@ import { Trash2 } from "lucide-react";
 import { UserPlus } from "lucide-react";
 import DatePicker from "react-date-picker";
 import { useEffect, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { WizardSchema } from "@/validation/ContestRegister";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
+import { Input } from "../common/Input";
 
 type ValuePiece = Date | null;
 
@@ -26,22 +26,26 @@ export const Step3 = () => {
     register,
     formState: { errors },
     getValues,
+    setValue,
   } = useFormContext<WizardSchema>();
 
+  // Sử dụng useFieldArray để quản lý danh sách các thành viên
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "stepThree.groupMemberInfo", // Đây là path mà useFieldArray sẽ lắng nghe
+  });
   const [valueGroup, getValueGroup] = useState<string>(
     getValues("stepThree.contest_group_stage")
   );
-  const { groupMemberInfo } = useContestRegisterStore(
-    (state) => {
-      return {
-        groupMemberInfo: state.groupMemberInfo,
-      };
-    }
-  );
+  const { groupMemberInfo } = useContestRegisterStore((state) => {
+    return {
+      groupMemberInfo: state.groupMemberInfo,
+    };
+  });
   const change = useContestRegisterStore((state) => state.change);
-  const changeGroupMemberInfo = useContestRegisterStore(
-    (state) => state.changeGroupMemberInfo
-  );
+  // const changeGroupMemberInfo = useContestRegisterStore(
+  //   (state) => state.changeGroupMemberInfo
+  // );
 
   const addTeamMember = () => {
     if (groupMemberInfo.length < 2) {
@@ -59,9 +63,9 @@ export const Step3 = () => {
     }
   };
 
-  const updateTeamMember = (index: number, key: string, value: any) => {
-    changeGroupMemberInfo(index, key, value);
-  };
+  // const updateTeamMember = (index: number, key: string, value: any) => {
+  //   changeGroupMemberInfo(index, key, value);
+  // };
 
   const deleteTeamMember = (index: number) => {
     const newGroupMemberInfo = groupMemberInfo.filter((_, i) => i !== index);
@@ -70,7 +74,18 @@ export const Step3 = () => {
 
   const checkContestGroupStage = () => {
     getValueGroup(getValues("stepThree.contest_group_stage"));
+    if (valueGroup != "5") {
+      //delete groupMemberInfo from Form validater
+      console.log("delete groupMemberInfo");
+      setValue("stepThree.groupMemberInfo", []);
+    }
   };
+
+  useEffect(() => {
+    console.log("delete groupMemberInfo 1");
+      setValue("stepThree.groupMemberInfo", []);
+      change("groupMemberInfo", []);
+  }, [valueGroup]);
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Thông tin bảng đấu:</h3>
@@ -206,7 +221,7 @@ export const Step3 = () => {
                 >
                   Thông tin thành viên {index + 2}{" "}
                   <Trash2
-                    className="h-5 w-5 text-red-600"
+                    className="h-5 w-5 text-red-600 hover:cursor-pointer"
                     onClick={() => deleteTeamMember(index)}
                   />
                 </div>
@@ -214,89 +229,118 @@ export const Step3 = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Họ và tên thí sinh
+                      Họ và tên thí sinh <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      id={`name-${index}`}
-                      value={member.name}
-                      onChange={(e) =>
-                        updateTeamMember(index, "name", e.target.value)
-                      }
-                      placeholder="Câu trả lời"
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.name`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <Input
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                          // {...fields}
+                          placeholder="Câu trả lời"
+                          customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          error={fieldState && fieldState.error?.message}
+                          // error={errors.stepThree?.groupMemberInfo?.[index]?.name?.message}
+                        />
+                      )}
                     />
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Trường học
+                      Trường học <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      id={`school-${index}`}
-                      value={member.schoolName}
-                      onChange={(e) =>
-                        updateTeamMember(index, "schoolName", e.target.value)
-                      }
-                      placeholder="Câu trả lời"
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.schoolName`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <Input
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                          placeholder="Câu trả lời"
+                          customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          error={fieldState && fieldState.error?.message}
+                        />
+                      )}
                     />
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
-                      Số điện thoại liên hệ
+                      Số điện thoại liên hệ{" "}
+                      <span className="text-red-500">*</span>
                     </Label>
-                    <Input
-                      type="number"
-                      id={`phone-${index}`}
-                      value={member.phone}
-                      onChange={(e) =>
-                        updateTeamMember(index, "phone", e.target.value)
-                      }
-                      placeholder="00-000-0000"
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.phone`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <Input
+                          type="number"
+                          value={value}
+                          onChange={onChange}
+                          placeholder="00-000-0000"
+                          customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          error={fieldState && fieldState.error?.message}
+                        />
+                      )}
                     />
                   </div>
-                  <div>
-                    <Label className="text-gray-950 text-SubheadSm">
+                  <div className="">
+                    <Label className=" text-gray-950 text-SubheadSm">
                       Ngày tháng năm sinh{" "}
+                      <span className="text-red-500">*</span>
                     </Label>
-                    <DatePicker
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[48px] text-lg focus-visible:outline-none"
-                      onChange={(value) => {
-                        onChange(value);
-                        updateTeamMember(index, "dob", value);
-                      }}
-                      value={value}
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.dob`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <DatePicker
+                          className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[52.5px] text-lg focus-visible:outline-none"
+                          onChange={onChange}
+                          value={value}
+                        />
+                      )}
                     />
+                    <div className="mt-2 text-red-600 text-bodyMd">{errors?.stepThree?.groupMemberInfo?.[index]?.dob?.message}</div>
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
                       Họ và tên phụ huynh
                     </Label>
-                    <Input
-                      value={member.parentName}
-                      onChange={(e) =>
-                        updateTeamMember(index, "parentName", e.target.value)
-                      }
-                      placeholder="Câu trả lời"
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.parentName`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <Input
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                          placeholder="Câu trả lời"
+                          customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          error={fieldState && fieldState.error?.message}
+                        />
+                      )}
                     />
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
                       Số điện thoại của phụ huynh
                     </Label>
-                    <Input
-                      type="number"
-                      value={member.parentPhoneNumber}
-                      onChange={(e) =>
-                        updateTeamMember(
-                          index,
-                          "parentPhoneNumber",
-                          e.target.value
-                        )
-                      }
-                      placeholder="00-000-0000"
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                    <Controller
+                      control={control}
+                      name={`stepThree.groupMemberInfo.${index}.parentPhoneNumber`}
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <Input
+                          type="number"
+                          value={value}
+                          onChange={onChange}
+                          placeholder="00-000-0000"
+                          customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          error={fieldState && fieldState.error?.message}
+                        />
+                      )}
                     />
                   </div>
                 </div>

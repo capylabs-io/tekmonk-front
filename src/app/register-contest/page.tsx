@@ -21,10 +21,32 @@ import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 
 const steps = [
-  { title: "Thông tin", titleHeader: "THÔNG TIN CÁ NHÂN", icon: "1" },
-  { title: "Tài khoản", titleHeader: "TẠO TÀI KHOẢN", icon: "2" },
-  { title: "Bảng thi", titleHeader: "LỰA CHỌN BẢNG ĐẤU", icon: "3" },
-  { title: "Xác nhận", titleHeader: "XÁC NHẬN ĐĂNG KÝ THAM GIA", icon: "4" },
+  {
+    title: "Thông tin",
+    titleHeader: "THÔNG TIN CÁ NHÂN",
+    icon: "1",
+    description: "Lưu lại thông tin cá nhân dùng để xác nhận khi dự thi",
+  },
+  {
+    title: "Tài khoản",
+    titleHeader: "TẠO TÀI KHOẢN",
+    icon: "2",
+    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi",
+  },
+  {
+    title: "Bảng thi",
+    titleHeader: "LỰA CHỌN BẢNG ĐẤU",
+    icon: "3",
+    description:
+      "Lựa chọn bảng đấu phù hợp với bạn (Lưu ý: nếu chọn thi nhóm ở bảng D thì bạn phải nhập thông tin thành viên của mình)",
+  },
+  {
+    title: "Xác nhận",
+    titleHeader: "XÁC NHẬN ĐĂNG KÝ THAM GIA",
+    icon: "4",
+    description:
+      "Lưu ý xác nhận kĩ thông tin của mình trước khi xác nhận đăng ký",
+  },
 ];
 
 export default function RegisterContest() {
@@ -68,7 +90,8 @@ export default function RegisterContest() {
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
-
+      console.log("isValid", isValid);
+      console.log("check groupStage", get(methods.getValues(), "stepThree"));
       if (isValid) setCurrentStep(currentStep + 1);
     }
   };
@@ -79,7 +102,6 @@ export default function RegisterContest() {
       ...get(formData, "stepOne", {}),
       ...get(formData, "stepTwo", {}),
       ...get(formData, "stepThree", {}),
-      groupMemberInfo: groupMemberInfo,
     });
     try {
       show();
@@ -88,7 +110,6 @@ export default function RegisterContest() {
         ...get(formData, "stepOne", {}),
         ...get(formData, "stepTwo", {}),
         ...get(formData, "stepThree", {}),
-        groupMemberInfo: groupMemberInfo,
       });
       setCandidateNumber(get(res, "candidateNumber", ""));
       success("Xong!", "Đăng ký thành công");
@@ -112,10 +133,16 @@ export default function RegisterContest() {
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
+        //clear groupMemberInfo informData when back to step 1
+        // method.setValue(
+        //   "stepThree.contest_group_stage", "1"
+        // );
+        // console.log("groupMemberInfo", get(methods.getValues(), "stepThree"));
         return <Step1 />;
       case 1:
         return <Step2 />;
       case 2:
+
         return <Step3 />;
       case 3:
         return <Step4 updateStatus={handleAccept} />;
@@ -165,6 +192,11 @@ export default function RegisterContest() {
                 {steps[currentStep].titleHeader
                   ? steps[currentStep].titleHeader
                   : "Đăng ký tham gia thành công"}
+              </div>
+              <div className="text-bodyMd">
+                {steps[currentStep].description
+                  ? steps[currentStep].description
+                  : ""}
               </div>
             </div>
             <div className="w-full border-t border-gray-300"></div>
