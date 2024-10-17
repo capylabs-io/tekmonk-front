@@ -64,14 +64,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     router.push("/login");
   };
   const redirectContest = () => {
-    router.push("/contest");
+    router.push("/cuoc-thi");
   }
 
   const handleRedirectToMyContest = async () => {
     try {
       const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
       const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id); 
-      router.push(`/all-contest-entries/${contestSubmission.data[0].id}`);
+      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
     }
@@ -114,7 +114,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 <TooltipTrigger asChild>
                   <div
                     className="text-gray-950  cursor-pointer"
-                    onClick={() => router.push("/all-contest-entries")}
+                    onClick={() => router.push("/tong-hop-bai-du-thi")}
                   >
                     Tổng hợp bài dự thi
                   </div>
@@ -173,7 +173,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Button>
                     <Button
                       outlined={true}
-                      onClick={() => router.push("/all-contest-entries")}
+                      onClick={() => router.push("/tong-hop-bai-du-thi")}
                     >
                       <div className="text-black text-base">
                         Tổng hợp bài dự thi

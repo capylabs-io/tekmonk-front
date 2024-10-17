@@ -69,7 +69,7 @@ const ContestHeader = () => {
         
           <div
             className="text-gray-950 text-bodyLg cursor-pointer"
-            onClick={() => router.push("/contest")}
+            onClick={() => router.push("/cuoc-thi")}
           >
             Thể lệ
           </div>
@@ -79,7 +79,7 @@ const ContestHeader = () => {
           <TooltipTrigger asChild>
           <div
               className="cursor-pointer"
-              onClick={() => router.push("/contest")}
+              onClick={() => router.push("/cuoc-thi")}
             >
               Tổng hợp bài dự thi
             </div>
@@ -143,7 +143,7 @@ const ContestHeader = () => {
         
           <li
             className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-            onClick={() => router.push("/contest")}
+            onClick={() => router.push("/cuoc-thi")}
           > 
             Thể lệ 
           </li>

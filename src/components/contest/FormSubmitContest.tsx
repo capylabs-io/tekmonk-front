@@ -115,7 +115,7 @@ const FormSubmitContest = React.forwardRef<
       await Promise.all(uploadPromises);
 
       success("Success", "Nộp bài thi thành công!");
-      router.push("all-contest-entries/" + result.id);
+      router.push("tong-hop-bai-du-thi/" + result.id);
     } catch (err) {
       error("Error", "Có lỗi xảy ra khi nộp bài thi");
     } finally {
