@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
@@ -169,6 +169,12 @@ export default function RegisterContest() {
   const handleAccept = () => {
     setIsAccepted(!isAccepted);
   };
+
+  useEffect(() => {
+    if(currentStep == 3) {
+      setIsAccepted(false);
+    }
+  },[currentStep])
   return (
     !isConnected() ? 
     <>
