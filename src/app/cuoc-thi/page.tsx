@@ -15,6 +15,7 @@ import { Snackbar } from "@/components/common/Snackbar";
 import { Loading } from "@/components/common/Loading";
 import { Share } from "lucide-react";
 import { shareOnMobile } from "react-mobile-share";
+import { Button } from "@/components/common/Button";
 
 export default function Contest() {
   const router = useRouter();
@@ -188,22 +189,19 @@ export default function Contest() {
                       />
 
                       <div className="p-6 w-full">
-                        <div className="w-full text-center text-gray-950 text-base mx-auto">
+                        {/* <div className="w-full text-center text-gray-950 text-base mx-auto">
                           Chia sẻ thông tin
-                        </div>
-                        <div className="mt-6 flex justify-center cursor-pointer gap-3 space-x-2"
+                        </div> */}
+                        <div className="mt-6 flex justify-center cursor-pointer gap-3 space-x-2 mb-2"
                           onClick={() =>
                             shareOnMobile({
                               text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-                              url: process.env.NEXT_PUBLIC_URL_CONTEST + '/cuoc-thi',
+                              url: process.env.NEXT_PUBLIC_BASE_URL + '/cuoc-thi',
                               title: "CUỘC THI SÁNG TẠO TRẺ",
-                              images: [
-                                "/image/contest/Frame-43.png",
-                              ],
                             })
                           }
                         >
-                          <Share />
+                          <Button className="!bg-blue-600">Chia sẻ</Button>
                         </div>
                         <div className="font-bold text-[32px] text-gray-950 text-center">
                           THỂ LỆ CUỘC THI
@@ -227,10 +225,10 @@ export default function Contest() {
                         <div className="mt-4 ">
                           <span className="text-gray-950 font-medium text-base max-mobile:text-base">Hạn cuối nhận đăng ký: </span><span className="text-black">31/10/2024</span>
                         </div>
-                        <div className="mt-4 w-full min-h-[112px] px-[10px] bg-primary-100 flex flex-col  justify-around rounded-md">
-                          <div className="text-base fill-black">Thông tin chuyển khoản: Công ty Cổ phần Tiền Phong</div>
-                          <div className="text-base">STK: 1027549219 - Ngân Hàng TMCP Ngoại thương Việt Nam</div>
-                          <div className="text-base">Cú pháp CK: Tên thí sinh + Số điện thoại</div>
+                        <div className="mt-4 w-full min-h-[112px] px-4 py-2 bg-primary-100 flex flex-col  justify-around rounded-md text-base">
+                          <p className="fill-black">Thông tin chuyển khoản: Công ty Cổ phần Tiền Phong</p>
+                          <p>STK: 1027549219 - Ngân Hàng TMCP Ngoại thương Việt Nam</p>
+                          <p>Cú pháp CK: Tên thí sinh + Số điện thoại</p>
                         </div>
                       </div>
                     </CardContestContent>

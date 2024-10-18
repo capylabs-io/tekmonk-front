@@ -23,6 +23,7 @@ import { ImageCustom } from "@/components/common/ImageCustom";
 import { Button } from "@/components/common/Button";
 import { useState, useEffect } from "react";
 import { useTagStore } from '@/store/TagStore';
+import { get } from 'lodash';
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
@@ -38,7 +39,6 @@ const ContestDetail: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await getOneContestSubmission(id as string);
-      console.log(response);
       if (response && response.data) {
         setContestDetail(response.data);
       } else {
@@ -109,9 +109,9 @@ const ContestDetail: React.FC = () => {
               <header className="px-8 border-b border-grey-200 pb-4">
                 <p className="mb-3">
                   <span className="text-SubheadSm !font-medium mr-2">
-                    {contestDetail.contest_entry?.user.fullName}
+                    {get(contestDetail, 'contest_entry.user.fullName', '')}
                   </span>
-                  <span className="text-grey-500 text-sm">Số báo danh: {contestDetail.contest_entry?.candidateNumber}</span>
+                  <span className="text-grey-500 text-sm">Số báo danh: {get(contestDetail, 'contest_entry.candidateNumber', '')}</span>
                 </p>
                 <h1 className="text-SubheadLg text-grey-700 uppercase">
                   {contestDetail.title}
@@ -129,7 +129,8 @@ const ContestDetail: React.FC = () => {
                   ))}
                 </div>
               </header>
-              <p className="py-4 px-8">{contestDetail.description}</p>
+              <div className="py-4 px-8 ql-viewer" dangerouslySetInnerHTML={{__html: contestDetail.description || ''}}>
+              </div>
               <div className="">
                 {
                   contestDetail.url && (
