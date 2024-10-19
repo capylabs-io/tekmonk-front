@@ -10,37 +10,29 @@ import { LAYERS } from "@/contants/layer";
 import { Clock } from "@/components/contest/Clock";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
-import { useRouter } from "next/navigation";
-import { Snackbar } from "@/components/common/Snackbar";
-import { Loading } from "@/components/common/Loading";
 import { Share } from "lucide-react";
 import { shareOnMobile } from "react-mobile-share";
 import { getContest } from "@/requests/contest";
 
 export default function Contest() {
-  const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const ref = useRef<HTMLDivElement>(null);
-
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
 
-  //data time
   useEffect(() => {
     const fetchContestData = async () => {
-      //fetch time contest
       const contestData = await getContest();
-      if(contestData){
+      if (contestData) {
         setStartTime(contestData.data[0].startTime);
         setEndTime(contestData.data[0].endTime);
       }
-      console.log("contestData: ", contestData);
     };
 
     fetchContestData();
 
     setIsClient(true);
+
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
@@ -55,7 +47,7 @@ export default function Contest() {
   return (
     isClient && (
       <>
-        <div ref={ref} className="min-h-screen relative max-width-pc">
+        <div className="min-h-screen relative max-width-pc">
           <div className="w-full mx-auto px-4 py-8 relative flex justify-center">
             <div className="max-md:hidden">
               <Image
@@ -145,8 +137,6 @@ export default function Contest() {
                 <div className="mt-7 text-Subhead3Xl text-primary-950 max-[460px]:text-xl">
                   BÁO TIỀN PHONG TỔ CHỨC
                 </div>
-
-
               </div>
               {/* use later */}
               {/* <div
@@ -177,9 +167,12 @@ export default function Contest() {
 
               <section>
                 <BlurFade delay={0.25 + 3 * 0.05} inView>
-                  <Clock startTime={startTime} endTime={endTime} />
+                  <Clock
+                    startTime={startTime}
+                    endTime={endTime}
+                  />
                 </BlurFade>
-
+                <div id="rules"></div>
                 <BlurFade delay={0.25 + 4 * 0.05} inView>
                   <CardContest
                     className={`mt-12 px-6 flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden shadow-custom-gray p-6 z-[${LAYERS.POST}]
@@ -206,15 +199,16 @@ export default function Contest() {
                         <div className="w-full text-center text-gray-950 text-base mx-auto">
                           Chia sẻ thông tin
                         </div>
-                        <div className="mt-6 flex justify-center cursor-pointer gap-3 space-x-2"
+                        <div
+                          className="mt-6 flex justify-center cursor-pointer gap-3 space-x-2"
                           onClick={() =>
                             shareOnMobile({
                               text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-                              url: process.env.NEXT_PUBLIC_URL_CONTEST + '/cuoc-thi',
+                              url:
+                                process.env.NEXT_PUBLIC_URL_CONTEST +
+                                "/cuoc-thi",
                               title: "CUỘC THI SÁNG TẠO TRẺ",
-                              images: [
-                                "/image/contest/Frame-43.png",
-                              ],
+                              images: ["/image/contest/Frame-43.png"],
                             })
                           }
                         >
@@ -224,28 +218,60 @@ export default function Contest() {
                           THỂ LỆ CUỘC THI
                         </div>
                         <div className="mt-4 text-gray-950 text-base max-mobile:text-base">
-                          Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.
+                          Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ
+                          phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING
+                          OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ
+                          đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân
+                          chơi, cơ hội giao lưu và học tập cho học sinh trên
+                          toàn quốc.
                         </div>
                         <div className="mt-4 ">
-                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">Thời gian: </span><span className="text-black">11/11/2024</span>
+                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">
+                            Thời gian:{" "}
+                          </span>
+                          <span className="text-black">11/11/2024</span>
                         </div>
                         <div className="mt-4 ">
-                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">Địa chỉ: </span>
-                          <span className="text-black">Nhà thi đấu Trịnh Hoài Đức</span>
+                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">
+                            Địa chỉ:{" "}
+                          </span>
+                          <span className="text-black">
+                            Nhà thi đấu Trịnh Hoài Đức
+                          </span>
                         </div>
                         <div className="mt-4 ">
-                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">Đối tượng dự thi: </span><span className="text-black">Học sinh từ 6 đến 17 tuổi trên toàn quốc</span>
+                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">
+                            Đối tượng dự thi:{" "}
+                          </span>
+                          <span className="text-black">
+                            Học sinh từ 6 đến 17 tuổi trên toàn quốc
+                          </span>
                         </div>
                         <div className="mt-4 ">
-                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">Lệ phí tham dự: </span><span className="text-black">300,000 VND / thí sinh</span>
+                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">
+                            Lệ phí tham dự:{" "}
+                          </span>
+                          <span className="text-black">
+                            300,000 VND / thí sinh
+                          </span>
                         </div>
                         <div className="mt-4 ">
-                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">Hạn cuối nhận đăng ký: </span><span className="text-black">31/10/2024</span>
+                          <span className="text-gray-950 font-medium text-base max-mobile:text-base">
+                            Hạn cuối nhận đăng ký:{" "}
+                          </span>
+                          <span className="text-black">31/10/2024</span>
                         </div>
                         <div className="mt-4 w-full min-h-[112px] px-[10px] bg-primary-100 flex flex-col  justify-around rounded-md">
-                          <div className="text-base fill-black">Thông tin chuyển khoản: Công ty Cổ phần Tiền Phong</div>
-                          <div className="text-base">STK: 1027549219 - Ngân Hàng TMCP Ngoại thương Việt Nam</div>
-                          <div className="text-base">Cú pháp CK: Tên thí sinh + Số điện thoại</div>
+                          <div className="text-base fill-black">
+                            Thông tin chuyển khoản: Công ty Cổ phần Tiền Phong
+                          </div>
+                          <div className="text-base">
+                            STK: 1027549219 - Ngân Hàng TMCP Ngoại thương Việt
+                            Nam
+                          </div>
+                          <div className="text-base">
+                            Cú pháp CK: Tên thí sinh + Số điện thoại
+                          </div>
                         </div>
                       </div>
                     </CardContestContent>

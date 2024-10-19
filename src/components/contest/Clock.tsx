@@ -5,7 +5,6 @@ import { CardContest } from "../common/CardContest";
 import { Button } from "../common/Button";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
-import FormSubmitContest from "./FormSubmitContest";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import {Link as LinkToScroll} from "react-scroll";
 
 interface TimeLeft {
   days: number;
@@ -192,12 +192,15 @@ export const Clock = ({
         >
           Tổng hợp bài dự thi
         </Button>
-        <Button
-          className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg"
-          outlined={true}
-        >
-          Thể lệ
-        </Button>
+        <LinkToScroll to="rules" smooth={true} duration={500}>
+          <Button
+            className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg"
+            outlined={true}
+          >
+            Thể lệ
+          </Button>
+        </LinkToScroll>
+        
       </div>
 
       <div className="mt-[52px] text-2xl font-bold text-gray-600">
