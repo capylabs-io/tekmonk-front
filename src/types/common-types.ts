@@ -46,6 +46,18 @@ export type User = {
   fullName?: string;
   user_role?: UserRole[] | UserRole | any;
 };
+
+export type ContestGroupStage = {
+  id?: string;
+  name?: string;
+  description?: string;
+  code?: string;
+  studentLevel?: string;
+  contestFormat?: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface Certificate {
   name: string;
   type: string;

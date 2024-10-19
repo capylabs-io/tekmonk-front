@@ -1,6 +1,6 @@
 import tekdojoAxios from "@/requests/axios.config";
 import { postLogin, getMe, postRegister } from "@/requests/login";
-import { Certificate, User } from "@/types/common-types";
+import { Certificate, ContestGroupStage, User } from "@/types/common-types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -10,6 +10,7 @@ type State = {
   userInfo: User | null;
   userCertificate: Certificate[] | null;
   candidateNumber: string | null;
+  contest_group_stage: ContestGroupStage | null;
 };
 
 type Actions = {
@@ -18,6 +19,7 @@ type Actions = {
   clear: () => void;
   getMe: () => Promise<void>;
   isConnected: () => boolean;
+  getContestGroupStage: () => ContestGroupStage | null;
 };
 
 // Khởi tạo giá trị mặc định cho state
@@ -26,6 +28,7 @@ const defaultStates: State = {
   userInfo: null,
   userCertificate: null,
   candidateNumber: null,
+  contest_group_stage: null
 };
 
 // Tạo store sử dụng Zustand
@@ -42,7 +45,8 @@ export const useUserStore = create<State & Actions>()(
         set({
           jwt: response.jwt,
           userInfo: response.user,
-          candidateNumber: response?.candidateNumber
+          candidateNumber: response?.candidateNumber,
+          contest_group_stage: response?.contest_group_stage
         });
         return response.user;
       },
@@ -74,6 +78,9 @@ export const useUserStore = create<State & Actions>()(
           console.error("Error fetching user info:", error);
         }
       },
+      getContestGroupStage: () => {
+        return get().contest_group_stage;
+      }
     }),
     { name: "userStore" }
   )

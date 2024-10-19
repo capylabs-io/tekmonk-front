@@ -15,16 +15,31 @@ import { Snackbar } from "@/components/common/Snackbar";
 import { Loading } from "@/components/common/Loading";
 import { Share } from "lucide-react";
 import { shareOnMobile } from "react-mobile-share";
+import { getContest } from "@/requests/contest";
 
 export default function Contest() {
   const router = useRouter();
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const startTime = process.env.NEXT_PUBLIC_START_TIME_CONTEST ? process.env.NEXT_PUBLIC_START_TIME_CONTEST.toString() : "";
-  const endTime = process.env.NEXT_PUBLIC_END_TIME_CONTEST ? process.env.NEXT_PUBLIC_END_TIME_CONTEST.toString() : "";
   const ref = useRef<HTMLDivElement>(null);
 
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
+
+  //data time
   useEffect(() => {
+    const fetchContestData = async () => {
+      //fetch time contest
+      const contestData = await getContest();
+      if(contestData){
+        setStartTime(contestData.data[0].startTime);
+        setEndTime(contestData.data[0].endTime);
+      }
+      console.log("contestData: ", contestData);
+    };
+
+    fetchContestData();
+
     setIsClient(true);
     const handleScroll = () => {
       setScrollY(window.scrollY);

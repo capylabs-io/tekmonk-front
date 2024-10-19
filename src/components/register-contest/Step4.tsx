@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
@@ -19,7 +22,7 @@ export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
       </div>
       <div className="text-bodyMd text-gray-950">
         Thông tin chi tiết xem{" "}
-        <span className="text-primary-700 underline">tại đây</span>
+        <Link href={"/cuoc-thi"} target="_blank" className="text-primary-700 underline hover:cursor-pointer ">tại đây</Link> 
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroup className="flex flex-col space-y-2 mt-2">

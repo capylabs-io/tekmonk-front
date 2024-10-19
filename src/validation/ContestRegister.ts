@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const Step1Shema = z.object({
+const Step1Schema = z.object({
   fullName: z
     .string({ required_error: "Họ tên học sinh là bắt buộc" })
     .min(5, "Họ tên học sinh phải có ít nhất 5 ký tự")
@@ -24,7 +24,7 @@ const Step1Shema = z.object({
     .min(1, "Số điện thoại của phụ huynh là bắt buộc"),
 });
 
-const Step2Shema = z
+const Step2Schema = z
   .object({
     email: z
       .string({ required_error: "Email là bắt buộc" })
@@ -45,7 +45,8 @@ const Step2Shema = z
     path: ["confirmPassword"],
   });
 
-  const Step3Shema = z.object({
+  const Step3Schema = z
+  .object({
     contest_group_stage: z.string().default("1"),
     groupMemberInfo: z
       .array(
@@ -63,7 +64,9 @@ const Step2Shema = z
             .min(1, "Số điện thoại là bắt buộc")
             .optional()
             .default(""),
-          dob: z.date({ required_error: "Ngày sinh là bắt buộc" }).optional(),
+          dob: z
+            .date({ required_error: "Ngày sinh là bắt buộc" })
+            .optional(),
           parentName: z.string().optional(),
           parentPhoneNumber: z.string().optional(),
         })
@@ -71,24 +74,32 @@ const Step2Shema = z
       .optional(),
   })
   .refine((data) => {
-    // Nếu chọn bảng nhóm thì phải nhập thông tin thành viên
-    if (data.contest_group_stage == "5") {
-      // Kiểm tra xem có đủ thông tin cho tất cả thành viên không
-      return data.groupMemberInfo && data.groupMemberInfo.every(member => {
-        return member.name && member.schoolName && member.phone && member.dob;
-      });
+    // If 'contest_group_stage' is "5" (group stage), require full member info
+    if (data.contest_group_stage === "5") {
+      return (
+        data.groupMemberInfo &&
+        data.groupMemberInfo.every((member) => {
+          return (
+            member.name.trim() && 
+            member.schoolName.trim() && 
+            member.phone.trim() && 
+            member.dob
+          );
+        })
+      );
     }
+    // If not group stage, clear out the groupMemberInfo array
     data.groupMemberInfo = [];
-    return true; // Nếu không chọn bảng nhóm thì không bắt buộc nhập thành viên
+    return true;
   }, {
     message: "Bạn phải nhập đầy đủ thông tin thành viên khi chọn thi nhóm",
     path: ["groupMemberInfo"],
   });
 
 export const wizardSchema = z.object({
-  stepOne: Step1Shema,
-  stepTwo: Step2Shema,
-  stepThree: Step3Shema,
+  stepOne: Step1Schema,
+  stepTwo: Step2Schema,
+  stepThree: Step3Schema,
 });
 
 export type WizardSchema = z.infer<typeof wizardSchema>;
