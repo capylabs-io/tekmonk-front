@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import {Link as LinkToScroll} from "react-scroll";
+import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 
 interface TimeLeft {
   days: number;
@@ -57,16 +58,15 @@ export const Clock = ({
   const [showDialog, setShowDialog] = useState(false);
   const [isContestStarted, setIsContestStarted] = useState(false);
   const [isContestStart, setIsContestStart] = useState(true);
+  const [contestStartTime, setContestStartTime] = useState<Date | undefined>(undefined);
 
-  const getContestGroupStage = useUserStore(
-    (state) => state.getContestGroupStage
-  );
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
 
   const [timeLeft, setTimeLeft] = useState(
     calculateTimeLeft(getRelevantTime(startTime, endTime))
   );
   const [contestTimeLeft, setContestTimeLeft] = useState(
-    calculateTimeLeft(new Date(getContestGroupStage()?.startTime || 0))
+    calculateTimeLeft(contestStartTime || new Date(0))
   );
   const isConnected = useUserStore((state) => state.isConnected);
 
@@ -78,6 +78,14 @@ export const Clock = ({
   ];
 
   useEffect(() => {
+    const fetContestGroupStage = async () => {
+      const data = await getContestGroupStageByCandidateNumber(
+        candidateNumber || ""
+      )
+      setContestStartTime(new Date(data.startTime));
+    }
+
+    fetContestGroupStage();
     const timer = setInterval(() => {
       const currentTime = new Date();
       if (currentTime >= new Date(startTime) && !isContestStarted) {
@@ -87,7 +95,7 @@ export const Clock = ({
       const targetTime = isContestStarted ? endTime : startTime;
       setTimeLeft(calculateTimeLeft(new Date(targetTime)));
       setContestTimeLeft(
-        calculateTimeLeft(new Date(getContestGroupStage()?.startTime || 0))
+        calculateTimeLeft(new Date(contestStartTime || 0))
       );
     }, 1000);
 
@@ -95,11 +103,10 @@ export const Clock = ({
   }, [startTime, endTime, isContestStarted]);
 
   const handleExam = () => {
-    const startTimeContest = getContestGroupStage()?.startTime;
-    if (!startTimeContest || startTimeContest == null) {
+    if (!contestStartTime || contestStartTime == null) {
       return;
     }
-    if (new Date() < new Date(startTimeContest)) {
+    if (new Date() < new Date(contestStartTime)) {
       setIsContestStart(false);
       return;
     }

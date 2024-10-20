@@ -13,12 +13,15 @@ import BlurFade from "@/components/ui/blur-fade";
 import { Share } from "lucide-react";
 import { shareOnMobile } from "react-mobile-share";
 import { getContest } from "@/requests/contest";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Contest() {
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
+  
+  
 
   useEffect(() => {
     const fetchContestData = async () => {
@@ -30,6 +33,8 @@ export default function Contest() {
     };
 
     fetchContestData();
+
+    
 
     setIsClient(true);
 

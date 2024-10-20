@@ -72,6 +72,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
       const contestEntry = await getOneContestEntry(
         useUserStore.getState().candidateNumber || ""
       );
+      console.log("contestEntry: ", contestEntry);
       const contestSubmission = await getContestSubmissionByContestEntry(
         contestEntry.id
       );
