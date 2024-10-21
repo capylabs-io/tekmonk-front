@@ -43,6 +43,7 @@
     "react-draft-wysiwyg": "^1.15.0",
     "react-hook-form": "^7.53.0",
     "react-mobile-share": "^2.2.3",
+    "react-quill": "^2.0.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.3",
     "react-scroll": "^1.9.0",
@@ -77,5 +78,8 @@
     "prettier": "^2.7.1",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
+  },
+  "overrides": {
+    "quill": "^2.0.2"
   }
 }

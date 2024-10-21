@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogContentNoClose,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/common/Dialog";
 import { DataContestSubmission } from "@/types/contestSubmit";
@@ -144,9 +145,14 @@ const FormSubmitContest = React.forwardRef<
         </div>
       </DialogTrigger>
       <DialogTitle className="hidden">Nộp bài thi</DialogTitle>
+      <DialogDescription className="hidden">
+        Lưu ý: Mỗi thí sinh chỉ được nộp bài thi một lần. Bài dự thi không
+        thể xoá hoặc chỉnh sửa sau khi đã nộp. Vui lòng kiểm tra kĩ trước
+        khi đăng tải.
+      </DialogDescription>
       <DialogContent aria-describedby="dialog-description"></DialogContent>
       <DialogContentNoClose 
-        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto max-mobile:max-h-screen pt-2 pb-0 max-h-screen overflow-y-auto"
+        className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto pt-2 pb-0 max-h-screen overflow-y-auto flex flex-col"
         aria-describedby="dialog-description"
       >
         <div id="dialog-description" className="sr-only">
@@ -162,7 +168,7 @@ const FormSubmitContest = React.forwardRef<
             khi đăng tải.
           </p>
         </div>
-        <section className="px-6">
+        <section className="px-6 h-full overflow-y-auto">
           <InputField
             title="Tên dự án"
             type="text"
@@ -216,11 +222,12 @@ const FormSubmitContest = React.forwardRef<
               control={control}
               error={errors.description?.message}
               type="text-area"
+              customClassNames="transition-all ease-linear min-h-[100px]"
               placeholder="Viết vài dòng giới thiệu tổng quan dự án"
             />
           </div>
         </section>
-        <footer className="flex flex-wrap items-center sm:justify-between gap-2 p-2 py-4 gap-1 sm:px-6 border-t border-gray-200 justify-center">
+        <footer className="flex flex-wrap items-center sm:justify-between p-2 py-4 gap-1 sm:px-6 border-t border-gray-200 justify-center">
           <Button
             className="rounded-[4rem] border border-gray-300 sm:w-[280px]"
             outlined={true}

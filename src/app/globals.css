@@ -170,3 +170,28 @@ h6 {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
 }
+
+/* quill editor */
+.ql-editor {
+  @apply text-bodyMd font-normal not-italic; 
+}
+
+.ql-viewer {
+  @apply text-bodyMd font-normal not-italic;
+}
+
+.ql-viewer * {
+  all: revert;
+}
+
+.ql-editor[contenteditable="true"]::before {
+  content: attr(data-placeholder);
+  font-style: normal !important;
+  color: #9CA3AF !important;
+  @apply text-lg font-normal outline-none;
+}
+
+.ql-editor[contenteditable="true"]:focus::before,
+.ql-editor:not(.ql-blank)::before {
+  content: ''; /* Remove placeholder when focused or has content */
+}

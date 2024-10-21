@@ -11,6 +11,7 @@ export type ContestSubmission = {
     createdAt: string;
     url?: string;
     source?: any;
+    QualifiedExam: boolean | null;
 }
 
 export type DataContestSubmission = {

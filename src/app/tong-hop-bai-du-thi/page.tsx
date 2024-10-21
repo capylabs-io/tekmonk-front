@@ -40,11 +40,18 @@ import { useTagStore } from '@/store/TagStore';
 import { get } from 'lodash';
 import Tag from "@/components/contest/Tag";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { SearchBar, SearchOption } from "@/components/common/SearchBar";
 
 enum SearchType {
   TAG = "tag",
   CANDIDATE_NUMBER = "candidateNumber",
 }
+
+// Define search options
+const searchOptions: SearchOption[] = [
+  { value: "tag", label: "Tag" },
+  { value: "candidateNumber", label: "Số báo danh" },
+];
 
 export default function SearchInterface() {
   const router = useRouter();
@@ -57,7 +64,6 @@ export default function SearchInterface() {
   const [searchResults, setSearchResults] = useState<ContestSubmission[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  // const [loading, setLoading] = useState(true);
   const [searchType, setSearchType] = useState<SearchType>(SearchType.CANDIDATE_NUMBER);
 
   const [hideLoading, showLoading, loading] = useLoadingStore((state) => [state.hide,state.show, state.isShowing])
@@ -65,23 +71,22 @@ export default function SearchInterface() {
 
   const fetchData = async () => {
     try {
-      showLoading()
+      showLoading();
       const response = await getContestSubmissionPagination(
         page,
         12,
         searchType === SearchType.CANDIDATE_NUMBER ? debouncedSearch : "",
         searchType === SearchType.TAG ? debouncedTag : ""
       );
-      console.log(response)
       setSearchResults(response.data);
-      const totalPages = Math.ceil(response.meta.pagination.total / 12);
-      setTotalPages(totalPages);
+      setTotalPages(Math.ceil(response.meta.pagination.total / 12));
     } catch (error) {
-      console.log(error);
-    }finally{
-      hideLoading( )
+      console.error("Error fetching data:", error);
+    } finally {
+      hideLoading();
     }
   };
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
@@ -114,19 +119,16 @@ export default function SearchInterface() {
   };
 
   useEffect(() => {
-    // Check for a stored tag when the component mounts
     if (selectedTag) {
       setTag(selectedTag);
       setSearchType(SearchType.TAG);
-      setSelectedTag(null); // Clear the stored tag after using it
+      setSelectedTag(null);
     }
   }, [selectedTag, setSelectedTag]);
 
   useEffect(() => {
     fetchData();
   }, [page, debouncedSearch, debouncedTag, searchType]);
-
- 
 
   const SkeletonCard = () => (
     <div className="hover:cursor-pointer">
@@ -156,38 +158,14 @@ export default function SearchInterface() {
         style={{ objectFit: "contain" }}
         quality={100}
       />
-      <div className="sm:w-[500px] flex items-center border rounded-lg h-12 sm:mx-auto pr-3 overflow-hidden mx-3">
-        <Select value={searchType} onValueChange={handleSearchTypeChange}>
-          <SelectTrigger className="w-[240px] border-0 border-r pl-3 rounded-none focus:outline-none focus:ring-0">
-            <SelectValue placeholder="Tìm kiếm theo" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            <SelectGroup>
-              <SelectLabel>Loại</SelectLabel>
-              <SelectItem value={SearchType.TAG}>Tag</SelectItem>
-              <SelectItem value={SearchType.CANDIDATE_NUMBER}>Số báo danh</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <Input
-          type="text"
-          placeholder="Tìm kiếm bài thi"
-          className="w-full h-full ml-1 py-2 text-bodyLg border-none rounded-none focus-visible:outline-none focus-visible:ring-0"
-          value={searchType === SearchType.TAG ? tag : search}
-          onChange={(e) => handleSearchValue(e.target.value)}
-        />
-        <svg
-          className="h-8 w-8 text-gray-400"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-      </div>
+      <SearchBar
+        searchOptions={searchOptions}
+        searchType={searchType}
+        searchValue={searchType === SearchType.TAG ? tag : search}
+        onSearchTypeChange={handleSearchTypeChange}
+        onSearchValueChange={handleSearchValue}
+        placeholder="Tìm kiếm bài thi"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
         {loading

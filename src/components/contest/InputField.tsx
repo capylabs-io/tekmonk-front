@@ -1,7 +1,9 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useMemo } from "react";
 import { TextArea } from "@/components/common/TextArea";
-import { Controller } from "react-hook-form"; // Import Controller from react-hook-form
+import { Controller } from "react-hook-form";
 import { Input } from "@/components/contest/Input";
+import 'react-quill/dist/quill.bubble.css';
+import dynamic from "next/dynamic";
 
 type Props = {
   title: string;
@@ -32,6 +34,7 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
     },
     ref // Forwarded ref
   ) => {
+    const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
     return (
       <div
         className={`flex flex-wrap sm:flex-nowrap items-center ${customClassNames}`}
@@ -47,11 +50,12 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
               control={control}
               render={({ field }) =>
                 type === "text-area" ? (
-                  <TextArea
-                    {...field}
+                  <ReactQuill
+                    theme="bubble"
+                    value={field.value || value || ''}
+                    className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px]"
+                    onChange={field.onChange}
                     placeholder={placeholder}
-                    customInputClassName={`w-full ${customInputClassNames}`}
-                    ref={ref}
                   />
                 ) : (
                   <Input
@@ -65,12 +69,12 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
               }
             />
           ) : type === "text-area" ? (
-            <TextArea
+            <ReactQuill
+              theme="snow"
+              className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px] transition-all ease-linear"
               value={value}
               onChange={() => {}} // Handle value change as needed
               placeholder={placeholder}
-              customInputClassName={`w-full ${customInputClassNames}`}
-              ref={ref}
             />
           ) : (
             <Input
