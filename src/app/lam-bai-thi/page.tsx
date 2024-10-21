@@ -117,7 +117,7 @@ const ContestGroupStage = ({contestGroupStage} : any) =>  {
               style={{ height: "calc(100vh - 50px)" }}
             >
               <iframe
-                src={contestGroupStage && contestGroupStage.contestEntryFile[0].url}
+                src={contestGroupStage?.contestEntryFile?.[0].url ? contestGroupStage?.contestEntryFile?.[0].url : "/pdf-test.pdf"}
                 className="w-full h-full"
                 title="Exam PDF"
               />
