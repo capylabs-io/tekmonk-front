@@ -126,7 +126,7 @@ export default function RegisterContest() {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     } else {
-      router.push("/cuoc-thi");
+      router.push("/");
     }
   };
 
@@ -158,7 +158,7 @@ export default function RegisterContest() {
 
   const handleBackToContest = () => {
     clear();
-    router.push("/cuoc-thi");
+    router.push("/");
   };
 
   const handleAccept = () => {
@@ -305,6 +305,6 @@ export default function RegisterContest() {
       </div>
     </>
   ) : (
-    router.push("/cuoc-thi")
+    router.push("/")
   );
 }

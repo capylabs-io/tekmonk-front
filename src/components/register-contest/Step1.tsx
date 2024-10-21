@@ -190,10 +190,29 @@ export const Step1 = () => {
             name="stepOne.parentPhoneNumber"
             render={({ field: { value, onChange }, fieldState }) => (
               <Input
-                type="number"
+                type="text"
                 value={value}
                 onChange={onChange}
                 placeholder="00-000-0000"
+                customClassNames="mt-2"
+                error={fieldState && fieldState.error?.message}
+              />
+            )}
+          />
+        </div>
+        <div className="">
+          <Label className="text-gray-950 text-SubheadSm">
+            Email của phụ huynh <span className="text-red-500">*</span>
+          </Label>
+          <Controller
+            control={control}
+            name="stepOne.parentEmail"
+            render={({ field: { value, onChange }, fieldState }) => (
+              <Input
+                type="text"
+                value={value}
+                onChange={onChange}
+                placeholder="Câu trả lời"
                 customClassNames="mt-2"
                 error={fieldState && fieldState.error?.message}
               />

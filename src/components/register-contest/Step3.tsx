@@ -13,8 +13,12 @@ import { WizardSchema } from "@/validation/ContestRegister";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { Input } from "../common/Input";
+import { get } from "lodash";
+type ValuePiece = Date | null;
 
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 export const Step3 = () => {
+  const [value, onChange] = useState<Value>(new Date());
   const {
     control,
     trigger,
@@ -40,7 +44,7 @@ export const Step3 = () => {
         name: "",
         schoolName: "",
         phone: "",
-        dob: undefined,
+        dob: null,
         parentName: "",
         parentPhoneNumber: "",
       });
@@ -48,39 +52,29 @@ export const Step3 = () => {
   };
 
   const deleteTeamMember = (indexToRemove: number) => {
-    console.log("Removing member at index", indexToRemove);
-    // Get the current members from the form
     const currentMembers = getValues("stepThree.groupMemberInfo");
+    if (currentMembers && currentMembers.length == 1) return;
 
-    if(currentMembers && currentMembers.length == 1) return;
-  
-    // Ensure there is more than one member
     if (currentMembers && currentMembers.length > 1) {
-      // Remove the member at the specified index
-      const updatedMembers = currentMembers.filter((_, i) => i !== indexToRemove);
-  
-      // Reset the form with the updated members
+      const updatedMembers = currentMembers.filter(
+        (_, i) => i !== indexToRemove
+      );
+
       setValue("stepThree.groupMemberInfo", updatedMembers);
-  
-      // Optionally trigger validation
+
       trigger("stepThree.groupMemberInfo");
     }
   };
-  
-  
 
   const checkContestGroupStage = () => {
     const groupStage = getValues("stepThree.contest_group_stage");
     setValueGroup(groupStage);
     if (groupStage !== "5") {
-      // Clear groupMemberInfo if the selected stage isn't the group option
       setValue("stepThree.groupMemberInfo", []);
     }
   };
 
   useEffect(() => {
-    // setValue("stepThree.groupMemberInfo", []);
-
     if (fields.length == 0 && valueGroup == "5") {
       console.log("Auto-adding a team member");
       addTeamMember();
@@ -236,20 +230,17 @@ export const Step3 = () => {
                       name={`stepThree.groupMemberInfo.${index}.name`}
                       render={({
                         field: { value, onChange },
-                        fieldState: { error },
+                        fieldState
                       }) => (
                         <>
                           <Input
                             type="text"
-                            value={member.name ? member.name :  value}
+                            value={member.name ? member.name : value}
                             onChange={onChange}
                             placeholder="Câu trả lời"
                             customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
-                            error={error?.message}
+                            error={fieldState && fieldState.error?.message}
                           />
-                          {error && (
-                            <p className="mt-1 text-red-500">{error.message}</p>
-                          )}
                         </>
                       )}
                     />
@@ -264,7 +255,7 @@ export const Step3 = () => {
                       render={({ field: { value, onChange }, fieldState }) => (
                         <Input
                           type="text"
-                          value={member.schoolName ? member.schoolName :  value}
+                          value={member.schoolName ? member.schoolName : value}
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
@@ -283,12 +274,16 @@ export const Step3 = () => {
                       name={`stepThree.groupMemberInfo.${index}.phone`}
                       render={({ field: { value, onChange }, fieldState }) => (
                         <Input
-                          type="number"
-                          value={member.phone ? member.phone :  value}
+                          type="text"
+                          value={member.phone ? member.phone : value}
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
-                          error={fieldState && fieldState.error?.message}
+                          error={get(
+                            errors,
+                            `stepThree.groupMemberInfo.${index}.phone.message`,
+                            ""
+                          )}
                         />
                       )}
                     />
@@ -301,20 +296,25 @@ export const Step3 = () => {
                     <Controller
                       control={control}
                       name={`stepThree.groupMemberInfo.${index}.dob`}
-                      render={({ field: { value, onChange }, fieldState }) => (
-                        <DatePicker
-                          className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[52.5px] text-lg focus-visible:outline-none"
-                          onChange={onChange}
-                          value={member.dob ? member.dob :  value}
-                        />
+                      render={({ field: { onChange, value }, fieldState }) => (
+                        <div>
+                          <DatePicker
+                            className={`w-full rounded-xl border ${
+                              fieldState.error
+                                ? "border-red-500"
+                                : "border-grey-300"
+                            } bg-grey-50 p-2 outline-none min-h-[52.5px] text-lg focus-visible:outline-none`}
+                            onChange={onChange}
+                            value={member.dob ? member.dob : value}
+                          />
+                          {fieldState.error && (
+                            <p className="text-red-500 text-sm">
+                              {fieldState.error.message}
+                            </p>
+                          )}
+                        </div>
                       )}
                     />
-                    <div className="mt-2 text-red-600 text-bodyMd">
-                      {
-                        errors?.stepThree?.groupMemberInfo?.[index]?.dob
-                          ?.message
-                      }
-                    </div>
                   </div>
                   <div>
                     <Label className="text-gray-950 text-SubheadSm">
@@ -326,7 +326,7 @@ export const Step3 = () => {
                       render={({ field: { value, onChange }, fieldState }) => (
                         <Input
                           type="text"
-                          value={member.parentName ? member.parentName :  value}
+                          value={member.parentName ? member.parentName : value}
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
@@ -344,8 +344,12 @@ export const Step3 = () => {
                       name={`stepThree.groupMemberInfo.${index}.parentPhoneNumber`}
                       render={({ field: { value, onChange }, fieldState }) => (
                         <Input
-                          type="number"
-                          value={member.parentPhoneNumber ? member.parentPhoneNumber :  value}
+                          type="text"
+                          value={
+                            member.parentPhoneNumber
+                              ? member.parentPhoneNumber
+                              : value
+                          }
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"

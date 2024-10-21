@@ -14,7 +14,7 @@ const home: React.FC = () => {
   //set for contest page
   const router = useRouter();
   useEffect(() => {
-    router.push('/cuoc-thi')
+    router.push('/')
   },[])
   return (
     <>

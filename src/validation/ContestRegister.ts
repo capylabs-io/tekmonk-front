@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const phoneRegex = /^(\+84|0)\d{9,10}$/;
+
 const Step1Schema = z.object({
   fullName: z
     .string({ required_error: "Họ tên học sinh là bắt buộc" })
@@ -21,7 +23,12 @@ const Step1Schema = z.object({
     .min(1, "Họ và tên phụ huynh là bắt buộc"),
   parentPhoneNumber: z
     .string({ required_error: "Số điện thoại của phụ huynh là bắt buộc" })
-    .min(1, "Số điện thoại của phụ huynh là bắt buộc"),
+    .min(1, "Số điện thoại của phụ huynh là bắt buộc")
+    .regex(phoneRegex, "Số điện thoại không hợp lệ"),
+  parentEmail: z
+    .string({ required_error: "Email của phụ huynh là bắt buộc" })
+    .email("Email không hợp lệ")
+    .min(1, "Email là bắt buộc"),
 });
 
 const Step2Schema = z
@@ -53,7 +60,8 @@ const Step2Schema = z
         z.object({
           name: z
             .string({ required_error: "Tên thành viên là bắt buộc" })
-            .min(1, "Tên thành viên tối thiểu là 1 ký tự"),
+            .min(5, "Tên thành viên tối thiểu là 5 ký tự").optional()
+            .default(""),
           schoolName: z
             .string({ required_error: "Trường học là bắt buộc" })
             .min(1, "Trường học là bắt buộc")
@@ -62,39 +70,18 @@ const Step2Schema = z
           phone: z
             .string({ required_error: "Số điện thoại là bắt buộc" })
             .min(1, "Số điện thoại là bắt buộc")
+            .regex(phoneRegex, "Số điện thoại không hợp lệ")
             .optional()
             .default(""),
           dob: z
-            .date({ required_error: "Ngày sinh là bắt buộc" })
-            .optional(),
+            .date({ required_error: "Ngày sinh là bắt buộc" }),
           parentName: z.string().optional(),
+          //parentPhoneNumber only number
           parentPhoneNumber: z.string().optional(),
         })
       )
       .optional(),
   })
-  .refine((data) => {
-    // If 'contest_group_stage' is "5" (group stage), require full member info
-    if (data.contest_group_stage === "5") {
-      return (
-        data.groupMemberInfo &&
-        data.groupMemberInfo.every((member) => {
-          return (
-            member.name.trim() && 
-            member.schoolName.trim() && 
-            member.phone.trim() && 
-            member.dob
-          );
-        })
-      );
-    }
-    // If not group stage, clear out the groupMemberInfo array
-    data.groupMemberInfo = [];
-    return true;
-  }, {
-    message: "Bạn phải nhập đầy đủ thông tin thành viên khi chọn thi nhóm",
-    path: ["groupMemberInfo"],
-  });
 
 export const wizardSchema = z.object({
   stepOne: Step1Schema,

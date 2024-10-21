@@ -7,10 +7,10 @@ import { persist } from "zustand/middleware";
 // Định nghĩa kiểu State và Actions
 type State = {
   jwt: string | null;
+  refreshToken: string | null;
   userInfo: User | null;
   userCertificate: Certificate[] | null;
   candidateNumber: string | null;
-  contest_group_stage: ContestGroupStage | null;
 };
 
 type Actions = {
@@ -19,16 +19,17 @@ type Actions = {
   clear: () => void;
   getMe: () => Promise<void>;
   isConnected: () => boolean;
-  getContestGroupStage: () => ContestGroupStage | null;
+  setRefreshToken: (refreshToken: string) => void;
+  setJwt: (jwt: string) => void;
 };
 
 // Khởi tạo giá trị mặc định cho state
 const defaultStates: State = {
   jwt: null,
+  refreshToken: null,
   userInfo: null,
   userCertificate: null,
   candidateNumber: null,
-  contest_group_stage: null
 };
 
 // Tạo store sử dụng Zustand
@@ -44,9 +45,9 @@ export const useUserStore = create<State & Actions>()(
         }
         set({
           jwt: response.jwt,
+          refreshToken: response.refreshToken,
           userInfo: response.user,
           candidateNumber: response?.candidateNumber,
-          contest_group_stage: response?.contest_group_stage
         });
         return response.user;
       },
@@ -78,9 +79,12 @@ export const useUserStore = create<State & Actions>()(
           console.error("Error fetching user info:", error);
         }
       },
-      getContestGroupStage: () => {
-        return get().contest_group_stage;
-      }
+      setRefreshToken: (refreshToken) => {
+        set({ refreshToken : refreshToken });
+      },
+      setJwt: (jwt) => {
+        set({ jwt : jwt });
+      },
     }),
     { name: "userStore" }
   )

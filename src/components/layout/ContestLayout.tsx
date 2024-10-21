@@ -64,7 +64,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     router.push("/login");
   };
   const redirectContest = () => {
-    router.push("/cuoc-thi");
+    router.push("/");
   };
 
   const handleRedirectToMyContest = async () => {

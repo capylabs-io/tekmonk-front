@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import {Link as LinkToScroll} from "react-scroll";
+import { Link as LinkToScroll } from "react-scroll";
 import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 
 interface TimeLeft {
@@ -58,7 +58,9 @@ export const Clock = ({
   const [showDialog, setShowDialog] = useState(false);
   const [isContestStarted, setIsContestStarted] = useState(false);
   const [isContestStart, setIsContestStart] = useState(true);
-  const [contestStartTime, setContestStartTime] = useState<Date | undefined>(undefined);
+  const [contestStartTime, setContestStartTime] = useState<Date | undefined>(
+    undefined
+  );
 
   const candidateNumber = useUserStore((state) => state.candidateNumber);
 
@@ -79,11 +81,12 @@ export const Clock = ({
 
   useEffect(() => {
     const fetContestGroupStage = async () => {
+      if (!candidateNumber) return;
       const data = await getContestGroupStageByCandidateNumber(
         candidateNumber || ""
-      )
+      );
       setContestStartTime(new Date(data.startTime));
-    }
+    };
 
     fetContestGroupStage();
     const timer = setInterval(() => {
@@ -94,9 +97,7 @@ export const Clock = ({
 
       const targetTime = isContestStarted ? endTime : startTime;
       setTimeLeft(calculateTimeLeft(new Date(targetTime)));
-      setContestTimeLeft(
-        calculateTimeLeft(new Date(contestStartTime || 0))
-      );
+      setContestTimeLeft(calculateTimeLeft(new Date(contestStartTime || 0)));
     }, 1000);
 
     return () => clearInterval(timer);
@@ -110,7 +111,7 @@ export const Clock = ({
       setIsContestStart(false);
       return;
     }
-    router.push("/cuoc-thi/lam-bai-thi");
+    router.push("/lam-bai-thi");
   };
 
   const isRegisterDisabled = new Date() > new Date(endTime);
@@ -147,24 +148,33 @@ export const Clock = ({
                 </DialogTitle>
               </DialogHeader>
               <div className="w-full border-t border-gray-300 "></div>
+
               <div className="flex flex-col items-center justify-center h-[110px]">
-                <div className="text-bodyLg">Mở cổng thi sau</div>
-                <div className="text-gray-700">
-                  <span className="text-SubheadLg text-gray-950">
-                    {contestTimeLeft.days}{" "}
-                    <span className="text-bodyLg">Ngày</span>{" "}
-                    {contestTimeLeft.hours}{" "}
-                    <span className="text-bodyLg">Giờ</span>{" "}
-                    {contestTimeLeft.minutes}{" "}
-                    <span className="text-bodyLg">Phút</span>{" "}
-                    {contestTimeLeft.seconds}{" "}
-                    <span className="text-bodyLg">Giây</span>
-                  </span>
-                </div>
-                {!isContestStart && (
-                  <div className="text-bodyLg text-red-700">
-                    Chưa đến giờ thi!
+                {contestStartTime && new Date() > new Date(contestStartTime) ? (
+                  <div className="text-gray-700 text-xl">
+                    Cuộc thi đã bắt đầu
                   </div>
+                ) : (
+                  <>
+                    <div className="text-bodyLg">Mở cổng thi sau</div>
+                    <div className="text-gray-700">
+                      <span className="text-SubheadLg text-gray-950">
+                        {contestTimeLeft.days}{" "}
+                        <span className="text-bodyLg">Ngày</span>{" "}
+                        {contestTimeLeft.hours}{" "}
+                        <span className="text-bodyLg">Giờ</span>{" "}
+                        {contestTimeLeft.minutes}{" "}
+                        <span className="text-bodyLg">Phút</span>{" "}
+                        {contestTimeLeft.seconds}{" "}
+                        <span className="text-bodyLg">Giây</span>
+                      </span>
+                    </div>
+                    {!isContestStart && (
+                      <div className="text-bodyLg text-red-700">
+                        Chưa đến giờ thi!
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
               <div className="w-full border-t border-gray-300 "></div>
@@ -174,8 +184,8 @@ export const Clock = ({
                     outlined={true}
                     className="w-[156px] h-[48px] rounded-[3rem] border"
                     onClick={() => {
-                      setIsContestStart(true)
-                      setShowDialog(false)
+                      setIsContestStart(true);
+                      setShowDialog(false);
                     }}
                   >
                     Quay lại
@@ -207,7 +217,6 @@ export const Clock = ({
             Thể lệ
           </Button>
         </LinkToScroll>
-        
       </div>
 
       <div className="mt-[52px] text-2xl font-bold text-gray-600">
@@ -219,10 +228,16 @@ export const Clock = ({
       <div className="mt-[26px] flex justify-center gap-4">
         {timeLeftComponents.map(({ label, value }, index) => (
           <div key={index} className="flex flex-col items-center">
-            <CardContest className="w-[200px] h-[168px] border border-gray-200 bg-white shadow-custom-gray flex flex-col items-center justify-center">
-              <div className="text-SubheadLg text-gray-500">{label}</div>
-              <div className="text-primary-700 text-[64px] font-dela">
-                {value.toString().padStart(2, "0")}
+            <CardContest
+              className=" w-[200px] h-[168px] flex flex-col items-center justify-center border border-gray-200 relative shadow-custom-gray bg-white
+                        max-[865px]:w-[120px] max-[865px]:h-[120px] 
+                        max-[545px]:w-[80px] max-[545px]:h-[80px] "
+            >
+              <div className="text-SubheadLg max-[865px]:text-sm max-[865px]:font-bold max-mobile:text-bodyXs text-gray-500">
+                {label}
+              </div>
+              <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
+                {value !== undefined ? value.toString().padStart(2, "0") : "00"}
               </div>
             </CardContest>
           </div>

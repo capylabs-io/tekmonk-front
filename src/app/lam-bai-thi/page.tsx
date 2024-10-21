@@ -5,21 +5,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/common/Button";
 import FormSubmitContest from "@/components/contest/FormSubmitContest";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/UserStore";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import GroupStageGuard from "@/components/hoc/GroupStageGuard";
 
-export default function ContestEntry() {
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+const ContestGroupStage = ({contestGroupStage} : any) =>  {
   const router = useRouter();
   const [timeOut, setTimeOut] = useState(false);
-  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<Date | undefined>();
-  const [contestGroupStage, setContestGroupStage] = useState<any>(undefined);
-
-  interface TimeLeft {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }
+  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<
+    Date | undefined
+  >(new Date(contestGroupStage.endTime));
+  // const [contestGroupStage, setContestGroupStage] = useState<any>(undefined);
 
   const calculateTimeLeft = (targetDate: Date): TimeLeft => {
     const difference = +targetDate - +new Date();
@@ -37,52 +38,56 @@ export default function ContestEntry() {
     return timeLeft;
   };
 
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
   useEffect(() => {
-    const fetchContestGroupStage = async () => {
-      const data = await getContestGroupStageByCandidateNumber(candidateNumber || "");
-      setGroupStageTimeLeft(new Date(data.endTime));
-      setContestGroupStage(data);
+    if (!groupStageTimeLeft) return;
+
+    // const uri = URL.createObjectURL(contestGroupStage.contestEntryFile[0].url);
+    // console.log(uri);
+    // setFileUrl(uri);
+
+    const updateTimer = () => {
+      const newTime = calculateTimeLeft(groupStageTimeLeft);
+      setTimeLeft(newTime);
+
+      if (
+        newTime.days === 0 &&
+        newTime.hours === 0 &&
+        newTime.minutes === 0 &&
+        newTime.seconds === 0
+      ) {
+        setTimeOut(true);
+        clearInterval(timer);
+      }
     };
-    fetchContestGroupStage();
-  }, [candidateNumber]);
 
-  useEffect(() => {
-    if (groupStageTimeLeft) {
-      setTimeLeft(calculateTimeLeft(groupStageTimeLeft));
+    const timer = setInterval(updateTimer, 1000);
+    updateTimer(); // Initial call to set the time immediately
 
-      const timer = setInterval(() => {
-        setTimeLeft((prevTime) => {
-          const newTime = calculateTimeLeft(groupStageTimeLeft);
-
-          if (newTime.days === 0 && newTime.hours === 0 && newTime.minutes === 0 && newTime.seconds === 0) {
-            setTimeOut(true);
-            clearInterval(timer);
-          }
-
-          return newTime;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
-    }
+    return () => clearInterval(timer);
   }, [groupStageTimeLeft]);
 
   const formatTime = (timeLeft: TimeLeft) => {
     const { days, hours, minutes, seconds } = timeLeft;
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   };
+  
 
   return (
-    <div className="min-h-screen max-w-[768px] mx-auto">
+    <div className="min-h-screen max-w-[768px] mx-auto bg-white mb-10">
       <Card className="max-w-4xl mx-auto p-0">
         <CardContent className="p-0">
           <div className="">
             <div className="flex justify-between items-center h-[64px] px-8 py-5">
-              <div className="text-SubheadLg text-primary-900">BẢNG {contestGroupStage && contestGroupStage.code}</div>
+              <div className="text-SubheadLg text-primary-900">
+                BẢNG {contestGroupStage.code}
+              </div>
               <div className="text-SubheadLg text-primary-900">
                 {formatTime(timeLeft)}
               </div>
@@ -93,7 +98,7 @@ export default function ContestEntry() {
                 outlined={true}
                 style={{ borderRadius: "4rem" }}
                 className="w-[110px] h-[40px] rounded-[3rem] border"
-                onClick={() => router.push("/cuoc-thi")}
+                onClick={() => router.push("/")}
               >
                 Quay lại
               </Button>
@@ -109,13 +114,14 @@ export default function ContestEntry() {
             </div>
             <div
               className="bg-white overflow-hidden"
-              style={{ height: "calc(100vh - 200px)" }}
+              style={{ height: "calc(100vh - 50px)" }}
             >
               <iframe
-                src="/placeholder.pdf"
+                src={contestGroupStage && contestGroupStage.contestEntryFile[0].url}
                 className="w-full h-full"
                 title="Exam PDF"
               />
+
             </div>
           </div>
         </CardContent>
@@ -123,3 +129,4 @@ export default function ContestEntry() {
     </div>
   );
 }
+export default GroupStageGuard(ContestGroupStage);

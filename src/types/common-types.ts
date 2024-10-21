@@ -56,6 +56,7 @@ export type ContestGroupStage = {
   contestFormat?: string;
   startTime: string;
   endTime: string;
+  
 }
 
 export interface Certificate {
