@@ -10,11 +10,13 @@ import { Post } from "@/components/home/Post";
 import WithAuth from "@/components/hoc/WithAuth";
 import { useRouter } from "next/navigation";
 
-const home: React.FC = () => {
+const Home = () => {
   //set for contest page
   const router = useRouter();
   useEffect(() => {
-    router.push('/')
+    if(router) {
+      router.push('/')
+    }
   },[])
   return (
     <>
@@ -98,4 +100,4 @@ const home: React.FC = () => {
   );
 };
 
-export default WithAuth(home);
+export default WithAuth(Home);

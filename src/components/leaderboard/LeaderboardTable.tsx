@@ -13,6 +13,7 @@ import { MoreHorizontal } from "lucide-react";
 import classNames from "classnames";
 import { LeaderboardData } from "@/types/common-types";
 import { Pagination } from "../common/Pagination";
+import { get } from "lodash";
 type Props = {
   data: LeaderboardData[];
 };
@@ -61,7 +62,7 @@ export const LeaderboardTable = ({ data }: Props) => {
                   <div className="text-SubheadSm !font-medium">
                     {row?.user.username}
                   </div>
-                  <div className="text-gray-500">@{row?.user.twitterName}</div>
+                  <div className="text-gray-500">@{get(row?.user, "twitterName")}</div>
                 </div>
               </TableCell>
               <TableCell className="text-center">

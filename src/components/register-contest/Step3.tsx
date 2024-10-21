@@ -44,7 +44,7 @@ export const Step3 = () => {
         name: "",
         schoolName: "",
         phone: "",
-        dob: null,
+        dob: new Date(),
         parentName: "",
         parentPhoneNumber: "",
       });
