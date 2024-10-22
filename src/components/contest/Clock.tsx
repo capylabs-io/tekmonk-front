@@ -15,6 +15,7 @@ import {
 } from "../ui/dialog";
 import { Link as LinkToScroll } from "react-scroll";
 import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import { get } from "lodash";
 
 interface TimeLeft {
   days: number;
@@ -61,6 +62,7 @@ export const Clock = ({
   const [contestStartTime, setContestStartTime] = useState<Date | undefined>(
     undefined
   );
+  const [contestGroupStage, setContestGroupStage] = useState<any>(undefined);
 
   const candidateNumber = useUserStore((state) => state.candidateNumber);
 
@@ -85,6 +87,8 @@ export const Clock = ({
       const data = await getContestGroupStageByCandidateNumber(
         candidateNumber || ""
       );
+      setContestGroupStage(data);
+      console.log(data);
       setContestStartTime(new Date(data.startTime));
     };
 
@@ -144,7 +148,7 @@ export const Clock = ({
             >
               <DialogHeader className="pt-6">
                 <DialogTitle className="text-center text-SubheadLg text-primary-900 m-0 p-0">
-                  Bảng A
+                  Bảng {get(contestGroupStage, "code", "")}
                 </DialogTitle>
               </DialogHeader>
               <div className="w-full border-t border-gray-300 "></div>
