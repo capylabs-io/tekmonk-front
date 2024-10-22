@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 interface TagStore {
   selectedTag: string | null;
@@ -9,4 +9,3 @@ export const useTagStore = create<TagStore>((set) => ({
   selectedTag: null,
   setSelectedTag: (tag) => set({ selectedTag: tag }),
 }));
-

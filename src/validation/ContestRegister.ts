@@ -52,36 +52,35 @@ const Step2Schema = z
     path: ["confirmPassword"],
   });
 
-  const Step3Schema = z
-  .object({
-    contest_group_stage: z.string().default("1"),
-    groupMemberInfo: z
-      .array(
-        z.object({
-          name: z
-            .string({ required_error: "Tên thành viên là bắt buộc" })
-            .min(5, "Tên thành viên tối thiểu là 5 ký tự").optional()
-            .default(""),
-          schoolName: z
-            .string({ required_error: "Trường học là bắt buộc" })
-            .min(1, "Trường học là bắt buộc")
-            .optional()
-            .default(""),
-          phone: z
-            .string({ required_error: "Số điện thoại là bắt buộc" })
-            .min(1, "Số điện thoại là bắt buộc")
-            .regex(phoneRegex, "Số điện thoại không hợp lệ")
-            .optional()
-            .default(""),
-          dob: z
-            .date({ required_error: "Ngày sinh là bắt buộc" }),
-          parentName: z.string().optional(),
-          //parentPhoneNumber only number
-          parentPhoneNumber: z.string().optional(),
-        })
-      )
-      .optional(),
-  })
+const Step3Schema = z.object({
+  contest_group_stage: z.string().default("1"),
+  groupMemberInfo: z
+    .array(
+      z.object({
+        name: z
+          .string({ required_error: "Tên thành viên là bắt buộc" })
+          .min(5, "Tên thành viên tối thiểu là 5 ký tự")
+          .optional()
+          .default(""),
+        schoolName: z
+          .string({ required_error: "Trường học là bắt buộc" })
+          .min(1, "Trường học là bắt buộc")
+          .optional()
+          .default(""),
+        phone: z
+          .string({ required_error: "Số điện thoại là bắt buộc" })
+          .min(1, "Số điện thoại là bắt buộc")
+          .regex(phoneRegex, "Số điện thoại không hợp lệ")
+          .optional()
+          .default(""),
+        dob: z.date({ required_error: "Ngày sinh là bắt buộc" }),
+        parentName: z.string().optional(),
+        //parentPhoneNumber only number
+        parentPhoneNumber: z.string().optional(),
+      })
+    )
+    .optional(),
+});
 
 export const wizardSchema = z.object({
   stepOne: Step1Schema,

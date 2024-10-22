@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 
 type Props = {
   title: string;
-  value?: File | null; 
+  value?: File | null;
   customInputClassNames?: string;
   customClassNames?: string;
   error?: string;
-  onChange?: (file: File | null) => void; 
+  onChange?: (file: File | null) => void;
   onBlur?: () => void;
 };
 
@@ -51,13 +51,18 @@ export const InputFileUploadContest = ({
     e.stopPropagation();
     handleFileChange(null);
     if (hiddenFileInput.current) {
-      hiddenFileInput.current.value = '';
+      hiddenFileInput.current.value = "";
     }
   };
 
   return (
     <>
-      <div className={classNames("flex flex-wrap sm:flex-nowrap w-full items-start mt-2 sm:mt-5", customClassNames)}>
+      <div
+        className={classNames(
+          "flex flex-wrap sm:flex-nowrap w-full items-start mt-2 sm:mt-5",
+          customClassNames
+        )}
+      >
         <div className="w-1/4">
           <label
             htmlFor="file_input"
@@ -93,7 +98,13 @@ export const InputFileUploadContest = ({
   );
 };
 
-const FileInfo = ({ file, onRemove }: { file: File; onRemove: (e: React.MouseEvent) => void }) => (
+const FileInfo = ({
+  file,
+  onRemove,
+}: {
+  file: File;
+  onRemove: (e: React.MouseEvent) => void;
+}) => (
   <div className="flex items-center gap-2">
     <p>{file.name}</p>
     <button

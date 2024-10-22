@@ -31,7 +31,6 @@ export const Input = ({
   isSearch = false,
   customInputClassNames,
   customClassNames,
-  
 }: Props) => {
   const [showPassword, setshowPassword] = useState(false);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,11 +52,18 @@ export const Input = ({
           value &&
             !error &&
             "border-green-400 focus:border-green-400 focus:border-2",
-          customClassNames,
+          customClassNames
         )}
       >
         <div className="flex w-full items-center text-base font-bold">
-          {isSearch && <Image src="/image/contestentries/search-icon.png" alt="search icon" width={24} height={10}/>}
+          {isSearch && (
+            <Image
+              src="/image/contestentries/search-icon.png"
+              alt="search icon"
+              width={24}
+              height={10}
+            />
+          )}
           <input
             type={showPassword ? "text" : type}
             lang="en-US"

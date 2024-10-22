@@ -52,9 +52,17 @@ export const InputImgUploadContest = ({
 
   return (
     <>
-      <div className={classNames("flex flex-wrap w-full items-start", customClassNames)}>
+      <div
+        className={classNames(
+          "flex flex-wrap w-full items-start",
+          customClassNames
+        )}
+      >
         <div className="w-full sm:w-1/5 mb-1">
-          <label htmlFor="file_input" className="text-SubheadSm text-primary-950">
+          <label
+            htmlFor="file_input"
+            className="text-SubheadSm text-primary-950"
+          >
             {title}
           </label>
           <p className="text-bodySm text-gray-500">SVG, PNG, JPG</p>

@@ -69,14 +69,17 @@ const FormSubmitContest = React.forwardRef<
   });
 
   const isExistContestSubmission = async () => {
-    const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
-    const contestSubmission = await getContestSubmissionByContestEntry(contestEntry.id);
+    const contestEntry = await getOneContestEntry(
+      useUserStore.getState().candidateNumber || ""
+    );
+    const contestSubmission = await getContestSubmissionByContestEntry(
+      contestEntry.id
+    );
     return contestSubmission.data.length > 0;
-  }
+  };
 
   const onSubmit = async (data: any) => {
     try {
-
       if (await isExistContestSubmission()) {
         warn("Warning", "Bạn đã nộp bài thi rồi!");
         closeDialog();
@@ -89,14 +92,16 @@ const FormSubmitContest = React.forwardRef<
 
       const tags = data.tags.split(",").map((tag: string) => tag.trim());
 
-      const contestEntry = await getOneContestEntry(useUserStore.getState().candidateNumber || "");
+      const contestEntry = await getOneContestEntry(
+        useUserStore.getState().candidateNumber || ""
+      );
 
       const contestObj: DataContestSubmission = {
         title: data.title,
         description: data.description,
         tags: { data: tags },
         url: data.url,
-        contest_entry: contestEntry.id
+        contest_entry: contestEntry.id,
       };
 
       const result = await createContestSubmission(contestObj);
@@ -111,7 +116,9 @@ const FormSubmitContest = React.forwardRef<
         uploadPromises.push(uploadThumbnail(result.id, thumbnail));
       }
 
-      uploadPromises.push(...imgProject.map(img => uploadAssets(result.id, img)));
+      uploadPromises.push(
+        ...imgProject.map((img) => uploadAssets(result.id, img))
+      );
 
       await Promise.all(uploadPromises);
 
@@ -146,17 +153,18 @@ const FormSubmitContest = React.forwardRef<
       </DialogTrigger>
       <DialogTitle className="hidden">Nộp bài thi</DialogTitle>
       <DialogDescription className="hidden">
-        Lưu ý: Mỗi thí sinh chỉ được nộp bài thi một lần. Bài dự thi không
-        thể xoá hoặc chỉnh sửa sau khi đã nộp. Vui lòng kiểm tra kĩ trước
-        khi đăng tải.
+        Lưu ý: Mỗi thí sinh chỉ được nộp bài thi một lần. Bài dự thi không thể
+        xoá hoặc chỉnh sửa sau khi đã nộp. Vui lòng kiểm tra kĩ trước khi đăng
+        tải.
       </DialogDescription>
       <DialogContent aria-describedby="dialog-description"></DialogContent>
-      <DialogContentNoClose 
+      <DialogContentNoClose
         className="max-w-[688px] sm:rounded-[32px] max-mobile:overflow-y-auto pt-2 pb-0 max-h-screen overflow-y-auto flex flex-col"
         aria-describedby="dialog-description"
       >
         <div id="dialog-description" className="sr-only">
-          Form để nộp bài thi cuộc thi. Bao gồm các trường thông tin như tên dự án, ảnh thumbnail, ảnh mô tả, file dự án, URL, tags, và mô tả.
+          Form để nộp bài thi cuộc thi. Bao gồm các trường thông tin như tên dự
+          án, ảnh thumbnail, ảnh mô tả, file dự án, URL, tags, và mô tả.
         </div>
         <div className="px-2 sm:px-14 border-b text-center border-gray-200">
           <h4 className="text-SubheadXl text-primary-900 mb-1 md:text-xl sm:text-lg text-base">
@@ -200,7 +208,6 @@ const FormSubmitContest = React.forwardRef<
               title="URL"
               type="text"
               name="url"
-
               control={control}
               error={errors.url?.message}
               customClassNames="mt-2 sm:mt-5"

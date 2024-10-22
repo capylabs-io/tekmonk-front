@@ -62,7 +62,9 @@ export const LeaderboardTable = ({ data }: Props) => {
                   <div className="text-SubheadSm !font-medium">
                     {row?.user.username}
                   </div>
-                  <div className="text-gray-500">@{get(row?.user, "twitterName")}</div>
+                  <div className="text-gray-500">
+                    @{get(row?.user, "twitterName")}
+                  </div>
                 </div>
               </TableCell>
               <TableCell className="text-center">

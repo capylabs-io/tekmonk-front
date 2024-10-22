@@ -34,7 +34,9 @@ export function SearchBar({
   customStyle,
 }: SearchBarProps) {
   return (
-    <div className={`sm:w-[500px] flex items-center border rounded-lg h-12 sm:mx-auto pr-3 overflow-hidden mx-3 ${customStyle}`}>
+    <div
+      className={`sm:w-[500px] flex items-center border rounded-lg h-12 sm:mx-auto pr-3 overflow-hidden mx-3 ${customStyle}`}
+    >
       <Select value={searchType} onValueChange={onSearchTypeChange}>
         <SelectTrigger className="w-[240px] border-0 border-r pl-3 rounded-none focus:outline-none focus:ring-0">
           <SelectValue placeholder="Tìm kiếm theo" />

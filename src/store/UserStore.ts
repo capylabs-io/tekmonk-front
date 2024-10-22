@@ -80,10 +80,10 @@ export const useUserStore = create<State & Actions>()(
         }
       },
       setRefreshToken: (refreshToken) => {
-        set({ refreshToken : refreshToken });
+        set({ refreshToken: refreshToken });
       },
       setJwt: (jwt) => {
-        set({ jwt : jwt });
+        set({ jwt: jwt });
       },
     }),
     { name: "userStore" }

@@ -41,7 +41,7 @@ export const InputFileUpdload = ({
       <div
         className={classNames(
           "flex w-full items-center text-base font-bold gap-x-4",
-          customClassNames,
+          customClassNames
         )}
       >
         <div
@@ -57,7 +57,7 @@ export const InputFileUpdload = ({
               "border-red-500 focus:border-red-500 text-sm focus:border-2",
             value &&
               !error &&
-              "border-green-400 focus:border-green-400 focus:border-2",
+              "border-green-400 focus:border-green-400 focus:border-2"
           )}
         >
           <input

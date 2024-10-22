@@ -142,7 +142,6 @@ export default function RegisterContest() {
       case 1:
         return <Step2 />;
       case 2:
-
         return <Step3 />;
       case 3:
         return <Step4 updateStatus={handleAccept} />;

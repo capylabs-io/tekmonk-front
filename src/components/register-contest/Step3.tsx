@@ -228,10 +228,7 @@ export const Step3 = () => {
                     <Controller
                       control={control}
                       name={`stepThree.groupMemberInfo.${index}.name`}
-                      render={({
-                        field: { value, onChange },
-                        fieldState
-                      }) => (
+                      render={({ field: { value, onChange }, fieldState }) => (
                         <>
                           <Input
                             type="text"

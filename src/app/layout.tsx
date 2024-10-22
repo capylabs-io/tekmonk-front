@@ -42,9 +42,7 @@ export default function RootLayout({
       <body>
         <ToastContainer />
         <Snackbar />
-        <div className="relative">
-          {children}
-        </div>
+        <div className="relative">{children}</div>
         <Loading />
       </body>
     </html>

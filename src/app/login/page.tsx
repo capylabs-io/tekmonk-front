@@ -26,7 +26,10 @@ export default function Login() {
     state.show,
     state.hide,
   ]);
-  const [error, success] = useSnackbarStore((state) => [state.error, state.success]);
+  const [error, success] = useSnackbarStore((state) => [
+    state.error,
+    state.success,
+  ]);
 
   const router = useRouter();
 
@@ -49,11 +52,11 @@ export default function Login() {
 
     try {
       const resUserInfo = await login(user);
-      
+
       const roleName = get(resUserInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        success("Xong!","Đăng nhập thành công");
+        success("Xong!", "Đăng nhập thành công");
         router.push("/");
       } else {
         useUserStore.getState().clear();
@@ -61,15 +64,14 @@ export default function Login() {
           identifier: "",
           password: "",
         });
-        error("Lỗi","Đăng nhập thất bại");
+        error("Lỗi", "Đăng nhập thất bại");
       }
-
     } catch (err) {
       setUser({
         identifier: "",
         password: "",
       });
-      error("Lỗi","Đăng nhập thất bại");
+      error("Lỗi", "Đăng nhập thất bại");
     } finally {
       hide();
     }
@@ -78,21 +80,21 @@ export default function Login() {
   return (
     <div className="w-full grid grid-cols-2 max-[819px]:grid-cols-1 h-screen">
       <div className="relative flex flex-col justify-center items-center h-screen">
-      <div className="flex w-full gap-2.5 absolute top-10 left-10">
-            <svg
-              className="w-2 fill-primary-700"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 320 512"
-            >
-              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-            </svg>
-            <div
-              className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-              onClick={() => router.push("/")}
-            >
-              Quay lại
-            </div>
+        <div className="flex w-full gap-2.5 absolute top-10 left-10">
+          <svg
+            className="w-2 fill-primary-700"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 320 512"
+          >
+            <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
+          </svg>
+          <div
+            className="text-primary-700 font-semibold text-base hover:cursor-pointer"
+            onClick={() => router.push("/")}
+          >
+            Quay lại
           </div>
+        </div>
         <Image
           src="/image/app-logox4.png"
           alt="app logo"
@@ -105,7 +107,12 @@ export default function Login() {
         </div>
         <div className="flex gap-x-1 mt-2">
           <div>Chưa có tài khoản?</div>
-          <div className="font-bold underline hover:cursor-pointer" onClick={() => router.push('/register-contest')}>Đăng ký</div>
+          <div
+            className="font-bold underline hover:cursor-pointer"
+            onClick={() => router.push("/register-contest")}
+          >
+            Đăng ký
+          </div>
           <div>ngay</div>
         </div>
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">
@@ -122,10 +129,10 @@ export default function Login() {
             value={user.password}
             onChange={handChangePassword}
           />
-          <Button className="mt-8" onClick={handleLogin}>Đăng nhập</Button>
-          <div className="text-center">
-            Quên mật khẩu?
-          </div>
+          <Button className="mt-8" onClick={handleLogin}>
+            Đăng nhập
+          </Button>
+          <div className="text-center">Quên mật khẩu?</div>
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">

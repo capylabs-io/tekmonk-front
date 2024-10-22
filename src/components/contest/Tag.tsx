@@ -13,13 +13,7 @@ type Props = {
 const BASE_CLASS =
   "font-bold rounded-2xl px-2 py-1 uppercase inline-block w-fit";
 // Tag component for displaying tags with primary is green and secondary is red
-export default function Tag({
-  text,
-  onClick,
-  className,
-  size,
-  type,
-}: Props) {
+export default function Tag({ text, onClick, className, size, type }: Props) {
   const handleOnClick = () => {
     onClick && onClick();
   };
@@ -44,12 +38,7 @@ export default function Tag({
     }
   })();
 
-  const classes = classNames([
-    BASE_CLASS,
-    typeTag,
-    sizeTag,
-    className,
-  ]);
+  const classes = classNames([BASE_CLASS, typeTag, sizeTag, className]);
 
   return (
     <span className={classes} onClick={handleOnClick}>

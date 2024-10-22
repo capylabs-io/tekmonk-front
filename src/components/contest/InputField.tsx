@@ -2,7 +2,7 @@ import React, { forwardRef, useMemo } from "react";
 import { TextArea } from "@/components/common/TextArea";
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/contest/Input";
-import 'react-quill/dist/quill.bubble.css';
+import "react-quill/dist/quill.bubble.css";
 import dynamic from "next/dynamic";
 
 type Props = {
@@ -18,7 +18,10 @@ type Props = {
   isRequired?: boolean;
 };
 
-export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Props>(
+export const InputField = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  Props
+>(
   (
     {
       title,
@@ -34,14 +37,17 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
     },
     ref // Forwarded ref
   ) => {
-    const ReactQuill = useMemo(() => dynamic(() => import('react-quill'), { ssr: false }),[]);
+    const ReactQuill = useMemo(
+      () => dynamic(() => import("react-quill"), { ssr: false }),
+      []
+    );
     return (
       <div
         className={`flex flex-wrap sm:flex-nowrap items-center ${customClassNames}`}
       >
         <label htmlFor={name} className="text-SubheadSm text-primary-950 w-1/4">
           {title}
-          <span className="text-red-500">{isRequired? " *" : ""}</span>
+          <span className="text-red-500">{isRequired ? " *" : ""}</span>
         </label>
         <div className="flex flex-col w-full">
           {control ? ( // If control is passed, use Controller
@@ -52,7 +58,7 @@ export const InputField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Pro
                 type === "text-area" ? (
                   <ReactQuill
                     theme="bubble"
-                    value={field.value || value || ''}
+                    value={field.value || value || ""}
                     className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px]"
                     onChange={field.onChange}
                     placeholder={placeholder}

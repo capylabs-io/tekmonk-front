@@ -26,8 +26,8 @@ export const MissionCard = ({
       prev === "inprogress"
         ? "complete"
         : prev === "complete"
-          ? "claimded"
-          : "inprogress",
+        ? "claimded"
+        : "inprogress"
     );
   };
   return (

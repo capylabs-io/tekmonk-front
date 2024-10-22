@@ -2,15 +2,22 @@ import Image, { ImageProps as NextImageProps } from "next/image";
 import { useState, useCallback, useEffect } from "react";
 import { Skeleton } from "../ui/skeleton";
 
-type ImageProps = Omit<NextImageProps, 'src' | 'alt' | 'width' | 'height'> & {
+type ImageProps = Omit<NextImageProps, "src" | "alt" | "width" | "height"> & {
   src: string;
   alt: string;
   width?: number;
   height?: number;
   className?: string;
-}
+};
 
-export const ImageCustom = ({ src, alt, width, height, className, ...props }: ImageProps) => {
+export const ImageCustom = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  ...props
+}: ImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [imageSrc, setImageSrc] = useState(src);
@@ -45,17 +52,19 @@ export const ImageCustom = ({ src, alt, width, height, className, ...props }: Im
 
   return (
     <>
-      {isLoading && <Skeleton className="w-full h-full bg-slate-100" aria-hidden="true" />}
+      {isLoading && (
+        <Skeleton className="w-full h-full bg-slate-100" aria-hidden="true" />
+      )}
       <Image
         src={imageSrc}
         alt={alt}
         width={width}
         height={height}
-        className={`${className} ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        className={`${className} ${isLoading ? "opacity-0" : "opacity-100"}`}
         onLoad={handleImageLoad}
         onError={handleImageError}
         {...props}
       />
     </>
-  )
-}
+  );
+};

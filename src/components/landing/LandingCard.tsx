@@ -53,7 +53,7 @@ export const LandingCard = ({ imageUrl, title, subTitle, name }: Props) => {
   return (
     <div
       className={classNames(
-        `relative flex flex-col items-center justify-center rounded-3xl ${backgroundColor} w-[332px] min-h-[212px] text-center p-6 gap-y-2 ${shadowColor} ${rotate}`,
+        `relative flex flex-col items-center justify-center rounded-3xl ${backgroundColor} w-[332px] min-h-[212px] text-center p-6 gap-y-2 ${shadowColor} ${rotate}`
       )}
     >
       <Image

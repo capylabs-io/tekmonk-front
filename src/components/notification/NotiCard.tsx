@@ -11,7 +11,7 @@ export const NotiCard = ({ isUnread = true, title, createdAt }: Props) => {
     <div
       className={classNames(
         "pl-6 pr-4 py-4 flex justify-between items-center relative",
-        isUnread && "bg-primary-50",
+        isUnread && "bg-primary-50"
       )}
     >
       <div className="flex gap-x-3 items-center">

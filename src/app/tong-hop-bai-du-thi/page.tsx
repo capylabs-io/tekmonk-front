@@ -36,10 +36,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { useTagStore } from '@/store/TagStore';
-import { get } from 'lodash';
+import { useTagStore } from "@/store/TagStore";
+import { get } from "lodash";
 import Tag from "@/components/contest/Tag";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { SearchBar, SearchOption } from "@/components/common/SearchBar";
 
 enum SearchType {
@@ -64,9 +68,15 @@ export default function SearchInterface() {
   const [searchResults, setSearchResults] = useState<ContestSubmission[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchType, setSearchType] = useState<SearchType>(SearchType.CANDIDATE_NUMBER);
+  const [searchType, setSearchType] = useState<SearchType>(
+    SearchType.CANDIDATE_NUMBER
+  );
 
-  const [hideLoading, showLoading, loading] = useLoadingStore((state) => [state.hide,state.show, state.isShowing])
+  const [hideLoading, showLoading, loading] = useLoadingStore((state) => [
+    state.hide,
+    state.show,
+    state.isShowing,
+  ]);
   const { selectedTag, setSelectedTag } = useTagStore();
 
   const fetchData = async () => {
@@ -170,71 +180,76 @@ export default function SearchInterface() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
         {loading
           ? Array(12)
-            .fill(0)
-            .map((_, index) => <SkeletonCard key={index} />)
+              .fill(0)
+              .map((_, index) => <SkeletonCard key={index} />)
           : searchResults.map((card, _) => (
-            <div
-              key={card.id}
-              className="flex flex-col"
-            >
-              <Card className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
-                onClick={() => navigateDetailItem(card.id)}
-              >
-                <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
-                  <AspectRatio ratio={16 / 9}>
-                    <ImageCustom
-                      src={
-                        card.thumbnail?.url
-                          ? card?.thumbnail.url
-                          : "/image/new/new-pic.png"
-                      }
-                      alt="Into the Breach"
-                      fill
-                      sizes="(max-width: 720px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      loading="lazy"
-                      quality={30}
-                      className="object-contain"
-                    />
-                  </AspectRatio>
-                </CardHeader>
-              </Card>
-              <CardContent className="p-0 py-2">
-                <div className="text-bodySm cursor-pointer text-gray-800"
-                  onClick={() => navigateDetailItem(card.id)}
-
-                >
-                  {card.contest_entry?.candidateNumber}
-                </div>
-                <div className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
+              <div key={card.id} className="flex flex-col">
+                <Card
+                  className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
                   onClick={() => navigateDetailItem(card.id)}
                 >
-                  {card.title}
-                </div>
-                <Carousel className="mt-1">
+                  <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
+                    <AspectRatio ratio={16 / 9}>
+                      <ImageCustom
+                        src={
+                          card.thumbnail?.url
+                            ? card?.thumbnail.url
+                            : "/image/new/new-pic.png"
+                        }
+                        alt="Into the Breach"
+                        fill
+                        sizes="(max-width: 720px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        loading="lazy"
+                        quality={30}
+                        className="object-contain"
+                      />
+                    </AspectRatio>
+                  </CardHeader>
+                </Card>
+                <CardContent className="p-0 py-2">
+                  <div
+                    className="text-bodySm cursor-pointer text-gray-800"
+                    onClick={() => navigateDetailItem(card.id)}
+                  >
+                    {card.contest_entry?.candidateNumber}
+                  </div>
+                  <div
+                    className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
+                    onClick={() => navigateDetailItem(card.id)}
+                  >
+                    {card.title}
+                  </div>
+                  <Carousel className="mt-1">
                     <CarouselContent className="-ml-4 pl-2">
-                      {get(card, 'tags', [])?.map((tag, index) => (
-                        <CarouselItem key={index} className="w-fit basis-auto select-none pl-2">
+                      {get(card, "tags", [])?.map((tag, index) => (
+                        <CarouselItem
+                          key={index}
+                          className="w-fit basis-auto select-none pl-2"
+                        >
                           <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
-                            <Tag text={tag} type="secondary" size="x-small" onClick={() => handleFilterByTag(tag)} />
+                            <Tag
+                              text={tag}
+                              type="secondary"
+                              size="x-small"
+                              onClick={() => handleFilterByTag(tag)}
+                            />
                           </div>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
-                </Carousel>
-              </CardContent>
-              <CardFooter className="p-0">
-                <div className="text-bodySm text-gray-800">
-                  {get(card, 'contest_entry.user.fullName', 'Unknown')}
-                </div>
-              </CardFooter>
-            </div>
-          ))}
+                  </Carousel>
+                </CardContent>
+                <CardFooter className="p-0">
+                  <div className="text-bodySm text-gray-800">
+                    {get(card, "contest_entry.user.fullName", "Unknown")}
+                  </div>
+                </CardFooter>
+              </div>
+            ))}
       </div>
       {searchResults.length === 0 && !loading && (
         <div className="h-[300px]">
-            <EmptySearch
-              message="Oops! Không thể tìm thấy bài thi nào"
-            />
+          <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
         </div>
       )}
       <Pagination>

@@ -376,8 +376,7 @@ export default function Contest() {
                               onClick={() =>
                                 shareOnMobile({
                                   text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-                                  url:
-                                    process.env.NEXT_PUBLIC_URL_CONTEST,
+                                  url: process.env.NEXT_PUBLIC_URL_CONTEST,
                                   title: "CUỘC THI SÁNG TẠO TRẺ",
                                   // images: ["/image/contest/Frame-43.png"],
                                 })

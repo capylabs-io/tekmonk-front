@@ -14,7 +14,7 @@ interface TimeLeft {
   seconds: number;
 }
 
-const ContestGroupStage = ({contestGroupStage} : any) =>  {
+const ContestGroupStage = ({ contestGroupStage }: any) => {
   const router = useRouter();
   const [timeOut, setTimeOut] = useState(false);
   const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<
@@ -77,7 +77,6 @@ const ContestGroupStage = ({contestGroupStage} : any) =>  {
     const { days, hours, minutes, seconds } = timeLeft;
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   };
-  
 
   return (
     <div className="min-h-screen max-w-[768px] mx-auto bg-white mb-10">
@@ -117,16 +116,19 @@ const ContestGroupStage = ({contestGroupStage} : any) =>  {
               style={{ height: "calc(100vh - 50px)" }}
             >
               <iframe
-                src={contestGroupStage?.contestEntryFile?.[0].url ? contestGroupStage?.contestEntryFile?.[0].url : "/pdf-test.pdf"}
+                src={
+                  contestGroupStage?.contestEntryFile?.[0].url
+                    ? contestGroupStage?.contestEntryFile?.[0].url
+                    : "/pdf-test.pdf"
+                }
                 className="w-full h-full"
                 title="Exam PDF"
               />
-
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
 export default GroupStageGuard(ContestGroupStage);

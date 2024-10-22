@@ -48,9 +48,7 @@ export const Button = ({
     BASE_CLASS,
     size && sizes.includes(size) ? styles[`b-${size}`] : styles["b-medium"],
     loading || disabled ? "cursor-default opacity-50" : "",
-    outlined
-      ? "bg-white text-primary-900"
-      : "bg-primary-600 text-white",
+    outlined ? "bg-white text-primary-900" : "bg-primary-600 text-white",
     highlight && "bg-white text-primary-900 border !border-black",
     wide && "w-full",
     className,
@@ -72,7 +70,7 @@ export const Button = ({
         <span
           className={classNames(
             "inline-block h-6 w-6 animate-spin rounded-full border-[3px] border-current border-t-transparent",
-            outlined ? "text-black/60" : "text-white",
+            outlined ? "text-black/60" : "text-white"
           )}
           role="status"
           aria-label="loading"

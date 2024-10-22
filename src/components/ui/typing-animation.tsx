@@ -49,7 +49,13 @@ export default function TypingAnimation({
   return (
     <div className={cn("text-center")}>
       {displayedText.map((text, index) => (
-        <h1 key={index} className={cn("font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm", className)}>
+        <h1
+          key={index}
+          className={cn(
+            "font-display text-center text-4xl font-bold leading-[5rem] tracking-[-0.02em] drop-shadow-sm",
+            className
+          )}
+        >
           {text}
         </h1>
       ))}

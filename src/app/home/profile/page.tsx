@@ -104,11 +104,11 @@ const Profile: React.FC = () => {
             <span
               className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
             >
-              {get(userInfo,"userRank")}
+              {get(userInfo, "userRank")}
             </span>
           </div>
           <div className="text-base text-primary-950">
-            {get(userInfo,"specialName")}
+            {get(userInfo, "specialName")}
           </div>
         </div>
         <div className="flex gap-x-2">

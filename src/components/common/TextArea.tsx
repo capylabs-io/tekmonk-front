@@ -44,7 +44,7 @@ export const TextArea: React.FC<Props> = ({
               "border-red-500 focus:border-red-500 text-sm focus:border-2",
             value &&
               !error &&
-              "border-green-500 focus:green-500 text-sm focus:border-2",
+              "border-green-500 focus:green-500 text-sm focus:border-2"
           )}
           {...rest}
           onChange={(e) => handleOnChange(e.target.value)}

@@ -1,5 +1,5 @@
-import React from 'react';
-import { X } from 'lucide-react';
+import React from "react";
+import { X } from "lucide-react";
 
 type ImgSubmitPreviewProps = {
   src: string;
@@ -9,7 +9,13 @@ type ImgSubmitPreviewProps = {
   onRemove: () => void;
 };
 
-export const ImgSubmitPreview: React.FC<ImgSubmitPreviewProps> = ({ src, width, height, className, onRemove }) => {
+export const ImgSubmitPreview: React.FC<ImgSubmitPreviewProps> = ({
+  src,
+  width,
+  height,
+  className,
+  onRemove,
+}) => {
   return (
     <div className={`relative ${className}`}>
       <img

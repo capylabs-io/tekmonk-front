@@ -21,7 +21,7 @@ type Actions = {
     type: SnackbarTypes,
     title: string,
     message: string,
-    isLastMessage: boolean,
+    isLastMessage: boolean
   ) => void;
   error: (title: string, message: string, isLastMessage?: boolean) => void;
   success: (title: string, message: string, isLastMessage?: boolean) => void;

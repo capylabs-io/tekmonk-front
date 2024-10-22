@@ -4,7 +4,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
+export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
@@ -22,7 +22,13 @@ export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
       </div>
       <div className="text-bodyMd text-gray-950">
         Thông tin chi tiết xem{" "}
-        <Link href={"/"} target="_blank" className="text-primary-700 underline hover:cursor-pointer ">tại đây</Link> 
+        <Link
+          href={"/"}
+          target="_blank"
+          className="text-primary-700 underline hover:cursor-pointer "
+        >
+          tại đây
+        </Link>
       </div>
       <div className="flex items-center space-x-2">
         <RadioGroup className="flex flex-col space-y-2 mt-2">
@@ -53,4 +59,3 @@ export const Step4 = ({ updateStatus }: {updateStatus : any}) => {
     </div>
   );
 };
-

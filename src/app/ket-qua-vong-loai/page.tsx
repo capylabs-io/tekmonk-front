@@ -15,8 +15,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchBar, SearchOption } from "@/components/common/SearchBar";
 import { getContestSubmissionResult } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
-import get from 'lodash/get';
-import { useDebounce } from '@/hooks/useDebounceValue';
+import get from "lodash/get";
+import { useDebounce } from "@/hooks/useDebounceValue";
 
 const searchOptions: SearchOption[] = [
   { value: "candidateNumber", label: "Số báo danh" },
@@ -124,22 +124,22 @@ export default function CompetitionResults() {
                     <TableCell>
                       <div>
                         <span className="text-SubheadMd text-primary-950">
-                          {get(contestant, 'contest_entry.user.fullName', '')}
+                          {get(contestant, "contest_entry.user.fullName", "")}
                         </span>{" "}
                         <span className="text-bodyMd text-gray-500">
-                          {get(contestant, 'contest_entry.candidateNumber', '')}
+                          {get(contestant, "contest_entry.candidateNumber", "")}
                         </span>
                       </div>
                       <div className="text-bodyMd text-gray-950">
-                        {get(contestant, 'title', '')}
+                        {get(contestant, "title", "")}
                       </div>
                     </TableCell>
                     <TableCell className="text-center text-SubheadMd text-gray-950">
-                      {get(contestant, 'QualifiedExam', null) === null
-                        ? 'CHƯA CHẤM'
-                        : get(contestant, 'QualifiedExam')
-                          ? 'ĐẠT'
-                          : 'KHÔNG ĐẠT'}
+                      {get(contestant, "QualifiedExam", null) === null
+                        ? "CHƯA CHẤM"
+                        : get(contestant, "QualifiedExam")
+                        ? "ĐẠT"
+                        : "KHÔNG ĐẠT"}
                     </TableCell>
                   </TableRow>
                 ))}

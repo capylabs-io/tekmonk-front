@@ -22,7 +22,7 @@ export const ProfileInfoBox = ({
       <div
         className={classNames(
           "h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center",
-          imageUrl && imageUrl,
+          imageUrl && imageUrl
         )}
       />
 

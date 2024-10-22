@@ -14,7 +14,7 @@ type UserRole = {
   name?: string;
   code?: string;
   description?: string;
-}
+};
 
 type UserProfile = {
   user?: User;
@@ -23,7 +23,7 @@ type UserProfile = {
   data?: any;
   schoolLevel?: string;
   schoolAddress?: string;
-}
+};
 
 export type User = {
   specialName: string;
@@ -41,7 +41,7 @@ export type User = {
   role: {
     name: string;
   };
-  userProfiles?: UserProfile[] | UserProfile | any; 
+  userProfiles?: UserProfile[] | UserProfile | any;
   phoneNumber?: string;
   parentName?: string;
   parentPhoneNumber?: string;
@@ -58,8 +58,7 @@ export type ContestGroupStage = {
   contestFormat?: string;
   startTime: string;
   endTime: string;
-  
-}
+};
 
 export interface Certificate {
   name: string;
@@ -136,14 +135,14 @@ export type Media = {
   url: string;
   createAt: string;
   size: number;
-}
+};
 
-export type UploadData= {
+export type UploadData = {
   ref: string;
   refId: string;
   field: string;
-  files: File
-}
+  files: File;
+};
 
 export type Contest = {
   id: string;
@@ -152,15 +151,14 @@ export type Contest = {
   thumbnail: Media;
   endTime: string;
   startTime: string;
-}
-
+};
 
 export type ContestEntry = {
   id: string;
   candidateNumber: string;
-  groupMemberInfo: object | null; 
-  user: User
-}
+  groupMemberInfo: object | null;
+  user: User;
+};
 
 export type ContestRegister = {
   fullName: string;
@@ -177,4 +175,4 @@ export type ContestRegister = {
   confirmPassword: string;
   groupMemberInfo: object[];
   contest_group_stage: string;
-}
+};

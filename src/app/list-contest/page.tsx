@@ -11,7 +11,6 @@ const ContestList: React.FC = () => {
   const [limit, setLimit] = useState();
   const [contestList, setContestList] = useState([]);
 
-
   useEffect(() => {
     const fetchContestList = async () => {
       try {

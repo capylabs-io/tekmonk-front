@@ -4,7 +4,14 @@ import Tag from "@/components/contest/Tag";
 import { Dock, DockIcon } from "@/components/ui/dock";
 import { getOneContestSubmission } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
-import { ArrowLeft, Facebook, Instagram, Mail, Send, Twitter } from "lucide-react";
+import {
+  ArrowLeft,
+  Facebook,
+  Instagram,
+  Mail,
+  Send,
+  Twitter,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { shareOnMobile } from "react-mobile-share";
@@ -17,13 +24,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { EmailShareButton, FacebookShareButton, TelegramShareButton, TwitterShareButton } from "react-share";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+} from "react-share";
 import { EmptySearch } from "@/components/common/EmptySearch";
 import { ImageCustom } from "@/components/common/ImageCustom";
 import { Button } from "@/components/common/Button";
 import { useState, useEffect } from "react";
-import { useTagStore } from '@/store/TagStore';
-import { get } from 'lodash';
+import { useTagStore } from "@/store/TagStore";
+import { get } from "lodash";
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
@@ -61,8 +73,8 @@ const ContestDetail: React.FC = () => {
     // Store the tag in Zustand store
     setSelectedTag(tag);
     // Navigate to the all contest entries page
-    router.push('/tong-hop-bai-du-thi');
-  }
+    router.push("/tong-hop-bai-du-thi");
+  };
 
   if (isLoading) {
     return (
@@ -82,15 +94,22 @@ const ContestDetail: React.FC = () => {
   if (!contestDetail) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <EmptySearch buttonText="Trở về" message="Không tìm thấy bài thi" onAction={() => router.push("/tong-hop-bai-du-thi")} />
+        <EmptySearch
+          buttonText="Trở về"
+          message="Không tìm thấy bài thi"
+          onAction={() => router.push("/tong-hop-bai-du-thi")}
+        />
       </div>
     );
   }
 
   const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/tong-hop-bai-du-thi/${id}`;
   const shareTitle = contestDetail?.title || "Check out this contest entry!";
-  const shareDescription = contestDetail?.description || "An amazing contest submission";
-  const shareImage = contestDetail?.assets?.[selectedImageIndex]?.url || `${process.env.NEXT_PUBLIC_BASE_URL}/image/contest/Saly-12.png`;
+  const shareDescription =
+    contestDetail?.description || "An amazing contest submission";
+  const shareImage =
+    contestDetail?.assets?.[selectedImageIndex]?.url ||
+    `${process.env.NEXT_PUBLIC_BASE_URL}/image/contest/Saly-12.png`;
 
   return (
     <>
@@ -102,16 +121,21 @@ const ContestDetail: React.FC = () => {
               onClick={() => router.push("/tong-hop-bai-du-thi")}
               className="cursor-pointer"
             />
-            <span className="text-grey-500 text-sm font-medium ml-2 select-none">Quay lại</span>
+            <span className="text-grey-500 text-sm font-medium ml-2 select-none">
+              Quay lại
+            </span>
           </div>
           <div className="">
             <section className="">
               <header className="px-8 border-b border-grey-200 pb-4">
                 <p className="mb-3">
                   <span className="text-SubheadSm !font-medium mr-2">
-                    {get(contestDetail, 'contest_entry.user.fullName', '')}
+                    {get(contestDetail, "contest_entry.user.fullName", "")}
                   </span>
-                  <span className="text-grey-500 text-sm">Số báo danh: {get(contestDetail, 'contest_entry.candidateNumber', '')}</span>
+                  <span className="text-grey-500 text-sm">
+                    Số báo danh:{" "}
+                    {get(contestDetail, "contest_entry.candidateNumber", "")}
+                  </span>
                 </p>
                 <h1 className="text-SubheadLg text-grey-700 uppercase">
                   {contestDetail.title}
@@ -129,25 +153,41 @@ const ContestDetail: React.FC = () => {
                   ))}
                 </div>
               </header>
-              <div className="py-4 px-8 ql-viewer" dangerouslySetInnerHTML={{__html: contestDetail.description || ''}}>
-              </div>
+              <div
+                className="py-4 px-8 ql-viewer"
+                dangerouslySetInnerHTML={{
+                  __html: contestDetail.description || "",
+                }}
+              ></div>
               <div className="">
-                {
-                  contestDetail.url && (
-                    <p className="px-8">
-                      <span className="text-grey-500 text-sm">Link bài thi: </span>
-                      <a className="text-blue-500 text-sm " target="_blank" href={contestDetail.url}>{contestDetail.url}</a>
-                    </p>
-                  )
-                }
-                {
-                  contestDetail.source && (
-                    <p className="px-8">
-                      <span className="text-grey-500 text-sm">Tệp đính kèm: </span>
-                      <a className="text-sm underline text-blue-500" href={contestDetail?.source?.[0]?.url} target="_blank">{contestDetail.title}</a>
-                    </p>
-                  )
-                }
+                {contestDetail.url && (
+                  <p className="px-8">
+                    <span className="text-grey-500 text-sm">
+                      Link bài thi:{" "}
+                    </span>
+                    <a
+                      className="text-blue-500 text-sm "
+                      target="_blank"
+                      href={contestDetail.url}
+                    >
+                      {contestDetail.url}
+                    </a>
+                  </p>
+                )}
+                {contestDetail.source && (
+                  <p className="px-8">
+                    <span className="text-grey-500 text-sm">
+                      Tệp đính kèm:{" "}
+                    </span>
+                    <a
+                      className="text-sm underline text-blue-500"
+                      href={contestDetail?.source?.[0]?.url}
+                      target="_blank"
+                    >
+                      {contestDetail.title}
+                    </a>
+                  </p>
+                )}
               </div>
               <div className="w-full mx-auto pt-4 sm:px-8">
                 <div className="hidden sm:block">
@@ -174,10 +214,11 @@ const ContestDetail: React.FC = () => {
                           className="pl-1 md:basis-1/2 lg:basis-1/3 select-none"
                         >
                           <div
-                            className={`relative cursor-pointer rounded-md overflow-hidden ${selectedImageIndex === index
-                              ? "border-2 border-blue-500"
-                              : ""
-                              }`}
+                            className={`relative cursor-pointer rounded-md overflow-hidden ${
+                              selectedImageIndex === index
+                                ? "border-2 border-blue-500"
+                                : ""
+                            }`}
                             style={{ aspectRatio: "16 / 9" }}
                             onClick={() => setSelectedImageIndex(index)}
                           >
@@ -208,7 +249,7 @@ const ContestDetail: React.FC = () => {
             <DockIcon className="bg-black/10 dark:bg-white/10">
               <FacebookShareButton
                 url={shareUrl}
-                hashtag={contestDetail.tags?.map(tag => `#${tag}`).join("")}
+                hashtag={contestDetail.tags?.map((tag) => `#${tag}`).join("")}
                 className="h-full w-full flex justify-center items-center"
                 about={shareTitle}
                 aria-description={shareDescription}
@@ -222,7 +263,7 @@ const ContestDetail: React.FC = () => {
                 url={shareUrl}
                 title={shareTitle}
                 via="montek"
-                hashtags={contestDetail.tags?.map(tag => `${tag}`)}
+                hashtags={contestDetail.tags?.map((tag) => `${tag}`)}
                 className="h-full w-full flex justify-center items-center"
               >
                 <Twitter size={16} />
@@ -263,7 +304,6 @@ const ContestDetail: React.FC = () => {
           </div>
         </div>
       </div>
-
     </>
   );
 };

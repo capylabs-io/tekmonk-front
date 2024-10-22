@@ -139,7 +139,6 @@ h6 {
   @apply font-bold max-sm:text-base max-sm:!leading-5 md:text-xl md:!leading-6;
 }
 
-
 .max-width-pc {
   width: 100%;
   max-width: 1400px !important;
@@ -149,8 +148,6 @@ h6 {
 .react-date-picker__wrapper {
   border: none !important;
 }
-
-
 
 .black {
   border: 1px solid black;
@@ -163,17 +160,17 @@ h6 {
 }
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;  /* Chrome, Safari and Opera */
+  display: none; /* Chrome, Safari and Opera */
 }
 
 /* quill editor */
 .ql-editor {
-  @apply text-bodyMd font-normal not-italic; 
+  @apply text-bodyMd font-normal not-italic;
 }
 
 .ql-viewer {
@@ -187,11 +184,11 @@ h6 {
 .ql-editor[contenteditable="true"]::before {
   content: attr(data-placeholder);
   font-style: normal !important;
-  color: #9CA3AF !important;
+  color: #9ca3af !important;
   @apply text-lg font-normal outline-none;
 }
 
 .ql-editor[contenteditable="true"]:focus::before,
 .ql-editor:not(.ql-blank)::before {
-  content: ''; /* Remove placeholder when focused or has content */
+  content: ""; /* Remove placeholder when focused or has content */
 }

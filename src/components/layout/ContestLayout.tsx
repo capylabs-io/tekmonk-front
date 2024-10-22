@@ -84,7 +84,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
   const handleRedirectResultContest = () => {
     router.push("/ket-qua-vong-loai");
-  }
+  };
 
   return (
     isClient && (
@@ -144,11 +144,11 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 </div>
               )}
               <div
-                  className="text-bodyMd hover:cursor-pointer"
-                  onClick={handleRedirectResultContest}
-                >
-                  Kết quả vòng loại
-                </div>
+                className="text-bodyMd hover:cursor-pointer"
+                onClick={handleRedirectResultContest}
+              >
+                Kết quả vòng loại
+              </div>
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyMd  hover:cursor-pointer"

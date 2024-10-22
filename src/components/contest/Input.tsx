@@ -54,11 +54,12 @@ export const Input = forwardRef<HTMLInputElement, Props>( // Forward the ref
         <div
           className={classNames(
             BASE_CLASS,
-            error && "border-red-500 focus:border-red-500 text-sm focus:border-2",
+            error &&
+              "border-red-500 focus:border-red-500 text-sm focus:border-2",
             value &&
               !error &&
               "border-green-400 focus:border-green-400 focus:border-2",
-            customClassNames,
+            customClassNames
           )}
         >
           <div className="flex w-full items-center text-base font-bold">
@@ -71,11 +72,13 @@ export const Input = forwardRef<HTMLInputElement, Props>( // Forward the ref
               name={name}
               onChange={handleOnChange}
               onBlur={handleOnBlur}
-              ref={ref} 
+              ref={ref}
             />
           </div>
         </div>
-        {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}
+        {error && (
+          <p className="mt-2 self-start text-sm text-red-600">{error}</p>
+        )}
       </>
     );
   }

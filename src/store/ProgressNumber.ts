@@ -12,7 +12,7 @@ type Actions = {
 
 // Initialize default state values
 const defaultStates: State = {
-  page: 1
+  page: 1,
 };
 
 // Create the store using Zustand
@@ -31,5 +31,5 @@ export const useProgressNumber = create<State & Actions>((set, get) => ({
     if (get().page < 3) {
       set({ page: get().page + 1 });
     }
-  }
+  },
 }));
