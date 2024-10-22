@@ -63,10 +63,8 @@ export const useContestRegisterStore = create<State & Actions>()(
     register: async (body) => {
       const response = await contestRegister(body);
       if (!response) {
-        console.log("Register failed");
         return;
       }
-      console.log("Register success");
       return response;
     },
     change: (key, value) => {

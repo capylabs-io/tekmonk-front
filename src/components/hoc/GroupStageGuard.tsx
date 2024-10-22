@@ -26,7 +26,6 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
           const data = await getContestGroupStageByCandidateNumber(
             candidateNumber
           );
-          console.log("res = ", data);
           setContestGroupStage(data);
         } catch (error) {
           return;
