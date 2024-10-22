@@ -5,7 +5,7 @@ import { Button } from "./Button";
 import { Facebook, Link, Mail, Twitter } from "lucide-react";
 
 export default function Share() {
-  const url = process.env.NEXT_PUBLIC_URL_CONTEST;
+  const url = process.env.NEXT_PUBLIC_BASE_URL;
   return (
     <>
       <FacebookShareButton url={""} hashtag="#code">
