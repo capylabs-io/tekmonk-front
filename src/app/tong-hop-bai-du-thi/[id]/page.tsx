@@ -57,7 +57,6 @@ const ContestDetail: React.FC = () => {
         setContestDetail(null);
       }
     } catch (error) {
-      console.log(error);
       setContestDetail(null);
     } finally {
       setIsLoading(false);

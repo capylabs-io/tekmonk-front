@@ -76,7 +76,6 @@ export const Step3 = () => {
 
   useEffect(() => {
     if (fields.length == 0 && valueGroup == "5") {
-      console.log("Auto-adding a team member");
       addTeamMember();
     }
   }, [valueGroup]);

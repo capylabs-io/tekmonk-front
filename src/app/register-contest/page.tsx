@@ -90,19 +90,12 @@ export default function RegisterContest() {
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
-      console.log("isValid", isValid);
-      console.log("check groupStage", get(methods.getValues(), "stepThree"));
       if (isValid) setCurrentStep(currentStep + 1);
     }
   };
 
   const handleNext = async (formData: any) => {
-    console.log("formData", formData);
-    console.log("groupMemberInfo", {
-      ...get(formData, "stepOne", {}),
-      ...get(formData, "stepTwo", {}),
-      ...get(formData, "stepThree", {}),
-    });
+    
     try {
       show();
 
