@@ -198,7 +198,7 @@ export default function Contest() {
   };
   return (
     isClient && (
-      <>
+      <div className="relative overflow-hidden">
         <div
           className={`absolute w-[160%] h-[100%] top-[1300px] left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[${LAYERS.BACKGROUND}] 
       bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)]
@@ -454,7 +454,7 @@ export default function Contest() {
             </div>
           </>
         </ContestLayout>
-      </>
+      </div>
     )
   );
 }
