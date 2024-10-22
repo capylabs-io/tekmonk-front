@@ -5,40 +5,40 @@
 /* Typography */
 
 h1 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 100px;
   @apply text-8xl font-bold;
 }
 
 h2 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 88px;
   font-size: 80px;
   @apply font-bold;
 }
 
 h3 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 80px;
   @apply text-7xl font-bold;
 }
 
 h4 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 88px;
   font-size: 80px;
   @apply font-bold;
 }
 
 h5 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 60px;
   font-size: 52px;
   @apply font-bold;
 }
 
 h6 {
-  font-family: var(--font-delo);
+  font-family: var(--font-nunito);
   line-height: 48px;
   font-size: 40px;
   @apply font-bold;
@@ -46,75 +46,149 @@ h6 {
 
 .text-bodyXs {
   font-size: 10px;
+  font-family: var(--font-nunito);
   @apply leading-3 font-normal;
 }
 
 .text-bodySm {
+  font-family: var(--font-nunito);
   @apply text-xs !leading-4 font-normal;
 }
 
 .text-bodyMd {
+  font-family: var(--font-nunito);
   @apply text-sm !leading-5 font-normal;
 }
 
 .text-bodyLg {
+  font-family: var(--font-nunito);
   @apply text-base !leading-5 font-normal;
 }
 
 .text-SubheadXXs {
+  font-family: var(--font-nunito);
   font-size: 10px;
-  @apply leading-3 font-bold;
+  line-height: 14px !important;
+  @apply font-bold;
 }
 
 .text-SubheadXs {
+  font-family: var(--font-nunito);
   @apply text-xs !leading-4 font-bold;
 }
 
 .text-SubheadSm {
+  font-family: var(--font-nunito);
   @apply text-sm !leading-5 font-bold;
 }
 
 .text-SubheadMd {
+  font-family: var(--font-nunito);
   @apply text-base !leading-6 font-bold;
 }
 
 .text-SubheadLg {
+  font-family: var(--font-nunito);
   @apply text-xl !leading-6 font-bold;
 }
 
 .text-SubheadXl {
+  font-family: var(--font-nunito);
   @apply text-2xl !leading-7 font-bold;
 }
 
 .text-Subhead2Xl {
+  font-family: var(--font-nunito);
   font-size: 28px;
   @apply leading-8  font-bold;
 }
 
 .text-Subhead3Xl {
-  @apply text-3xl !leading-10 font-bold;
+  font-family: var(--font-nunito);
+  font-size: 32px;
+  @apply !leading-10 font-bold;
 }
 
 .text-Subhead4Xl {
+  font-family: var(--font-nunito);
   @apply text-[40px] leading-[48px] font-bold;
 }
 
 .text-Heading4xl {
+  font-family: var(--font-nunito);
   @apply font-bold max-sm:text-[32px] max-sm:leading-10 md:text-[40px] md:leading-[48px];
 }
 
 .text-Heading3xl {
+  font-family: var(--font-nunito);
   @apply font-bold max-sm:text-2xl max-sm:!leading-7 md:text-[32px] md:leading-10;
 }
 
 .text-Heading2xl {
+  font-family: var(--font-nunito);
   @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-[28px] md:leading-[32px];
 }
 
 .text-HeadingXl {
+  font-family: var(--font-nunito);
   @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-2xl md:!leading-7;
 }
 
 .text-HeadingLg {
+  font-family: var(--font-nunito);
   @apply font-bold max-sm:text-base max-sm:!leading-5 md:text-xl md:!leading-6;
+}
+
+.max-width-pc {
+  width: 100%;
+  max-width: 1400px !important;
+}
+
+/*for override date picker*/
+.react-date-picker__wrapper {
+  border: none !important;
+}
+
+.black {
+  border: 1px solid black;
+}
+.red {
+  border: 1px solid red;
+}
+.blue {
+  border: 1px solid blue;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* quill editor */
+.ql-editor {
+  @apply text-bodyMd font-normal not-italic;
+}
+
+.ql-viewer {
+  @apply text-bodyMd font-normal not-italic;
+}
+
+.ql-viewer * {
+  all: revert;
+}
+
+.ql-editor[contenteditable="true"]::before {
+  content: attr(data-placeholder);
+  font-style: normal !important;
+  color: #9ca3af !important;
+  @apply text-lg font-normal outline-none;
+}
+
+.ql-editor[contenteditable="true"]:focus::before,
+.ql-editor:not(.ql-blank)::before {
+  content: ""; /* Remove placeholder when focused or has content */
 }

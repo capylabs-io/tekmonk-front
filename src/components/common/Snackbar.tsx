@@ -1,3 +1,4 @@
+"use client";
 import classNames from "classnames";
 import {
   AlertCircle,
@@ -65,7 +66,7 @@ export const Snackbar: React.FC = () => {
       className={classNames(
         BASE_CLASSES,
         isShowing ? "top-5" : "-top-[400px]",
-        snackClass,
+        snackClass
       )}
     >
       <div className="flex w-full">

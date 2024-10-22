@@ -59,7 +59,7 @@ export const Post = ({
           <div
             className={classNames(
               "flex items-center gap-x-1 font-bold ",
-              liked ? "text-red-500" : "text-gray-500",
+              liked ? "text-red-500" : "text-gray-500"
             )}
           >
             <button onClick={() => setLiked((prev) => !prev)}>

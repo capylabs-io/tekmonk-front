@@ -1,6 +1,7 @@
 "use client";
 import classNames from "classnames";
 import { Eye, EyeOff } from "lucide-react";
+import Image from "next/image";
 import React, { ReactNode, useState } from "react";
 
 type Props = {
@@ -10,7 +11,9 @@ type Props = {
   customClassNames?: string;
   error?: string;
   placeholder?: string;
-  onChange?: (value: string) => void;
+  name?: string;
+  isSearch?: boolean;
+  onChange?: (value: any) => void;
   onBlur?: () => void;
 };
 const BASE_CLASS =
@@ -24,6 +27,8 @@ export const Input = ({
   onChange,
   placeholder,
   onBlur,
+  name = "",
+  isSearch = false,
   customInputClassNames,
   customClassNames,
 }: Props) => {
@@ -47,16 +52,25 @@ export const Input = ({
           value &&
             !error &&
             "border-green-400 focus:border-green-400 focus:border-2",
-          customClassNames,
+          customClassNames
         )}
       >
         <div className="flex w-full items-center text-base font-bold">
+          {isSearch && (
+            <Image
+              src="/image/contestentries/search-icon.png"
+              alt="search icon"
+              width={24}
+              height={10}
+            />
+          )}
           <input
             type={showPassword ? "text" : type}
             lang="en-US"
             className={classNames(BASE_INPUT_CLASS, customInputClassNames)}
             placeholder={placeholder || ""}
             value={value}
+            name={name}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
           />

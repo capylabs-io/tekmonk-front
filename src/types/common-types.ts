@@ -9,18 +9,57 @@ export type Event = {
   imageUrl: string;
   createdAt: string;
 };
+
+type UserRole = {
+  name?: string;
+  code?: string;
+  description?: string;
+};
+
+type UserProfile = {
+  user?: User;
+  schoolName?: string;
+  className?: string;
+  data?: any;
+  schoolLevel?: string;
+  schoolAddress?: string;
+};
+
 export type User = {
+  specialName: string;
+  imageURL: string;
   id: string;
   username: string;
   email: string;
-  userRank: string;
-  specialName: string;
-  imageURL?: string;
-  twitterName?: string;
+  provider?: string;
+  confirmed?: string;
+  blocked?: string;
+  metadata?: string;
+  skills?: string[];
+  currentTitle?: string;
+  description?: string;
   role: {
     name: string;
   };
+  userProfiles?: UserProfile[] | UserProfile | any;
+  phoneNumber?: string;
+  parentName?: string;
+  parentPhoneNumber?: string;
+  fullName?: string;
+  user_role?: UserRole[] | UserRole | any;
 };
+
+export type ContestGroupStage = {
+  id?: string;
+  name?: string;
+  description?: string;
+  code?: string;
+  studentLevel?: string;
+  contestFormat?: string;
+  startTime: string;
+  endTime: string;
+};
+
 export interface Certificate {
   name: string;
   type: string;
@@ -87,4 +126,53 @@ export type BackgroundShop = {
   image: string;
   title: string;
   price: string;
+};
+
+export type Media = {
+  id: number;
+  name: string;
+  ext: string;
+  url: string;
+  createAt: string;
+  size: number;
+};
+
+export type UploadData = {
+  ref: string;
+  refId: string;
+  field: string;
+  files: File;
+};
+
+export type Contest = {
+  id: string;
+  name: string;
+  status: string;
+  thumbnail: Media;
+  endTime: string;
+  startTime: string;
+};
+
+export type ContestEntry = {
+  id: string;
+  candidateNumber: string;
+  groupMemberInfo: object | null;
+  user: User;
+};
+
+export type ContestRegister = {
+  fullName: string;
+  schoolName: string;
+  studentAddress: string;
+  studentDob: string;
+  className: string;
+  schoolAddress: string;
+  parentName: string;
+  parentPhoneNumber: string;
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  groupMemberInfo: object[];
+  contest_group_stage: string;
 };
