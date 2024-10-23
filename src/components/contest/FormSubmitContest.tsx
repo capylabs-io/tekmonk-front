@@ -176,7 +176,7 @@ const FormSubmitContest = React.forwardRef<
             khi đăng tải.
           </p>
         </div>
-        <section className="px-6 h-full overflow-y-auto">
+        <section className="px-6 h-full overflow-y-auto hide-scrollbar">
           <InputField
             title="Tên dự án"
             type="text"

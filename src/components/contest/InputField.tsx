@@ -2,7 +2,7 @@ import React, { forwardRef, useMemo } from "react";
 import { TextArea } from "@/components/common/TextArea";
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/contest/Input";
-import "react-quill/dist/quill.bubble.css";
+import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 
 type Props = {
@@ -41,6 +41,7 @@ export const InputField = forwardRef<
       () => dynamic(() => import("react-quill"), { ssr: false }),
       []
     );
+    
     return (
       <div
         className={`flex flex-wrap sm:flex-nowrap items-center ${customClassNames}`}
@@ -49,7 +50,7 @@ export const InputField = forwardRef<
           {title}
           <span className="text-red-500">{isRequired ? " *" : ""}</span>
         </label>
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full max-w-[500px] rounded-xl overflow-hidden">
           {control ? ( // If control is passed, use Controller
             <Controller
               name={name}
@@ -57,7 +58,7 @@ export const InputField = forwardRef<
               render={({ field }) =>
                 type === "text-area" ? (
                   <ReactQuill
-                    theme="bubble"
+                    theme="snow"
                     value={field.value || value || ""}
                     className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px]"
                     onChange={field.onChange}
@@ -77,7 +78,8 @@ export const InputField = forwardRef<
           ) : type === "text-area" ? (
             <ReactQuill
               theme="snow"
-              className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px] transition-all ease-linear"
+              
+              className="w-full rounded-xl bg-grey-50 outline-none !text-bodyXs min-h-[200px] transition-all ease-linear"
               value={value}
               onChange={() => {}} // Handle value change as needed
               placeholder={placeholder}
