@@ -164,6 +164,7 @@ import ContestLayout from "@/components/layout/ContestLayout";
 import { Share } from "lucide-react";
 
 export default function Contest() {
+
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string>("");
@@ -200,11 +201,11 @@ export default function Contest() {
     isClient && (
       <div className="relative overflow-hidden">
         <div
-          className={`absolute w-[160%] h-[100%] top-[1300px] left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[${LAYERS.BACKGROUND}] 
+          className={`absolute w-[160%] h-[100%] top-[1450px] left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[${LAYERS.BACKGROUND}] 
       bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)]
        rounded-tl-[50%] rounded-tr-[50%] overflow-hidden 
-       max-mobile:w-[310%] max-mobile:top-[1250px]
-       max-md:w-[260%] max-md:top-[1200px]
+       max-mobile:w-[310%] max-mobile:top-[1400px]
+       max-md:w-[260%] max-md:top-[1350px]
        `}
         ></div>
         <ContestLayout>
@@ -305,7 +306,7 @@ export default function Contest() {
                 <div className="w-[884px] mt-4 relative">
                   <div className="text-center mb-8 flex-col justify-center">
                     <TypingAnimation
-                      texts={["CUỘC THI", "SÁNG TẠO TRẺ"]}
+                      texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
                       className="text-primary-700 uppercase mb-2 font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-4xl"
                     />
 
@@ -342,7 +343,8 @@ export default function Contest() {
 
                   <section>
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      <Clock startTime={startTime} endTime={endTime} />
+                      {startTime && endTime && (<Clock startTime={startTime} endTime={endTime} />)}
+                      
                     </BlurFade>
                     <div id="rules"></div>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>

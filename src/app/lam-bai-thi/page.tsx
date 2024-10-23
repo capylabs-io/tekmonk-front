@@ -6,77 +6,28 @@ import { Button } from "@/components/common/Button";
 import FormSubmitContest from "@/components/contest/FormSubmitContest";
 import { useRouter } from "next/navigation";
 import GroupStageGuard from "@/components/hoc/GroupStageGuard";
+import { ContestGroupStage } from "@/types/common-types";
+import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
 
-const ContestGroupStage = ({ contestGroupStage }: any) => {
+const ContestGroupStageEntry = ({ contestGroupStage }: { contestGroupStage: ContestGroupStage}) => {
   const router = useRouter();
-  const [timeOut, setTimeOut] = useState(false);
-  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<
-    Date | undefined
-  >(new Date(contestGroupStage.endTime));
-  // const [contestGroupStage, setContestGroupStage] = useState<any>(undefined);
+  console.log("contest start")
+  const [timeOver, setTimeOver] = useState(false);
+  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<string>(contestGroupStage.endTime);
 
-  const calculateTimeLeft = (targetDate: Date): TimeLeft => {
-    const difference = +targetDate - +new Date();
-    let timeLeft: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
-
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-
-    return timeLeft;
-  };
-
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const handleTimeOver = () => {
+    setTimeOver(true);
+  }
 
   useEffect(() => {
-    if (!groupStageTimeLeft) return;
+    //check if start time is less than current time
+    if(new Date(contestGroupStage.startTime) > new Date()) {
+      router.push("/");
+    }
+    setGroupStageTimeLeft(contestGroupStage.endTime);
+  }, []);
 
-    // const uri = URL.createObjectURL(contestGroupStage.contestEntryFile[0].url);
-    // console.log(uri);
-    // setFileUrl(uri);
-
-    const updateTimer = () => {
-      const newTime = calculateTimeLeft(groupStageTimeLeft);
-      setTimeLeft(newTime);
-
-      if (
-        newTime.days === 0 &&
-        newTime.hours === 0 &&
-        newTime.minutes === 0 &&
-        newTime.seconds === 0
-      ) {
-        setTimeOut(true);
-        clearInterval(timer);
-      }
-    };
-
-    const timer = setInterval(updateTimer, 1000);
-    updateTimer(); // Initial call to set the time immediately
-
-    return () => clearInterval(timer);
-  }, [groupStageTimeLeft]);
-
-  const formatTime = (timeLeft: TimeLeft) => {
-    const { days, hours, minutes, seconds } = timeLeft;
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-  };
 
   return (
     <div className="min-h-screen max-w-[768px] mx-auto bg-white mb-10">
@@ -88,7 +39,10 @@ const ContestGroupStage = ({ contestGroupStage }: any) => {
                 BẢNG {contestGroupStage.code}
               </div>
               <div className="text-SubheadLg text-primary-900">
-                {formatTime(timeLeft)}
+                {/* {formatTime(timeLeft)} */}
+                <DateTimeDisplay dataTime={groupStageTimeLeft} type="hours"/><span>:</span>
+                <DateTimeDisplay dataTime={groupStageTimeLeft} type="minutes"/><span>:</span>
+                <DateTimeDisplay dataTime={groupStageTimeLeft} type="seconds" onTimeOver={handleTimeOver}/>
               </div>
             </div>
             <div className="w-full border-t border-gray-300 "></div>
@@ -105,7 +59,7 @@ const ContestGroupStage = ({ contestGroupStage }: any) => {
                 <Button
                   style={{ borderRadius: "4rem" }}
                   className="w-[110px] h-[40px] rounded-[3rem]"
-                  disabled={timeOut}
+                  disabled={timeOver}
                 >
                   Nộp bài
                 </Button>
@@ -131,4 +85,4 @@ const ContestGroupStage = ({ contestGroupStage }: any) => {
     </div>
   );
 };
-export default GroupStageGuard(ContestGroupStage);
+export default GroupStageGuard(ContestGroupStageEntry);
