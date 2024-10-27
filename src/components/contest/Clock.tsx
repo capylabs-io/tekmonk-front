@@ -12,17 +12,21 @@ import { ContestGroupStage, TimeLeft } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
 
 
-
-export const Clock = memo(
+const Clock = 
   ({ startTime, endTime }: { startTime: string; endTime: string }) => {
     const router = useRouter();
-    const [isContestStarted, setIsContestStarted] = useState(false);
-    const [contestStartTime, setContestStartTime] = useState<string>(
+    //use state
+    const [isContestStarted, setIsContestStarted] = useState({
+      started: false,
+      ended: false,
+    }
+    );
+    const [contestTimeLeft, setContestTimeLeft] = useState<string>(
       startTime
     );
+    
 
     const candidateNumber = useUserStore((state) => state.candidateNumber);
-
 
     const [dataGroupStage, setDataGroupStage] = useState<ContestGroupStage>(
       {} as ContestGroupStage
@@ -32,13 +36,25 @@ export const Clock = memo(
     const getRelevantTime = (startTime: string, endTime: string) => {
       const currentTime = new Date();
       if( currentTime < new Date(startTime) ) {
-        setIsContestStarted(false);
+        setIsContestStarted({ started: false, ended: false });
         return startTime;
       }else {
-        setIsContestStarted(true);
+        setIsContestStarted({ started: true, ended: false });
         return endTime;
       }
     };
+
+    const handleTimeOver = () => {
+      if(!isContestStarted.started) {
+        setIsContestStarted({ started: true, ended: false });
+        console.log("start contest")
+        return;
+      }
+      if(!isContestStarted.ended) {
+        setIsContestStarted({ started: true, ended: true });
+        return;
+      }
+    }
 
     const fetchDataGroupStage = async () => {
       try {
@@ -59,8 +75,8 @@ export const Clock = memo(
     };
     useEffect(() => {
       fetchDataGroupStage();
-      getRelevantTime(startTime, endTime);
-    }, []);
+      setContestTimeLeft(getRelevantTime(startTime, endTime));
+    }, [isContestStarted.started, isContestStarted.ended]);
 
     const isRegisterDisabled = new Date() > new Date(endTime);
 
@@ -72,7 +88,7 @@ export const Clock = memo(
               className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg"
               outlined={false}
               onClick={() => router.push("register-contest")}
-              disabled={isRegisterDisabled}
+              disabled={isRegisterDisabled || !isContestStarted.started || isContestStarted.ended}
             >
               Đăng ký
             </Button>
@@ -98,7 +114,7 @@ export const Clock = memo(
         </div>
 
         <div className="mt-[52px] text-2xl font-bold text-gray-600">
-          {isContestStarted
+          {isContestStarted.started
             ? "Thời gian đăng ký kết thúc sau:"
             : "Thời gian đăng ký bắt đầu sau:"}
         </div>
@@ -130,9 +146,9 @@ export const Clock = memo(
                 NGÀY
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                { contestStartTime &&
+                { contestTimeLeft &&
                   <DateTimeDisplay
-                    dataTime={contestStartTime}
+                    dataTime={contestTimeLeft}
                     type={"days"}
                   />
                 }
@@ -150,9 +166,9 @@ export const Clock = memo(
                 GIỜ
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestStartTime &&
+                {contestTimeLeft &&
                   <DateTimeDisplay
-                    dataTime={contestStartTime}
+                    dataTime={contestTimeLeft}
                     type={"hours"}
                   />
                 }
@@ -170,9 +186,9 @@ export const Clock = memo(
                 PHÚT
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestStartTime &&
+                {contestTimeLeft &&
                   <DateTimeDisplay
-                    dataTime={contestStartTime}
+                    dataTime={contestTimeLeft}
                     type={"minutes"}
                   />
                 }
@@ -190,10 +206,11 @@ export const Clock = memo(
                 GIÂY
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestStartTime &&
+                {contestTimeLeft &&
                   <DateTimeDisplay
-                    dataTime={contestStartTime}
+                    dataTime={contestTimeLeft}
                     type={"seconds"}
+                    onTimeOver={handleTimeOver}
                   />
                 }
               </div>
@@ -202,5 +219,6 @@ export const Clock = memo(
         </div>
       </div>
     );
-  }
-);
+  };
+
+export default memo(Clock);

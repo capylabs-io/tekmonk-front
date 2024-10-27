@@ -6,12 +6,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
@@ -23,7 +19,6 @@ import {
 } from "../ui/tooltip";
 import { Button } from "../common/Button";
 import { useUserStore } from "@/store/UserStore";
-import { toast } from "react-toastify";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
@@ -39,17 +34,23 @@ type ContestLayoutProps = {
 
 const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
+  //use state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [clear, isConnected] = useUserStore((state) => [
     state.clear,
     state.isConnected,
   ]);
+
+
+  //use store
   const [success] = useSnackbarStore((state) => [state.success]);
   useEffect(() => {
     setIsClient(true);
   }, []);
+  const isSubmitted = useUserStore((state) => state.isSubmitted);
 
+  //handle function
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     if (!isMenuOpen) {
@@ -75,6 +76,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
       const contestSubmission = await getContestSubmissionByContestEntry(
         contestEntry.id
       );
+      if(contestSubmission.data.length === 0) {return;}
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
@@ -134,7 +136,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && (
+              {isConnected() && isSubmitted && (
                 <div
                   className="text-bodyMd hover:cursor-pointer"
                   onClick={handleRedirectToMyContest}
@@ -210,8 +212,8 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         Tổng hợp bài dự thi
                       </div>
                     </Button>
-                    {isConnected() && (
-                      <Button outlined={true} onClick={() => router.push("/")}>
+                    {isConnected() && isSubmitted && (
+                      <Button outlined={true} onClick={handleRedirectToMyContest}>
                         <div className="text-black text-base">
                           Bài dự thi của tôi
                         </div>

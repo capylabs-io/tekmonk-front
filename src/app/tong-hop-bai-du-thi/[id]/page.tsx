@@ -117,7 +117,7 @@ const ContestDetail: React.FC = () => {
           <div className="h-12 mobile:h-16 flex items-center px-8">
             <ArrowLeft
               size={24}
-              onClick={() => router.push("/tong-hop-bai-du-thi")}
+              onClick={() => router.back()}
               className="cursor-pointer"
             />
             <span className="text-grey-500 text-sm font-medium ml-2 select-none">

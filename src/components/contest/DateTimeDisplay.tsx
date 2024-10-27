@@ -71,7 +71,13 @@ const DateTimeDisplay = ({
     }
   }, [countDown, type]);
 
-  return <>{timeValue}</>;
+  return (
+    getReturnValues().days +
+      getReturnValues().hours +
+      getReturnValues().minutes +
+      getReturnValues().seconds >
+      0 ? <>{timeValue}</> : <>00</>
+  );
 };
 
 export default DateTimeDisplay;

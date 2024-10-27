@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/common/Dialog";
 import { DataContestSubmission } from "@/types/contestSubmit";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,6 +50,19 @@ const FormSubmitContest = React.forwardRef<
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
+  //get candidate number
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  useEffect(() => {
+    //if candidate number is null, redirect to home page
+    if(!candidateNumber) {
+      router.push("/");
+    }
+    const firstChar = candidateNumber?.charAt(0);
+    if(firstChar != "A" && firstChar != "B" && firstChar != "C") {
+      setCansubmitZipFile(true);
+    }
+  },[candidateNumber])
   const router = useRouter();
 
   const { success, error, warn } = useSnackbarStore();
@@ -123,6 +136,7 @@ const FormSubmitContest = React.forwardRef<
       await Promise.all(uploadPromises);
 
       success("Success", "Nộp bài thi thành công!");
+      useUserStore.setState({ isSubmitted: true });
       router.push("tong-hop-bai-du-thi/" + result.id);
     } catch (err) {
       error("Error", "Có lỗi xảy ra khi nộp bài thi");
@@ -199,11 +213,12 @@ const FormSubmitContest = React.forwardRef<
               imgArr={imgProject}
               onChange={handleImgChange}
             />
-            <InputFileUploadContest
+            {cansubmitZipFile && <InputFileUploadContest
               title="File dự án"
               onChange={handleFileChange}
               value={projectFile}
-            />
+            />}
+            
             <InputField
               title="URL"
               type="text"
