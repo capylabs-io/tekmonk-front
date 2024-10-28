@@ -90,19 +90,12 @@ export default function RegisterContest() {
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
-      console.log("isValid", isValid);
-      console.log("check groupStage", get(methods.getValues(), "stepThree"));
       if (isValid) setCurrentStep(currentStep + 1);
     }
   };
 
   const handleNext = async (formData: any) => {
-    console.log("formData", formData);
-    console.log("groupMemberInfo", {
-      ...get(formData, "stepOne", {}),
-      ...get(formData, "stepTwo", {}),
-      ...get(formData, "stepThree", {}),
-    });
+    
     try {
       show();
 
@@ -173,7 +166,7 @@ export default function RegisterContest() {
     <>
       <div className="h-full mt-4 overflow-auto">
         <div className="px-2">
-          <div
+          {/* <div
             className="w-full max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
             style={{
               backgroundImage: "url('/image/contest/Banner.png')",
@@ -181,7 +174,8 @@ export default function RegisterContest() {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
             }}
-          ></div>
+          ></div> */}
+          <div className="w-full text-[40px] text-primary-700 font-dela max-w-[720px] max-[580px]:text-[32px] max-[370px]:text-[28px] mx-auto rounded-2x text-center">Đăng ký thông tin dự thi</div>
         </div>
 
         <div className="p-2">

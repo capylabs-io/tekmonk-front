@@ -14,6 +14,14 @@ import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { Input } from "../common/Input";
 import { get } from "lodash";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -76,72 +84,63 @@ export const Step3 = () => {
 
   useEffect(() => {
     if (fields.length == 0 && valueGroup == "5") {
-      console.log("Auto-adding a team member");
       addTeamMember();
     }
   }, [valueGroup]);
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Thông tin bảng đấu:</h3>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="border border-gray-300 p-2">Bảng</th>
-              <th className="border border-gray-300 p-2">Lớp</th>
-              <th className="border border-gray-300 p-2">Hình thức thi</th>
-              <th className="border border-gray-300 p-2">Nội dung thi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border border-gray-300 p-2">Bảng A</td>
-              <td className="border border-gray-300 p-2">
-                Tiểu học: 8 - 11 tuổi
-              </td>
-              <td className="border border-gray-300 p-2">Thi cá nhân</td>
-              <td className="border border-gray-300 p-2">
-                Lập trình bằng CodeCombat (Python hoặc JavaScript)
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2">Bảng B</td>
-              <td className="border border-gray-300 p-2">THCS: 12 - 15 tuổi</td>
-              <td className="border border-gray-300 p-2">Thi cá nhân</td>
-              <td className="border border-gray-300 p-2">
-                Lập trình bằng CodeCombat (Python hoặc JavaScript)
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2">Bảng C</td>
-              <td className="border border-gray-300 p-2">THPT: 16 - 18 tuổi</td>
-              <td className="border border-gray-300 p-2">Thi cá nhân</td>
-              <td className="border border-gray-300 p-2">
-                Lập trình bằng CodeCombat (Python hoặc JavaScript)
-              </td>
-            </tr>
-            <tr>
-              <td className="border border-gray-300 p-2">Bảng D</td>
-              <td className="border border-gray-300 p-2">
-                THCS, THPT: Bảng sáng tạo
-              </td>
-              <td className="border border-gray-300 p-2">
-                Thi cá nhân hoặc thi theo đội, tối đa 03 thành viên
-              </td>
-              <td className="border border-gray-300 p-2">
-                <div>
-                  Sáng tạo sản phẩm công nghệ phục vụ cho các chủ đề giải đáp
-                  (sử dụng Scratch hoặc Python).
-                </div>
-                <div>
-                  Sản phẩm sáng tạo dự thi chưa từng đạt giải các cuộc thi, hội
-                  thi cấp quốc gia, quốc tế.
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div className="container mx-auto py-10">
+      <Table className="border-collapse border border-slate-400">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">Bảng</TableHead>
+            <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">Lớp</TableHead>
+            <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">Hình thức thi</TableHead>
+            <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">Nội dung thi</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="border border-slate-300 p-2">Bảng A</TableCell>
+            <TableCell className="border border-slate-300 p-2">Tiểu học: Lớp 3 - lớp 5</TableCell>
+            <TableCell className="border border-slate-300 p-2">Thi cá nhân</TableCell>
+            <TableCell className="border border-slate-300 p-2" rowSpan={3}>
+              Lập trình bằng CodeCombat (Python hoặc JavaScript)
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-slate-300 p-2">Bảng B</TableCell>
+            <TableCell className="border border-slate-300 p-2">THCS: Lớp 6 - lớp 9</TableCell>
+            <TableCell className="border border-slate-300 p-2">Thi cá nhân</TableCell>
+            {/* <TableCell className="border border-slate-300 p-2">
+              Lập trình bằng CodeCombat (Python hoặc JavaScript)
+            </TableCell> */}
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-slate-300 p-2">Bảng C</TableCell>
+            <TableCell className="border border-slate-300 p-2">THPT: Lớp 10 - lớp 12</TableCell>
+            <TableCell className="border border-slate-300 p-2">Thi cá nhân</TableCell>
+            {/* <TableCell className="border border-slate-300 p-2">
+              Lập trình bằng CodeCombat (Python hoặc JavaScript)
+            </TableCell> */}
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-slate-300 p-2">Bảng D</TableCell>
+            <TableCell className="border border-slate-300 p-2">Tiểu học, THCS, THPT (Lớp 3 - 12): Bảng sáng tạo</TableCell>
+            <TableCell className="border border-slate-300 p-2">Thi cá nhân hoặc thi theo đội, tối đa 03 thành viên</TableCell>
+            <TableCell className="border border-slate-300 p-2">
+              <div>
+                Sáng tạo sản phẩm công nghệ phục vụ cho các chủ đề giải đáp (sử dụng Scratch hoặc Python).
+              </div>
+              <div className="mt-2">
+                Sản phẩm sáng tạo dự thi chưa từng đạt giải các cuộc thi, hội thi cấp quốc gia, quốc tế.
+              </div>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
       <div>
         <Label className="text-SubheadSm text-gray-950">
           Thí sinh đăng ký bảng đấu <span className="text-red-500">*</span>
@@ -162,19 +161,19 @@ export const Step3 = () => {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="1" id="category-A" />
                 <Label className="text-bodyLg text-black ">
-                  Bảng A (Khối tiểu học: 8 - 11 tuổi)
+                  Bảng A (Khối tiểu học: Lớp 3 - lớp 5)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="2" id="category-B" />
                 <Label className="text-bodyLg text-black">
-                  Bảng B (Khối THCS: 12 - 15 tuổi)
+                  Bảng B (Khối THCS: Lớp 6 - lớp 9)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="3" id="category-C" />
                 <Label className="text-bodyLg text-black">
-                  Bảng C (Khối THPT: 16 - 18 tuổi)
+                  Bảng C (Khối THPT: Lớp 10 - lớp 12)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
