@@ -38,14 +38,14 @@ const ContestGroupStageEntry = ({
   //function handler
   const handleRedirectToMyContest = async () => {
     try {
-      if(!candidateNumber) return;
-      const contestEntry = await getOneContestEntry(
-        candidateNumber
-      );
+      if (!candidateNumber) return;
+      const contestEntry = await getOneContestEntry(candidateNumber);
       const contestSubmission = await getContestSubmissionByContestEntry(
         contestEntry.id
       );
-      if(contestSubmission.data.length === 0) {return;}
+      if (contestSubmission.data.length === 0) {
+        return;
+      }
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
@@ -67,6 +67,36 @@ const ContestGroupStageEntry = ({
         <Card className="max-w-4xl mx-auto p-0">
           <CardContent className="p-0">
             <div className="">
+              <div className="flex justify-between items-center h-[64px] px-8 py-5">
+                <Button
+                  outlined={true}
+                  style={{ borderRadius: "4rem" }}
+                  className="w-[110px] h-[40px] rounded-[3rem] border"
+                  onClick={() => router.push("/")}
+                >
+                  Quay lại
+                </Button>
+                {isSubmitted ? (
+                  <Button
+                    style={{ borderRadius: "4rem" }}
+                    className=" h-[40px] rounded-[3rem]"
+                    onClick={handleRedirectToMyContest}
+                  >
+                    Bài dự thi của tôi
+                  </Button>
+                ) : (
+                  <FormSubmitContest>
+                    <Button
+                      style={{ borderRadius: "4rem" }}
+                      className="w-[110px] h-[40px] rounded-[3rem]"
+                      disabled={timeOver || isSubmitted}
+                    >
+                      Nộp bài
+                    </Button>
+                  </FormSubmitContest>
+                )}
+              </div>
+              <div className="w-full border-t border-gray-300 "></div>
               <div className="flex justify-between items-center h-[64px] px-8 py-5">
                 <div className="text-SubheadLg text-primary-900">
                   BẢNG {contestGroupStage.code}
@@ -96,34 +126,11 @@ const ContestGroupStageEntry = ({
                   {/* {formatTime(timeLeft)} */}
                 </div>
               </div>
-              <div className="w-full border-t border-gray-300 "></div>
-              <div className="flex justify-between items-center h-[64px] px-8 py-5">
-                <Button
-                  outlined={true}
-                  style={{ borderRadius: "4rem" }}
-                  className="w-[110px] h-[40px] rounded-[3rem] border"
-                  onClick={() => router.push("/")}
-                >
-                  Quay lại
-                </Button>
-                {isSubmitted ? (
-                  <Button
-                      style={{ borderRadius: "4rem" }}
-                      className=" h-[40px] rounded-[3rem]"
-                      onClick={handleRedirectToMyContest}
-                  >Bài dự thi của tôi</Button>
-                ) : (
-                  <FormSubmitContest>
-                    <Button
-                      style={{ borderRadius: "4rem" }}
-                      className="w-[110px] h-[40px] rounded-[3rem]"
-                      disabled={timeOver || isSubmitted}
-                    >
-                      Nộp bài
-                    </Button>
-                  </FormSubmitContest>
-                )}
-              </div>
+                      <div className="flex justify-between items-center h-[64px] px-8 py-5">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
               <div
                 className="bg-white overflow-hidden"
                 style={{ height: "calc(100vh - 50px)" }}

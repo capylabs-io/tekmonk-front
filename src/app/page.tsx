@@ -164,6 +164,7 @@ import ContestLayout from "@/components/layout/ContestLayout";
 import { Share } from "lucide-react";
 import ContestRules from "@/components/contest/ContestRules";
 import { Button } from "@/components/common/Button";
+import { IconDisPlay } from "@/components/contest/IconDisplay";
 
 export default function Contest() {
 
@@ -172,6 +173,9 @@ export default function Contest() {
   const [isClient, setIsClient] = useState<boolean>(false);
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
+  const [statusBackGround, setStatusBackGround] = useState({
+    top: 1650,
+  });
 
 
   //use effect
@@ -203,98 +207,48 @@ export default function Contest() {
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const handleChangeRuleStep = (step:string) => {
+    console.log("step: ", step);
+    switch (step) {
+      case "1":
+        setStatusBackGround({ top: 1650 });
+        break;
+      case "2":
+        setStatusBackGround({ top: 1870 });
+        break;
+      case "3":
+        setStatusBackGround({ top: 2690 });
+        break;
+      case "4":
+        setStatusBackGround({ top: 1650 });
+        break;
+      default:
+        setStatusBackGround({ top: 1650 });
+        break;
+      
+    }
+  };
   return (
     isClient && (
       <div className="relative overflow-hidden">
         <div
-          className={`absolute w-[160%] h-[100%] top-[1450px] bot-0 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-[${LAYERS.BACKGROUND}] 
-      bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)]
-       rounded-tl-[50%] rounded-tr-[50%] 
-       max-mobile:w-[310%] max-mobile:top-[1400px]
-       max-md:w-[260%] max-md:top-[1350px]
-       `}
-        ></div>
+    className={`absolute w-[190%] h-full  left-1/2 -z-[${LAYERS.BACKGROUND}]
+      bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)] rounded-t-[50%] 
+      max-mobile:w-[310%] max-mobile:top-[1400px]
+      max-md:w-[260%] max-md:top-[1350px]`}
+    style={{
+      transform: "translateX(-50%) translateY(-50%)", // Adjusts center position
+      top: `${statusBackGround.top}px`,
+    }}
+  ></div>
+  
         <ContestLayout>
           <>
             <div className="min-h-screen relative max-width-pc">
               <div className="w-full mx-auto px-4 py-8 relative flex justify-center">
-                <div className="max-md:hidden">
-                  <Image
-                    src="/image/contest/Saly-12.png"
-                    alt="Stylized mobile phone"
-                    width={360}
-                    height={360}
-                    className={`absolute top-16 -left-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.9}px)`,
-                    }}
-                  />
-
-                  <Image
-                    src="/image/contest/Saly-43.png"
-                    alt="Cartoon rocket"
-                    width={360}
-                    height={360}
-                    className={`absolute top-16 -right-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.9}px)`,
-                    }}
-                  />
-
-                  <Image
-                    src="/image/contest/gold.png"
-                    alt="gold"
-                    width={184}
-                    height={184}
-                    className={`absolute top-[600px] -left-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.8}px)`,
-                    }}
-                  />
-
-                  <Image
-                    src="/image/contest/img.png"
-                    alt="fire"
-                    width={272}
-                    height={272}
-                    className={`absolute top-[700px] -right-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.8}px)`,
-                    }}
-                  />
-
-                  <Image
-                    src="/image/contest/Group-10.png"
-                    alt="decor"
-                    width={60}
-                    height={77}
-                    className={`absolute top-10 -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.8}px)`,
-                    }}
-                  />
-                  <Image
-                    src="/image/contest/Group-11.png"
-                    alt="Cartoon rocket"
-                    width={60}
-                    height={53}
-                    className={`absolute top-0 right-[40%] -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.2}px)`,
-                    }}
-                  />
-                  <Image
-                    src="/image/contest/Group-12.png"
-                    alt="Cartoon rocket"
-                    width={120}
-                    height={114}
-                    sizes="auto"
-                    className={`absolute top-10 right-0 -z-[${LAYERS.ICON_CONTEST}]`}
-                    style={{
-                      transform: `translateY(${scrollY * 0.8}px)`,
-                    }}
-                  />
-                </div>
+                {/*  */}
+                <IconDisPlay />
                 {scrollY > 500 && (
                   <div
                     className="w-10 h-10 bg-white fixed bottom-3 right-5 z-[1000] cursor-pointer rounded-full"
@@ -418,7 +372,7 @@ export default function Contest() {
                             >
                               Chi tiết thể lệ cuộc thi
                             </Button>
-                            <ContestRules/>
+                            <ContestRules changeRuleAction={handleChangeRuleStep}/>
                           </div>
                         </CardContestContent>
                       </CardContest>
