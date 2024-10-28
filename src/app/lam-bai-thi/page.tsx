@@ -11,6 +11,7 @@ import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { useUserStore } from "@/store/UserStore";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import { Progress } from "@/components/ui/progress";
 
 const ContestGroupStageEntry = ({
   contestGroupStage,
@@ -27,6 +28,7 @@ const ContestGroupStageEntry = ({
     contestGroupStage.endTime
   );
   const [isClient, setIsClient] = useState(false);
+  const [progress, setProgress] = useState(30);
 
   //
   const candidateNumber = useUserStore((state) => state.candidateNumber);
@@ -59,6 +61,8 @@ const ContestGroupStageEntry = ({
       router.push("/");
     }
     setGroupStageTimeLeft(contestGroupStage.endTime);
+
+    //handle get progress later
   }, []);
 
   return (
@@ -127,9 +131,9 @@ const ContestGroupStageEntry = ({
                 </div>
               </div>
                       <div className="flex justify-between items-center h-[64px] px-8 py-5">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                        <div className="text-gray-950 text-bodyLg">Tiến trình</div>
+                        <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
+                        <div className="text-primary-900 text-bodyL">{progress}%</div>
                       </div>
               <div
                 className="bg-white overflow-hidden"
