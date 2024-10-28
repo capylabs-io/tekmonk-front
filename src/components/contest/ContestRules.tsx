@@ -23,7 +23,7 @@ const ContestRules = () => {
   }, [activeTab]);
 
   return (
-    <div className="w-full h-full min-h-[500px] mix-w-[400px] max-w-4xl mx-auto px-4 overflow-x-scroll mt-4">
+    <div className="w-full h-full min-h-[500px] mix-w-[400px] max-w-4xl mx-auto px-4 mt-4">
       <nav className="flex border-b border-gray-200">
         {tabs.map((tab) => (
           <button

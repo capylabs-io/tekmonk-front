@@ -416,7 +416,7 @@ export default function Contest() {
                               outlined={true}
                               onClick={() => window.open('https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf', '_blank')}
                             >
-                              Xem chi tiết thể lệ pdf
+                              Chi tiết thể lệ cuộc thi
                             </Button>
                             <ContestRules/>
                           </div>
