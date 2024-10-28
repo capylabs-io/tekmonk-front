@@ -11,7 +11,7 @@ const tabs = [
   { id: "3", label: "Hướng dẫn thi đấu" },
   { id: "4", label: "Quy định kỹ thuật" },
 ];
-const ContestRules = ({changeRuleAction} : {changeRuleAction: (step:string) => void}) => {
+const ContestRules = () => {
   const [activeTab, setActiveTab] = useState("1");
   const scrollPosition = useRef(0);
   const handleTabChange = (tabId:any) => {
@@ -30,7 +30,6 @@ const ContestRules = ({changeRuleAction} : {changeRuleAction: (step:string) => v
             key={tab.id}
             onClick={() => {
               handleTabChange(tab.id)
-              changeRuleAction(tab.id)
             }}
             className={`flex-1 py-2 px-1 text-center text-sm font-medium text-SubheadMd ${
               activeTab === tab.id

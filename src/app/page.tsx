@@ -167,7 +167,6 @@ import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
 
 export default function Contest() {
-
   //use state
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -175,8 +174,9 @@ export default function Contest() {
   const [endTime, setEndTime] = useState<string>("");
   const [statusBackGround, setStatusBackGround] = useState({
     top: 1650,
+    smTop: 1400,
+    mdTop: 1250,
   });
-
 
   //use effect
   useEffect(() => {
@@ -208,41 +208,16 @@ export default function Contest() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleChangeRuleStep = (step:string) => {
-    console.log("step: ", step);
-    switch (step) {
-      case "1":
-        setStatusBackGround({ top: 1650 });
-        break;
-      case "2":
-        setStatusBackGround({ top: 1870 });
-        break;
-      case "3":
-        setStatusBackGround({ top: 2690 });
-        break;
-      case "4":
-        setStatusBackGround({ top: 1650 });
-        break;
-      default:
-        setStatusBackGround({ top: 1650 });
-        break;
-      
-    }
-  };
   return (
     isClient && (
       <div className="relative overflow-hidden">
         <div
-    className={`absolute w-[190%] h-full  left-1/2 -z-[${LAYERS.BACKGROUND}]
+    className={`absolute w-[190%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND}]
       bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)] rounded-t-[50%] 
-      max-mobile:w-[310%] max-mobile:top-[1400px]
-      max-md:w-[260%] max-md:top-[1350px]`}
-    style={{
-      transform: "translateX(-50%) translateY(-50%)", // Adjusts center position
-      top: `${statusBackGround.top}px`,
-    }}
+      max-mobile:w-[310%] max-mobile:top-[430px]
+      max-md:w-[260%] max-md:top-[400px]`}
   ></div>
-  
+
         <ContestLayout>
           <>
             <div className="min-h-screen relative max-width-pc">
@@ -346,7 +321,10 @@ export default function Contest() {
                             >
                               <Share />
                             </div>
-                            <div id="rules" className="font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]">
+                            <div
+                              id="rules"
+                              className="font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
+                            >
                               Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
                             </div>
                             <div className="mt-4 text-gray-950 text-bodyLg max-mobile:text-base">
@@ -365,14 +343,19 @@ export default function Contest() {
                               dự thi vòng chung kết tại Barcelona, Tây Ban Nha
                               vào tháng 7 năm 2025.
                             </div>
-                            <Button 
-                              className="border border-gray-300 !rounded-[3rem] mx-auto mt-4 shadow-custom-gray" 
+                            <Button
+                              className="border border-gray-300 !rounded-[3rem] mx-auto mt-4 shadow-custom-gray"
                               outlined={true}
-                              onClick={() => window.open('https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf', '_blank')}
+                              onClick={() =>
+                                window.open(
+                                  "https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf",
+                                  "_blank"
+                                )
+                              }
                             >
                               Chi tiết thể lệ cuộc thi
                             </Button>
-                            <ContestRules changeRuleAction={handleChangeRuleStep}/>
+                            <ContestRules />
                           </div>
                         </CardContestContent>
                       </CardContest>
