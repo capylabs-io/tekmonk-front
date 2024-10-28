@@ -41,11 +41,11 @@ export function SearchBar({
         <SelectTrigger className="w-[240px] border-0 border-r pl-3 rounded-none focus:outline-none focus:ring-0">
           <SelectValue placeholder="Tìm kiếm theo" />
         </SelectTrigger>
-        <SelectContent className="bg-white">
+        <SelectContent className="bg-white cursor-pointer">
           <SelectGroup>
             <SelectLabel>Loại</SelectLabel>
             {searchOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+              <SelectItem key={option.value} value={option.value} className="cursor-pointer hover:bg-gray-300">
                 {option.label}
               </SelectItem>
             ))}
@@ -59,8 +59,9 @@ export function SearchBar({
         value={searchValue}
         onChange={(e) => onSearchValueChange(e.target.value)}
       />
-      <svg
-        className="h-8 w-8 text-gray-400"
+      <div className="h-8 w-8 ml-2.5">
+        <svg
+        className="h-full w-full text-gray-400 cursor-pointer"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -70,6 +71,8 @@ export function SearchBar({
       >
         <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
       </svg>
+      </div>
+      
     </div>
   );
 }

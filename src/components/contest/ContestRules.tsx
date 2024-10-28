@@ -6,13 +6,13 @@ import { CompetitionContest } from "./rules/competitionContent";
 import { TechnicalRegulations } from "./rules/technicalRegulations";
 import { CompetitionInstructions } from "./rules/competitionInstructions";
 const tabs = [
-  { id: "general", label: "Thông tin chung" },
-  { id: "content", label: "Nội dung thi đấu" },
-  { id: "guidelines", label: "Hướng dẫn thi đấu" },
-  { id: "regulations", label: "Quy định kỹ thuật" },
+  { id: "1", label: "Thông tin chung" },
+  { id: "2", label: "Nội dung thi đấu" },
+  { id: "3", label: "Hướng dẫn thi đấu" },
+  { id: "4", label: "Quy định kỹ thuật" },
 ];
-const ContestRules = () => {
-  const [activeTab, setActiveTab] = useState("general");
+const ContestRules = ({changeRuleAction} : {changeRuleAction: (step:string) => void}) => {
+  const [activeTab, setActiveTab] = useState("1");
   const scrollPosition = useRef(0);
   const handleTabChange = (tabId:any) => {
     scrollPosition.current = window.scrollY; // Lưu vị trí cuộn hiện tại
@@ -28,7 +28,10 @@ const ContestRules = () => {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => handleTabChange(tab.id)}
+            onClick={() => {
+              handleTabChange(tab.id)
+              changeRuleAction(tab.id)
+            }}
             className={`flex-1 py-2 px-1 text-center text-sm font-medium text-SubheadMd ${
               activeTab === tab.id
                 ? "text-primary-950 border-b-2 border-primary-600"
@@ -40,10 +43,10 @@ const ContestRules = () => {
         ))}
       </nav>
       <div className="mt-4">
-        {activeTab === "general" && <CommonInfo />}
-        {activeTab === "content" && <CompetitionContest />}
-        {activeTab === "guidelines" && <CompetitionInstructions />}
-        {activeTab === "regulations" && <TechnicalRegulations />}
+        {activeTab === "1" && <CommonInfo />}
+        {activeTab === "2" && <CompetitionContest />}
+        {activeTab === "3" && <CompetitionInstructions />}
+        {activeTab === "4" && <TechnicalRegulations />}
       </div>
     </div>
   );
