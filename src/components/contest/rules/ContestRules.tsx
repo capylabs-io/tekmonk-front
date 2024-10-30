@@ -1,10 +1,10 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import { CommonInfo } from "./rules/CommonInfo";
-import { CompetitionContest } from "./rules/competitionContent";
-import { TechnicalRegulations } from "./rules/technicalRegulations";
-import { CompetitionInstructions } from "./rules/competitionInstructions";
+import { CommonInfo } from "./CommonInfo";
+import { CompetitionContest } from "./competitionContent";
+import { CompetitionInstructions } from "./competitionInstructions";
+import { TechnicalRegulations } from "./technicalRegulations";
 const tabs = [
   { id: "1", label: "Thông tin chung" },
   { id: "2", label: "Nội dung thi đấu" },

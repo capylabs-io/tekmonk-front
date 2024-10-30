@@ -130,7 +130,7 @@ export const CompetitionContest = () => {
           <TableBody>
             <TableRow className="border-b">
               <TableCell className="font-medium border-r whitespace-nowrap">Hạn đăng kí</TableCell>
-              <TableCell className="border-r">25/11/2024</TableCell>
+              <TableCell className="border-r">23:59 24/11/2024</TableCell>
               <TableCell>Theo thông báo của Ban Tổ chức sau khi có kết quả Vòng Loại</TableCell>
             </TableRow>
             <TableRow className="border-b">
@@ -141,7 +141,7 @@ export const CompetitionContest = () => {
             <TableRow>
               <TableCell className="font-medium border-r whitespace-nowrap">Địa điểm, hình thức thi</TableCell>
               <TableCell className="border-r">
-                <p>Bảng A, B, C: Tham gia thi tập trung tại các điểm thi do Ban Tổ chức lựa chọn.</p>
+                <p>Bảng A, B, C: Tham gia thi tập trung tại các điểm thi tại Hà Nội do Ban Tổ chức lựa chọn.</p>
                 <p className="mt-2">Bảng D: Nộp bài trực tuyến theo hướng dẫn của Ban Tổ chức.</p>
               </TableCell>
               <TableCell>Thi trực tiếp (tại Cung Thiếu Nhi Hà Nội)</TableCell>

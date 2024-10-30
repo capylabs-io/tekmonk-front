@@ -13,12 +13,12 @@ import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { useUserStore } from "@/store/UserStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
 
 const steps = [
   {
@@ -49,13 +49,12 @@ const steps = [
   },
 ];
 
-export default function RegisterContest() {
+const  RegisterContest = () => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [candidateNumber, setCandidateNumber] = useState<string>("");
   const [isAccepted, setIsAccepted] = useState(false);
-  const isConnected = useUserStore((state) => state.isConnected);
   const [register, clear] = useContestRegisterStore((state) => [
     state.register,
     state.clear,
@@ -65,9 +64,6 @@ export default function RegisterContest() {
     state.error,
     state.success,
   ]);
-  const groupMemberInfo = useContestRegisterStore(
-    (state) => state.groupMemberInfo
-  );
 
   const methods = useForm<WizardSchema>({
     mode: "onChange",
@@ -126,11 +122,6 @@ export default function RegisterContest() {
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
-        //clear groupMemberInfo informData when back to step 1
-        // method.setValue(
-        //   "stepThree.contest_group_stage", "1"
-        // );
-        // console.log("groupMemberInfo", get(methods.getValues(), "stepThree"));
         return <Step1 />;
       case 1:
         return <Step2 />;
@@ -162,19 +153,10 @@ export default function RegisterContest() {
       setIsAccepted(false);
     }
   }, [currentStep]);
-  return !isConnected() ? (
+  return (
     <>
       <div className="h-full mt-4 overflow-auto">
         <div className="px-2">
-          {/* <div
-            className="w-full max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
-            style={{
-              backgroundImage: "url('/image/contest/Banner.png')",
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          ></div> */}
           <div className="w-full text-[40px] text-primary-700 font-dela max-w-[720px] max-[580px]:text-[32px] max-[370px]:text-[28px] mx-auto rounded-2x text-center">Đăng ký thông tin dự thi</div>
         </div>
 
@@ -297,7 +279,7 @@ export default function RegisterContest() {
         </div>
       </div>
     </>
-  ) : (
-    router.push("/")
-  );
+  ) ;
 }
+
+export default RegisterContestGuard(RegisterContest);

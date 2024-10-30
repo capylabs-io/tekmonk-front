@@ -134,7 +134,7 @@ const GroupStageDialog = ({
                     </span>
                   </div>
                   {isShowMessage && (
-                    <div className="text-bodyLg text-red-700">
+                    <div className="text-bodyLg text-red-700 text-center">
                       Chưa đến giờ cuộc thi diễn ra, vui lòng truy cập sau bạn
                       nhé!
                     </div>

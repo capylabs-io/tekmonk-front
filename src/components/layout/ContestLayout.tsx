@@ -2,7 +2,7 @@
 
 import { Nunito_Sans } from "next/font/google";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Drawer,
@@ -22,6 +22,7 @@ import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import {Link as LinkToScroll} from "react-scroll";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -34,14 +35,13 @@ type ContestLayoutProps = {
 
 const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   //use state
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [clear, isConnected] = useUserStore((state) => [
     state.clear,
     state.isConnected,
   ]);
-
 
   //use store
   const [success] = useSnackbarStore((state) => [state.success]);
@@ -51,21 +51,18 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   const isSubmitted = useUserStore((state) => state.isSubmitted);
 
   //handle function
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    if (!isMenuOpen) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-  };
   const handleLogout = () => {
     clear();
     success("Success", "Đăng xuất thành công");
     router.push("/login");
   };
   const redirectContest = () => {
-    router.push("/");
+    //handle if user is not at main page =>  refirect to main page
+    if (pathname != "/") {
+      router.push("/");
+      return;
+    }
+    return;
   };
 
   const handleRedirectToMyContest = async () => {
@@ -76,7 +73,9 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
       const contestSubmission = await getContestSubmissionByContestEntry(
         contestEntry.id
       );
-      if(contestSubmission.data.length === 0) {return;}
+      if (contestSubmission.data.length === 0) {
+        return;
+      }
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
       console.error(err);
@@ -93,14 +92,6 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
       >
         <TooltipProvider>
-          {/* <Image
-            src="/image/contest/layer_bg.png"
-            alt="Background"
-            fill
-            priority
-            quality={40}
-            className="object-cover absolute z-[-60]"
-          /> */}
 
           {/* Header */}
           <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
@@ -116,40 +107,62 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
+
+          <LinkToScroll to="rules" smooth={true} duration={500}>
               <div
                 className="text-gray-950  cursor-pointer"
                 onClick={redirectContest}
               >
                 Thể lệ
               </div>
+          </LinkToScroll>
+
+              <div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div
+                      className="text-gray-950  cursor-pointer"
+                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
+                    >
+                      Tổng hợp bài dự thi
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sắp diễn ra</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              {isConnected() && isSubmitted && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <div
+                      className="text-bodyMd hover:cursor-pointer"
+                      // onClick={handleRedirectToMyContest}
+                    >
+                      Bài dự thi của tôi
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sắp diễn ra</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
 
               <Tooltip>
-                <TooltipTrigger asChild>
+                <TooltipTrigger>
                   <div
-                    className="text-gray-950  cursor-pointer"
-                    onClick={() => router.push("/tong-hop-bai-du-thi")}
+                    className="text-bodyMd hover:cursor-pointer"
+                    // onClick={handleRedirectResultContest}
                   >
-                    Tổng hợp bài dự thi
+                    Kết quả vòng loại
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Sắp diễn ra</p>
                 </TooltipContent>
               </Tooltip>
-              {isConnected() && isSubmitted && (
-                <div
-                  className="text-bodyMd hover:cursor-pointer"
-                  onClick={handleRedirectToMyContest}
-                >
-                  Bài dự thi của tôi
-                </div>
-              )}
-              <div
-                className="text-bodyMd hover:cursor-pointer"
-                onClick={handleRedirectResultContest}
-              >
-                Kết quả vòng loại
-              </div>
+
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyMd  hover:cursor-pointer"
@@ -171,11 +184,11 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             </nav>
 
             {/* Mobile Menu Button */}
+            <div className="md:hidden">
             <Drawer direction="top">
-              <DrawerTrigger asChild>
+              <DrawerTrigger >
                 <div
-                  onClick={() => toggleMenu()}
-                  className="md:hidden text-gray-950 hover:cursor-pointer"
+                  className="text-gray-950 hover:cursor-pointer"
                 >
                   <svg
                     className="w-6 h-6"
@@ -206,14 +219,17 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Button>
                     <Button
                       outlined={true}
-                      onClick={() => router.push("/tong-hop-bai-du-thi")}
+                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
                     >
                       <div className="text-black text-base">
                         Tổng hợp bài dự thi
                       </div>
                     </Button>
                     {isConnected() && isSubmitted && (
-                      <Button outlined={true} onClick={handleRedirectToMyContest}>
+                      <Button
+                        outlined={true}
+                        // onClick={handleRedirectToMyContest}
+                      >
                         <div className="text-black text-base">
                           Bài dự thi của tôi
                         </div>
@@ -222,7 +238,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
                     <Button
                       outlined={true}
-                      onClick={() => router.push("/ket-qua-vong-loai")}
+                      // onClick={() => router.push("/ket-qua-vong-loai")}
                     >
                       <div className="text-black text-base">
                         Kết quả vòng loại
@@ -257,6 +273,8 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 </div>
               </DrawerContent>
             </Drawer>
+
+            </div>
           </div>
         </TooltipProvider>
 

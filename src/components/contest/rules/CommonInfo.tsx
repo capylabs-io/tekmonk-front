@@ -24,10 +24,10 @@ export const CommonInfo = () => {
               giấy chứng nhận và giải thưởng có giá trị (bằng tiền mặt hoặc hiện
               vật). Ngoài ra, top 20 thí sinh Vòng Quốc gia có cơ hội tham gia đội
               tuyển thi đấu hạng mục lập trình của cuộc thi Olympic STEM Quốc tế
-              (STEM Olympiad).
+              (International STEM Olympiad).
             </p>
             <p className="mt-2">
-              Chi tiết số lượng giải thưởng tương ứng với 4 bảng thi đấu như sau:
+              Chi tiết cơ cấu giải thưởng tương ứng với mỗi bảng thi đấu như sau:
             </p>
             <ul className="list-disc list-inside mt-2">
               <li>01 Giải Vàng</li>

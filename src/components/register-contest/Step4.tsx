@@ -51,7 +51,8 @@ export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
       <div className="text-bodyLg text-gray-950">
         Hotline hỗ trợ: 085 851 4499 (từ 8h30 đến 17h30 hàng ngày)
       </div>
-      <div className="text-bodyLg text-gray-950">Facebook: Học viện Công Nghệ Tekmonk</div>
+      <div className="text-bodyLg text-gray-950">Facebook: Học viện Công nghệ Tekmonk (https://m.facebook.com/HocvienTekmonk)
+</div>
       <div className="text-bodyLg text-gray-950">Website: tekmonk.edu.vn</div>
     </div>
   );

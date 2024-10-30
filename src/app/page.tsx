@@ -162,9 +162,10 @@ import { shareOnMobile } from "react-mobile-share";
 import { getContest } from "@/requests/contest";
 import ContestLayout from "@/components/layout/ContestLayout";
 import { Share } from "lucide-react";
-import ContestRules from "@/components/contest/ContestRules";
+import ContestRules from "@/components/contest/rules/ContestRules";
 import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
+import { AccordionContest } from "@/components/contest/rules/AccordionContest";
 
 export default function Contest() {
   //use state
@@ -212,11 +213,11 @@ export default function Contest() {
     isClient && (
       <div className="relative overflow-hidden">
         <div
-    className={`absolute w-[190%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND}]
+          className={`absolute w-[190%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND}]
       bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)] rounded-t-[50%] 
       max-mobile:w-[310%] max-mobile:top-[430px]
       max-md:w-[260%] max-md:top-[400px]`}
-  ></div>
+        ></div>
 
         <ContestLayout>
           <>
@@ -246,7 +247,7 @@ export default function Contest() {
                     />
 
                     <div className="mt-7 text-Subhead3Xl text-primary-950 max-[460px]:text-xl">
-                      BÁO TIỀN PHONG TỔ CHỨC
+                      Cuộc thi lập trình cấp quốc gia đầu tiên dành cho học sinh
                     </div>
                   </div>
                   {/* use later */}
@@ -290,7 +291,7 @@ export default function Contest() {
                       max-[685px]:p-4
                       
                       max-mobile:w-[360px]
-                      max-mobile:px-1
+                      max-mobile:p-1 
                       max-mobile:rounded-lg
                       
                     `}
@@ -304,7 +305,7 @@ export default function Contest() {
                             className="w-full h-auto rounded-lg max-mobile:rounded-md"
                           />
 
-                          <div className="p-6 w-full max-mobile:p-0 ">
+                          <div className="p-6 w-full max-mobile:p-2">
                             <div className="w-full text-center text-gray-950 text-base mx-auto">
                               Chia sẻ thông tin
                             </div>
@@ -355,7 +356,14 @@ export default function Contest() {
                             >
                               Chi tiết thể lệ cuộc thi
                             </Button>
-                            <ContestRules />
+                            <div className="max-mobile:hidden">
+                              <ContestRules />
+                            </div>
+                            {/* for mobile  */}
+                            <div className="hidden max-mobile:block">
+                                <AccordionContest />
+                            </div>
+
                           </div>
                         </CardContestContent>
                       </CardContest>

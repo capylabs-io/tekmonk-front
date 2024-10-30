@@ -101,7 +101,7 @@ const ContestGroupStageEntry = ({
                 )}
               </div>
               <div className="w-full border-t border-gray-300 "></div>
-              <div className="flex justify-between items-center h-[64px] px-8 py-5">
+              <div className="flex justify-between items-center h-[48px] px-8">
                 <div className="text-SubheadLg text-primary-900">
                   BẢNG {contestGroupStage.code}
                 </div>
@@ -127,14 +127,13 @@ const ContestGroupStageEntry = ({
                         </>
                       )
                     : "Hết giờ"}
-                  {/* {formatTime(timeLeft)} */}
                 </div>
               </div>
-                      <div className="flex justify-between items-center h-[64px] px-8 py-5">
-                        <div className="text-gray-950 text-bodyLg">Tiến trình</div>
-                        <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
-                        <div className="text-primary-900 text-bodyL">{progress}%</div>
-                      </div>
+              <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
+                <div className="text-gray-950 text-bodyLg">Tiến trình</div>
+                <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
+                <div className="text-primary-900 text-bodyL">{progress}%</div>
+              </div>
               <div
                 className="bg-white overflow-hidden"
                 style={{ height: "calc(100vh - 50px)" }}
