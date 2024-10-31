@@ -21,7 +21,7 @@ export const IconDisPlay = () => {
                     alt="Cartoon rocket"
                     width={360}
                     height={360}
-                    className={`absolute top-16 -right-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
+                    className={`absolute top-16 -right-[30%] -z-[${LAYERS.ICON_CONTEST}]`}
                     style={{
                       transform: `translateY(${scrollY * 0.9}px)`,
                     }}
