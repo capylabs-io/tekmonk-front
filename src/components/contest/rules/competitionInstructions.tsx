@@ -29,7 +29,7 @@ export const CompetitionInstructions = () => {
             </ul>
             <div className="font-semibold mb-2">Bảng D:</div>
             <ul className="list-disc pl-5">
-              <li>Thí sinh lập trình phần mềm, ứng dụng sáng tạo, sử dụng ngôn ngữ lập trình Scratch hoặc Python theo chủ đề "Trường học tương lai"</li>
+              <li>Thí sinh lập trình phần mềm, ứng dụng sáng tạo, sử dụng ngôn ngữ lập trình Scratch hoặc Python theo chủ đề &quot;Trường học tương lai&quot;</li>
               <li>Ban Tổ chức thông báo trước chủ đề và định hướng của bảng thi để thí sinh chuẩn bị (có văn bản công bố chủ đề và hướng dẫn cách thức thi riêng. Thời gian công bố dự kiến trước ngày 25/11/2024).</li>
               <li>Học sinh có thể thi cá nhân hoặc đội nhóm (Tối đa 3 thành viên), nộp bài thi trực tuyến qua website olympiad.tekmonk.edu.vn.</li>
             </ul>
