@@ -33,7 +33,7 @@ const steps = [
     title: "Tài khoản",
     titleHeader: "TẠO TÀI KHOẢN",
     icon: "2",
-    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi",
+    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi và code combat",
   },
   {
     title: "Bảng thi",
@@ -105,44 +105,44 @@ const  RegisterContest = () => {
   };
 
   const handleNextStep = async () => {
-    if(currentStep === 1) {
-      //handle create account codecombat here
-      if(!isCreateCodeCombat) {
-        show();
-        const data = {
-          name: get(methods.getValues("stepTwo"), "username"),
-          email: get(methods.getValues("stepTwo"), "email"),
-          role: "student"
-        }
-        const res = await createCodeCombat(data);
-        if(res === "username") {
-          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
-          hide();
-          return;
-        }
-        if(res === "email") {
-          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
-          hide();
-          return;
-        }
-        if(res === "other") {
-          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
-          hide();
-          return;
-        }
-        setIsInvalidCodeCombat(initInvalidCodeCombat);
-        const id = get(res, "id", "");
-        console.log("id = ", id);
-        setCodeCombatId(id.toString());
-        setIsCreateCodeCombat(false);
-        hide();
-      }
-    }
+    // if(currentStep === 1) {
+    //   //handle create account codecombat here
+    //   if(!isCreateCodeCombat) {
+    //     show();
+    //     const data = {
+    //       name: get(methods.getValues("stepTwo"), "username"),
+    //       email: get(methods.getValues("stepTwo"), "email"),
+    //       role: "student"
+    //     }
+    //     const res = await createCodeCombat(data);
+    //     if(res === "username") {
+    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
+    //       hide();
+    //       return;
+    //     }
+    //     if(res === "email") {
+    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
+    //       hide();
+    //       return;
+    //     }
+    //     if(res === "other") {
+    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
+    //       hide();
+    //       return;
+    //     }
+    //     setIsInvalidCodeCombat(initInvalidCodeCombat);
+    //     const id = get(res, "id", "");
+    //     console.log("id = ", id);
+    //     setCodeCombatId(id.toString());
+    //     setIsCreateCodeCombat(true);
+    //     hide();
+    //   }
+    // }
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
-      if (isValid) setCurrentStep(currentStep + 1);
-      // setCurrentStep(currentStep + 1);
+      // if (isValid) setCurrentStep(currentStep + 1);
+      setCurrentStep(currentStep + 1);
     }
   };
 
@@ -225,7 +225,7 @@ const  RegisterContest = () => {
                   ? steps[currentStep].titleHeader
                   : "Đăng ký tham gia thành công"}
               </div>
-              <div className="text-bodyMd">
+              <div className="text-bodyMd text-center">
                 {steps[currentStep].description
                   ? steps[currentStep].description
                   : ""}
