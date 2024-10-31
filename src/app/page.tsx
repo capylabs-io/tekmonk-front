@@ -243,10 +243,15 @@ export default function Contest() {
                   <div className="text-center mb-8 flex-col justify-center">
                     <TypingAnimation
                       texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
-                      className="text-primary-700 uppercase mb-2 font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-4xl"
+                      className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
+                      
+                      max-md:tracking-[0.02em] 
+                      max-md:!leading-[3rem]
+                      "
+                      
                     />
 
-                    <div className="mt-7 text-Subhead3Xl text-primary-950 max-[460px]:text-xl">
+                    <div className="mt-4 text-Subhead3Xl text-primary-950 max-[460px]:text-xl max-[460px]:!leading-[1.5rem]">
                       Cuộc thi lập trình cấp quốc gia đầu tiên dành cho học sinh
                     </div>
                   </div>
@@ -277,7 +282,7 @@ export default function Contest() {
                   </CardContest>
                 </div> */}
 
-                  <section>
+                  <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
                       {startTime && endTime && (
                         <Clock startTime={startTime} endTime={endTime} />
@@ -368,7 +373,7 @@ export default function Contest() {
                         </CardContestContent>
                       </CardContest>
                     </BlurFade>
-                  </section>
+                  </div>
                 </div>
               </div>
             </div>

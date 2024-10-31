@@ -90,7 +90,11 @@ const Clock = ({
         <div className="mt-[52px] flex items-center justify-center gap-4 flex-col">
           {!isConnected() ? (
             <Button
-              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg"
+              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem]  shadow-custom-primary text-SubheadLg 
+              
+              max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+              "
               outlined={false}
               onClick={() => router.push("register-contest")}
               disabled={
@@ -108,7 +112,10 @@ const Clock = ({
           <Tooltip>
             <TooltipTrigger>
               <Button
-                className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg"
+                className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg 
+                max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+                "
                 outlined={true}
                 // onClick={() => router.push("tong-hop-bai-du-thi")}
               >
@@ -121,7 +128,11 @@ const Clock = ({
           </Tooltip>
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
-              className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg"
+              className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 
+              max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+              
+              "
               outlined={true}
             >
               Thể lệ
@@ -129,7 +140,7 @@ const Clock = ({
           </LinkToScroll>
         </div>
 
-        <div className="mt-[52px] text-2xl font-bold text-gray-600">
+        <div className="mt-[52px] text-2xl font-bold text-gray-600 max-md:text-xl">
           {isContestStarted.started
             ? "Thời gian đăng ký kết thúc sau:"
             : "Thời gian đăng ký bắt đầu sau:"}

@@ -63,7 +63,10 @@ const GroupStageDialog = ({
         <Dialog open={showDialog} onOpenChange={setShowDialog}>
           <DialogTrigger>
             <Button
-              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg"
+              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg 
+              max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+              "
               outlined={false}
             >
               Vào làm bài

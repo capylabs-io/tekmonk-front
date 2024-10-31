@@ -4,13 +4,16 @@ import Image from "next/image";
 export const IconDisPlay = () => {
     return (
         <>
-                <div className="max-md:hidden">
+                <div className="">
                   <Image
                     src="/image/contest/Saly-12.png"
                     alt="Stylized mobile phone"
                     width={360}
                     height={360}
-                    className={`absolute top-16 -left-[20%] -z-[${LAYERS.ICON_CONTEST}]`}
+                    className={`absolute top-16 -left-[20%] -z-[${LAYERS.ICON_CONTEST}]
+                     max-md:w-[200px]
+                     max-md:-left-[25%]
+                     `}
                     style={{
                       transform: `translateY(${scrollY * 0.9}px)`,
                     }}
@@ -21,7 +24,9 @@ export const IconDisPlay = () => {
                     alt="Cartoon rocket"
                     width={360}
                     height={360}
-                    className={`absolute top-16 -right-[30%] -z-[${LAYERS.ICON_CONTEST}]`}
+                    className={`absolute top-16 -right-[30%] -z-[${LAYERS.ICON_CONTEST}]
+                    max-md:w-[200px]
+                     max-md:-right-[25%]`}
                     style={{
                       transform: `translateY(${scrollY * 0.9}px)`,
                     }}
@@ -54,7 +59,7 @@ export const IconDisPlay = () => {
                     alt="decor"
                     width={60}
                     height={77}
-                    className={`absolute top-10 -z-[${LAYERS.ICON_CONTEST}]`}
+                    className={`absolute top-10 -z-[${LAYERS.ICON_CONTEST}] max-md:hidden`}
                     style={{
                       transform: `translateY(${scrollY * 0.8}px)`,
                     }}
@@ -75,7 +80,7 @@ export const IconDisPlay = () => {
                     width={120}
                     height={114}
                     sizes="auto"
-                    className={`absolute top-10 right-0 -z-[${LAYERS.ICON_CONTEST}]`}
+                    className={`absolute top-10 right-0 -z-[${LAYERS.ICON_CONTEST}] max-md:hidden`}
                     style={{
                       transform: `translateY(${scrollY * 0.8}px)`,
                     }}
