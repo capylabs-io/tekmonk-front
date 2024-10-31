@@ -83,18 +83,17 @@ const GroupStageDialog = ({
             <div className="flex flex-col items-center justify-center h-[120px]">
               {isGroupStageStarted ? (
                 <div className="py-4 px-[33px]">
-                  <div className="text-gray-700 text-xl text-center mb-4">
-                    Cuộc thi đã bắt đầu. Hãy nhập mã được cung cấp bởi
-                    CodeCombat để bắt đầu bài thi.
+                  <div className="text-gray-700 text-xl text-center">
+                    Cuộc thi đã bắt đầu !
                   </div>
-                  <div className="max-h-12 max-w-[372px] mx-auto mb-4">
+                  {/* <div className="max-h-12 max-w-[372px] mx-auto mb-4">
                     <Input
                       type="text"
                       customClassNames="h-full text-bodyLg"
                       placeholder="Mã tham dự"
                       onChange={handleCodeCombatId}
                     />
-                  </div>
+                  </div> */}
                   <div></div>
                 </div>
               ) : (
