@@ -11,7 +11,7 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
-import { get } from "lodash";
+import { get, set } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,8 @@ import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
+import { createCodeCombat } from "@/requests/codecombat";
+import { boolean } from "zod";
 
 const steps = [
   {
@@ -50,11 +52,29 @@ const steps = [
 ];
 
 const  RegisterContest = () => {
+  //init data
+  const initInvalidCodeCombat = {
+    username: false,
+    email: false,
+    other: false,
+    reload: false
+  }
   const router = useRouter();
+  //use state
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [candidateNumber, setCandidateNumber] = useState<string>("");
   const [isAccepted, setIsAccepted] = useState(false);
+  const [isInvalidCodeCombat, setIsInvalidCodeCombat] = useState({
+    username: false,
+    email: false,
+    other: false,
+    reload: false
+  });
+  const [isCreateCodeCombat, setIsCreateCodeCombat] = useState(false);
+  const [codeCombatId, setCodeCombatId] = useState<string>("");
+
+  //store
   const [register, clear] = useContestRegisterStore((state) => [
     state.register,
     state.clear,
@@ -65,11 +85,13 @@ const  RegisterContest = () => {
     state.success,
   ]);
 
+  //form
   const methods = useForm<WizardSchema>({
     mode: "onChange",
     resolver: zodResolver(wizardSchema),
   });
 
+  //function
   const getStepName = (step: number) => {
     switch (step) {
       default:
@@ -83,10 +105,44 @@ const  RegisterContest = () => {
   };
 
   const handleNextStep = async () => {
+    if(currentStep === 1) {
+      //handle create account codecombat here
+      if(!isCreateCodeCombat) {
+        show();
+        const data = {
+          name: get(methods.getValues("stepTwo"), "username"),
+          email: get(methods.getValues("stepTwo"), "email"),
+          role: "student"
+        }
+        const res = await createCodeCombat(data);
+        if(res === "username") {
+          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
+          hide();
+          return;
+        }
+        if(res === "email") {
+          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
+          hide();
+          return;
+        }
+        if(res === "other") {
+          setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
+          hide();
+          return;
+        }
+        setIsInvalidCodeCombat(initInvalidCodeCombat);
+        const id = get(res, "id", "");
+        console.log("id = ", id);
+        setCodeCombatId(id.toString());
+        setIsCreateCodeCombat(false);
+        hide();
+      }
+    }
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
       if (isValid) setCurrentStep(currentStep + 1);
+      // setCurrentStep(currentStep + 1);
     }
   };
 
@@ -99,6 +155,7 @@ const  RegisterContest = () => {
         ...get(formData, "stepOne", {}),
         ...get(formData, "stepTwo", {}),
         ...get(formData, "stepThree", {}),
+        codeCombatId: codeCombatId,
       });
       setCandidateNumber(get(res, "candidateNumber", ""));
       success("Xong!", "Đăng ký thành công");
@@ -124,7 +181,7 @@ const  RegisterContest = () => {
       case 0:
         return <Step1 />;
       case 1:
-        return <Step2 />;
+        return <Step2 stateCodeCombat={isInvalidCodeCombat}/>;
       case 2:
         return <Step3 />;
       case 3:
