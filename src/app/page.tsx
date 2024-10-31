@@ -213,12 +213,17 @@ export default function Contest() {
     isClient && (
       <div className="relative overflow-hidden">
         <div
-          className={`absolute w-[190%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND}]
-      bg-gradient-to-b from-[rgb(248,239,249)] to-[rgb(159,42,143)] rounded-t-[50%] 
+          className={`absolute w-[195%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_2}]
+      bg-gradient-to-b from-[rgb(248,239,248)] to-[rgb(159,42,143)] rounded-t-[50%] 
       max-mobile:w-[310%] max-mobile:top-[430px]
       max-md:w-[260%] max-md:top-[400px]`}
         ></div>
-
+        <div
+          className={`absolute w-[140%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_1}]
+      bg-gradient-to-b from-[rgb(247,224,246)] to-[rgb(224,121,213)] rounded-t-[50%] 
+      max-mobile:w-[300%] max-mobile:top-[430px]
+      max-md:w-[230%] max-md:top-[400px]`}
+        ></div>
         <ContestLayout>
           <>
             <div className="min-h-screen relative max-width-pc">
@@ -240,7 +245,7 @@ export default function Contest() {
                   </div>
                 )}
                 <div className="w-[884px] mt-4 relative">
-                  <div className="text-center mb-8 flex-col justify-center">
+                  <div className="text-center mb-8 flex-col justify-center px-1">
                     <TypingAnimation
                       texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
                       className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
