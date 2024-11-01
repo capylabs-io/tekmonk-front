@@ -58,6 +58,7 @@ export type ContestGroupStage = {
   contestFormat?: string;
   startTime: string;
   endTime: string;
+  contestEntryFile?: any;
 };
 
 export interface Certificate {
@@ -176,3 +177,10 @@ export type ContestRegister = {
   groupMemberInfo: object[];
   contest_group_stage: string;
 };
+
+export type TimeLeft = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}

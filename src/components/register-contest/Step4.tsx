@@ -44,18 +44,16 @@ export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
         </RadioGroup>
       </div>
       <div className="text-bodyLg text-gray-950">
-        Mọi thắc mắc hoặc cần tư vấn vui lòng liên hệ với Ban Tổ chức Việt Nam
+        Mọi thắc mắc hoặc cần tư vấn vui lòng liên hệ với Ban tổ chức Giải Vô địch Tekmonk Coding Olympiad
         theo một trong các cách sau:
       </div>
+      <div className="text-bodyLg text-gray-950">Email: tekmonk.academy@gmail.com</div>
       <div className="text-bodyLg text-gray-950">
-        Địa chỉ: Học viện Công Nghệ Tekmonk
+        Hotline hỗ trợ: 085 851 4499 (từ 8h30 đến 17h30 hàng ngày)
       </div>
-      <div className="text-bodyLg text-gray-950">Email: tekmonk@gmail.com</div>
-      <div className="text-bodyLg text-gray-950">
-        Hotline hỗ trợ: 085 851 449 (từ 8h30 đến 17h30 hằng ngày)
-      </div>
-      <div className="text-bodyLg text-gray-950">Facebook: @tekmonkvn</div>
-      <div className="text-bodyLg text-gray-950">Website: tekmonk.vn</div>
+      <div className="text-bodyLg text-gray-950">Facebook: <Link href="https://m.facebook.com/HocvienTekmonk" className="text-primary-800 font-semibold underline" target="_blank">Học viện Công nghệ Tekmonk</Link>
+</div>
+      <div className="text-bodyLg text-gray-950">Website: <Link href="https://tekmonk.edu.vn" className="text-primary-800 font-semibold underline" target="_blank">tekmonk.edu.vn</Link></div>
     </div>
   );
 };

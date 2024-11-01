@@ -78,7 +78,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full grid grid-cols-2 max-[819px]:grid-cols-1 h-screen">
+    <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
       <div className="relative flex flex-col justify-center items-center h-screen">
         <div className="flex w-full gap-2.5 absolute top-10 left-10">
           <svg
@@ -118,7 +118,7 @@ export default function Login() {
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">
           <Input
             type="text"
-            placeholder="Tên tài khoản, email hoặc số điện thoại"
+            placeholder="Tên tài khoản hoặc email"
             customClassNames="w-full"
             value={user.identifier}
             onChange={handleChangeUsername}

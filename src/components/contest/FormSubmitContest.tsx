@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/common/Button";
 import {
   Dialog,
@@ -7,7 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/common/Dialog";
 import { DataContestSubmission } from "@/types/contestSubmit";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +29,7 @@ import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { DialogFooter, DialogHeader } from "../ui/dialog";
 
 // Define the validation schema
 const submissionSchema = z.object({
@@ -50,6 +52,20 @@ const FormSubmitContest = React.forwardRef<
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
+  const [showDialogAccept, setShowDialogAccept] = useState(false);
+  //get candidate number
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  useEffect(() => {
+    //if candidate number is null, redirect to home page
+    if (!candidateNumber) {
+      router.push("/");
+    }
+    const firstChar = candidateNumber?.charAt(0);
+    if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
+      setCansubmitZipFile(true);
+    }
+  }, [candidateNumber]);
   const router = useRouter();
 
   const { success, error, warn } = useSnackbarStore();
@@ -123,6 +139,7 @@ const FormSubmitContest = React.forwardRef<
       await Promise.all(uploadPromises);
 
       success("Success", "Nộp bài thi thành công!");
+      useUserStore.setState({ isSubmitted: true });
       router.push("tong-hop-bai-du-thi/" + result.id);
     } catch (err) {
       error("Error", "Có lỗi xảy ra khi nộp bài thi");
@@ -176,7 +193,7 @@ const FormSubmitContest = React.forwardRef<
             khi đăng tải.
           </p>
         </div>
-        <section className="px-6 h-full overflow-y-auto">
+        <section className="px-6 h-full overflow-y-auto hide-scrollbar">
           <InputField
             title="Tên dự án"
             type="text"
@@ -199,11 +216,14 @@ const FormSubmitContest = React.forwardRef<
               imgArr={imgProject}
               onChange={handleImgChange}
             />
-            <InputFileUploadContest
-              title="File dự án"
-              onChange={handleFileChange}
-              value={projectFile}
-            />
+            {cansubmitZipFile && (
+              <InputFileUploadContest
+                title="File dự án"
+                onChange={handleFileChange}
+                value={projectFile}
+              />
+            )}
+
             <InputField
               title="URL"
               type="text"
@@ -243,14 +263,51 @@ const FormSubmitContest = React.forwardRef<
           >
             Huỷ
           </Button>
-          <Button
-            className="w-[260px]"
-            outlined={false}
-            style={{ borderRadius: "4rem" }}
-            onClick={handleSubmit(onSubmit)}
-          >
-            Nộp bài
-          </Button>
+          <Dialog open={showDialogAccept} onOpenChange={setShowDialogAccept}>
+            <DialogTrigger>
+              <Button
+                className="w-[260px]"
+                outlined={false}
+                style={{ borderRadius: "4rem" }}
+                // onClick={handleSubmit(onSubmit)}
+              >
+                Nộp bài
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="">
+              <DialogHeader>
+                <div className="text-SubheadLg text-primary-900 mx-auto">
+                  Xác nhận nộp bài
+                </div>
+              </DialogHeader>
+              <div className="w-full border-t border-gray-300"></div>
+              <div className="px-6 py-4 text-xl text-gray-700">
+                Mỗi thí sinh chỉ được nộp bài một lần duy nhất. Bạn không thể
+                chỉnh sửa bài thi sau khi đã nộp bài. Bạn đã chắc chắn muốn nộp
+                bài thi chưa?{" "}
+              </div>
+              <div className="w-full border-t border-gray-300"></div>
+              <DialogFooter>
+                <div className="w-full flex justify-center items-center gap-x-3">
+                  <Button
+                    outlined={true}
+                    className="w-[156px] border border-gray-300 !rounded-[3rem]"
+                    onClick={() => {
+                      setShowDialogAccept(false);
+                    }}
+                  >
+                    Quay lại
+                  </Button>
+                  <Button
+                    className="w-[156px] !rounded-[3rem]"
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Xác nhận
+                  </Button>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </footer>
       </DialogContentNoClose>
     </Dialog>

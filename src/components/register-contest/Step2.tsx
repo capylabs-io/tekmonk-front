@@ -2,40 +2,34 @@
 
 import { Label } from "@/components/ui/label";
 import { Input } from "../common/Input";
-import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { Controller, useFormContext } from "react-hook-form";
 import { WizardSchema } from "@/validation/ContestRegister";
+import { useEffect, useState } from "react";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+type InvalidCodeCombat = {
+  username: boolean;
+  email: boolean;
+  other: boolean;
+  reload: boolean;// for reload Step 2 when create user fail
+};
 
-export const Step2 = () => {
-  const { email, username, password, confirmPassword } =
-    useContestRegisterStore((state) => {
-      return {
-        email: state.email,
-        username: state.username,
-        password: state.password,
-        confirmPassword: state.confirmPassword,
-      };
-    });
-  const change = useContestRegisterStore((state) => state.change);
-  const handleChangeEmail = (text: string) => {
-    change("email", text);
-  };
-  const handleChangeUsername = (text: string) => {
-    change("username", text);
-  };
-  const handleChangePassword = (text: string) => {
-    change("password", text);
-  };
-  const handleChangeConfirmPassword = (text: string) => {
-    change("confirmPassword", text);
-  };
-
+export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) => {
+  //use state
+  const [error] = useSnackbarStore((state) => [
+    state.error,
+  ]);
+  const [isvalidCodeCombat, setIsvalidCodeCombat] = useState(stateCodeCombat);
   const {
     control,
-    trigger,
-    register,
     formState: { errors },
   } = useFormContext<WizardSchema>();
+  useEffect(() => {
+    setIsvalidCodeCombat(stateCodeCombat);
+    if(stateCodeCombat.other) {
+      //show snackbar here
+      error("lỗi", "Có lỗi xảy ra khi tạo tài khoản code combat");
+    }
+  },[stateCodeCombat.reload]);
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -50,13 +44,18 @@ export const Step2 = () => {
               <Input
                 type="text"
                 value={value}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  setIsvalidCodeCombat({...stateCodeCombat, email: false});
+
+                }}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
                 error={fieldState && fieldState.error?.message}
               />
             )}
-          />
+            />
+            {isvalidCodeCombat.email && (<p className="text-red-500">Email đã tồn tại</p>)}
         </div>
         <div>
           <Label className="text-gray-950 text-SubheadSm">
@@ -69,13 +68,17 @@ export const Step2 = () => {
               <Input
                 type="text"
                 value={value}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  setIsvalidCodeCombat({...stateCodeCombat, username: false}); 
+                }}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
                 error={fieldState && fieldState.error?.message}
               />
             )}
-          />
+            />
+            {isvalidCodeCombat.username && (<p className="text-red-500">Tên đăng nhập đã tồn tại</p>)}
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
