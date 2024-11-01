@@ -52,7 +52,6 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
         contestEntry.id
       );
       setIsSubmitted(contestSubmission.data.length > 0);
-      console.log(contestSubmission.data.length > 0);
     };
 
     useEffect(() => {

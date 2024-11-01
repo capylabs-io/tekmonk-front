@@ -37,7 +37,6 @@ const GroupStageDialog = ({
 
   const handleExam = () => {
     if (!isGroupStageStarted) {
-      console.log("Chưa đến giờ thi!");
       setIsShowMessage(true);
     } else {
       if (router) {

@@ -15,7 +15,6 @@ type InvalidCodeCombat = {
 
 export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) => {
   //use state
-  // console.log("default data = ", stateCodeCombat);
   const [error] = useSnackbarStore((state) => [
     state.error,
   ]);
@@ -31,7 +30,6 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
       error("lỗi", "Có lỗi xảy ra khi tạo tài khoản code combat");
     }
   },[stateCodeCombat.reload]);
-  // console.log("state = ", isvalidCodeCombat);
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

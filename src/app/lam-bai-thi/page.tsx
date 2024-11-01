@@ -21,7 +21,6 @@ const ContestGroupStageEntry = ({
   isSubmitted: boolean;
 }) => {
   const router = useRouter();
-  console.log("contest start");
   //use state
   const [timeOver, setTimeOver] = useState(false);
   const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<string>(

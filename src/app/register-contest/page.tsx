@@ -112,7 +112,6 @@ const  RegisterContest = () => {
   };
 
   const handleNext = async (formData: any) => {
-    console.log("submited");
     try {
       show();
       const res = await register({
@@ -125,7 +124,6 @@ const  RegisterContest = () => {
       success("Xong!", "Đăng ký thành công");
       setIsSubmitted(true);
     } catch (err) {
-      console.log("err = ", err);
       const message = HandleReturnMessgaeErrorAxios(err);
       if(message === "username") {
         error("Lỗi", "Tên tài khoản đã tồn tại");
@@ -192,7 +190,6 @@ const  RegisterContest = () => {
     if (currentStep == 3) {
       setIsAccepted(false);
     }
-    console.log("currentStep = ", currentStep);
   }, [currentStep]);
   return (
     <>
