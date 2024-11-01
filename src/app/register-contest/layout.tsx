@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative">
+    <div className="relative min-h-screen">
       <DotPattern
         className={cn(
           "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
-          `absolute top-0 h-full z-[${LAYERS.BACKGROUND}]`
+          `absolute top-0 h-full z-[${LAYERS.BACKGROUND_1}]`
         )}
       />
       <ContestLayout>{children}</ContestLayout>

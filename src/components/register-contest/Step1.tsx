@@ -155,7 +155,7 @@ export const Step1 = () => {
                 type="text"
                 value={value}
                 onChange={onChange}
-                placeholder="Câu trả lời"
+                placeholder="VD: Quận Hoàn Kiếm - Hà Nội"
                 customClassNames="mt-2"
                 error={fieldState && fieldState.error?.message}
               />
