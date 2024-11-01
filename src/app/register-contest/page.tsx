@@ -19,8 +19,6 @@ import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
-import { createCodeCombat } from "@/requests/codecombat";
-import { boolean } from "zod";
 
 const steps = [
   {
@@ -105,63 +103,48 @@ const  RegisterContest = () => {
   };
 
   const handleNextStep = async () => {
-    // if(currentStep === 1) {
-    //   //handle create account codecombat here
-    //   if(!isCreateCodeCombat) {
-    //     show();
-    //     const data = {
-    //       name: get(methods.getValues("stepTwo"), "username"),
-    //       email: get(methods.getValues("stepTwo"), "email"),
-    //       role: "student"
-    //     }
-    //     const res = await createCodeCombat(data);
-    //     if(res === "username") {
-    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
-    //       hide();
-    //       return;
-    //     }
-    //     if(res === "email") {
-    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
-    //       hide();
-    //       return;
-    //     }
-    //     if(res === "other") {
-    //       setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
-    //       hide();
-    //       return;
-    //     }
-    //     setIsInvalidCodeCombat(initInvalidCodeCombat);
-    //     const id = get(res, "id", "");
-    //     console.log("id = ", id);
-    //     setCodeCombatId(id.toString());
-    //     setIsCreateCodeCombat(true);
-    //     hide();
-    //   }
-    // }
     if (currentStep < steps.length - 1) {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
-      // if (isValid) setCurrentStep(currentStep + 1);
-      setCurrentStep(currentStep + 1);
+      if (isValid) setCurrentStep(currentStep + 1);
+      // setCurrentStep(currentStep + 1);
     }
   };
 
   const handleNext = async (formData: any) => {
-    
+    console.log("submited");
     try {
       show();
-
       const res = await register({
         ...get(formData, "stepOne", {}),
         ...get(formData, "stepTwo", {}),
         ...get(formData, "stepThree", {}),
-        codeCombatId: codeCombatId,
       });
+
       setCandidateNumber(get(res, "candidateNumber", ""));
       success("Xong!", "Đăng ký thành công");
       setIsSubmitted(true);
     } catch (err) {
+      console.log("err = ", err);
       const message = HandleReturnMessgaeErrorAxios(err);
+      if(message === "username") {
+        error("Lỗi", "Tên tài khoản đã tồn tại");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
+      if(message === "email") {
+        error("Lỗi", "Email đã tồn tại");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
+      if(message === "unknown") {
+        error("Lỗi", "Có lỗi xảy ra");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
       error("Lỗi", message);
     } finally {
       hide();
@@ -209,6 +192,7 @@ const  RegisterContest = () => {
     if (currentStep == 3) {
       setIsAccepted(false);
     }
+    console.log("currentStep = ", currentStep);
   }, [currentStep]);
   return (
     <>
