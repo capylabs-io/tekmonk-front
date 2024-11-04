@@ -12,6 +12,8 @@ import { getOneContestEntry } from "@/requests/contestEntry";
 import { useUserStore } from "@/store/UserStore";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { Progress } from "@/components/ui/progress";
+import { getProgress } from "@/requests/code-combat";
+import { get } from "lodash";
 
 const ContestGroupStageEntry = ({
   contestGroupStage,
@@ -27,7 +29,7 @@ const ContestGroupStageEntry = ({
     contestGroupStage.endTime
   );
   const [isClient, setIsClient] = useState(false);
-  const [progress, setProgress] = useState(30);
+  const [progress, setProgress] = useState(0);
 
   //
   const candidateNumber = useUserStore((state) => state.candidateNumber);
@@ -35,7 +37,7 @@ const ContestGroupStageEntry = ({
   const handleTimeOver = () => {
     setTimeOver(true);
   };
-
+  const codeCombatId = useUserStore((state) => state.codeCombatId);
   //function handler
   const handleRedirectToMyContest = async () => {
     try {
@@ -53,16 +55,32 @@ const ContestGroupStageEntry = ({
     }
   };
 
+  const handleGetProgress = async () => {
+    try {
+      if(!codeCombatId) return;
+      
+      const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
+      console.log("start");
+      if(res){
+        setProgress(Math.round(res.currentProgress * 100));
+        console.log("data", progress);
+      }
+
+    } catch (error) {
+      return;
+    }
+  }
   useEffect(() => {
     setIsClient(true);
     //check if start time is less than current time
     if (new Date(contestGroupStage.startTime) > new Date()) {
       router.push("/");
     }
+    handleGetProgress();
     setGroupStageTimeLeft(contestGroupStage.endTime);
 
     //handle get progress later
-  }, []);
+  }, [progress]);
 
   return (
     isClient && (
