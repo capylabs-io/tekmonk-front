@@ -122,7 +122,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <TooltipTrigger asChild>
                     <div
                       className="text-gray-950  cursor-pointer"
-                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
+                      onClick={() => router.push("/tong-hop-bai-du-thi")}
                     >
                       Tổng hợp bài dự thi
                     </div>
@@ -138,7 +138,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <TooltipTrigger>
                     <div
                       className="text-bodyMd hover:cursor-pointer"
-                      // onClick={handleRedirectToMyContest}
+                      onClick={handleRedirectToMyContest}
                     >
                       Bài dự thi của tôi
                     </div>
@@ -153,7 +153,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 <TooltipTrigger>
                   <div
                     className="text-bodyMd hover:cursor-pointer"
-                    // onClick={handleRedirectResultContest}
+                    onClick={handleRedirectResultContest}
                   >
                     Kết quả vòng loại
                   </div>
@@ -219,7 +219,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Button>
                     <Button
                       outlined={true}
-                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
+                      onClick={() => router.push("/tong-hop-bai-du-thi")}
                     >
                       <div className="text-black text-base">
                         Tổng hợp bài dự thi
@@ -238,7 +238,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
                     <Button
                       outlined={true}
-                      // onClick={() => router.push("/ket-qua-vong-loai")}
+                      onClick={() => router.push("/ket-qua-vong-loai")}
                     >
                       <div className="text-black text-base">
                         Kết quả vòng loại

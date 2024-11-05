@@ -68,6 +68,7 @@ export const InputField = forwardRef<
                   <Input
                     {...field}
                     type={type}
+                    value={value}
                     placeholder={placeholder}
                     customInputClassNames={`${customInputClassNames}`}
                     customClassNames={`h-10 flex items-center text-bodyXs ${customInputClassNames}`}

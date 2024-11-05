@@ -117,7 +117,7 @@ const Clock = ({
                 max-[460px]:h-[50px]
                 "
                 outlined={true}
-                // onClick={() => router.push("tong-hop-bai-du-thi")}
+                onClick={() => router.push("tong-hop-bai-du-thi")}
               >
                 Tổng hợp bài dự thi
               </Button>

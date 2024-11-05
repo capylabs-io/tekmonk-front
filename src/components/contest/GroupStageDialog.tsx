@@ -156,12 +156,12 @@ const GroupStageDialog = ({
                 >
                   Quay lại
                 </Button>
-                <Button
+                {isGroupStageStarted &&                 <Button
                   className="w-[156px] h-[48px] !rounded-[3rem]"
                   onClick={handleExam}
                 >
                   Vào thi
-                </Button>
+                </Button>}
               </div>
             </DialogFooter>
           </DialogContent>

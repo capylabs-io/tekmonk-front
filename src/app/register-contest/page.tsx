@@ -201,7 +201,7 @@ const  RegisterContest = () => {
         <div className="p-2">
           <Card className="w-full max-w-[720px] mt-2 mx-auto rounded-2xl bg-white">
             <div className="w-full min-h-16 p-6 ">
-              <div className=" text-SubheadLg text-primary-900 max-mobile:text-center">
+              <div className=" text-SubheadLg text-primary-900 text-center">
                 {steps[currentStep].titleHeader
                   ? steps[currentStep].titleHeader
                   : "Đăng ký tham gia thành công"}

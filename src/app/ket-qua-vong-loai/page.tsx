@@ -17,6 +17,7 @@ import { getContestSubmissionResult } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
 import get from "lodash/get";
 import { useDebounce } from "@/hooks/useDebounceValue";
+import { EmptySearch } from "@/components/common/EmptySearch";
 
 const searchOptions: SearchOption[] = [
   { value: "candidateNumber", label: "Số báo danh" },
@@ -73,7 +74,7 @@ export default function CompetitionResults() {
     setCurrentPage(1);
   }, [debouncedSearchTerm, searchType]);
 
-  return (
+  return ( 
     <div className="min-h-screen max-w-[720px] mx-auto bg-white">
       <Card className="w-full mx-auto border-l border-r border-b rounded-none border-t-0">
         <CardHeader className="w-full h-16 p-5">
@@ -97,7 +98,13 @@ export default function CompetitionResults() {
             onSearchTypeChange={handleSearchTypeChange}
             customStyle="my-4"
           />
-          <div className="overflow-x-auto">
+          {data.length == 0 ? (<>
+            <div className="h-[300px]">
+          <EmptySearch message="Chưa có kết quả, vui lòng chờ" />
+        </div>
+          </>) : <>
+          
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader className="p-4">
                 <TableRow>
@@ -146,6 +153,8 @@ export default function CompetitionResults() {
               </TableBody>
             </Table>
           </div>
+          </>}
+          
 
           <div className="mt-4 flex justify-between items-center px-2 pb-1">
             <div className="text-sm text-gray-500">

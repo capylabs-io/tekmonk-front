@@ -26,12 +26,16 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { InputMulImgUploadContest } from "./InputMulImgUploadContest";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
-import { getOneContestEntry } from "@/requests/contestEntry";
+import {
+  getContestGroupStageByCandidateNumber,
+  getOneContestEntry,
+} from "@/requests/contestEntry";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
-
-// Define the validation schema
+import { getProgress } from "@/requests/code-combat";
+import { get, round } from "lodash"
+import { Progress } from "@/components/ui/progress";
 const submissionSchema = z.object({
   title: z.string().min(1, "Tên dự án không được để trống"),
   tags: z
@@ -56,19 +60,14 @@ const FormSubmitContest = React.forwardRef<
   const [showDialogAccept, setShowDialogAccept] = useState(false);
   //get candidate number
   const candidateNumber = useUserStore((state) => state.candidateNumber);
-  useEffect(() => {
-    //if candidate number is null, redirect to home page
-    if (!candidateNumber) {
-      router.push("/");
-    }
-    const firstChar = candidateNumber?.charAt(0);
-    if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
-      setCansubmitZipFile(true);
-    }
-  }, [candidateNumber]);
+  const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
+  const codeCombatId = useUserStore((state) => state.codeCombatId);
   const router = useRouter();
 
   const { success, error, warn } = useSnackbarStore();
+
+  //use state
+  const [progress, setProgress] = useState(0);
 
   const {
     control,
@@ -77,13 +76,29 @@ const FormSubmitContest = React.forwardRef<
   } = useForm({
     resolver: zodResolver(submissionSchema),
     defaultValues: {
-      title: "",
+      title: cansubmitZipFile ? "" : fullNameUser || "",
       tags: "",
       url: "",
       description: "",
     },
   });
-
+  const handleGetProgress = async () => {
+    try {
+      if (!codeCombatId || !candidateNumber) {
+        return;
+      }
+      const data = await getContestGroupStageByCandidateNumber(candidateNumber);
+      if (!data) {
+        return;
+      }
+      const res = await getProgress(codeCombatId, Number(get(data, "id", 0)));
+      if (res) {
+        setProgress(round(res.currentProgress * 100, 1));
+      }
+    } catch (error) {
+      return;
+    }
+  };
   const isExistContestSubmission = async () => {
     const contestEntry = await getOneContestEntry(
       useUserStore.getState().candidateNumber || ""
@@ -113,13 +128,14 @@ const FormSubmitContest = React.forwardRef<
       );
 
       const contestObj: DataContestSubmission = {
-        title: data.title,
+        title: cansubmitZipFile ? data.title : fullNameUser || "",
         description: data.description,
         tags: { data: tags },
         url: data.url,
         contest_entry: contestEntry.id,
+        progress: progress,
       };
-
+      
       const result = await createContestSubmission(contestObj);
 
       const uploadPromises = [];
@@ -160,6 +176,17 @@ const FormSubmitContest = React.forwardRef<
   const handleImgChange = (newImages: File[]) => {
     setImgProject(newImages);
   };
+  useEffect(() => {
+    //if candidate number is null, redirect to home page
+    if (!candidateNumber) {
+      router.push("/");
+    }
+    const firstChar = candidateNumber?.charAt(0);
+    if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
+      setCansubmitZipFile(true);
+    }
+    handleGetProgress();
+  }, [candidateNumber]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -194,16 +221,33 @@ const FormSubmitContest = React.forwardRef<
           </p>
         </div>
         <section className="px-6 h-full overflow-y-auto hide-scrollbar">
-          <InputField
-            title="Tên dự án"
-            type="text"
-            name="title"
-            isRequired
-            control={control}
-            error={errors.title?.message}
-            customClassNames="mb-2 sm:mb-5"
-            placeholder="VD: Chatbot Miracle"
-          />
+          {cansubmitZipFile ? (
+            <>
+              <InputField
+                title="Tên dự án"
+                type="text"
+                name="title"
+                isRequired
+                control={control}
+                error={errors.title?.message}
+                customClassNames="mb-2 sm:mb-5"
+                placeholder="VD: Chatbot Miracle"
+              />
+            </>
+          ) : (
+            <>
+              <div className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}>
+                <label className="text-SubheadSm text-primary-950 w-1/4">
+                  Tên dự án
+                  <span className="text-red-500">*</span>
+                </label>
+                <div className="flex w-full max-w-[500px] rounded-xl overflow-hidden gap-x-1">
+                  Bài dự thi của: <span className="font-bold">{fullNameUser}</span>
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="w-full border-t border-gray-200 py-2 sm:py-5">
             <InputImgUploadContest
               title="Ảnh dự án"
@@ -211,11 +255,27 @@ const FormSubmitContest = React.forwardRef<
               onChange={setThumbnail}
               customClassNames="mt-b sm:mb-5"
             />
-            <InputMulImgUploadContest
-              title="Ảnh mô tả dự án"
-              imgArr={imgProject}
-              onChange={handleImgChange}
-            />
+            {cansubmitZipFile ? (
+              <InputMulImgUploadContest
+                title="Ảnh mô tả dự án"
+                imgArr={imgProject}
+                onChange={handleImgChange}
+              />
+            ) : (
+              <>
+              <div className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}>
+                <label className="text-SubheadSm text-primary-950 w-1/4">
+                  Tiến trình
+                  
+                </label>
+                <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
+                <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
+                <div className="text-primary-900 text-bodyL">{progress}%</div>
+                </div>
+              </div>
+            </>
+            )}
+
             {cansubmitZipFile && (
               <InputFileUploadContest
                 title="File dự án"
@@ -224,7 +284,7 @@ const FormSubmitContest = React.forwardRef<
               />
             )}
 
-            <InputField
+            {/* <InputField
               title="URL"
               type="text"
               name="url"
@@ -232,13 +292,14 @@ const FormSubmitContest = React.forwardRef<
               error={errors.url?.message}
               customClassNames="mt-2 sm:mt-5"
               placeholder="VD: Chatbot Miracle"
-            />
+            /> */}
           </div>
           <div className="flex flex-col gap-[18px] border-t border-gray-200 pt-5">
             <InputField
               title="Tags"
               type="text"
               name="tags"
+              isRequired
               control={control}
               error={errors.tags?.message}
               placeholder="VD: B2C, AI, design...."

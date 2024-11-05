@@ -22,4 +22,5 @@ export type DataContestSubmission = {
     data: string[];
   };
   contest_entry: string | null;
+  progress: number | 0
 };

@@ -13,7 +13,7 @@ import { useUserStore } from "@/store/UserStore";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { Progress } from "@/components/ui/progress";
 import { getProgress } from "@/requests/code-combat";
-import { get } from "lodash";
+import { get, round } from "lodash";
 
 const ContestGroupStageEntry = ({
   contestGroupStage,
@@ -60,10 +60,8 @@ const ContestGroupStageEntry = ({
       if(!codeCombatId) return;
       
       const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
-      console.log("start");
       if(res){
-        setProgress(Math.round(res.currentProgress * 100));
-        console.log("data", progress);
+        setProgress(round(res.currentProgress * 100, 1));
       }
 
     } catch (error) {
@@ -78,9 +76,16 @@ const ContestGroupStageEntry = ({
     }
     handleGetProgress();
     setGroupStageTimeLeft(contestGroupStage.endTime);
-
-    //handle get progress later
-  }, [progress]);
+    
+    if (!isSubmitted) {
+      const interval = setInterval(() => {
+        handleGetProgress();
+      }, 30000);
+  
+      // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
+      return () => clearInterval(interval);
+    }
+  }, [progress, isSubmitted]);
 
   return (
     isClient && (
