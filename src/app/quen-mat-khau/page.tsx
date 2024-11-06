@@ -21,15 +21,14 @@ export default function ForgotPassword() {
   const handleSendEmail = async (data: any) => {
     setEmail(data.email);
     try {
-
-        const res = await forgotPasswordRequest(get(data, "email", email));
-        if (res) {
-            setIsSendMail(true);
-            return;
-        }
-        error("Lỗi!", "Email không tồn tại");
-    }catch (err) {
-        error("Lỗi!", "Lỗi không xác định, vui lòng thử lại sau");
+      const res = await forgotPasswordRequest(get(data, "email", email));
+      if (res) {
+        setIsSendMail(true);
+        return;
+      }
+      error("Lỗi!", "Email không tồn tại");
+    } catch (err) {
+      error("Lỗi!", "Lỗi không xác định, vui lòng thử lại sau");
     }
   };
   const {
@@ -86,7 +85,10 @@ export default function ForgotPassword() {
                 className="mt-8 w-full !rounded-[3rem]"
                 onClick={handleSubmit(handleSendEmail)}
               >
-                <div className="flex items-center gap-x-2">Tiếp theo <MoveRight className="mt-0.5" size={16} strokeWidth={4} /></div>
+                <div className="flex items-center gap-x-2">
+                  Tiếp theo{" "}
+                  <MoveRight className="mt-0.5" size={16} strokeWidth={4} />
+                </div>
               </Button>
             </div>
           ) : (
@@ -97,25 +99,9 @@ export default function ForgotPassword() {
                 </div>
                 <div className="mt-2 text-bodyLg">
                   Chúng tôi đã gửi hướng dẫn để thiết lập lại mật khẩu tài khoản
-                  của bạn tới email:{" "}
-                  <div className="font-bold">{email}.</div> Vui
-                  lòng kiểm tra email và làm theo hướng dẫn.
+                  của bạn tới email: <div className="font-bold">{email}.</div>{" "}
+                  Vui lòng kiểm tra email và làm theo hướng dẫn.
                 </div>
-                <div className="mt-8 gap-x-1 flex items-center">
-                  <div className="text-bodyLg text-gray-800">
-                    Chưa nhận được mail?{" "}
-                  </div>
-                  <div className="text-primary-700 text-base font-bold flex items-center gap-x-1 cursor-pointer" onClick={handleSendEmail}>
-                    <div>Gửi lại</div>{" "}
-                    <RotateCcw
-                      className="mt-0.5"
-                      color="#9a1595"
-                      size={16}
-                      strokeWidth={3}
-                    />{" "}
-                  </div>
-                </div>
-                  <div className="text-bodyMd text-primary-700">Mail hướng dẫn đã được gửi, hãy thử lại sau 30 phút.</div>
               </div>
             </>
           )}
