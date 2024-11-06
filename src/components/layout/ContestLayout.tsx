@@ -94,7 +94,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         <TooltipProvider>
 
           {/* Header */}
-          <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
+          <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white">
             <Image
               src="/image/app-logox2.png"
               alt="app logo"

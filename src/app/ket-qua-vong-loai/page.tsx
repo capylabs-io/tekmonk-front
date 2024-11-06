@@ -74,15 +74,15 @@ export default function CompetitionResults() {
     setCurrentPage(1);
   }, [debouncedSearchTerm, searchType]);
 
-  return ( 
-    <div className="min-h-screen max-w-[720px] mx-auto bg-white">
-      <Card className="w-full mx-auto border-l border-r border-b rounded-none border-t-0">
-        <CardHeader className="w-full h-16 p-5">
-          <CardTitle className="w-full h-16 text-2xl sm:text-SubheadLg text-primary-900 p-0">
+  return (
+    <div className="min-h-[calc(100vh-64px)] max-w-[720px] mx-auto bg-white border-l border-r border-b rounded-none border-t-0 flex flex-col justify-between">
+      <div className="w-full mx-auto !border-none">
+        <div className="w-full h-16 p-5">
+          <div className="w-full h-16 text-2xl sm:text-SubheadLg text-primary-900 p-0">
             KẾT QUẢ
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="w-full p-0">
+          </div>
+        </div>
+        <div className="w-full p-0 min-h-full">
           <div
             className="w-full h-64 bg-contain bg-no-repeat"
             style={{
@@ -98,64 +98,76 @@ export default function CompetitionResults() {
             onSearchTypeChange={handleSearchTypeChange}
             customStyle="my-4"
           />
-          {data.length == 0 ? (<>
-            <div className="h-[300px]">
-          <EmptySearch message="Chưa có kết quả, vui lòng chờ" />
-        </div>
-          </>) : <>
-          
-            <div className="overflow-x-auto">
-            <Table>
-              <TableHeader className="p-4">
-                <TableRow>
-                  <TableHead className="w-[20%] text-SubheadXs text-gray-700 text-center">
-                    STT
-                  </TableHead>
-                  <TableHead className="text-SubheadXs text-gray-700 text-center">
-                    THÍ SINH
-                  </TableHead>
-                  <TableHead className="text-center text-SubheadXs text-gray-700">
-                    KẾT QUẢ
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.map((contestant, index) => (
-                  <TableRow
-                    key={index}
-                    className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
-                  >
-                    <TableCell className="text-SubheadSm text-gray-500 text-center">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>
-                      <div>
-                        <span className="text-SubheadMd text-primary-950">
-                          {get(contestant, "contest_entry.user.fullName", "")}
-                        </span>{" "}
-                        <span className="text-bodyMd text-gray-500">
-                          {get(contestant, "contest_entry.candidateNumber", "")}
-                        </span>
-                      </div>
-                      <div className="text-bodyMd text-gray-950">
-                        {get(contestant, "title", "")}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center text-SubheadMd text-gray-950">
-                      {get(contestant, "QualifiedExam", null) === null
-                        ? "CHƯA CHẤM"
-                        : get(contestant, "QualifiedExam")
-                        ? "ĐẠT"
-                        : "KHÔNG ĐẠT"}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-          </>}
-          
+          {data.length == 0 ? (
+            <>
+              <div className="min-h-[100%]">
+                <EmptySearch message="Chưa có kết quả, vui lòng chờ" customClassName="!border-none"/>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="p-4">
+                    <TableRow>
+                      <TableHead className="w-[20%] text-SubheadXs text-gray-700 text-center">
+                        STT
+                      </TableHead>
+                      <TableHead className="text-SubheadXs text-gray-700 text-center">
+                        THÍ SINH
+                      </TableHead>
+                      <TableHead className="text-center text-SubheadXs text-gray-700">
+                        KẾT QUẢ
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.map((contestant, index) => (
+                      <TableRow
+                        key={index}
+                        className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                      >
+                        <TableCell className="text-SubheadSm text-gray-500 text-center">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell>
+                          <div>
+                            <span className="text-SubheadMd text-primary-950">
+                              {get(
+                                contestant,
+                                "contest_entry.user.fullName",
+                                ""
+                              )}
+                            </span>{" "}
+                            <span className="text-bodyMd text-gray-500">
+                              {get(
+                                contestant,
+                                "contest_entry.candidateNumber",
+                                ""
+                              )}
+                            </span>
+                          </div>
+                          <div className="text-bodyMd text-gray-950">
+                            {get(contestant, "title", "")}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center text-SubheadMd text-gray-950">
+                          {get(contestant, "QualifiedExam", null) === null
+                            ? "CHƯA CHẤM"
+                            : get(contestant, "QualifiedExam")
+                            ? "ĐẠT"
+                            : "KHÔNG ĐẠT"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
+          )}
 
+        </div>
+      </div>
           <div className="mt-4 flex justify-between items-center px-2 pb-1">
             <div className="text-sm text-gray-500">
               Trang {currentPage} / {totalPages}
@@ -181,8 +193,6 @@ export default function CompetitionResults() {
               </Button>
             </div>
           </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

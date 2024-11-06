@@ -1,6 +1,5 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -158,8 +157,11 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto pb-5 space-y-6 max-w-[720px] border-r border-l border-gray-200 bg-white min-h-screen shadow-md">
-      <Image
+    
+  
+    <div className="mx-auto max-w-[720px] border-gray-200 bg-white h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1">
+      <div className="space-y-6">
+<Image
         src={`/image/contestentries/Banner.png`}
         alt={`Banner`}
         width={720}
@@ -177,124 +179,130 @@ export default function SearchInterface() {
         placeholder="Tìm kiếm bài thi"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-        {loading
-          ? Array(12)
-              .fill(0)
-              .map((_, index) => <SkeletonCard key={index} />)
-          : searchResults.map((card, _) => (
-              <div key={card.id} className="flex flex-col">
-                <Card
-                  className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
-                  onClick={() => navigateDetailItem(card.id)}
-                >
-                  <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
-                    <AspectRatio ratio={16 / 9}>
-                      <ImageCustom
-                        src={
-                          card.thumbnail?.url
-                            ? card?.thumbnail.url
-                            : "/image/new/new-pic.png"
-                        }
-                        alt="Into the Breach"
-                        fill
-                        sizes="(max-width: 720px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        loading="lazy"
-                        quality={30}
-                        className="object-contain"
-                      />
-                    </AspectRatio>
-                  </CardHeader>
-                </Card>
-                <CardContent className="p-0 py-2">
-                  <div
-                    className="text-bodySm cursor-pointer text-gray-800"
-                    onClick={() => navigateDetailItem(card.id)}
-                  >
-                    {card.contest_entry?.candidateNumber}
-                  </div>
-                  <div
-                    className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
-                    onClick={() => navigateDetailItem(card.id)}
-                  >
-                    {card.title}
-                  </div>
-                  <Carousel className="mt-1">
-                    <CarouselContent className="-ml-4 pl-2">
-                      {get(card, "tags", [])?.map((tag, index) => (
-                        <CarouselItem
-                          key={index}
-                          className="w-fit basis-auto select-none pl-2"
-                        >
-                          <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
-                            <Tag
-                              text={tag}
-                              type="secondary"
-                              size="x-small"
-                              onClick={() => handleFilterByTag(tag)}
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                  </Carousel>
-                </CardContent>
-                <CardFooter className="p-0">
-                  <div className="text-bodySm text-gray-800">
-                    {get(card, "contest_entry.user.fullName", "Unknown")}
-                  </div>
-                </CardFooter>
-              </div>
-            ))}
+
       </div>
-      {searchResults.length === 0 && !loading && (
-        <div className="h-[300px]">
-          <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
-        </div>
-      )}
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={() => handlePageChange(Math.max(1, page - 1))}
-              className={page === 1 ? "pointer-events-none opacity-50" : ""}
-            />
-          </PaginationItem>
-          {[...Array(totalPages)].map((_, index) => {
-            const pageNumber = index + 1;
-            if (
-              pageNumber === 1 ||
-              pageNumber === totalPages ||
-              (pageNumber >= page - 1 && pageNumber <= page + 1)
-            ) {
-              return (
-                <PaginationItem key={pageNumber}>
-                  <PaginationLink
-                    href="#"
-                    isActive={pageNumber === page}
-                    onClick={() => handlePageChange(pageNumber)}
+      
+
+      <div className="flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+          {loading
+            ? Array(12)
+                .fill(0)
+                .map((_, index) => <SkeletonCard key={index} />)
+            : searchResults.map((card, _) => (
+                <div key={card.id} className="flex flex-col">
+                  <Card
+                    className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
+                    onClick={() => navigateDetailItem(card.id)}
                   >
-                    {pageNumber}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            } else if (pageNumber === page - 2 || pageNumber === page + 2) {
-              return <PaginationEllipsis key={pageNumber} />;
-            }
-            return null;
-          })}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
-              className={
-                page === totalPages ? "pointer-events-none opacity-50" : ""
+                    <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
+                      <AspectRatio ratio={16 / 9}>
+                        <ImageCustom
+                          src={
+                            card.thumbnail?.url
+                              ? card?.thumbnail.url
+                              : "/image/new/new-pic.png"
+                          }
+                          alt="Into the Breach"
+                          fill
+                          sizes="(max-width: 720px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          loading="lazy"
+                          quality={30}
+                          className="object-contain"
+                        />
+                      </AspectRatio>
+                    </CardHeader>
+                  </Card>
+                  <CardContent className="p-0 py-2">
+                    <div
+                      className="text-bodySm cursor-pointer text-gray-800"
+                      onClick={() => navigateDetailItem(card.id)}
+                    >
+                      {card.contest_entry?.candidateNumber}
+                    </div>
+                    <div
+                      className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
+                      onClick={() => navigateDetailItem(card.id)}
+                    >
+                      {card.title}
+                    </div>
+                    <Carousel className="mt-1">
+                      <CarouselContent className="-ml-4 pl-2">
+                        {get(card, "tags", [])?.map((tag, index) => (
+                          <CarouselItem
+                            key={index}
+                            className="w-fit basis-auto select-none pl-2"
+                          >
+                            <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
+                              <Tag
+                                text={tag}
+                                type="secondary"
+                                size="x-small"
+                                onClick={() => handleFilterByTag(tag)}
+                              />
+                            </div>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                    </Carousel>
+                  </CardContent>
+                  <CardFooter className="p-0">
+                    <div className="text-bodySm text-gray-800">
+                      {get(card, "contest_entry.user.fullName", "Unknown")}
+                    </div>
+                  </CardFooter>
+                </div>
+              ))}
+        </div>
+        {searchResults.length === 0 && !loading && (
+          <div className="h-[300px]">
+            <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
+          </div>
+        )}
+        <Pagination className="">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={() => handlePageChange(Math.max(1, page - 1))}
+                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+              />
+            </PaginationItem>
+            {[...Array(totalPages)].map((_, index) => {
+              const pageNumber = index + 1;
+              if (
+                pageNumber === 1 ||
+                pageNumber === totalPages ||
+                (pageNumber >= page - 1 && pageNumber <= page + 1)
+              ) {
+                return (
+                  <PaginationItem key={pageNumber}>
+                    <PaginationLink
+                      href="#"
+                      isActive={pageNumber === page}
+                      onClick={() => handlePageChange(pageNumber)}
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              } else if (pageNumber === page - 2 || pageNumber === page + 2) {
+                return <PaginationEllipsis key={pageNumber} />;
               }
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+              return null;
+            })}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
+                className={
+                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
     </div>
   );
 }

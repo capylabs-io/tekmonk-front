@@ -266,7 +266,6 @@ const FormSubmitContest = React.forwardRef<
               <div className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}>
                 <label className="text-SubheadSm text-primary-950 w-1/4">
                   Tiến trình
-                  
                 </label>
                 <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
                 <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
