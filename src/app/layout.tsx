@@ -72,7 +72,7 @@ export default function RootLayout({
       className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
     >
       <body>
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <Snackbar />
         <div className="relative">{children}</div>
         <Loading />

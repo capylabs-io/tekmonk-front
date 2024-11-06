@@ -26,8 +26,7 @@ const GroupStageDialog = ({
   //useState
   const [showDialog, setShowDialog] = useState(false);
   const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
-  const [isShowMessage, setIsShowMessage] = useState(false);
-  const [codeCombatId, setCodeCombatId] = useState("");
+  const [isShowMessage, setIsShowMessage] = useState(false)  
   const [isClient, setIsClient] = useState(false);
 
   //arrow function
@@ -45,9 +44,7 @@ const GroupStageDialog = ({
     }
   };
 
-  const handleCodeCombatId = (text: string) => {
-    setCodeCombatId(text);
-  };
+
 
   useEffect(() => {
     // Check if the group stage has already started
@@ -67,6 +64,7 @@ const GroupStageDialog = ({
                 max-[460px]:h-[50px]
               "
               outlined={false}
+              
             >
               Vào làm bài
             </Button>

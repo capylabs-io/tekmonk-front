@@ -16,6 +16,7 @@ type Props = {
   name?: string;
   control?: any; // Added control prop for react-hook-form
   isRequired?: boolean;
+  
 };
 
 export const InputField = forwardRef<

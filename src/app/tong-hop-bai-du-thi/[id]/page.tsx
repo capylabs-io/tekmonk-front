@@ -6,6 +6,7 @@ import { getOneContestSubmission } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
 import {
   ArrowLeft,
+  Download,
   Facebook,
   Instagram,
   Mail,
@@ -112,19 +113,40 @@ const ContestDetail: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-[720px] mx-auto border-r border-l border-gray-200 bg-white h-full shadow-md">
+      <div className="min-h-[calc(100vh-64px)]">
+      <div className="max-w-[720px] mx-auto mb-2 border-r border-l border-b border-gray-200 bg-white shadow-md">
         <div className="">
-          <div className="h-12 mobile:h-16 flex items-center px-8">
-            <ArrowLeft
-              size={24}
-              onClick={() => router.back()}
-              className="cursor-pointer"
-            />
-            <span className="text-grey-500 text-sm font-medium ml-2 select-none">
-              Quay lại
-            </span>
+          <div className="flex justify-between items-center w-full px-8 ">
+            <div className="h-12 mobile:h-16 flex items-center">
+              <ArrowLeft
+                size={24}
+                onClick={() => router.back()}
+                className="cursor-pointer"
+              />
+              <span className="text-grey-500 text-sm font-medium ml-2 select-none max-mobile:hidden">
+                Quay lại
+              </span>
+            </div>
+            {contestDetail.source && (
+              <Button outlined={true} className="border border-gray-300 !rounded-[3rem] w-[168px] h-[40px]
+               shadow-custom-gray flex items-center 
+               max-mobile:w-[50px] max-mobile:h-[36px] max-mobile:rounded-[2rem]
+               ">
+                <Download className="mr-2 mb-1 max-mobile:mr-0" size={17} strokeWidth="2"/>
+                <a
+                className="text-SubheadSm text-primary-900"
+              href={contestDetail?.source?.[0]?.url}
+              target="_blank"
+            >
+              <div className="max-mobile:hidden">Tải về dạng .zip</div>
+              
+            </a>
+              </Button>
+              
+            )}
           </div>
-          <div className="">
+
+          <div className="mt-4">
             <section className="">
               <header className="px-8 border-b border-grey-200 pb-4">
                 <p className="mb-3">
@@ -170,20 +192,6 @@ const ContestDetail: React.FC = () => {
                       href={contestDetail.url}
                     >
                       {contestDetail.url}
-                    </a>
-                  </p>
-                )}
-                {contestDetail.source && (
-                  <p className="px-8">
-                    <span className="text-grey-500 text-sm">
-                      Tệp đính kèm:{" "}
-                    </span>
-                    <a
-                      className="text-sm underline text-blue-500"
-                      href={contestDetail?.source?.[0]?.url}
-                      target="_blank"
-                    >
-                      {contestDetail.title}
                     </a>
                   </p>
                 )}
@@ -244,7 +252,7 @@ const ContestDetail: React.FC = () => {
         </div>
         <hr />
         <div className="py-4">
-          <Dock direction="middle" className="m-0 mx-auto px-3 hidden sm:flex">
+          <Dock direction="middle" className="m-0 mx-auto px-3 sm:flex border-none">
             <DockIcon className="bg-black/10 dark:bg-white/10">
               <FacebookShareButton
                 url={shareUrl}
@@ -287,7 +295,7 @@ const ContestDetail: React.FC = () => {
               </EmailShareButton>
             </DockIcon>
           </Dock>
-          <div className="flex justify-center items-center mt-6 sm:hidden">
+          {/* <div className="flex justify-center items-center mt-6 sm:hidden">
             <Button
               className="w-fit !bg-blue-600"
               onClick={() =>
@@ -300,9 +308,11 @@ const ContestDetail: React.FC = () => {
             >
               Chia sẻ
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
+      </div>
+      
     </>
   );
 };

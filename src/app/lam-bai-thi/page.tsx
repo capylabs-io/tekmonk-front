@@ -33,11 +33,13 @@ const ContestGroupStageEntry = ({
 
   //
   const candidateNumber = useUserStore((state) => state.candidateNumber);
+  
+  const codeCombatId = useUserStore((state) => state.codeCombatId);
 
+  const [showProgress, setShowProgress] = useState(false);
   const handleTimeOver = () => {
     setTimeOver(true);
   };
-  const codeCombatId = useUserStore((state) => state.codeCombatId);
   //function handler
   const handleRedirectToMyContest = async () => {
     try {
@@ -57,6 +59,12 @@ const ContestGroupStageEntry = ({
 
   const handleGetProgress = async () => {
     try {
+      const firstChar = candidateNumber?.charAt(0);
+      if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
+        setShowProgress(false);
+        return;
+      }
+      setShowProgress(true);
       if(!codeCombatId) return;
       
       const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
@@ -68,15 +76,18 @@ const ContestGroupStageEntry = ({
       return;
     }
   }
+  
   useEffect(() => {
     setIsClient(true);
     //check if start time is less than current time
     if (new Date(contestGroupStage.startTime) > new Date()) {
       router.push("/");
     }
+
     handleGetProgress();
     setGroupStageTimeLeft(contestGroupStage.endTime);
     
+
     if (!isSubmitted) {
       const interval = setInterval(() => {
         handleGetProgress();
@@ -151,11 +162,13 @@ const ContestGroupStageEntry = ({
                     : "Hết giờ"}
                 </div>
               </div>
+              {showProgress && 
               <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
                 <div className="text-gray-950 text-bodyLg">Tiến trình</div>
                 <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
                 <div className="text-primary-900 text-bodyL">{progress}%</div>
               </div>
+              }
               <div
                 className="bg-white overflow-hidden"
                 style={{ height: "calc(100vh - 50px)" }}

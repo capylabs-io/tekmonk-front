@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle, Circle } from "lucide-react";
 import { SearchBar, SearchOption } from "@/components/common/SearchBar";
 import { getContestSubmissionResult } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
@@ -101,7 +101,10 @@ export default function CompetitionResults() {
           {data.length == 0 ? (
             <>
               <div className="min-h-[100%]">
-                <EmptySearch message="Chưa có kết quả, vui lòng chờ" customClassName="!border-none"/>
+                <EmptySearch
+                  message="Chưa có kết quả, vui lòng chờ"
+                  customClassName="!border-none"
+                />
               </div>
             </>
           ) : (
@@ -152,11 +155,36 @@ export default function CompetitionResults() {
                           </div>
                         </TableCell>
                         <TableCell className="text-center text-SubheadMd text-gray-950">
-                          {get(contestant, "QualifiedExam", null) === null
-                            ? "CHƯA CHẤM"
-                            : get(contestant, "QualifiedExam")
-                            ? "ĐẠT"
-                            : "KHÔNG ĐẠT"}
+                          {get(contestant, "QualifiedExam", null) === null ? (
+                            "CHƯA CHẤM"
+                          ) : get(contestant, "QualifiedExam") ? (
+                            <div className="flex items-center justify-evenly">
+                              <p>ĐẠT</p>
+                              <CheckCircle />
+                            </div>
+                          ) : (
+                            <div className="flex item-center justify-evenly">
+                              <p>KHÔNG ĐẠT</p>{" "}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                className="lucide lucide-circle-x"
+                              >
+                                <circle cx="12" cy="12" r="10" color="#83077E"/>
+                                <path d="m15 9-6 6" color="#83077E"/>
+                                <path d="m9 9 6 6" color="#83077E"/>
+                              </svg>
+                              {/* <CircleX /> */}
+                              
+                            </div>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -165,34 +193,33 @@ export default function CompetitionResults() {
               </div>
             </>
           )}
-
         </div>
       </div>
-          <div className="mt-4 flex justify-between items-center px-2 pb-1">
-            <div className="text-sm text-gray-500">
-              Trang {currentPage} / {totalPages}
-            </div>
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Trước
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Sau
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+      <div className="mt-4 flex justify-between items-center px-2 pb-1">
+        <div className="text-sm text-gray-500">
+          Trang {currentPage} / {totalPages}
+        </div>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Trước
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Sau
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

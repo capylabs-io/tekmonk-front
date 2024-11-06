@@ -148,7 +148,7 @@
 // }
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   CardContest,
@@ -166,49 +166,83 @@ import ContestRules from "@/components/contest/rules/ContestRules";
 import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
 import { AccordionContest } from "@/components/contest/rules/AccordionContest";
+import { ContestGroupStage, Contest as TypeContest } from "@/types/common-types";
+import { useUserStore } from "@/store/UserStore";
+import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 
 export default function Contest() {
-  //use state
+  // => use state
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<string>("");
-  const [statusBackGround, setStatusBackGround] = useState({
-    top: 1650,
-    smTop: 1400,
-    mdTop: 1250,
-  });
+  const [contestData, setContestData] = useState<TypeContest>();
+  const [contestGroupStageData, setContestGroupStageData] = useState<ContestGroupStage>();
+
+  // => use store
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
+
+  // => function handle
+  const fetchContestData = async () => {
+    try {
+      const res = await getContest();
+    if (res) {
+      setContestData(res);
+    }
+    } catch (error) {
+    }
+  };
+  const fetchContestGroupStageData = async () => {
+    try {
+      if (!candidateNumber) {
+        return;
+      }
+      const response = await getContestGroupStageByCandidateNumber(
+        candidateNumber
+      );
+      if (!response) {
+        return;
+      }
+      setContestGroupStageData(response);
+      return;
+    } catch (err) {
+      return;
+    }
+  }
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
 
   //use effect
   useEffect(() => {
-    const fetchContestData = async () => {
-      const contestData = await getContest();
-      if (contestData) {
-        setStartTime(contestData.data[0].startTime);
-        setEndTime(contestData.data[0].endTime);
-      }
-    };
-
+    
+    //call api
+    fetchContestGroupStageData();
     fetchContestData();
+    
 
     setIsClient(true);
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  //handle function
-  const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+  const Typing = useMemo(() => {
+    return (
+      <TypingAnimation
+        texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
+        className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
+                      max-md:tracking-[0.02em] 
+                      max-md:!leading-[3rem]
+                      "
+      />
+    );
+  }, []);
   return (
     isClient && (
       <div className="relative overflow-hidden">
@@ -246,15 +280,7 @@ export default function Contest() {
                 )}
                 <div className="w-[884px] mt-4 relative">
                   <div className="text-center mb-8 flex-col justify-center px-1">
-                    <TypingAnimation
-                      texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
-                      className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
-                      
-                      max-md:tracking-[0.02em] 
-                      max-md:!leading-[3rem]
-                      "
-                      
-                    />
+                    {Typing}
 
                     <div className="mt-4 text-Subhead3Xl text-primary-950 max-[460px]:text-xl max-[460px]:!leading-[1.5rem]">
                       Cuộc thi lập trình cấp Quốc Gia đầu tiên dành cho học sinh
@@ -289,8 +315,8 @@ export default function Contest() {
 
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      {startTime && endTime && (
-                        <Clock startTime={startTime} endTime={endTime} />
+                      {contestData && (
+                        <Clock contestData={contestData} contestGroupStageData={contestGroupStageData} />
                       )}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>

@@ -15,7 +15,7 @@ const ContestList: React.FC = () => {
     const fetchContestList = async () => {
       try {
         const submitContestList = await getContest();
-        setContestList(submitContestList.data);
+        setContestList(submitContestList);
       } catch (error) {
         console.error("Failed to fetch contest list:", error);
       }

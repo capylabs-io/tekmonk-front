@@ -84,6 +84,7 @@ const FormSubmitContest = React.forwardRef<
   });
   const handleGetProgress = async () => {
     try {
+      if(cansubmitZipFile) return;
       if (!codeCombatId || !candidateNumber) {
         return;
       }
