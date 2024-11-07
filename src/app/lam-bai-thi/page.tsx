@@ -53,7 +53,8 @@ const ContestGroupStageEntry = ({
       }
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
-      console.error(err);
+      //console.error(err);
+      return;
     }
   };
 
