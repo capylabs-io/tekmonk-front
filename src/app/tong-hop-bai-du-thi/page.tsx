@@ -159,7 +159,7 @@ export default function SearchInterface() {
   return (
     
   
-    <div className="mx-auto max-w-[720px] border-gray-200 bg-white h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1">
+    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1">
       <div className="space-y-6">
 <Image
         src={`/image/contestentries/Banner.png`}
