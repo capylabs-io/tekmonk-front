@@ -34,10 +34,12 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { getProgress } from "@/requests/code-combat";
-import { get, round } from "lodash"
+import { get, round, set } from "lodash";
 import { Progress } from "@/components/ui/progress";
 const submissionSchema = z.object({
-  title: z.string().min(1, "Tên dự án không được để trống"),
+  title: z
+    .string({ required_error: "Tên dự án không được để trống" })
+    .min(1, "Tên dự án phải có ít nhất 1 ký tự"),
   tags: z
     .string()
     .regex(
@@ -52,39 +54,44 @@ const FormSubmitContest = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode }
 >(({ children }, ref) => {
+  const router = useRouter();
+  //use state
+  const [progress, setProgress] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
   const [showDialogAccept, setShowDialogAccept] = useState(false);
-  //get candidate number
+
+  //use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
-  const router = useRouter();
 
   const { success, error, warn } = useSnackbarStore();
 
-  //use state
-  const [progress, setProgress] = useState(0);
-
+  //define form
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
+    trigger,
   } = useForm({
     resolver: zodResolver(submissionSchema),
     defaultValues: {
-      title: cansubmitZipFile ? "" : fullNameUser || "",
+      title: "",
       tags: "",
       url: "",
       description: "",
     },
   });
+
+  //handle function
   const handleGetProgress = async () => {
     try {
-      if(cansubmitZipFile) return;
+      if (cansubmitZipFile) return;
       if (!codeCombatId || !candidateNumber) {
         return;
       }
@@ -112,6 +119,7 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
+     
       if (await isExistContestSubmission()) {
         warn("Warning", "Bạn đã nộp bài thi rồi!");
         closeDialog();
@@ -136,7 +144,7 @@ const FormSubmitContest = React.forwardRef<
         contest_entry: contestEntry.id,
         progress: progress,
       };
-      
+
       const result = await createContestSubmission(contestObj);
 
       const uploadPromises = [];
@@ -185,9 +193,12 @@ const FormSubmitContest = React.forwardRef<
     const firstChar = candidateNumber?.charAt(0);
     if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
       setCansubmitZipFile(true);
+    } else {
+      setCansubmitZipFile(false);
+      setValue("title", fullNameUser || "user");
     }
     handleGetProgress();
-  }, [candidateNumber]);
+  }, [candidateNumber, cansubmitZipFile]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -237,13 +248,16 @@ const FormSubmitContest = React.forwardRef<
             </>
           ) : (
             <>
-              <div className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}>
+              <div
+                className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
+              >
                 <label className="text-SubheadSm text-primary-950 w-1/4">
                   Tên dự án
                   <span className="text-red-500">*</span>
                 </label>
                 <div className="flex w-full max-w-[500px] rounded-xl overflow-hidden gap-x-1">
-                  Bài dự thi của: <span className="font-bold">{fullNameUser}</span>
+                  Bài dự thi của:{" "}
+                  <span className="font-bold">{fullNameUser}</span>
                 </div>
               </div>
             </>
@@ -264,16 +278,23 @@ const FormSubmitContest = React.forwardRef<
               />
             ) : (
               <>
-              <div className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}>
-                <label className="text-SubheadSm text-primary-950 w-1/4">
-                  Tiến trình
-                </label>
-                <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
-                <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
-                <div className="text-primary-900 text-bodyL">{progress}%</div>
+                <div
+                  className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
+                >
+                  <label className="text-SubheadSm text-primary-950 w-1/4">
+                    Tiến trình
+                  </label>
+                  <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
+                    <Progress
+                      value={progress}
+                      className="w-[80%] border border-gray-300 bg-gray-200"
+                    />
+                    <div className="text-primary-900 text-bodyL">
+                      {progress}%
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </>
+              </>
             )}
 
             {cansubmitZipFile && (
@@ -300,6 +321,8 @@ const FormSubmitContest = React.forwardRef<
               type="text"
               name="tags"
               isRequired
+              isTooltip
+              tooltipContent="Tags phải được phân tách bởi dấu phẩy và không có khoảng trắng thừa"
               control={control}
               error={errors.tags?.message}
               placeholder="VD: B2C, AI, design...."
@@ -361,7 +384,14 @@ const FormSubmitContest = React.forwardRef<
                   </Button>
                   <Button
                     className="w-[156px] !rounded-[3rem]"
-                    onClick={handleSubmit(onSubmit)}
+                    onClick={async () => {
+                      const isValid = await trigger();
+                      if (isValid) {
+                        setShowDialogAccept(false);
+                        await handleSubmit(onSubmit)();
+                      }
+                      setShowDialogAccept(false);
+                    }}
                   >
                     Xác nhận
                   </Button>

@@ -17,7 +17,6 @@ export const getContestGroupStageByCandidateNumber = async (
     const response = await tekdojoAxios.get(
       `${BASE_URL}/contest-entries?filters[candidateNumber][$eq]=${candidateNumber}&populate[contest_group_stage][populate]=contestEntryFile`
     );
-    console.log("data", response.data);
     return response.data.data[0].contest_group_stage as ContestGroupStage;
   } catch (error) {
     return;
