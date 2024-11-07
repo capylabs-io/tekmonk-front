@@ -204,6 +204,7 @@ export default function Contest() {
       setContestGroupStageData(response);
       return;
     } catch (err) {
+      console.error(err);
       return;
     }
   }
