@@ -43,6 +43,15 @@ export default function CompetitionResults() {
         searchType === "candidateNumber" ? searchTerm : "",
         searchType === "project" ? searchTerm : ""
       );
+
+      //sort data by QualifiedExam with type is true | false | null
+      response.data.sort((a:any, b:any) => {
+        const priority = (val: boolean | null): number => {
+          if (val === null) return 1;
+          return val ? 2 : 0;
+        };
+        return priority(b.QualifiedExam) - priority(a.QualifiedExam);
+      });
       setData(response.data);
       setTotalPages(Math.ceil(response.meta.pagination.total / itemsPerPage));
     } catch (error) {
@@ -160,7 +169,7 @@ export default function CompetitionResults() {
                           ) : get(contestant, "QualifiedExam") ? (
                             <div className="flex items-center justify-evenly">
                               <p>ĐẠT</p>
-                              <CheckCircle />
+                              <CheckCircle color="#03f701"/>
                             </div>
                           ) : (
                             <div className="flex item-center justify-evenly">
@@ -177,9 +186,9 @@ export default function CompetitionResults() {
                                 stroke-linejoin="round"
                                 className="lucide lucide-circle-x"
                               >
-                                <circle cx="12" cy="12" r="10" color="#83077E"/>
-                                <path d="m15 9-6 6" color="#83077E"/>
-                                <path d="m9 9 6 6" color="#83077E"/>
+                                <circle cx="12" cy="12" r="10" color="#f70000"/>
+                                <path d="m15 9-6 6" color="#f70000"/>
+                                <path d="m9 9 6 6" color="#f70000"/>
                               </svg>
                               {/* <CircleX /> */}
                               
