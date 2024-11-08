@@ -166,7 +166,10 @@ import ContestRules from "@/components/contest/rules/ContestRules";
 import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
 import { AccordionContest } from "@/components/contest/rules/AccordionContest";
-import { ContestGroupStage, Contest as TypeContest } from "@/types/common-types";
+import {
+  ContestGroupStage,
+  Contest as TypeContest,
+} from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
 import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 
@@ -175,7 +178,8 @@ export default function Contest() {
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [contestData, setContestData] = useState<TypeContest>();
-  const [contestGroupStageData, setContestGroupStageData] = useState<ContestGroupStage>();
+  const [contestGroupStageData, setContestGroupStageData] =
+    useState<ContestGroupStage>();
 
   // => use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
@@ -184,11 +188,10 @@ export default function Contest() {
   const fetchContestData = async () => {
     try {
       const res = await getContest();
-    if (res) {
-      setContestData(res);
-    }
-    } catch (error) {
-    }
+      if (res) {
+        setContestData(res);
+      }
+    } catch (error) {}
   };
   const fetchContestGroupStageData = async () => {
     try {
@@ -207,7 +210,7 @@ export default function Contest() {
       console.error(err);
       return;
     }
-  }
+  };
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -217,14 +220,11 @@ export default function Contest() {
     setScrollY(window.scrollY);
   };
 
-
   //use effect
   useEffect(() => {
-    
     //call api
     fetchContestGroupStageData();
     fetchContestData();
-    
 
     setIsClient(true);
     window.addEventListener("scroll", handleScroll);
@@ -317,7 +317,10 @@ export default function Contest() {
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
                       {contestData && (
-                        <Clock contestData={contestData} contestGroupStageData={contestGroupStageData} />
+                        <Clock
+                          contestData={contestData}
+                          contestGroupStageData={contestGroupStageData}
+                        />
                       )}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>
@@ -339,17 +342,19 @@ export default function Contest() {
                             alt="Contest participants"
                             width={800}
                             height={400}
+                            priority
                             className="w-full h-auto rounded-lg max-mobile:rounded-md"
                           />
 
                           <div className="p-6 w-full max-mobile:p-2">
-                            
-                            <div className="mt-2 flex w-full justify-center items-center gap-x-5 
+                            <div
+                              className="mt-2 flex w-full justify-center items-center gap-x-5 
                             max-mobile:flex-col
                             max-mobile:gap-y-3
                             
-                            ">
-                            <Button
+                            "
+                            >
+                              <Button
                                 className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px] "
                                 outlined={true}
                                 onClick={() =>
@@ -374,11 +379,10 @@ export default function Contest() {
                                 }
                               >
                                 Chia sẻ cuộc thi
-                                <Share className="ml-2"/>
+                                <Share className="ml-2" />
                               </Button>
-                              
                             </div>
-                            
+
                             <div
                               id="rules"
                               className="mt-6 font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
@@ -401,15 +405,14 @@ export default function Contest() {
                               dự thi vòng chung kết tại Barcelona, Tây Ban Nha
                               vào tháng 7 năm 2025.
                             </div>
-                            
+
                             <div className=" mt-10 max-mobile:hidden">
                               <ContestRules />
                             </div>
                             {/* for mobile  */}
                             <div className="hidden max-mobile:block">
-                                <AccordionContest />
+                              <AccordionContest />
                             </div>
-
                           </div>
                         </CardContestContent>
                       </CardContest>

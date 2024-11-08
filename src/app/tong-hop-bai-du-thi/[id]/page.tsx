@@ -124,15 +124,15 @@ const ContestDetail: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-[calc(100vh-64px)]">
-        <div className="max-w-[720px] mx-auto mb-2 border-r border-l border-b border-gray-200 bg-white shadow-md">
+      <div className="min-h-[calc(100vh-64px)] flex">
+        <div className="max-w-[720px] w-full flex-1 mx-auto border-r border-l border-b border-gray-200 bg-white shadow-md">
           <div className="">
             <div className="flex justify-between items-center w-full px-8 ">
-              <div className="h-12 mobile:h-16 flex items-center">
+              <div className="h-12 mobile:h-16 flex items-center cursor-pointer"
+              onClick={() => router.back()}
+              >
                 <ArrowLeft
                   size={24}
-                  onClick={() => router.back()}
-                  className="cursor-pointer"
                 />
                 <span className="text-grey-500 text-sm font-medium ml-2 select-none max-mobile:hidden">
                   Quay lại
@@ -213,12 +213,12 @@ const ContestDetail: React.FC = () => {
                   )}
                 </div>
                 {isShowCodeCombatCert ? (
-                  <div>
+                  <div className="mb-6">
                     <Certificate name={get(contestDetail, "contest_entry.user.fullName", "")} progress={get(contestDetail, "progress", 0)}/>
                   </div>
                 ) : (
                   <>
-                    <div className="w-full mx-auto pt-4 sm:px-8 blue">
+                    <div className="w-full mx-auto pt-4 sm:px-8">
                       <div className="hidden sm:block">
                         <AspectRatio ratio={16 / 9}>
                           {contestDetail.assets?.[selectedImageIndex]?.url && (

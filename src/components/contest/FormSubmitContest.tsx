@@ -121,7 +121,6 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
-     
       if (await isExistContestSubmission()) {
         warn("Warning", "Bạn đã nộp bài thi rồi!");
         closeDialog();
@@ -189,9 +188,9 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const onValueTagChange = (value: string) => {
-    console.log('value', value);
-    setValue('tags', value);
-  }
+    console.log("value", value);
+    setValue("tags", value);
+  };
   useEffect(() => {
     //if candidate number is null, redirect to home page
     if (!candidateNumber) {
@@ -291,7 +290,7 @@ const FormSubmitContest = React.forwardRef<
                   <label className="text-SubheadSm text-primary-950 w-1/4">
                     Tiến trình
                   </label>
-                  <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
+                  <div className="flex w-full justify-between items-center max-w-3/4 rounded-xl overflow-hidden gap-x-2">
                     <Progress
                       value={progress}
                       className="w-[80%] border border-gray-300 bg-gray-200"
@@ -325,7 +324,13 @@ const FormSubmitContest = React.forwardRef<
               placeholder="VD: B2C, AI, design...."
             /> */}
 
-            <InputTags  error={errors.tags?.message} onValueChange={onValueTagChange} />
+            <InputTags
+              tooltipContent="Tags phải được phân tách bởi dấu phẩy và không có khoảng trắng thừa"
+              isRequired
+              isTooltip
+              error={errors.tags?.message}
+              onValueChange={onValueTagChange}
+            />
 
             <InputField
               title="Mô tả"

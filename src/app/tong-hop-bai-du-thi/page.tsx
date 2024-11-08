@@ -157,31 +157,27 @@ export default function SearchInterface() {
   );
 
   return (
-    
-  
-    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1">
-      <div className="space-y-6">
-<Image
-        src={`/image/contestentries/Banner.png`}
-        alt={`Banner`}
-        width={720}
-        height={480}
-        priority
-        style={{ objectFit: "contain" }}
-        quality={100}
-      />
-      <SearchBar
-        searchOptions={searchOptions}
-        searchType={searchType}
-        searchValue={searchType === SearchType.TAG ? tag : search}
-        onSearchTypeChange={handleSearchTypeChange}
-        onSearchValueChange={handleSearchValue}
-        placeholder="Tìm kiếm bài thi"
-      />
-
-
+    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0">
+      <div className="">
+        <Image
+          src={`/image/contestentries/Banner.png`}
+          alt={`Banner`}
+          width={720}
+          height={480}
+          priority
+          style={{ objectFit: "contain" }}
+          quality={100}
+        />
+        <SearchBar
+          searchOptions={searchOptions}
+          searchType={searchType}
+          searchValue={searchType === SearchType.TAG ? tag : search}
+          onSearchTypeChange={handleSearchTypeChange}
+          onSearchValueChange={handleSearchValue}
+          placeholder="Tìm kiếm bài thi"
+          customStyle="my-6"
+        />
       </div>
-      
 
       <div className="flex flex-col justify-between">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
@@ -259,7 +255,7 @@ export default function SearchInterface() {
             <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
           </div>
         )}
-        <Pagination className="">
+        <Pagination className="mt-4">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious

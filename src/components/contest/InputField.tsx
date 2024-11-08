@@ -84,7 +84,7 @@ export const InputField = forwardRef<
               </>
             )}
           </label>
-          <div className="flex flex-col w-full max-w-[500px] overflow-hidden">
+          <div className="flex flex-col w-full max-w-3/4 overflow-hidden">
             {control ? ( // If control is passed, use Controller
               <Controller
                 name={name}
