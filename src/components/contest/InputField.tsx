@@ -94,7 +94,7 @@ export const InputField = forwardRef<
                     <ReactQuill
                       theme="snow"
                       value={field.value || value || ""}
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[100px]"
+                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[130px]"
                       onChange={field.onChange}
                       placeholder={placeholder}
                     />

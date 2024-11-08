@@ -284,7 +284,7 @@ export default function Contest() {
                     {Typing}
 
                     <div className="mt-4 text-Subhead3Xl text-primary-950 max-[460px]:text-xl max-[460px]:!leading-[1.5rem]">
-                      Cuộc thi lập trình cấp Quốc Gia đầu tiên dành cho học sinh
+                      Cuộc thi Lập trình cấp Quốc Gia đầu tiên dành cho học sinh
                     </div>
                   </div>
                   {/* use later */}
@@ -335,7 +335,7 @@ export default function Contest() {
                       >
                         <CardContestContent className="p-0 w-full">
                           <Image
-                            src="/image/contest/Frame-43.png"
+                            src="/image/contest/cover-05.png"
                             alt="Contest participants"
                             width={800}
                             height={400}

@@ -36,15 +36,17 @@ import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { getProgress } from "@/requests/code-combat";
 import { get, round, set } from "lodash";
 import { Progress } from "@/components/ui/progress";
+import { InputTags } from "./InputTags";
+
 const submissionSchema = z.object({
   title: z
     .string({ required_error: "Tên dự án không được để trống" })
     .min(1, "Tên dự án phải có ít nhất 1 ký tự"),
   tags: z
-    .string()
+    .string({ required_error: "Tags không được để trống" })
     .regex(
       /^\s*[a-zA-Z0-9]+\s*(,\s*[a-zA-Z0-9]+\s*)*$/,
-      "Tags phải được phân tách bởi dấu phẩy và không có khoảng trắng thừa"
+      "Tags không được để trống"
     ),
   url: z.string(),
   description: z.string(),
@@ -185,6 +187,11 @@ const FormSubmitContest = React.forwardRef<
   const handleImgChange = (newImages: File[]) => {
     setImgProject(newImages);
   };
+
+  const onValueTagChange = (value: string) => {
+    console.log('value', value);
+    setValue('tags', value);
+  }
   useEffect(() => {
     //if candidate number is null, redirect to home page
     if (!candidateNumber) {
@@ -304,19 +311,9 @@ const FormSubmitContest = React.forwardRef<
                 value={projectFile}
               />
             )}
-
-            {/* <InputField
-              title="URL"
-              type="text"
-              name="url"
-              control={control}
-              error={errors.url?.message}
-              customClassNames="mt-2 sm:mt-5"
-              placeholder="VD: Chatbot Miracle"
-            /> */}
           </div>
           <div className="flex flex-col gap-[18px] border-t border-gray-200 pt-5">
-            <InputField
+            {/* <InputField
               title="Tags"
               type="text"
               name="tags"
@@ -326,7 +323,10 @@ const FormSubmitContest = React.forwardRef<
               control={control}
               error={errors.tags?.message}
               placeholder="VD: B2C, AI, design...."
-            />
+            /> */}
+
+            <InputTags  error={errors.tags?.message} onValueChange={onValueTagChange} />
+
             <InputField
               title="Mô tả"
               name="description"

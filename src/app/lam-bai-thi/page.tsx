@@ -72,6 +72,7 @@ const ContestGroupStageEntry = ({
       if(res){
         setProgress(round(res.currentProgress * 100, 1));
       }
+      console.log("progress", progress);
 
     } catch (error) {
       return;
@@ -92,7 +93,7 @@ const ContestGroupStageEntry = ({
     if (!isSubmitted) {
       const interval = setInterval(() => {
         handleGetProgress();
-      }, 30000);
+      }, 10000);
   
       // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
       return () => clearInterval(interval);
