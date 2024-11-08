@@ -24,6 +24,7 @@ export type DataContestSubmission = {
   };
   contest_entry: string | null;
   progress: number | 0,
-  classIndex?: string;
-  memberId?: string;
+  classIndex?: string; //group stage id (0 -> 5)
+  memberId?: string | null; // code combat id in local storage
+  data?: any
 };

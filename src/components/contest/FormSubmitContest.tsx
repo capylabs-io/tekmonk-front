@@ -37,6 +37,7 @@ import { getProgress } from "@/requests/code-combat";
 import { get, round, set } from "lodash";
 import { Progress } from "@/components/ui/progress";
 import { InputTags } from "./InputTags";
+import { ContestGroupStage } from "@/types/common-types";
 
 const submissionSchema = z.object({
   title: z
@@ -65,12 +66,12 @@ const FormSubmitContest = React.forwardRef<
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
   const [showDialogAccept, setShowDialogAccept] = useState(false);
-
+  const [contestGroupStage, setContestGroupStage] = useState<ContestGroupStage>();
   //use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
-
+  
   const { success, error, warn } = useSnackbarStore();
 
   //define form
@@ -101,6 +102,7 @@ const FormSubmitContest = React.forwardRef<
       if (!data) {
         return;
       }
+      setContestGroupStage(data);
       const res = await getProgress(codeCombatId, Number(get(data, "id", 0)));
       if (res) {
         setProgress(round(res.currentProgress * 100, 1));
@@ -144,6 +146,9 @@ const FormSubmitContest = React.forwardRef<
         url: data.url,
         contest_entry: contestEntry.id,
         progress: progress,
+        classIndex: get(contestGroupStage, "id", ''),
+        memberId: codeCombatId != ""? codeCombatId : null,
+        data: null
       };
 
       const result = await createContestSubmission(contestObj);
