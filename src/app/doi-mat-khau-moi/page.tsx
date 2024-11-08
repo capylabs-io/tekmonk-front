@@ -15,12 +15,15 @@ import DotPattern from "@/components/ui/dot-pattern";
 import { LAYERS } from "@/contants/layer";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-
+import { Suspense } from "react";
 export default function ResetPassword() {
   const router = useRouter();
 
   const [isPasswordChanged, setIsPasswordChanged] = useState(false);
-  const [error, success] = useSnackbarStore((state) => [state.error, state.success]);
+  const [error, success] = useSnackbarStore((state) => [
+    state.error,
+    state.success,
+  ]);
   const searchParams = useSearchParams();
 
   const token = searchParams.get("token");
@@ -30,16 +33,15 @@ export default function ResetPassword() {
       token: token,
     };
     try {
-        
-        const res = await resetPasswordRequest(dataBody);
-        if (!res) {
-            error("Lỗi!", "Mật khẩu không khớp");
-            return;
-        }
-        success("Thành công!", "Mật khẩu đã được thay đổi");        
-        setIsPasswordChanged(true);
+      const res = await resetPasswordRequest(dataBody);
+      if (!res) {
+        error("Lỗi!", "Mật khẩu không khớp");
+        return;
+      }
+      success("Thành công!", "Mật khẩu đã được thay đổi");
+      setIsPasswordChanged(true);
     } catch (err) {
-        error("Lỗi!", "Lỗi không xác định, vui lòng thử lại sau");
+      error("Lỗi!", "Lỗi không xác định, vui lòng thử lại sau");
     }
   };
   const backToMainPage = () => {
@@ -57,7 +59,7 @@ export default function ResetPassword() {
   } = useForm({
     resolver: zodResolver(ResetPasswordSchema),
   });
-  return !isPasswordChanged ? (
+  const passWordChange = (
     <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
       <div className="relative flex flex-col items-center h-screen">
         <div className="flex w-full gap-2.5 absolute top-10 left-10">
@@ -126,51 +128,53 @@ export default function ResetPassword() {
       </div>
       <div className="bg-[url('/login.jpg')] bg-no-repeat !bg-center bg-cover"></div>
     </div>
-  ) : (
-    <>
-      <div className="relative">
-        <DotPattern
-          className={cn(
-            "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
-            `absolute top-0 min-h-full h-full z-[${LAYERS.BACKGROUND_1}]`
-          )}
-        />
-        <ContestLayout>
-          <div className="min-h-screen w-full max-md:p-2">
-            <div className="md:w-[720px]  h-[376px] mt-10 bg-white border border-gray-300 rounded-2xl mx-auto flex flex-col justify-between">
-              <div className="w-full border-b border-b-gray-300 h-16 text-SubheadLg text-primary-900 px-8 pt-5">
-                Thay đổi mật khẩu thành công
-              </div>
-              <div className="text-center flex flex-col items-center">
-                <Image
-                  alt=""
-                  src={"/image/icon/done-progress.png"}
-                  width={84}
-                  height={84}
-                />
-                <div className="text-xl text-[rgb(42,43,43)] mt-8">
-                  Mật khẩu đã được thay đổi. Xin vui lòng đăng nhập lại.
-                </div>
-              </div>
-              <div className="w-full h-16 border-t border-gray-300 flex justify-between items-center px-14 max-tabletHeader:px-8 max-mobile:px-1">
-                <Button
-                  outlined={true}
-                  className="border border-gray-300 h-10 !rounded-[3rem] max-tabletHeader:p-1"
-                  onClick={backToMainPage}
-                >
-                  Quay lại trang chủ
-                </Button>
-                <Button
-                  className="h-10 !rounded-[3rem] max-mobile:p-3 max-tabletHeader:p-3"
-                  onClick={backToLoginPage}
-                >
-                  Đăng nhập
-                </Button>
+  );
+
+  const passwordChangeSuccess = (
+    <div className="relative">
+      <DotPattern
+        className={cn(
+          "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
+          `absolute top-0 min-h-full h-full z-[${LAYERS.BACKGROUND_1}]`
+        )}
+      />
+      <ContestLayout>
+        <div className="min-h-screen w-full max-md:p-2">
+          <div className="md:w-[720px]  h-[376px] mt-10 bg-white border border-gray-300 rounded-2xl mx-auto flex flex-col justify-between">
+            <div className="w-full border-b border-b-gray-300 h-16 text-SubheadLg text-primary-900 px-8 pt-5">
+              Thay đổi mật khẩu thành công
+            </div>
+            <div className="text-center flex flex-col items-center">
+              <Image
+                alt=""
+                src={"/image/icon/done-progress.png"}
+                width={84}
+                height={84}
+              />
+              <div className="text-xl text-[rgb(42,43,43)] mt-8">
+                Mật khẩu đã được thay đổi. Xin vui lòng đăng nhập lại.
               </div>
             </div>
+            <div className="w-full h-16 border-t border-gray-300 flex justify-between items-center px-14 max-tabletHeader:px-8 max-mobile:px-1">
+              <Button
+                outlined={true}
+                className="border border-gray-300 h-10 !rounded-[3rem] max-tabletHeader:p-1"
+                onClick={backToMainPage}
+              >
+                Quay lại trang chủ
+              </Button>
+              <Button
+                className="h-10 !rounded-[3rem] max-mobile:p-3 max-tabletHeader:p-3"
+                onClick={backToLoginPage}
+              >
+                Đăng nhập
+              </Button>
+            </div>
           </div>
-        </ContestLayout>
-      </div>
-    </>
+        </div>
+      </ContestLayout>
+    </div>
   );
+
+  return <>{isPasswordChanged ? passwordChangeSuccess : passWordChange}</>;
 }

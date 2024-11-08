@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import DotPattern from "@/components/ui/dot-pattern";
 import { cn } from "@/lib/utils";
 import { Snackbar } from "@/components/common/Snackbar";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,8 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   title: "Tekmonk",
-  description: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+  description:
+    "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
   icons: {
     icon: "/favicon.ico?v=4",
   },
@@ -36,7 +38,9 @@ export const metadata: Metadata = {
     siteName: "Tekmonk",
     images: [
       {
-        url: process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
+        url:
+          process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE ||
+          "/default-image.jpg",
         width: 1200,
         height: 630,
         alt: "CUỘC THI SÁNG TẠO TRẺ",
@@ -49,7 +53,9 @@ export const metadata: Metadata = {
     title: "CUỘC THI SÁNG TẠO TRẺ",
     description:
       "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-    images: [process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg"],
+    images: [
+      process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
+    ],
   },
   other: {
     "fb:app_id": "1234567890",
@@ -74,7 +80,9 @@ export default function RootLayout({
       <body>
         {/* <ToastContainer /> */}
         <Snackbar />
-        <div className="relative">{children}</div>
+        <Suspense>
+          <div className="relative">{children}</div>
+        </Suspense>
         <Loading />
       </body>
     </html>
