@@ -148,10 +148,16 @@ export type UploadData = {
 export type Contest = {
   id: string;
   name: string;
-  status: string;
-  thumbnail: Media;
+  description?: string;
+  content?: string;
+  thumbnail?: Media;
+  socialMediaShare?: any;
   endTime: string;
   startTime: string;
+  data?: any;
+  metadata?: any;
+  category?: any;
+  groupStage?: ContestGroupStage;
 };
 
 export type ContestEntry = {

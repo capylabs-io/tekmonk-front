@@ -8,7 +8,7 @@ import { useUserStore } from "@/store/UserStore";
 import { Link as LinkToScroll } from "react-scroll";
 import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 import GroupStageDialog from "./GroupStageDialog";
-import { ContestGroupStage } from "@/types/common-types";
+import { Contest, ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
 import {
   Tooltip,
@@ -17,72 +17,77 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
+type StateTime = {
+  started: boolean;
+  ended: boolean;
+};
+
 const Clock = ({
-  startTime,
-  endTime,
+  contestData,
+  contestGroupStageData,
 }: {
-  startTime: string;
-  endTime: string;
+  contestData: Contest;
+  contestGroupStageData?: ContestGroupStage;
 }) => {
   const router = useRouter();
-  //use state
-  const [isContestStarted, setIsContestStarted] = useState({
+  // => use state
+  const [isContestStarted, setIsContestStarted] = useState<StateTime>({
     started: false,
     ended: false,
   });
-  const [contestTimeLeft, setContestTimeLeft] = useState<string>(startTime);
 
-  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  const [isGroupStageStarted, setIsGroupStageStarted] = useState<StateTime>({
+    started: false,
+    ended: false,
+  });
 
-  const [dataGroupStage, setDataGroupStage] = useState<ContestGroupStage>(
-    {} as ContestGroupStage
+  
+
+  const [timeLeft, setTimeLeft] = useState<string>(contestData.startTime);
+  const [textShowContest, setTextShowContest] = useState<string>(
+    "Thời gian đăng ký bắt đầu sau:"
   );
 
+  // => use store
   const isConnected = useUserStore((state) => state.isConnected);
-  const getRelevantTime = (startTime: string, endTime: string) => {
-    const currentTime = new Date();
-    if (currentTime < new Date(startTime)) {
-      setIsContestStarted({ started: false, ended: false });
-      return startTime;
-    } else {
-      setIsContestStarted({ started: true, ended: false });
-      return endTime;
-    }
-  };
+
+  // => handle function
 
   const handleTimeOver = () => {
     if (!isContestStarted.started) {
       setIsContestStarted({ started: true, ended: false });
+      setTextShowContest("Thời gian đăng ký kết thúc sau:");
+      setTimeLeft(contestData.endTime);
       return;
     }
     if (!isContestStarted.ended) {
       setIsContestStarted({ started: true, ended: true });
-      return;
-    }
-  };
-
-  const fetchDataGroupStage = async () => {
-    try {
-      if (!candidateNumber) {
+      if (!contestGroupStageData && !isConnected()) {
+        setTextShowContest("Đã hết thời gian đăng ký !");
         return;
       }
-      const response = await getContestGroupStageByCandidateNumber(
-        candidateNumber
-      );
-      if (!response || !response.startTime) {
+      if(contestGroupStageData && (new Date() < new Date(contestGroupStageData.startTime))) { // có lẽ lỗi do contestGroupStageData chưa load kịp thì đã skip logic rồi => thêm isConnected()
+        setTextShowContest("Cuộc thi sắp diễn ra! bắt đầu sau:");
+        setTimeLeft(contestGroupStageData.startTime); // => gọi api bất chấp =>  holy sh*t => fix later
         return;
       }
-      setDataGroupStage(response);
-    } catch (err) {
-      return;
+      if (contestGroupStageData && !isGroupStageStarted.started) {
+        setIsGroupStageStarted({ started: true, ended: false });
+        setTextShowContest("Cuộc thi đang diễn ra! kết thúc sau:");
+        setTimeLeft(contestGroupStageData.endTime);
+        console.log("timeLeft", timeLeft);
+        return;
+      }
+      if (contestGroupStageData && !isGroupStageStarted.ended) {
+        setIsGroupStageStarted({ started: true, ended: true });
+        setTextShowContest("Cuộc thi đã kết thúc!");
+        return;
+      }
     }
+    //if user is not connected => return => fix later
   };
-  useEffect(() => {
-    fetchDataGroupStage();
-    setContestTimeLeft(getRelevantTime(startTime, endTime));
-  }, [isContestStarted.started, isContestStarted.ended]);
 
-  const isRegisterDisabled = new Date() > new Date(endTime);
+  // const isRegisterDisabled = new Date() > new Date(contestData.endTime);
 
   return (
     <div className="text-center mb-12">
@@ -98,16 +103,18 @@ const Clock = ({
               outlined={false}
               onClick={() => router.push("register-contest")}
               disabled={
-                isRegisterDisabled ||
                 !isContestStarted.started ||
                 isContestStarted.ended
               }
             >
               Đăng ký
             </Button>
+          ) : contestGroupStageData ? (
+            <GroupStageDialog groupStageData={contestGroupStageData} />
           ) : (
-            <GroupStageDialog groupStageData={dataGroupStage} />
-          )}
+            <p></p>// fix later
+          ) 
+          }
 
           <Tooltip>
             <TooltipTrigger>
@@ -117,7 +124,7 @@ const Clock = ({
                 max-[460px]:h-[50px]
                 "
                 outlined={true}
-                // onClick={() => router.push("tong-hop-bai-du-thi")}
+                onClick={() => router.push("tong-hop-bai-du-thi")}
               >
                 Tổng hợp bài dự thi
               </Button>
@@ -141,9 +148,7 @@ const Clock = ({
         </div>
 
         <div className="mt-[52px] text-2xl font-bold text-gray-600 max-md:text-xl">
-          {isContestStarted.started
-            ? "Thời gian đăng ký kết thúc sau:"
-            : "Thời gian đăng ký bắt đầu sau:"}
+          {textShowContest}
         </div>
 
         <div className="mt-[26px] flex justify-center gap-4">
@@ -173,8 +178,8 @@ const Clock = ({
                 NGÀY
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestTimeLeft && (
-                  <DateTimeDisplay dataTime={contestTimeLeft} type={"days"} />
+                {timeLeft && (
+                  <DateTimeDisplay dataTime={timeLeft} type={"days"} />
                 )}
               </div>
             </CardContest>
@@ -190,8 +195,8 @@ const Clock = ({
                 GIỜ
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestTimeLeft && (
-                  <DateTimeDisplay dataTime={contestTimeLeft} type={"hours"} />
+                {timeLeft && (
+                  <DateTimeDisplay dataTime={timeLeft} type={"hours"} />
                 )}
               </div>
             </CardContest>
@@ -207,11 +212,8 @@ const Clock = ({
                 PHÚT
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestTimeLeft && (
-                  <DateTimeDisplay
-                    dataTime={contestTimeLeft}
-                    type={"minutes"}
-                  />
+                {timeLeft && (
+                  <DateTimeDisplay dataTime={timeLeft} type={"minutes"} />
                 )}
               </div>
             </CardContest>
@@ -227,9 +229,9 @@ const Clock = ({
                 GIÂY
               </div>
               <div className="text-primary-700 font-dela max-[865px]:text-4xl max-mobile:text-2xl text-[64px]">
-                {contestTimeLeft && (
+                {timeLeft && (
                   <DateTimeDisplay
-                    dataTime={contestTimeLeft}
+                    dataTime={timeLeft}
                     type={"seconds"}
                     onTimeOver={handleTimeOver}
                   />

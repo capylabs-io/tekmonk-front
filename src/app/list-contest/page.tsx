@@ -11,22 +11,23 @@ const ContestList: React.FC = () => {
   const [limit, setLimit] = useState();
   const [contestList, setContestList] = useState([]);
 
-  useEffect(() => {
-    const fetchContestList = async () => {
-      try {
-        const submitContestList = await getContest();
-        setContestList(submitContestList.data);
-      } catch (error) {
-        console.error("Failed to fetch contest list:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchContestList = async () => {
+  //     try {
+  //       const submitContestList = await getContest();
+      
+  //       submitContestList && setContestList(submitContestList);
+  //     } catch (error) {
+  //       console.error("Failed to fetch contest list:", error);
+  //     }
+  //   };
 
-    fetchContestList();
-  }, []);
+  //   fetchContestList();
+  // }, []);
 
   return (
     <>
-      <h1 className="text-primary-900 text-SubheadLg py-5 px-8 w-full">
+      {/* <h1 className="text-primary-900 text-SubheadLg py-5 px-8 w-full">
         Danh sách các cuộc thi
       </h1>
       <Image
@@ -49,7 +50,7 @@ const ContestList: React.FC = () => {
             startDate={new Date(contest.startTime).toLocaleDateString()}
           />
         ))}
-      </div>
+      </div> */}
     </>
   );
 };

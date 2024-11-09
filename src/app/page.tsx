@@ -148,7 +148,7 @@
 // }
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   CardContest,
@@ -166,60 +166,95 @@ import ContestRules from "@/components/contest/rules/ContestRules";
 import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
 import { AccordionContest } from "@/components/contest/rules/AccordionContest";
+import { ContestGroupStage, Contest as TypeContest } from "@/types/common-types";
+import { useUserStore } from "@/store/UserStore";
+import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 
 export default function Contest() {
-  //use state
+  // => use state
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<string>("");
-  const [statusBackGround, setStatusBackGround] = useState({
-    top: 1650,
-    smTop: 1400,
-    mdTop: 1250,
-  });
+  const [contestData, setContestData] = useState<TypeContest>();
+  const [contestGroupStageData, setContestGroupStageData] = useState<ContestGroupStage>();
+
+  // => use store
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
+
+  // => function handle
+  const fetchContestData = async () => {
+    try {
+      const res = await getContest();
+    if (res) {
+      setContestData(res);
+    }
+    } catch (error) {
+    }
+  };
+  const fetchContestGroupStageData = async () => {
+    try {
+      if (!candidateNumber) {
+        return;
+      }
+      const response = await getContestGroupStageByCandidateNumber(
+        candidateNumber
+      );
+      if (!response) {
+        return;
+      }
+      setContestGroupStageData(response);
+      return;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  }
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleScroll = () => {
+    setScrollY(window.scrollY);
+  };
+
 
   //use effect
   useEffect(() => {
-    const fetchContestData = async () => {
-      const contestData = await getContest();
-      if (contestData) {
-        setStartTime(contestData.data[0].startTime);
-        setEndTime(contestData.data[0].endTime);
-      }
-    };
-
+    
+    //call api
+    fetchContestGroupStageData();
     fetchContestData();
+    
 
     setIsClient(true);
-
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  //handle function
-  const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
+  const Typing = useMemo(() => {
+    return (
+      <TypingAnimation
+        texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
+        className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
+                      max-md:tracking-[0.02em] 
+                      max-md:!leading-[3rem]
+                      "
+      />
+    );
+  }, []);
   return (
     isClient && (
       <div className="relative overflow-hidden">
         <div
-          className={`absolute w-[195%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_2}]
+          className={`absolute w-[195%] h-full top-[480px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_2}]
       bg-gradient-to-b from-[rgb(248,239,248)] to-[rgb(159,42,143)] rounded-t-[50%] 
       max-mobile:w-[310%] max-mobile:top-[430px]
       max-md:w-[260%] max-md:top-[400px]`}
         ></div>
         <div
-          className={`absolute w-[140%] h-full top-[500px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_1}]
+          className={`absolute w-[140%] h-full top-[480px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_1}]
       bg-gradient-to-b from-[rgb(247,224,246)] to-[rgb(224,121,213)] rounded-t-[50%] 
       max-mobile:w-[300%] max-mobile:top-[430px]
       max-md:w-[230%] max-md:top-[400px]`}
@@ -246,18 +281,10 @@ export default function Contest() {
                 )}
                 <div className="w-[884px] mt-4 relative">
                   <div className="text-center mb-8 flex-col justify-center px-1">
-                    <TypingAnimation
-                      texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
-                      className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
-                      
-                      max-md:tracking-[0.02em] 
-                      max-md:!leading-[3rem]
-                      "
-                      
-                    />
+                    {Typing}
 
                     <div className="mt-4 text-Subhead3Xl text-primary-950 max-[460px]:text-xl max-[460px]:!leading-[1.5rem]">
-                      Cuộc thi lập trình cấp quốc gia đầu tiên dành cho học sinh
+                      Cuộc thi Lập trình cấp Quốc Gia đầu tiên dành cho học sinh
                     </div>
                   </div>
                   {/* use later */}
@@ -289,8 +316,8 @@ export default function Contest() {
 
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      {startTime && endTime && (
-                        <Clock startTime={startTime} endTime={endTime} />
+                      {contestData && (
+                        <Clock contestData={contestData} contestGroupStageData={contestGroupStageData} />
                       )}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>
@@ -308,7 +335,7 @@ export default function Contest() {
                       >
                         <CardContestContent className="p-0 w-full">
                           <Image
-                            src="/image/contest/Frame-43.png"
+                            src="/image/contest/22222.jpg"
                             alt="Contest participants"
                             width={800}
                             height={400}
@@ -316,29 +343,49 @@ export default function Contest() {
                           />
 
                           <div className="p-6 w-full max-mobile:p-2">
-                            <div className="w-full text-center text-gray-950 text-base mx-auto">
-                              Chia sẻ thông tin
+                            
+                            <div className="mt-2 flex w-full justify-center items-center gap-x-5 
+                            max-mobile:flex-col
+                            max-mobile:gap-y-3
+                            
+                            ">
+                            <Button
+                                className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px] "
+                                outlined={true}
+                                onClick={() =>
+                                  window.open(
+                                    "https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf",
+                                    "_blank"
+                                  )
+                                }
+                              >
+                                Chi tiết thể lệ cuộc thi
+                              </Button>
+                              <Button
+                                className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px]  "
+                                outlined={true}
+                                onClick={() =>
+                                  shareOnMobile({
+                                    text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+                                    url: process.env.NEXT_PUBLIC_BASE_URL,
+                                    title: "CUỘC THI SÁNG TẠO TRẺ",
+                                    // images: ["/image/contest/Frame-43.png"],
+                                  })
+                                }
+                              >
+                                Chia sẻ cuộc thi
+                                <Share className="ml-2"/>
+                              </Button>
+                              
                             </div>
-                            <div
-                              className="mt-6 flex justify-center cursor-pointer gap-3 space-x-2"
-                              onClick={() =>
-                                shareOnMobile({
-                                  text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-                                  url: process.env.NEXT_PUBLIC_BASE_URL,
-                                  title: "CUỘC THI SÁNG TẠO TRẺ",
-                                  // images: ["/image/contest/Frame-43.png"],
-                                })
-                              }
-                            >
-                              <Share />
-                            </div>
+                            
                             <div
                               id="rules"
-                              className="font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
+                              className="mt-6 font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
                             >
                               Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
                             </div>
-                            <div className="mt-4 text-gray-950 text-bodyLg max-mobile:text-base">
+                            <div className="mt-10 text-gray-950 text-bodyLg max-mobile:text-base">
                               Giải đấu Tekmonk Coding Olympiad được tổ chức bởi
                               Học viện Công nghệ Tekmonk, thuộc Tập đoàn Hanoi
                               Telecom, là sân chơi trí tuệ hàng đầu dành cho học
@@ -348,25 +395,14 @@ export default function Contest() {
                               mà còn là cơ hội để các em phát triển tư duy logic
                               và rèn luyện kỹ năng giải quyết vấn đề thực tiễn.
                             </div>
-                            <div className="mt-4 text-gray-950 text-bodyLg max-mobile:text-base">
+                            <div className="mt-6 text-gray-950 text-bodyLg max-mobile:text-base">
                               Top 20 thí sinh xuất sắc nhất của Giải đấu sẽ được
                               lựa chọn tham gia Olympic STEM Quốc tế, với cơ hội
                               dự thi vòng chung kết tại Barcelona, Tây Ban Nha
                               vào tháng 7 năm 2025.
                             </div>
-                            <Button
-                              className="border border-gray-300 !rounded-[3rem] mx-auto mt-4 shadow-custom-gray"
-                              outlined={true}
-                              onClick={() =>
-                                window.open(
-                                  "https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf",
-                                  "_blank"
-                                )
-                              }
-                            >
-                              Chi tiết thể lệ cuộc thi
-                            </Button>
-                            <div className="max-mobile:hidden">
+                            
+                            <div className=" mt-10 max-mobile:hidden">
                               <ContestRules />
                             </div>
                             {/* for mobile  */}

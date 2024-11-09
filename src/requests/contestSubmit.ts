@@ -107,7 +107,7 @@ export const getContestSubmissionResult = async (
   project: string
 ) => {
   const response = await tekdojoAxios.get(
-    `${BASE_URL}/contest-submissions?populate[contest_entry][populate]=user&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[1]=id:asc&sort[0]=QualifiedExam:asc&filters[contest_entry][candidateNumber][$containsi]=${candidateNumber}&filters[contest_entry][user][fullName][$containsi]=${name}&filters[title][$containsi]=${project}`
+    `${BASE_URL}/contest-submissions?populate[contest_entry][populate]=user&pagination[page]=${page}&pagination[pageSize]=${limit}&sort[1]=id:asc&sort[0]=QualifiedExam:desc&filters[contest_entry][candidateNumber][$containsi]=${candidateNumber}&filters[contest_entry][user][fullName][$containsi]=${name}&filters[title][$containsi]=${project}`
   );
   return response.data;
 };
