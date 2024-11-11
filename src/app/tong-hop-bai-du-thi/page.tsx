@@ -24,16 +24,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useDebounce } from "@/hooks/useDebounceValue";
 import { EmptySearch } from "@/components/common/EmptySearch";
 import { ImageCustom } from "@/components/common/ImageCustom";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useTagStore } from "@/store/TagStore";
 import { get } from "lodash";

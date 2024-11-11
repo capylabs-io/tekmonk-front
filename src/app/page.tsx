@@ -175,10 +175,9 @@ export default function Contest() {
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [contestData, setContestData] = useState<TypeContest>();
-  const [contestGroupStageData, setContestGroupStageData] = useState<ContestGroupStage>();
 
   // => use store
-  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  
 
   // => function handle
   const fetchContestData = async () => {
@@ -190,24 +189,7 @@ export default function Contest() {
     } catch (error) {
     }
   };
-  const fetchContestGroupStageData = async () => {
-    try {
-      if (!candidateNumber) {
-        return;
-      }
-      const response = await getContestGroupStageByCandidateNumber(
-        candidateNumber
-      );
-      if (!response) {
-        return;
-      }
-      setContestGroupStageData(response);
-      return;
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-  }
+  
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -222,7 +204,6 @@ export default function Contest() {
   useEffect(() => {
     
     //call api
-    fetchContestGroupStageData();
     fetchContestData();
     
 
@@ -244,6 +225,7 @@ export default function Contest() {
       />
     );
   }, []);
+
   return (
     isClient && (
       <div className="relative overflow-hidden">
@@ -317,7 +299,7 @@ export default function Contest() {
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
                       {contestData && (
-                        <Clock contestData={contestData} contestGroupStageData={contestGroupStageData} />
+                        <Clock contestData={contestData}/>
                       )}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>

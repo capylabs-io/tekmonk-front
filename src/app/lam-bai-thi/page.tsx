@@ -29,8 +29,11 @@ const ContestGroupStageEntry = ({
     contestGroupStage.endTime
   );
   const [isClient, setIsClient] = useState(false);
-  const [progress, setProgress] = useState(0);
-
+  const [progress, setProgress] = useState({
+    currentProgress: 0,
+    totalProgress: 1
+  });
+  const progressPercent = round(progress.currentProgress / progress.totalProgress * 100, 2);
   //
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   
@@ -70,7 +73,7 @@ const ContestGroupStageEntry = ({
       
       const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
       if(res){
-        setProgress(round(res.currentProgress * 100, 1));
+        setProgress(res);
       }
       console.log("progress", progress);
 
@@ -98,7 +101,7 @@ const ContestGroupStageEntry = ({
       // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
       return () => clearInterval(interval);
     }
-  }, [progress, isSubmitted]);
+  }, [isSubmitted]);
 
   return (
     isClient && (
@@ -167,8 +170,8 @@ const ContestGroupStageEntry = ({
               {showProgress && 
               <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
                 <div className="text-gray-950 text-bodyLg">Tiến trình</div>
-                <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
-                <div className="text-primary-900 text-bodyL">{progress}%</div>
+                <Progress value={progressPercent} className="w-[80%] border border-gray-300 bg-gray-200"/>
+                <div className="text-primary-900 text-bodyL">{progress.currentProgress} / {progress.totalProgress}</div>
               </div>
               }
               <div

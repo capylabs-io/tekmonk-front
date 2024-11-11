@@ -11,7 +11,7 @@ const Step1Schema = z.object({
     .string({ required_error: "Trường học là bắt buộc" })
     .min(1, "Trường học là bắt buộc"),
   studentAddress: z.string().optional(),
-  dateOfBirth: z.date().optional(), //đang bị lỗi => nếu nhập sẽ không bấm tiếp tục được:w
+  dateOfBirth: z.date({required_error: "Ngày sinh là bắt buộc"}), //đang bị lỗi => nếu nhập sẽ không bấm tiếp tục được:w
   className: z
     .string({ required_error: "Tên lớp học là bắt buộc" })
     .min(1, "Tên lớp học là bắt buộc"),

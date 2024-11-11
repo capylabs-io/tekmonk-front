@@ -25,7 +25,6 @@ export const Step3 = () => {
   const {
     control,
     trigger,
-    register,
     formState: { errors },
     getValues,
     setValue,

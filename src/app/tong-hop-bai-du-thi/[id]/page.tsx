@@ -218,7 +218,8 @@ const ContestDetail: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="w-full mx-auto pt-4 sm:px-8 blue">
+                  {contestDetail.assets && contestDetail.assets?.length > 0 && (
+                      <div className="w-full mx-auto pt-4 sm:px-8">
                       <div className="hidden sm:block">
                         <AspectRatio ratio={16 / 9}>
                           {contestDetail.assets?.[selectedImageIndex]?.url && (
@@ -271,6 +272,8 @@ const ContestDetail: React.FC = () => {
                         </Carousel>
                       </div>
                     </div>
+                  )}
+                    
                   </>
                 )}
               </section>

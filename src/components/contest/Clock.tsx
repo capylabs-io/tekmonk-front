@@ -24,10 +24,9 @@ type StateTime = {
 
 const Clock = ({
   contestData,
-  contestGroupStageData,
 }: {
   contestData: Contest;
-  contestGroupStageData?: ContestGroupStage;
+  
 }) => {
   const router = useRouter();
   //ENV
@@ -44,6 +43,8 @@ const Clock = ({
     ended: false,
   });
 
+  const [groupStage, setGroupStage] = useState<ContestGroupStage>();
+
 
   const [timeLeft, setTimeLeft] = useState<string>(contestData.startTime);
   const [textShowContest, setTextShowContest] = useState<string>(
@@ -52,6 +53,7 @@ const Clock = ({
 
   // => use store
   const isConnected = useUserStore((state) => state.isConnected);
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
 
   // => handle function
 
@@ -64,23 +66,22 @@ const Clock = ({
     }
     if (!isContestStarted.ended) {
       setIsContestStarted({ started: true, ended: true });
-      if (!contestGroupStageData && !isConnected()) {
+      if (!groupStage && !isConnected()) {
         setTextShowContest("Đã hết thời gian đăng ký !");
         return;
       }
-      if(contestGroupStageData && (new Date() < new Date(contestGroupStageData.startTime))) { // có lẽ lỗi do contestGroupStageData chưa load kịp thì đã skip logic rồi => thêm isConnected()
+      if(groupStage && (new Date() < new Date(groupStage.startTime))) { // có lẽ lỗi do contestGroupStageData chưa load kịp thì đã skip logic rồi => thêm isConnected()
         setTextShowContest("Cuộc thi sắp diễn ra! bắt đầu sau:");
-        setTimeLeft(contestGroupStageData.startTime); // => gọi api bất chấp =>  holy sh*t => fix later
+        setTimeLeft(groupStage.startTime); // => gọi api bất chấp =>  holy sh*t => fix later
         return;
       }
-      if (contestGroupStageData && !isGroupStageStarted.started) {
+      if (groupStage && !isGroupStageStarted.started) {
         setIsGroupStageStarted({ started: true, ended: false });
         setTextShowContest("Cuộc thi đang diễn ra! kết thúc sau:");
-        setTimeLeft(contestGroupStageData.endTime);
-        console.log("timeLeft", timeLeft);
+        setTimeLeft(groupStage.endTime);
         return;
       }
-      if (contestGroupStageData && !isGroupStageStarted.ended) {
+      if (groupStage && !isGroupStageStarted.ended) {
         setIsGroupStageStarted({ started: true, ended: true });
         setTextShowContest("Cuộc thi đã kết thúc!");
         return;
@@ -89,8 +90,29 @@ const Clock = ({
     //if user is not connected => return => fix later
   };
 
-  // const isRegisterDisabled = new Date() > new Date(contestData.endTime);
-
+  const fetchContestGroupStageData = async () => {
+    try {
+      if (!candidateNumber) {
+        return;
+      }
+      const response = await getContestGroupStageByCandidateNumber(
+        candidateNumber
+      );
+      if (!response) {
+        return;
+      }
+      setGroupStage(response);
+      return;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  }
+  
+  useEffect(() => {
+    fetchContestGroupStageData();
+  },[candidateNumber])
+  
   return (
     <div className="text-center mb-12">
       <TooltipProvider>
@@ -111,11 +133,9 @@ const Clock = ({
             >
               Đăng ký
             </Button>
-          ) : contestGroupStageData ? (
-            <GroupStageDialog groupStageData={contestGroupStageData} />
-          ) : (
-            <p></p>// fix later
-          ) 
+          ) : groupStage && (
+            <GroupStageDialog groupStageData={groupStage} />
+          )
           }
           {is_show_full && 
           <Tooltip>

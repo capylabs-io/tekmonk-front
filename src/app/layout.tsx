@@ -80,7 +80,7 @@ export default function RootLayout({
       <body>
         {/* <ToastContainer /> */}
         <Snackbar />
-        <Suspense>
+        <Suspense fallback={<>Loding ...</>}>
           <div className="relative">{children}</div>
         </Suspense>
         <Loading />
