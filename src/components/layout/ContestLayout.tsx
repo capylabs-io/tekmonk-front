@@ -119,8 +119,9 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 Thể lệ
               </div>
           </LinkToScroll>
-
-              <div>
+            {is_show_full && 
+              <>
+                <div>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div
@@ -174,6 +175,11 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </TooltipContent>
                   }
               </Tooltip>
+              
+              </>
+            
+            }
+              
 
               {isConnected() ? (
                 <div
@@ -229,7 +235,8 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         Thể lệ
                       </div>
                     </Button>
-                    <Button
+                    {is_show_full && <>
+                      <Button
                       outlined={true}
                       onClick={() => {
                         is_show_full && router.push("/tong-hop-bai-du-thi");
@@ -258,6 +265,9 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         Kết quả vòng loại
                       </div>
                     </Button>
+                    
+                    </>}
+                    
 
                     {!isConnected() && (
                       <Button

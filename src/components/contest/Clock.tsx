@@ -117,7 +117,7 @@ const Clock = ({
             <p></p>// fix later
           ) 
           }
-
+          {is_show_full && 
           <Tooltip>
             <TooltipTrigger>
               <Button
@@ -139,6 +139,7 @@ const Clock = ({
             </TooltipContent>}
             
           </Tooltip>
+          }
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 
