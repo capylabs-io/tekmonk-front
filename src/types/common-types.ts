@@ -58,6 +58,7 @@ export type ContestGroupStage = {
   contestFormat?: string;
   startTime: string;
   endTime: string;
+  contestEntryFile?: any;
 };
 
 export interface Certificate {
@@ -147,10 +148,16 @@ export type UploadData = {
 export type Contest = {
   id: string;
   name: string;
-  status: string;
-  thumbnail: Media;
+  description?: string;
+  content?: string;
+  thumbnail?: Media;
+  socialMediaShare?: any;
   endTime: string;
   startTime: string;
+  data?: any;
+  metadata?: any;
+  category?: any;
+  groupStage?: ContestGroupStage;
 };
 
 export type ContestEntry = {
@@ -176,3 +183,10 @@ export type ContestRegister = {
   groupMemberInfo: object[];
   contest_group_stage: string;
 };
+
+export type TimeLeft = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}

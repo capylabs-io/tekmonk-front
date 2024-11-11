@@ -11,14 +11,14 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
-import { get } from "lodash";
+import { get, set } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { useUserStore } from "@/store/UserStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
 
 const steps = [
   {
@@ -31,7 +31,7 @@ const steps = [
     title: "Tài khoản",
     titleHeader: "TẠO TÀI KHOẢN",
     icon: "2",
-    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi",
+    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi và code combat",
   },
   {
     title: "Bảng thi",
@@ -49,13 +49,30 @@ const steps = [
   },
 ];
 
-export default function RegisterContest() {
+const  RegisterContest = () => {
+  //init data
+  const initInvalidCodeCombat = {
+    username: false,
+    email: false,
+    other: false,
+    reload: false
+  }
   const router = useRouter();
+  //use state
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [candidateNumber, setCandidateNumber] = useState<string>("");
   const [isAccepted, setIsAccepted] = useState(false);
-  const isConnected = useUserStore((state) => state.isConnected);
+  const [isInvalidCodeCombat, setIsInvalidCodeCombat] = useState({
+    username: false,
+    email: false,
+    other: false,
+    reload: false
+  });
+  const [isCreateCodeCombat, setIsCreateCodeCombat] = useState(false);
+  const [codeCombatId, setCodeCombatId] = useState<string>("");
+
+  //store
   const [register, clear] = useContestRegisterStore((state) => [
     state.register,
     state.clear,
@@ -65,15 +82,14 @@ export default function RegisterContest() {
     state.error,
     state.success,
   ]);
-  const groupMemberInfo = useContestRegisterStore(
-    (state) => state.groupMemberInfo
-  );
 
+  //form
   const methods = useForm<WizardSchema>({
     mode: "onChange",
     resolver: zodResolver(wizardSchema),
   });
 
+  //function
   const getStepName = (step: number) => {
     switch (step) {
       default:
@@ -91,24 +107,42 @@ export default function RegisterContest() {
       const stepName = getStepName(currentStep);
       const isValid = await methods.trigger(stepName);
       if (isValid) setCurrentStep(currentStep + 1);
+      // setCurrentStep(currentStep + 1);
     }
   };
 
   const handleNext = async (formData: any) => {
-    
     try {
       show();
-
       const res = await register({
         ...get(formData, "stepOne", {}),
         ...get(formData, "stepTwo", {}),
         ...get(formData, "stepThree", {}),
       });
+
       setCandidateNumber(get(res, "candidateNumber", ""));
       success("Xong!", "Đăng ký thành công");
       setIsSubmitted(true);
     } catch (err) {
       const message = HandleReturnMessgaeErrorAxios(err);
+      if(message === "username") {
+        error("Lỗi", "Tên tài khoản đã tồn tại");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
+      if(message === "email") {
+        error("Lỗi", "Email đã tồn tại");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
+      if(message === "unknown") {
+        error("Lỗi", "Có lỗi xảy ra");
+        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
+        setCurrentStep(1);
+        return;
+      }
       error("Lỗi", message);
     } finally {
       hide();
@@ -126,14 +160,9 @@ export default function RegisterContest() {
   const renderStepContent = () => {
     switch (currentStep) {
       case 0:
-        //clear groupMemberInfo informData when back to step 1
-        // method.setValue(
-        //   "stepThree.contest_group_stage", "1"
-        // );
-        // console.log("groupMemberInfo", get(methods.getValues(), "stepThree"));
         return <Step1 />;
       case 1:
-        return <Step2 />;
+        return <Step2 stateCodeCombat={isInvalidCodeCombat}/>;
       case 2:
         return <Step3 />;
       case 3:
@@ -162,30 +191,22 @@ export default function RegisterContest() {
       setIsAccepted(false);
     }
   }, [currentStep]);
-  return !isConnected() ? (
+  return (
     <>
       <div className="h-full mt-4 overflow-auto">
         <div className="px-2">
-          <div
-            className="w-full max-w-[720px] mx-auto h-80 rounded-2xl max-mobile:h-48"
-            style={{
-              backgroundImage: "url('/image/contest/Banner.png')",
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          ></div>
+          <div className="w-full text-[40px] text-primary-700 font-dela max-w-[720px] max-[580px]:text-[32px] max-[370px]:text-[28px] mx-auto rounded-2x text-center">Đăng ký thông tin dự thi</div>
         </div>
 
         <div className="p-2">
           <Card className="w-full max-w-[720px] mt-2 mx-auto rounded-2xl bg-white">
             <div className="w-full min-h-16 p-6 ">
-              <div className=" text-SubheadLg text-primary-900 max-mobile:text-center">
+              <div className=" text-SubheadLg text-primary-900 text-center">
                 {steps[currentStep].titleHeader
                   ? steps[currentStep].titleHeader
                   : "Đăng ký tham gia thành công"}
               </div>
-              <div className="text-bodyMd">
+              <div className="text-bodyMd text-center">
                 {steps[currentStep].description
                   ? steps[currentStep].description
                   : ""}
@@ -296,7 +317,7 @@ export default function RegisterContest() {
         </div>
       </div>
     </>
-  ) : (
-    router.push("/")
-  );
+  ) ;
 }
+
+export default RegisterContestGuard(RegisterContest);

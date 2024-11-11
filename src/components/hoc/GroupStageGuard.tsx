@@ -2,36 +2,61 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import {
+  getContestGroupStageByCandidateNumber,
+  getOneContestEntry,
+} from "@/requests/contestEntry";
 import { ContestGroupStage } from "@/types/common-types";
+import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 
 interface WrappedComponentProps {
   contestGroupStage: ContestGroupStage;
+  isSubmitted: boolean;
 }
 
 const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
   const Comp: React.FC = (props) => {
     const router = useRouter();
+
+    //use state
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    //
     const [contestGroupStage, setContestGroupStage] =
       useState<ContestGroupStage | null>(null);
     const candidateNumber = useUserStore((state) => state.candidateNumber);
 
+    const fetchContestGroupStage = async () => {
+      if (!candidateNumber) {
+        router.push("/");
+        return;
+      }
+      try {
+        const data = await getContestGroupStageByCandidateNumber(
+          candidateNumber
+        );
+        data && setContestGroupStage(data);
+      } catch (error) {
+        return;
+      }
+    };
+
+    //handle if user aready submit the form
+    //get contest submission by candidate number
+    const checkExistContestSubmission = async () => {
+      if (!candidateNumber) {
+        router.push("/");
+        return;
+      }
+      const contestEntry = await getOneContestEntry(candidateNumber);
+      const contestSubmission = await getContestSubmissionByContestEntry(
+        contestEntry.id
+      );
+      setIsSubmitted(contestSubmission.data.length > 0);
+    };
+
     useEffect(() => {
-      const fetchContestGroupStage = async () => {
-        if (!candidateNumber) {
-          router.push("/");
-          return;
-        }
-        try {
-          const data = await getContestGroupStageByCandidateNumber(
-            candidateNumber
-          );
-          setContestGroupStage(data);
-        } catch (error) {
-          return;
-        }
-      };
       fetchContestGroupStage();
+      checkExistContestSubmission();
     }, [candidateNumber]);
 
     if (contestGroupStage === null) {
@@ -41,7 +66,11 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
       router.push("/");
     } else
       return (
-        <WrappedComponent {...props} contestGroupStage={contestGroupStage} />
+        <WrappedComponent
+          {...props}
+          contestGroupStage={contestGroupStage}
+          isSubmitted={isSubmitted}
+        />
       );
   };
 

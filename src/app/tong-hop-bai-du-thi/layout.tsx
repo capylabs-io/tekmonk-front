@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <DotPattern
         className={cn(
           "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
-          `absolute top-0 h-full z-[${LAYERS.BACKGROUND}]`
+          `absolute top-0 h-screen min-h-full z-[${LAYERS.BACKGROUND_1}]`
         )}
       />
       <ContestLayout>{children}</ContestLayout>

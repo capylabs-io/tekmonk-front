@@ -11,6 +11,8 @@ type State = {
   userInfo: User | null;
   userCertificate: Certificate[] | null;
   candidateNumber: string | null;
+  codeCombatId: string | null;
+  isSubmitted: boolean;
 };
 
 type Actions = {
@@ -30,6 +32,8 @@ const defaultStates: State = {
   userInfo: null,
   userCertificate: null,
   candidateNumber: null,
+  codeCombatId: null,
+  isSubmitted: false,
 };
 
 // Tạo store sử dụng Zustand
@@ -48,6 +52,8 @@ export const useUserStore = create<State & Actions>()(
           refreshToken: response.refreshToken,
           userInfo: response.user,
           candidateNumber: response?.candidateNumber,
+          codeCombatId: response?.codeCombatId,
+          isSubmitted: response?.isSubmitted,
         });
         return response.user;
       },

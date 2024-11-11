@@ -78,7 +78,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full grid grid-cols-2 max-[819px]:grid-cols-1 h-screen">
+    <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
       <div className="relative flex flex-col justify-center items-center h-screen">
         <div className="flex w-full gap-2.5 absolute top-10 left-10">
           <svg
@@ -118,7 +118,7 @@ export default function Login() {
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">
           <Input
             type="text"
-            placeholder="Tên tài khoản, email hoặc số điện thoại"
+            placeholder="Tên tài khoản hoặc email"
             customClassNames="w-full"
             value={user.identifier}
             onChange={handleChangeUsername}
@@ -132,14 +132,14 @@ export default function Login() {
           <Button className="mt-8" onClick={handleLogin}>
             Đăng nhập
           </Button>
-          <div className="text-center">Quên mật khẩu?</div>
+          <div className="text-center cursor-pointer" onClick={() => router.push('quen-mat-khau')}>Quên mật khẩu?</div>
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">
           Quên mật khẩu?
         </div> */}
       </div>
-      <div className="bg-[url('/image/login/login-banner.png')] bg-no-repeat !bg-right bg-cover"></div>
+      <div className="bg-[url('/login.jpg')] bg-no-repeat !bg-center bg-cover"></div>
       {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>

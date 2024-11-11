@@ -1,3 +1,4 @@
+import { Contest } from "@/types/common-types";
 import tekdojoAxios from "./axios.config";
 import { BASE_URL } from "@/contants/api-url";
 
@@ -7,8 +8,9 @@ export const getContest = async () => {
     const response = await tekdojoAxios.get(
       `${BASE_URL}/contests?populate=thumbnail`
     );
-    return response.data;
+    return response.data.data[0] as Contest;
   } catch (error) {
+    console.error("Error fetching data:", error);
     return;
   }
 };

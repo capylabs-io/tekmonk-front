@@ -11,6 +11,7 @@ export type ContestSubmission = {
   createdAt: string;
   url?: string;
   source?: any;
+  progress?: number;
   QualifiedExam: boolean | null;
 };
 
@@ -22,4 +23,8 @@ export type DataContestSubmission = {
     data: string[];
   };
   contest_entry: string | null;
+  progress: number | 0,
+  classIndex?: string; //group stage id (0 -> 5)
+  memberId?: string | null; // code combat id in local storage
+  data?: any
 };
