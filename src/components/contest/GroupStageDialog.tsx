@@ -13,7 +13,6 @@ import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
-import { Input } from "../common/Input";
 
 const GroupStageDialog = ({
   groupStageData,
@@ -22,7 +21,6 @@ const GroupStageDialog = ({
 }) => {
   //import others
   const router = useRouter();
-
   //useState
   const [showDialog, setShowDialog] = useState(false);
   const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
@@ -64,7 +62,6 @@ const GroupStageDialog = ({
                 max-[460px]:h-[50px]
               "
               outlined={false}
-              
             >
               Vào làm bài
             </Button>

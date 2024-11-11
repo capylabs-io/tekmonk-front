@@ -93,7 +93,7 @@ const ContestGroupStageEntry = ({
     if (!isSubmitted) {
       const interval = setInterval(() => {
         handleGetProgress();
-      }, 10000);
+      }, 30000);
   
       // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
       return () => clearInterval(interval);
