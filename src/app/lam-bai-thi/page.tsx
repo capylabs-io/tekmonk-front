@@ -12,6 +12,8 @@ import { getOneContestEntry } from "@/requests/contestEntry";
 import { useUserStore } from "@/store/UserStore";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { Progress } from "@/components/ui/progress";
+import { getProgress } from "@/requests/code-combat";
+import { get, round } from "lodash";
 
 const ContestGroupStageEntry = ({
   contestGroupStage,
@@ -27,15 +29,17 @@ const ContestGroupStageEntry = ({
     contestGroupStage.endTime
   );
   const [isClient, setIsClient] = useState(false);
-  const [progress, setProgress] = useState(30);
+  const [progress, setProgress] = useState(0);
 
   //
   const candidateNumber = useUserStore((state) => state.candidateNumber);
+  
+  const codeCombatId = useUserStore((state) => state.codeCombatId);
 
+  const [showProgress, setShowProgress] = useState(false);
   const handleTimeOver = () => {
     setTimeOver(true);
   };
-
   //function handler
   const handleRedirectToMyContest = async () => {
     try {
@@ -49,20 +53,52 @@ const ContestGroupStageEntry = ({
       }
       router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
     } catch (err) {
-      console.error(err);
+      //console.error(err);
+      return;
     }
   };
 
+  const handleGetProgress = async () => {
+    try {
+      const firstChar = candidateNumber?.charAt(0);
+      if (firstChar != "A" && firstChar != "B" && firstChar != "C") {
+        setShowProgress(false);
+        return;
+      }
+      setShowProgress(true);
+      if(!codeCombatId) return;
+      
+      const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
+      if(res){
+        setProgress(round(res.currentProgress * 100, 1));
+      }
+      console.log("progress", progress);
+
+    } catch (error) {
+      return;
+    }
+  }
+  
   useEffect(() => {
     setIsClient(true);
     //check if start time is less than current time
     if (new Date(contestGroupStage.startTime) > new Date()) {
       router.push("/");
     }
-    setGroupStageTimeLeft(contestGroupStage.endTime);
 
-    //handle get progress later
-  }, []);
+    handleGetProgress();
+    setGroupStageTimeLeft(contestGroupStage.endTime);
+    
+
+    if (!isSubmitted) {
+      const interval = setInterval(() => {
+        handleGetProgress();
+      }, 30000);
+  
+      // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
+      return () => clearInterval(interval);
+    }
+  }, [progress, isSubmitted]);
 
   return (
     isClient && (
@@ -128,11 +164,13 @@ const ContestGroupStageEntry = ({
                     : "Hết giờ"}
                 </div>
               </div>
+              {showProgress && 
               <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
                 <div className="text-gray-950 text-bodyLg">Tiến trình</div>
                 <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
                 <div className="text-primary-900 text-bodyL">{progress}%</div>
               </div>
+              }
               <div
                 className="bg-white overflow-hidden"
                 style={{ height: "calc(100vh - 50px)" }}

@@ -13,7 +13,6 @@ import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
-import { Input } from "../common/Input";
 
 const GroupStageDialog = ({
   groupStageData,
@@ -22,12 +21,10 @@ const GroupStageDialog = ({
 }) => {
   //import others
   const router = useRouter();
-
   //useState
   const [showDialog, setShowDialog] = useState(false);
   const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
-  const [isShowMessage, setIsShowMessage] = useState(false);
-  const [codeCombatId, setCodeCombatId] = useState("");
+  const [isShowMessage, setIsShowMessage] = useState(false)  
   const [isClient, setIsClient] = useState(false);
 
   //arrow function
@@ -45,9 +42,7 @@ const GroupStageDialog = ({
     }
   };
 
-  const handleCodeCombatId = (text: string) => {
-    setCodeCombatId(text);
-  };
+
 
   useEffect(() => {
     // Check if the group stage has already started
@@ -156,12 +151,12 @@ const GroupStageDialog = ({
                 >
                   Quay lại
                 </Button>
-                <Button
+                {isGroupStageStarted &&                 <Button
                   className="w-[156px] h-[48px] !rounded-[3rem]"
                   onClick={handleExam}
                 >
                   Vào thi
-                </Button>
+                </Button>}
               </div>
             </DialogFooter>
           </DialogContent>

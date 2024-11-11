@@ -36,6 +36,7 @@ type ContestLayoutProps = {
 const ContestLayout = ({ children }: ContestLayoutProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
   //use state
   const [isClient, setIsClient] = useState(false);
   const [clear, isConnected] = useUserStore((state) => [
@@ -67,6 +68,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
   const handleRedirectToMyContest = async () => {
     try {
+      if(!is_show_full) return;
       const contestEntry = await getOneContestEntry(
         useUserStore.getState().candidateNumber || ""
       );
@@ -83,6 +85,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   };
 
   const handleRedirectResultContest = () => {
+    if(!is_show_full) return;
     router.push("/ket-qua-vong-loai");
   };
 
@@ -94,7 +97,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         <TooltipProvider>
 
           {/* Header */}
-          <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white ">
+          <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white">
             <Image
               src="/image/app-logox2.png"
               alt="app logo"
@@ -122,14 +125,19 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <TooltipTrigger asChild>
                     <div
                       className="text-gray-950  cursor-pointer"
-                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
+                      onClick={() => {
+                        is_show_full && router.push("/tong-hop-bai-du-thi");
+                      }}
                     >
                       Tổng hợp bài dự thi
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Sắp diễn ra</p>
-                  </TooltipContent>
+                  {!is_show_full && 
+                    <TooltipContent>
+                      <p>Sắp diễn ra</p>
+                    </TooltipContent>
+                  }
+                  
                 </Tooltip>
               </div>
 
@@ -138,14 +146,16 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <TooltipTrigger>
                     <div
                       className="text-bodyMd hover:cursor-pointer"
-                      // onClick={handleRedirectToMyContest}
+                      onClick={handleRedirectToMyContest}
                     >
                       Bài dự thi của tôi
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Sắp diễn ra</p>
-                  </TooltipContent>
+                  {!is_show_full && 
+                    <TooltipContent>
+                      <p>Sắp diễn ra</p>
+                    </TooltipContent>
+                  }
                 </Tooltip>
               )}
 
@@ -153,14 +163,16 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 <TooltipTrigger>
                   <div
                     className="text-bodyMd hover:cursor-pointer"
-                    // onClick={handleRedirectResultContest}
+                    onClick={handleRedirectResultContest}
                   >
                     Kết quả vòng loại
                   </div>
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p>Sắp diễn ra</p>
-                </TooltipContent>
+                {!is_show_full && 
+                    <TooltipContent>
+                      <p>Sắp diễn ra</p>
+                    </TooltipContent>
+                  }
               </Tooltip>
 
               {isConnected() ? (
@@ -219,7 +231,9 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Button>
                     <Button
                       outlined={true}
-                      // onClick={() => router.push("/tong-hop-bai-du-thi")}
+                      onClick={() => {
+                        is_show_full && router.push("/tong-hop-bai-du-thi");
+                      }}
                     >
                       <div className="text-black text-base">
                         Tổng hợp bài dự thi
@@ -228,7 +242,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     {isConnected() && isSubmitted && (
                       <Button
                         outlined={true}
-                        // onClick={handleRedirectToMyContest}
+                        onClick={handleRedirectToMyContest}
                       >
                         <div className="text-black text-base">
                           Bài dự thi của tôi
@@ -238,7 +252,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
                     <Button
                       outlined={true}
-                      // onClick={() => router.push("/ket-qua-vong-loai")}
+                      onClick={handleRedirectResultContest}
                     >
                       <div className="text-black text-base">
                         Kết quả vòng loại

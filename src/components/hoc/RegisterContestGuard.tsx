@@ -14,8 +14,8 @@ const RegisterContestGuard = (WrappedComponent: React.FC) => {
         const data = await getContest();
         if (data) {
           const currentTime = new Date();
-          const contestStartTime = new Date(get(data, ["data", 0, "startTime"]));
-          const contestEndTime = new Date(get(data, ["data", 0, "endTime"]));
+          const contestStartTime = new Date(get(data, ["startTime"]));
+          const contestEndTime = new Date(get(data, ["endTime"]));
           if (currentTime > contestStartTime && currentTime < contestEndTime) {
             setCanRegister(true);
           } else {
@@ -23,7 +23,6 @@ const RegisterContestGuard = (WrappedComponent: React.FC) => {
           }
         }
       } catch (error) {
-        console.error("Failed to fetch contest data:", error);
         setCanRegister(false);
       }
     };
