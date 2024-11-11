@@ -30,6 +30,9 @@ const Clock = ({
   contestGroupStageData?: ContestGroupStage;
 }) => {
   const router = useRouter();
+  //ENV
+  const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
+
   // => use state
   const [isContestStarted, setIsContestStarted] = useState<StateTime>({
     started: false,
@@ -41,7 +44,6 @@ const Clock = ({
     ended: false,
   });
 
-  
 
   const [timeLeft, setTimeLeft] = useState<string>(contestData.startTime);
   const [textShowContest, setTextShowContest] = useState<string>(
@@ -124,14 +126,18 @@ const Clock = ({
                 max-[460px]:h-[50px]
                 "
                 outlined={true}
-                onClick={() => router.push("tong-hop-bai-du-thi")}
+                onClick={() => {
+                  is_show_full && router.push("tong-hop-bai-du-thi")
+                }}
               >
                 Tổng hợp bài dự thi
               </Button>
             </TooltipTrigger>
+            {!is_show_full && 
             <TooltipContent>
               <p>Sắp diễn ra</p>
-            </TooltipContent>
+            </TooltipContent>}
+            
           </Tooltip>
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
