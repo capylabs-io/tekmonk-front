@@ -1,6 +1,6 @@
 'use client';
 
-export const Certificate = ({name, progress}: {name: string, progress: number}) => {
+export const Certificate = ({name, progress, course}: {name: string, progress: number, course: string}) => {
     return (
         <>
             <div
@@ -21,8 +21,9 @@ export const Certificate = ({name, progress}: {name: string, progress: number}) 
                        max-[400px]:h-[60px]
                        ">
                         <div className="text-SubheadMd max-[500px]:text-[12px]">CHÚC MỪNG</div>
-                        <div className="text-Subhead3Xl uppercase max-[500px]:text-[28px] max-[420px]:text-[24px]">{name}</div>
+                        <div className="text-Subhead3Xl uppercase max-[500px]:text-[28px] max-[420px]:text-[24px] ">{name}</div>
                         <div className="text-bodyLg max-[500px]:text-[12px]">Đã hoàn thành cuộc thi</div>
+                        <div>Khóa học: {course}</div>
                       </div>
                       <div className="w-full text-Subhead4Xl text-primary-950 text-center mt-[32%] 
                       

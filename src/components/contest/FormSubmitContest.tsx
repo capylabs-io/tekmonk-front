@@ -59,10 +59,10 @@ const FormSubmitContest = React.forwardRef<
 >(({ children }, ref) => {
   const router = useRouter();
   //use state
-  const [progress, setProgress] = useState({
-    currentProgress: 0,
-    totalProgress: 1
-  });
+  // const [progress, setProgress] = useState({
+  //   currentProgress: 0,
+  //   totalProgress: 1
+  // });
   const [isOpen, setIsOpen] = useState(false);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
@@ -107,9 +107,9 @@ const FormSubmitContest = React.forwardRef<
       }
       setContestGroupStage(data);
       const res = await getProgress(codeCombatId, Number(get(data, "id", 0)));
-      if (res) {
-        setProgress(res);
-      }
+      // if (res) {
+      //   setProgress(res);
+      // }
     } catch (error) {
       return;
     }
@@ -149,7 +149,6 @@ const FormSubmitContest = React.forwardRef<
         tags: { data: tags },
         url: data.url,
         contest_entry: contestEntry.id,
-        progress: progress.currentProgress,
         classIndex: get(contestGroupStage, "id", ''),
         memberId: codeCombatId != ""? codeCombatId : null,
         data: null
@@ -295,7 +294,7 @@ const FormSubmitContest = React.forwardRef<
               />
             ) : (
               <>
-                <div
+                {/* <div
                   className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
                 >
                   <label className="text-SubheadSm text-primary-950 w-1/4">
@@ -310,7 +309,7 @@ const FormSubmitContest = React.forwardRef<
                       {progress.currentProgress} / {progress.totalProgress}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </>
             )}
 

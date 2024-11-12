@@ -35,7 +35,7 @@ import { EmptySearch } from "@/components/common/EmptySearch";
 import { Button } from "@/components/common/Button";
 import { useState, useEffect, useRef } from "react";
 import { useTagStore } from "@/store/TagStore";
-import { get, set } from "lodash";
+import { get, round, set } from "lodash";
 import { ImageCustom } from "@/components/common/ImageCustom";
 import { Certificate } from "@/components/contest/Certificate";
 
@@ -47,6 +47,7 @@ const ContestDetail: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [selectedCourse, setSelectedCourse] = useState<number>(0);
   const setSelectedTag = useTagStore((state) => state.setSelectedTag);
   const [isShowCodeCombatCert, setIsShowCodeCombatCert] = useState(false);
 
@@ -73,7 +74,6 @@ const ContestDetail: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (!id) return;
@@ -213,67 +213,97 @@ const ContestDetail: React.FC = () => {
                   )}
                 </div>
                 {isShowCodeCombatCert ? (
-                  <div>
-                    <Certificate name={get(contestDetail, "contest_entry.user.fullName", "")} progress={get(contestDetail, "progress", 0)}/>
-                  </div>
-                ) : (
                   <>
-                  {contestDetail.assets && contestDetail.assets?.length > 0 && (
-                      <div className="w-full mx-auto pt-4 sm:px-8">
-                      <div className="hidden sm:block">
-                        <AspectRatio ratio={16 / 9}>
-                          {contestDetail.assets?.[selectedImageIndex]?.url && (
-                            <div className="relative w-full h-full">
-                              <ImageCustom
-                                src={
-                                  contestDetail.assets[selectedImageIndex].url
-                                }
-                                alt={`Selected image for ${contestDetail.title}`}
-                                className="rounded-md object-contain"
-                                quality={80}
-                                fill
-                              />
-                            </div>
-                          )}
-                        </AspectRatio>
-                      </div>
-                      <div className="mt-6 mb-4 sm:px-12 px-14">
-                        <Carousel opts={{ align: "center" }} className="w-full">
+                    {contestDetail.resultCodeCombat &&
+                      contestDetail.resultCodeCombat?.length > 0 && (
+                        <Carousel className="w-[85%] mx-auto h-full px-1">
                           <CarouselContent className="m-0">
-                            {contestDetail.assets?.map((item, index) => (
-                              <CarouselItem
-                                key={index}
-                                className="pl-1 md:basis-1/2 lg:basis-1/3 select-none"
-                              >
-                                <div
-                                  className={`relative cursor-pointer rounded-md overflow-hidden ${
-                                    selectedImageIndex === index
-                                      ? "border-2 border-blue-500"
-                                      : ""
-                                  }`}
-                                  style={{ aspectRatio: "16 / 9" }}
-                                  onClick={() => setSelectedImageIndex(index)}
+                            {contestDetail.resultCodeCombat?.map(
+                              (item, index) => (
+                                <CarouselItem
+                                  key={index}
                                 >
-                                  <ImageCustom
-                                    src={item.url}
-                                    alt={`Contest entry image ${index + 1}`}
-                                    fill
-                                    className="object-contain"
-                                    quality={40}
-                                    sizes="(max-width: 640px) 25vw, 20vw"
-                                    loading="lazy"
+                                  <Certificate
+                                    name={item.name}
+                                    progress={round(
+                                      (item.currentLevel / item.totalLevel) * 100, 1
+                                    )}
+                                    course={contestDetail.title}
                                   />
-                                </div>
-                              </CarouselItem>
-                            ))}
+                                </CarouselItem>
+                              )
+                            )}
                           </CarouselContent>
-                          <CarouselPrevious />
+                          <CarouselPrevious className="mr-0"/>
                           <CarouselNext />
                         </Carousel>
-                      </div>
-                    </div>
-                  )}
-                    
+                      )}
+                  </>
+                ) : (
+                  <>
+                    {contestDetail.assets &&
+                      contestDetail.assets?.length > 0 && (
+                        <div className="w-full mx-auto pt-4 sm:px-8">
+                          <div className="hidden sm:block">
+                            <AspectRatio ratio={16 / 9}>
+                              {contestDetail.assets?.[selectedImageIndex]
+                                ?.url && (
+                                <div className="relative w-full h-full">
+                                  <ImageCustom
+                                    src={
+                                      contestDetail.assets[selectedImageIndex]
+                                        .url
+                                    }
+                                    alt={`Selected image for ${contestDetail.title}`}
+                                    className="rounded-md object-contain"
+                                    quality={80}
+                                    fill
+                                  />
+                                </div>
+                              )}
+                            </AspectRatio>
+                          </div>
+                          <div className="mt-6 mb-4 sm:px-12 px-14">
+                            <Carousel
+                              opts={{ align: "center" }}
+                              className="w-full"
+                            >
+                              <CarouselContent className="m-0">
+                                {contestDetail.assets?.map((item, index) => (
+                                  <CarouselItem
+                                    key={index}
+                                    className="pl-1 md:basis-1/2 lg:basis-1/3 select-none"
+                                  >
+                                    <div
+                                      className={`relative cursor-pointer rounded-md overflow-hidden ${
+                                        selectedImageIndex === index
+                                          ? "border-2 border-blue-500"
+                                          : ""
+                                      }`}
+                                      style={{ aspectRatio: "16 / 9" }}
+                                      onClick={() =>
+                                        setSelectedImageIndex(index)
+                                      }
+                                    >
+                                      <ImageCustom
+                                        src={item.url}
+                                        alt={`Contest entry image ${index + 1}`}
+                                        fill
+                                        className="object-contain"
+                                        quality={40}
+                                        sizes="(max-width: 640px) 25vw, 20vw"
+                                        loading="lazy"
+                                      />
+                                    </div>
+                                  </CarouselItem>
+                                ))}
+                              </CarouselContent>
+                              <CarouselPrevious />
+                              <CarouselNext />
+                            </Carousel>
+                          </div>
+                        </div>
+                      )}
                   </>
                 )}
               </section>
