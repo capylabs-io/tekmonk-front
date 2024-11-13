@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ExamTable } from "../ExamTable";
+import { ExamTable } from "./ExamTable";
 
 export const CompetitionContent = () => {
   return (

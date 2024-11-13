@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ExamTable } from "../contest/ExamTable";
+import { ExamTable } from "../contest/rules/ExamTable";
 export const Step3 = () => {
   const {
     control,
@@ -85,7 +85,7 @@ export const Step3 = () => {
   return (
     <div className="space-y-4">
       <div className="text-2xl font-semibold">Thông tin bảng đấu:</div>
-      <div className="mx-auto py-10 overflow-x-auto ">
+      <div className="mx-auto py-10 overflow-x-auto max-mobile:hidden">
         <ExamTable/>
       </div>
       <div>
