@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ExamTable } from "../contest/rules/ExamTable";
+import { ExamTableOnMobile } from "../contest/rules/ExamTableOnMobile";
 export const Step3 = () => {
   const {
     control,
@@ -83,10 +84,13 @@ export const Step3 = () => {
     }
   }, [valueGroup]);
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-0">
       <div className="text-2xl font-semibold">Thông tin bảng đấu:</div>
       <div className="mx-auto py-10 overflow-x-auto max-mobile:hidden">
-        <ExamTable/>
+        <ExamTable />
+      </div>
+      <div className="mx-auto min-[440px]:hidden">
+        <ExamTableOnMobile />
       </div>
       <div>
         <Label className="text-SubheadSm text-gray-950">
