@@ -83,6 +83,9 @@ export const Step3 = () => {
       addTeamMember();
     }
   }, [valueGroup]);
+
+  //custom className
+  const customInputClassNames = "max-mobile:placeholder:text-base";
   return (
     <div className="space-y-4 p-0">
       <div className="text-2xl font-semibold">Thông tin bảng đấu:</div>
@@ -186,6 +189,7 @@ export const Step3 = () => {
                             onChange={onChange}
                             placeholder="Câu trả lời"
                             customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                            customInputClassNames={customInputClassNames}
                             error={fieldState && fieldState.error?.message}
                           />
                         </>
@@ -206,6 +210,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}
@@ -226,6 +231,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={get(
                             errors,
                             `stepThree.groupMemberInfo.${index}.phone.message`,
@@ -277,6 +283,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}
@@ -300,6 +307,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}

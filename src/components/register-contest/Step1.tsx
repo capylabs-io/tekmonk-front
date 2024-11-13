@@ -44,6 +44,8 @@ export const Step1 = () => {
     formState: { errors },
   } = useFormContext<WizardSchema>();
 
+  //custom className
+  const customInputClassNames = "max-mobile:placeholder:text-base";
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
@@ -62,6 +64,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -81,6 +84,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -99,8 +103,9 @@ export const Step1 = () => {
                 value={value}
                 onChange={onChange}
                 placeholder="Câu trả lời"
-                error={fieldState && fieldState.error?.message}
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
+                error={fieldState && fieldState.error?.message}
               />
             )}
           />
@@ -153,6 +158,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -172,6 +178,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="VD: Quận Hoàn Kiếm - Hà Nội"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -191,6 +198,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -210,6 +218,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="00-000-0000"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -229,6 +238,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}

@@ -15,14 +15,17 @@ type InvalidCodeCombat = {
 
 export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) => {
   //use state
+  const [isvalidCodeCombat, setIsvalidCodeCombat] = useState(stateCodeCombat);
+
   const [error] = useSnackbarStore((state) => [
     state.error,
   ]);
-  const [isvalidCodeCombat, setIsvalidCodeCombat] = useState(stateCodeCombat);
   const {
     control,
     formState: { errors },
   } = useFormContext<WizardSchema>();
+
+  //use Effect
   useEffect(() => {
     setIsvalidCodeCombat(stateCodeCombat);
     if(stateCodeCombat.other) {
@@ -30,6 +33,9 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
       error("lỗi", "Có lỗi xảy ra khi tạo tài khoản code combat");
     }
   },[stateCodeCombat.reload]);
+
+  //custom className
+  const customInputClassNames = "max-mobile:placeholder:text-base";
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -51,6 +57,7 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
                 }}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -74,6 +81,7 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
                 }}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -97,6 +105,7 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
                   onChange={onChange}
                   placeholder="Câu trả lời"
                   customClassNames="mt-2 mb-0"
+                  customInputClassNames={customInputClassNames}
                   error={fieldState && fieldState.error?.message}
                 />
               )}
@@ -118,6 +127,7 @@ export const Step2 = ({stateCodeCombat} : {stateCodeCombat: InvalidCodeCombat}) 
                   onChange={onChange}
                   placeholder="Câu trả lời"
                   customClassNames="mt-2 mb-0"
+                  customInputClassNames={customInputClassNames}
                   error={fieldState && fieldState.error?.message}
                 />
               )}
