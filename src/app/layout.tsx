@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { Loading } from "@/components/common/Loading";
-import { ToastContainer } from "react-toastify";
-import DotPattern from "@/components/ui/dot-pattern";
-import { cn } from "@/lib/utils";
 import { Snackbar } from "@/components/common/Snackbar";
 import { Suspense } from "react";
 
@@ -78,9 +75,8 @@ export default function RootLayout({
       className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
     >
       <body>
-        {/* <ToastContainer /> */}
         <Snackbar />
-        <Suspense fallback={<>Loding ...</>}>
+        <Suspense fallback={<Loading />}>
           <div className="relative">{children}</div>
         </Suspense>
         <Loading />
