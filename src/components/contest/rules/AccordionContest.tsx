@@ -6,9 +6,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CommonInfo } from "./CommonInfo";
-import { CompetitionContent } from "./competitionContent";
-import { CompetitionInstructions } from "./competitionInstructions";
-import { TechnicalRegulations } from "./technicalRegulations";
+import { CompetitionContent } from "./CompetitionContent";
+import { CompetitionInstructions } from "./CompetitionInstructions";
+import { TechnicalRegulations } from "./TechnicalRegulations";
 
 const tabs = [
   { id: "1", label: "Thông tin chung", value: <CommonInfo /> },
