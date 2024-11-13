@@ -22,7 +22,7 @@ import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
-import {Link as LinkToScroll} from "react-scroll";
+import { Link as LinkToScroll } from "react-scroll";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -68,7 +68,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
   const handleRedirectToMyContest = async () => {
     try {
-      if(!is_show_full) return;
+      if (!is_show_full) return;
       const contestEntry = await getOneContestEntry(
         useUserStore.getState().candidateNumber || ""
       );
@@ -85,7 +85,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   };
 
   const handleRedirectResultContest = () => {
-    if(!is_show_full) return;
+    if (!is_show_full) return;
     router.push("/ket-qua-vong-loai");
   };
 
@@ -95,7 +95,6 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
         className={`${nunitoSans.variable} font-sans relative w-full h-full flex flex-col overflow-hidden`}
       >
         <TooltipProvider>
-
           {/* Header */}
           <div className="relative h-16 w-full flex items-center justify-between px-4 sm:px-12 border-b bg-white">
             <Image
@@ -110,76 +109,71 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
-
-          <LinkToScroll to="rules" smooth={true} duration={500}>
-              <div
-                className="text-gray-950  cursor-pointer"
-                onClick={redirectContest}
-              >
-                Thể lệ
-              </div>
-          </LinkToScroll>
-            {is_show_full && 
-              <>
-                <div>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div
-                      className="text-gray-950  cursor-pointer"
-                      onClick={() => {
-                        is_show_full && router.push("/tong-hop-bai-du-thi");
-                      }}
-                    >
-                      Tổng hợp bài dự thi
-                    </div>
-                  </TooltipTrigger>
-                  {!is_show_full && 
-                    <TooltipContent>
-                      <p>Sắp diễn ra</p>
-                    </TooltipContent>
-                  }
-                  
-                </Tooltip>
-              </div>
-
-              {isConnected() && isSubmitted && (
-                <Tooltip>
-                  <TooltipTrigger>
-                    <div
-                      className="text-bodyMd hover:cursor-pointer"
-                      onClick={handleRedirectToMyContest}
-                    >
-                      Bài dự thi của tôi
-                    </div>
-                  </TooltipTrigger>
-                  {!is_show_full && 
-                    <TooltipContent>
-                      <p>Sắp diễn ra</p>
-                    </TooltipContent>
-                  }
-                </Tooltip>
-              )}
-
-              <Tooltip>
-                <TooltipTrigger>
-                  <div
-                    className="text-bodyMd hover:cursor-pointer"
-                    onClick={handleRedirectResultContest}
-                  >
-                    Kết quả vòng loại
+              <LinkToScroll to="rules" smooth={true} duration={500}>
+                <div
+                  className="text-gray-950  cursor-pointer text-lg"
+                  onClick={redirectContest}
+                >
+                  Thể lệ
+                </div>
+              </LinkToScroll>
+              {is_show_full && (
+                <>
+                  <div>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          className="text-gray-950  cursor-pointer"
+                          onClick={() => {
+                            is_show_full && router.push("/tong-hop-bai-du-thi");
+                          }}
+                        >
+                          Tổng hợp bài dự thi
+                        </div>
+                      </TooltipTrigger>
+                      {!is_show_full && (
+                        <TooltipContent>
+                          <p>Sắp diễn ra</p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
                   </div>
-                </TooltipTrigger>
-                {!is_show_full && 
-                    <TooltipContent>
-                      <p>Sắp diễn ra</p>
-                    </TooltipContent>
-                  }
-              </Tooltip>
-              
-              </>
-            
-            }
-              
+
+                  {isConnected() && isSubmitted && (
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <div
+                          className="text-bodyMd hover:cursor-pointer"
+                          onClick={handleRedirectToMyContest}
+                        >
+                          Bài dự thi của tôi
+                        </div>
+                      </TooltipTrigger>
+                      {!is_show_full && (
+                        <TooltipContent>
+                          <p>Sắp diễn ra</p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                  )}
+
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div
+                        className="text-bodyMd hover:cursor-pointer"
+                        onClick={handleRedirectResultContest}
+                      >
+                        Kết quả vòng loại
+                      </div>
+                    </TooltipTrigger>
+                    {!is_show_full && (
+                      <TooltipContent>
+                        <p>Sắp diễn ra</p>
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </>
+              )}
 
               {isConnected() ? (
                 <div
@@ -203,101 +197,99 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-            <Drawer direction="top">
-              <DrawerTrigger >
-                <div
-                  className="text-gray-950 hover:cursor-pointer"
-                >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 6h16M4 12h16m-7 6h7"
-                    />
-                  </svg>
-                </div>
-              </DrawerTrigger>
-              <DrawerContent className="bg-white !p-0">
-                <div className="w-full max-w-sm">
-                  <div className=" pb-0 gap-y-4">
-                    <Button outlined={true} onClick={() => router.push("/")}>
-                      <div
-                        className="text-black text-base"
-                        onClick={redirectContest}
-                      >
-                        Thể lệ
-                      </div>
-                    </Button>
-                    {is_show_full && <>
-                      <Button
-                      outlined={true}
-                      onClick={() => {
-                        is_show_full && router.push("/tong-hop-bai-du-thi");
-                      }}
+              <Drawer direction="top">
+                <DrawerTrigger>
+                  <div className="text-gray-950 hover:cursor-pointer">
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <div className="text-black text-base">
-                        Tổng hợp bài dự thi
-                      </div>
-                    </Button>
-                    {isConnected() && isSubmitted && (
-                      <Button
-                        outlined={true}
-                        onClick={handleRedirectToMyContest}
-                      >
-                        <div className="text-black text-base">
-                          Bài dự thi của tôi
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 6h16M4 12h16m-7 6h7"
+                      />
+                    </svg>
+                  </div>
+                </DrawerTrigger>
+                <DrawerContent className="bg-white !p-0">
+                  <div className="w-full max-w-sm">
+                    <div className=" pb-0 gap-y-4">
+                      <Button outlined={true} onClick={() => router.push("/")}>
+                        <div
+                          className="text-black text-base"
+                          onClick={redirectContest}
+                        >
+                          Thể lệ
                         </div>
                       </Button>
-                    )}
+                      {is_show_full && (
+                        <>
+                          <Button
+                            outlined={true}
+                            onClick={() => {
+                              is_show_full &&
+                                router.push("/tong-hop-bai-du-thi");
+                            }}
+                          >
+                            <div className="text-black text-base">
+                              Tổng hợp bài dự thi
+                            </div>
+                          </Button>
+                          {isConnected() && isSubmitted && (
+                            <Button
+                              outlined={true}
+                              onClick={handleRedirectToMyContest}
+                            >
+                              <div className="text-black text-base">
+                                Bài dự thi của tôi
+                              </div>
+                            </Button>
+                          )}
 
-                    <Button
-                      outlined={true}
-                      onClick={handleRedirectResultContest}
-                    >
-                      <div className="text-black text-base">
-                        Kết quả vòng loại
-                      </div>
-                    </Button>
-                    
-                    </>}
-                    
+                          <Button
+                            outlined={true}
+                            onClick={handleRedirectResultContest}
+                          >
+                            <div className="text-black text-base">
+                              Kết quả vòng loại
+                            </div>
+                          </Button>
+                        </>
+                      )}
 
-                    {!isConnected() && (
-                      <Button
-                        outlined={true}
-                        onClick={() => router.push("/login")}
-                      >
-                        <div className="text-black text-base">Đăng nhập</div>
-                      </Button>
-                    )}
-                  </div>
-                  <DrawerFooter className="px-0">
-                    {/* <DrawerClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DrawerClose> */}
-                    {isConnected() && (
-                      <div>
+                      {!isConnected() && (
                         <Button
                           outlined={true}
-                          className="text-red-600"
-                          onClick={handleLogout}
+                          onClick={() => router.push("/login")}
                         >
-                          Đăng xuất
+                          <div className="text-black text-base">Đăng nhập</div>
                         </Button>
-                      </div>
-                    )}
-                  </DrawerFooter>
-                </div>
-              </DrawerContent>
-            </Drawer>
-
+                      )}
+                    </div>
+                    <DrawerFooter className="px-0">
+                      {/* <DrawerClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DrawerClose> */}
+                      {isConnected() && (
+                        <div>
+                          <Button
+                            outlined={true}
+                            className="text-red-600"
+                            onClick={handleLogout}
+                          >
+                            Đăng xuất
+                          </Button>
+                        </div>
+                      )}
+                    </DrawerFooter>
+                  </div>
+                </DrawerContent>
+              </Drawer>
             </div>
           </div>
         </TooltipProvider>

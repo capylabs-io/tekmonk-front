@@ -42,7 +42,7 @@ const ContestGroupStageEntry = ({
   const [showResult, setShowResult] = useState({
     currentLevel: 0,
     totalLevel: 0,
-  })
+  });
   const [showProgress, setShowProgress] = useState(false);
 
   // use store
@@ -79,15 +79,13 @@ const ContestGroupStageEntry = ({
       }
       setShowProgress(true);
       if (!codeCombatId) return;
-
-      const res = await getProgress(
+      const res:any = await getProgress(
         codeCombatId,
         Number(get(contestGroupStage, "id", 0))
       );
       if (res) {
         setProgress(res);
       }
-      console.log("progress", progress);
     } catch (error) {
       return;
     }
@@ -181,33 +179,44 @@ const ContestGroupStageEntry = ({
                 <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
                   <div className="text-gray-950 text-bodyLg flex items-center gap-x-3">
                     {/* <div>Tiến trình</div> */}
-                    <Select value={course} onValueChange={(e) => {
-                      setCourse(e);
-                      const selectedCourse = progress.find((item) => item.name === e);
-                      if (selectedCourse) {
-                        setShowResult({
-                          currentLevel: selectedCourse.currentLevel,
-                          totalLevel: selectedCourse.totalLevel
-                        })
-                      }
-                    }}> 
-                      <SelectTrigger className="w-[150px]" >
+                    <Select
+                      value={course}
+                      onValueChange={(e) => {
+                        setCourse(e);
+                        const selectedCourse = progress.find(
+                          (item) => item.name === e
+                        );
+                        if (selectedCourse) {
+                          setShowResult({
+                            currentLevel: selectedCourse.currentLevel,
+                            totalLevel: selectedCourse.totalLevel,
+                          });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-[150px]">
                         <SelectValue placeholder="Chọn khóa học" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup className="bg-white">
-                          {progress.map((item: TProgressResult, index: number) => {
-                            return (<>
-                              <SelectItem key={index} value={item.name} >
-                                <SelectLabel>{item.name}</SelectLabel>
-                              </SelectItem>
-                            </>)
-                          })}
+                          {progress.map(
+                            (item: TProgressResult, index: number) => {
+                              return (
+                                <>
+                                  <SelectItem key={index} value={item.name}>
+                                    <SelectLabel>{item.name}</SelectLabel>
+                                  </SelectItem>
+                                </>
+                              );
+                            }
+                          )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="font-semibold">{showResult.currentLevel} / {showResult.totalLevel}</div>
+                  <div className="font-semibold">
+                    {showResult.currentLevel} / {showResult.totalLevel}
+                  </div>
                 </div>
               )}
               <div
