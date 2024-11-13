@@ -47,7 +47,6 @@ const ContestDetail: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [selectedCourse, setSelectedCourse] = useState<number>(0);
   const setSelectedTag = useTagStore((state) => state.setSelectedTag);
   const [isShowCodeCombatCert, setIsShowCodeCombatCert] = useState(false);
 
@@ -163,7 +162,7 @@ const ContestDetail: React.FC = () => {
             </div>
 
             <div className="mt-4">
-              <section className="">
+              <section className="px-1">
                 <header className="px-8 border-b border-grey-200 pb-4">
                   <p className="mb-3">
                     <span className="text-SubheadSm !font-medium mr-2">
@@ -216,7 +215,7 @@ const ContestDetail: React.FC = () => {
                   <>
                     {contestDetail.resultCodeCombat &&
                       contestDetail.resultCodeCombat?.length > 0 && (
-                        <Carousel className="w-[85%] mx-auto h-full px-1">
+                        <Carousel className="w-[85%] mx-auto h-full mb-8">
                           <CarouselContent className="m-0">
                             {contestDetail.resultCodeCombat?.map(
                               (item, index) => (
@@ -224,18 +223,19 @@ const ContestDetail: React.FC = () => {
                                   key={index}
                                 >
                                   <Certificate
-                                    name={item.name}
+                                    name={contestDetail.title} //default with stage A, B, C title is fullName user
                                     progress={round(
                                       (item.currentLevel / item.totalLevel) * 100, 1
                                     )}
-                                    course={contestDetail.title}
+                                    course={item.name}
                                   />
                                 </CarouselItem>
                               )
                             )}
                           </CarouselContent>
-                          <CarouselPrevious className="mr-0"/>
-                          <CarouselNext />
+
+                          <CarouselPrevious className="mr-0 max-[450px]:hidden"/>
+                          <CarouselNext className="ml-0 max-[450px]:hidden"/>
                         </Carousel>
                       )}
                   </>
