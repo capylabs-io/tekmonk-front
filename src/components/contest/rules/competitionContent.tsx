@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ExamTable } from "../ExamTable";
 
 export const CompetitionContest = () => {
   return (
@@ -18,99 +19,7 @@ export const CompetitionContest = () => {
           Thí sinh đăng ký theo đúng lớp học hiện tại theo năm học 2024 - 2025
         </p>
         <div className="border rounded-lg overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-100">
-                <TableHead className="w-[100px] font-bold text-black border-r whitespace-nowrap">
-                  Bảng
-                </TableHead>
-                <TableHead className="font-bold text-black border-r whitespace-nowrap">
-                  Lớp
-                </TableHead>
-                <TableHead className="font-bold text-black border-r whitespace-nowrap">
-                  Hình thức thi
-                </TableHead>
-                <TableHead className="font-bold text-black whitespace-nowrap">
-                  Ngôn ngữ lập trình thi đấu
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow className="border-b">
-                <TableCell className="font-medium border-r whitespace-nowrap">
-                  Bảng A
-                </TableCell>
-                <TableCell className="border-r">
-                  Tiểu học: Lớp 3 - lớp 5
-                </TableCell>
-                <TableCell className="border-r whitespace-nowrap">
-                  Thi cá nhân
-                </TableCell>
-                <TableCell rowSpan={3} className=" text-center my-auto">
-                  <div>
-                  <div className="sm:hidden">
-                    Thí sinh vận dụng kiến thức và kỹ năng lập trình để thực
-                    hiện các thử thách trên nền tảng CodeCombat
-                  </div>
-                  <div className="hidden sm:block">
-                    Thí sinh vận dụng kiến thức và kỹ năng lập trình để thực
-                    hiện các thử thách trên nền tảng CodeCombat
-                    (https://codecombat.com/)
-                  </div>
-                  </div>
-                  
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-b">
-                <TableCell className="font-medium border-r whitespace-nowrap">
-                  Bảng B
-                </TableCell>
-                <TableCell className="border-r">THCS: Lớp 6 - lớp 9</TableCell>
-                <TableCell className="border-r whitespace-nowrap">
-                  Thi cá nhân
-                </TableCell>
-              </TableRow>
-              <TableRow className="border-b">
-                <TableCell className="font-medium border-r whitespace-nowrap">
-                  Bảng C
-                </TableCell>
-                <TableCell className="border-r">
-                  THPT: Lớp 10 - lớp 12
-                </TableCell>
-                <TableCell className="border-r whitespace-nowrap">
-                  Thi cá nhân
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium border-r whitespace-nowrap">
-                  Bảng D
-                </TableCell>
-                <TableCell className="border-r">
-                  <div className="sm:hidden">
-                    Tiểu học, THCS, THPT (Lớp 3 - 12): Bảng sáng tạo
-                  </div>
-                  <div className="hidden sm:block">
-                    Tiểu học, THCS, THPT (Lớp 3 - lớp 12): Bảng sáng tạo
-                  </div>
-                </TableCell>
-                <TableCell className="border-r">
-                  Thi cá nhân hoặc thi theo đội, tối đa 03 thành viên
-                </TableCell>
-                <TableCell>
-                  <div className="sm:hidden">
-                    Thí sản phẩm phần mềm sáng tạo (Scratch/Python). Chưa từng
-                    đạt giải cấp Quốc gia, quốc tế.
-                  </div>
-                  <div className="hidden sm:block">
-                    Thí sản phẩm phần mềm sáng tạo phù hợp với chủ đề của giải
-                    đấu (sử dụng Scratch hoặc Python). Sản phẩm sáng tạo dự thi
-                    chưa từng đạt giải các cuộc thi, hội thi cấp Quốc gia, quốc
-                    tế.
-                  </div>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <ExamTable />
         </div>
       </div>
 

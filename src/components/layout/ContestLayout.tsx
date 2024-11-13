@@ -111,7 +111,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
               <LinkToScroll to="rules" smooth={true} duration={500}>
                 <div
-                  className="text-gray-950  cursor-pointer text-lg"
+                  className="text-gray-950 cursor-pointer text-lg font-semibold"
                   onClick={redirectContest}
                 >
                   Thể lệ
@@ -123,7 +123,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
-                          className="text-gray-950  cursor-pointer"
+                          className="text-gray-950 cursor-pointer text-lg font-semibold"
                           onClick={() => {
                             is_show_full && router.push("/tong-hop-bai-du-thi");
                           }}
@@ -143,7 +143,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     <Tooltip>
                       <TooltipTrigger>
                         <div
-                          className="text-bodyMd hover:cursor-pointer"
+                          className="text-bodyMd hover:cursor-pointer !text-lg !font-semibold"
                           onClick={handleRedirectToMyContest}
                         >
                           Bài dự thi của tôi
@@ -160,7 +160,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   <Tooltip>
                     <TooltipTrigger>
                       <div
-                        className="text-bodyMd hover:cursor-pointer"
+                        className="text-bodyMd hover:cursor-pointer !text-lg !font-semibold"
                         onClick={handleRedirectResultContest}
                       >
                         Kết quả vòng loại
@@ -177,7 +177,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
               {isConnected() ? (
                 <div
-                  className="text-red-600 text-bodyMd  hover:cursor-pointer"
+                  className="text-red-600 text-bodyMd hover:cursor-pointer !text-lg !font-semibold"
                   onClick={handleLogout}
                 >
                   Đăng xuất
@@ -188,7 +188,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 // </a>
                 <div
                   onClick={() => router.push("/login")}
-                  className=" hover:cursor-pointer"
+                  className=" hover:cursor-pointer text-lg font-semibold"
                 >
                   Đăng nhập
                 </div>
