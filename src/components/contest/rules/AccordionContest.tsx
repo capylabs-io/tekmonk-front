@@ -6,13 +6,13 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { CommonInfo } from "./CommonInfo";
-import { CompetitionContest } from "./competitionContent";
+import { CompetitionContent } from "./competitionContent";
 import { CompetitionInstructions } from "./competitionInstructions";
 import { TechnicalRegulations } from "./technicalRegulations";
 
 const tabs = [
   { id: "1", label: "Thông tin chung", value: <CommonInfo /> },
-  { id: "2", label: "Nội dung thi đấu", value: <CompetitionContest /> },
+  { id: "2", label: "Nội dung thi đấu", value: <CompetitionContent /> },
   { id: "3", label: "Hướng dẫn thi đấu", value: <CompetitionInstructions /> },
   { id: "4", label: "Quy định kỹ thuật", value: <TechnicalRegulations /> },
 ];

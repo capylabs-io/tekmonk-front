@@ -2,9 +2,9 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import { CommonInfo } from "./CommonInfo";
-import { CompetitionContest } from "./competitionContent";
-import { CompetitionInstructions } from "./competitionInstructions";
-import { TechnicalRegulations } from "./technicalRegulations";
+import { CompetitionContent } from "./CompetitionContent";
+import { CompetitionInstructions } from "./CompetitionInstructions";
+import { TechnicalRegulations } from "./TechnicalRegulations";
 const tabs = [
   { id: "1", label: "Thông tin chung" },
   { id: "2", label: "Nội dung thi đấu" },
@@ -43,7 +43,7 @@ const ContestRules = () => {
       </nav>
       <div className="mt-4">
         {activeTab === "1" && <CommonInfo />}
-        {activeTab === "2" && <CompetitionContest />}
+        {activeTab === "2" && <CompetitionContent />}
         {activeTab === "3" && <CompetitionInstructions />}
         {activeTab === "4" && <TechnicalRegulations />}
       </div>

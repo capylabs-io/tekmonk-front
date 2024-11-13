@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { ExamTable } from "../ExamTable";
 
-export const CompetitionContest = () => {
+export const CompetitionContent = () => {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 space-y-12">
       <div>
