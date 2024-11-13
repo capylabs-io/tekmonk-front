@@ -44,9 +44,9 @@ export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
           checked={isChecked}
           className="group-hover:border-primary-600" 
         />
-        <label htmlFor="category-A" className="text-base font-medium text-gray-900 cursor-pointer">
+        <div className="text-base font-medium text-gray-900 cursor-pointer">
           Tôi đã đọc, nắm bắt thông tin về giải đấu
-        </label>
+        </div>
       </div>
     </RadioGroup>
 
