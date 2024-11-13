@@ -1,40 +1,31 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import {Card, CardContent, CardFooter, CardHeader,} from "@/components/ui/card";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getContestSubmissionPagination } from "@/requests/contestSubmit";
-import { ContestSubmission } from "@/types/contestSubmit";
+import {useEffect, useState} from "react";
+import {getContestSubmissionPagination} from "@/requests/contestSubmit";
+import {ContestSubmission} from "@/types/contestSubmit";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "@/hooks/useDebounceValue";
-import { EmptySearch } from "@/components/common/EmptySearch";
-import { ImageCustom } from "@/components/common/ImageCustom";
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { useLoadingStore } from "@/store/LoadingStore";
-import { useTagStore } from "@/store/TagStore";
-import { get } from "lodash";
+import {Skeleton} from "@/components/ui/skeleton";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useDebounce} from "@/hooks/useDebounceValue";
+import {EmptySearch} from "@/components/common/EmptySearch";
+import {ImageCustom} from "@/components/common/ImageCustom";
+import {AspectRatio} from "@/components/ui/aspect-ratio"
+import {useLoadingStore} from "@/store/LoadingStore";
+import {useTagStore} from "@/store/TagStore";
+import {get} from "lodash";
 import Tag from "@/components/contest/Tag";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from "@/components/ui/carousel";
-import { SearchBar, SearchOption } from "@/components/common/SearchBar";
+import {Carousel, CarouselContent, CarouselItem,} from "@/components/ui/carousel";
+import {SearchBar, SearchOption} from "@/components/common/SearchBar";
 
 enum SearchType {
   TAG = "tag",

@@ -1,43 +1,39 @@
 "use client";
-import { Button } from "@/components/common/Button";
+import {Button} from "@/components/common/Button";
 import {
-  Dialog,
-  DialogContent,
-  DialogContentNoClose,
-  DialogDescription,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogContentNoClose,
+    DialogDescription,
+    DialogTrigger,
 } from "@/components/common/Dialog";
-import { DataContestSubmission } from "@/types/contestSubmit";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/components/contest/InputField";
+import {DataContestSubmission} from "@/types/contestSubmit";
+import React, {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {InputField} from "@/components/contest/InputField";
 import {
-  createContestSubmission,
-  getContestSubmissionByContestEntry,
-  uploadAssets,
-  uploadSource,
-  uploadThumbnail,
+    createContestSubmission,
+    getContestSubmissionByContestEntry,
+    uploadAssets,
+    uploadSource,
+    uploadThumbnail,
 } from "@/requests/contestSubmit";
-import { InputFileUploadContest } from "@/components/contest/InputFileUploadContest";
-import { InputImgUploadContest } from "@/components/contest/InputImgUploadContest";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { InputMulImgUploadContest } from "./InputMulImgUploadContest";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/UserStore";
-import {
-  getContestGroupStageByCandidateNumber,
-  getOneContestEntry,
-} from "@/requests/contestEntry";
-import { useSnackbarStore } from "@/store/SnackbarStore";
-import { useLoadingStore } from "@/store/LoadingStore";
-import { DialogFooter, DialogHeader } from "../ui/dialog";
-import { getProgress } from "@/requests/code-combat";
-import { get, round, set } from "lodash";
-import { Progress } from "@/components/ui/progress";
-import { InputTags } from "./InputTags";
-import { ContestGroupStage } from "@/types/common-types";
+import {InputFileUploadContest} from "@/components/contest/InputFileUploadContest";
+import {InputImgUploadContest} from "@/components/contest/InputImgUploadContest";
+import {DialogTitle} from "@radix-ui/react-dialog";
+import {InputMulImgUploadContest} from "./InputMulImgUploadContest";
+import {useRouter} from "next/navigation";
+import {useUserStore} from "@/store/UserStore";
+import {getContestGroupStageByCandidateNumber, getOneContestEntry,} from "@/requests/contestEntry";
+import {useSnackbarStore} from "@/store/SnackbarStore";
+import {useLoadingStore} from "@/store/LoadingStore";
+import {DialogFooter, DialogHeader} from "../ui/dialog";
+import {getProgress} from "@/requests/code-combat";
+import {get} from "lodash";
+import {InputTags} from "./InputTags";
+import {ContestGroupStage} from "@/types/common-types";
 
 const submissionSchema = z.object({
   title: z
@@ -196,7 +192,6 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const onValueTagChange = (value: string) => {
-    console.log('value', value);
     setValue('tags', value);
   }
   useEffect(() => {

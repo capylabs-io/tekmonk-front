@@ -148,27 +148,22 @@
 // }
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 import Image from "next/image";
-import {
-  CardContest,
-  CardContestContent,
-} from "@/components/common/CardContest";
-import { LAYERS } from "@/contants/layer";
+import {CardContest, CardContestContent,} from "@/components/common/CardContest";
+import {LAYERS} from "@/contants/layer";
 import Clock from "@/components/contest/Clock";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
-import { shareOnMobile } from "react-mobile-share";
-import { getContest } from "@/requests/contest";
+import {shareOnMobile} from "react-mobile-share";
+import {getContest} from "@/requests/contest";
 import ContestLayout from "@/components/layout/ContestLayout";
-import { Share } from "lucide-react";
+import {Share} from "lucide-react";
 import ContestRules from "@/components/contest/rules/ContestRules";
-import { Button } from "@/components/common/Button";
-import { IconDisPlay } from "@/components/contest/IconDisplay";
-import { AccordionContest } from "@/components/contest/rules/AccordionContest";
-import { ContestGroupStage, Contest as TypeContest } from "@/types/common-types";
-import { useUserStore } from "@/store/UserStore";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import {Button} from "@/components/common/Button";
+import {IconDisPlay} from "@/components/contest/IconDisplay";
+import {AccordionContest} from "@/components/contest/rules/AccordionContest";
+import {Contest as TypeContest} from "@/types/common-types";
 
 export default function Contest() {
   // => use state

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import {useState} from "react";
+import {Card, CardContent} from "@/components/ui/card"
+import {Badge} from "@/components/ui/badge"
+
 const tabs = [
   { id: 1, label: "Bảng A" },
   { id: 2, label: "Bảng B" },

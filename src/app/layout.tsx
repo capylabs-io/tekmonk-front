@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
-import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
+import type {Metadata} from "next";
+import {Dela_Gothic_One, Inter, Nunito_Sans} from "next/font/google";
 import "./globals.css";
-import { Loading } from "@/components/common/Loading";
-import { Snackbar } from "@/components/common/Snackbar";
-import { Suspense } from "react";
+import {Loading} from "@/components/common/Loading";
+import {Snackbar} from "@/components/common/Snackbar";
+import {Suspense} from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 

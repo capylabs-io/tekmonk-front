@@ -1,23 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CheckCircle, Circle } from "lucide-react";
-import { SearchBar, SearchOption } from "@/components/common/SearchBar";
-import { getContestSubmissionResult } from "@/requests/contestSubmit";
-import { ContestSubmission } from "@/types/contestSubmit";
+import {useEffect, useState} from "react";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
+import {Button} from "@/components/ui/button";
+import {CheckCircle, ChevronLeft, ChevronRight} from "lucide-react";
+import {SearchBar, SearchOption} from "@/components/common/SearchBar";
+import {getContestSubmissionResult} from "@/requests/contestSubmit";
+import {ContestSubmission} from "@/types/contestSubmit";
 import get from "lodash/get";
-import { useDebounce } from "@/hooks/useDebounceValue";
-import { EmptySearch } from "@/components/common/EmptySearch";
+import {useDebounce} from "@/hooks/useDebounceValue";
+import {EmptySearch} from "@/components/common/EmptySearch";
 
 const searchOptions: SearchOption[] = [
   { value: "candidateNumber", label: "Số báo danh" },

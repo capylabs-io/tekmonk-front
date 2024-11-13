@@ -1,17 +1,10 @@
 "use client";
-import { get, set } from "lodash";
-import { Button } from "../common/Button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { memo, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { ContestGroupStage } from "@/types/common-types";
+import {get} from "lodash";
+import {Button} from "../common/Button";
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "../ui/dialog";
+import {memo, useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
+import {ContestGroupStage} from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
 
 const GroupStageDialog = ({

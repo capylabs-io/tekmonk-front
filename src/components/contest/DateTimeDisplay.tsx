@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { TimeLeft } from "@/types/common-types";
+import {useEffect, useState} from "react";
+import {TimeLeft} from "@/types/common-types";
 
 const DateTimeDisplay = ({
   dataTime,
@@ -15,7 +15,6 @@ const DateTimeDisplay = ({
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
   );
-  const [isValidCountDonw, setIsValidCountDonw] = useState(true);
 
   const getReturnValues = (): TimeLeft => {
     const days = Math.floor(countDown / (1000 * 60 * 60 * 24));

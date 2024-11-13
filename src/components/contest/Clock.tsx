@@ -1,21 +1,16 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
-import { CardContest } from "../common/CardContest";
-import { Button } from "../common/Button";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/store/UserStore";
-import { Link as LinkToScroll } from "react-scroll";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import {memo, useEffect, useState} from "react";
+import {CardContest} from "../common/CardContest";
+import {Button} from "../common/Button";
+import {useRouter} from "next/navigation";
+import {useUserStore} from "@/store/UserStore";
+import {Link as LinkToScroll} from "react-scroll";
+import {getContestGroupStageByCandidateNumber} from "@/requests/contestEntry";
 import GroupStageDialog from "./GroupStageDialog";
-import { Contest, ContestGroupStage } from "@/types/common-types";
+import {Contest, ContestGroupStage} from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,} from "../ui/tooltip";
 
 type StateTime = {
   started: boolean;

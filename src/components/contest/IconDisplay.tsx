@@ -1,6 +1,7 @@
 "use client";
-import { LAYERS } from "@/contants/layer";
+import {LAYERS} from "@/contants/layer";
 import Image from "next/image";
+
 export const IconDisPlay = () => {
     return (
         <>

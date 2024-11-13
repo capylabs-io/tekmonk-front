@@ -1,13 +1,9 @@
 "use client";
 
-import { useState, KeyboardEvent, useEffect } from "react";
-import { Info, X } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import {KeyboardEvent, useEffect, useState} from "react";
+import {Info, X} from "lucide-react";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,} from "../ui/tooltip";
+
 type Props = {
   customClassNames?: string;
   error?: string; // Added error prop

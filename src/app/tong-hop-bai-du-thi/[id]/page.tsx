@@ -1,43 +1,22 @@
 "use client";
 
 import Tag from "@/components/contest/Tag";
-import { Dock, DockIcon } from "@/components/ui/dock";
-import { getOneContestSubmission } from "@/requests/contestSubmit";
-import { ContestSubmission } from "@/types/contestSubmit";
-import {
-  ArrowLeft,
-  Download,
-  Facebook,
-  Instagram,
-  Mail,
-  Send,
-  Twitter,
-} from "lucide-react";
+import {Dock, DockIcon} from "@/components/ui/dock";
+import {getOneContestSubmission} from "@/requests/contestSubmit";
+import {ContestSubmission} from "@/types/contestSubmit";
+import {ArrowLeft, Download, Facebook, Mail, Send, Twitter,} from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { shareOnMobile } from "react-mobile-share";
-import { useParams } from "next/navigation";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
-  EmailShareButton,
-  FacebookShareButton,
-  TelegramShareButton,
-  TwitterShareButton,
-} from "react-share";
-import { EmptySearch } from "@/components/common/EmptySearch";
-import { Button } from "@/components/common/Button";
-import { useState, useEffect, useRef } from "react";
-import { useTagStore } from "@/store/TagStore";
-import { get, round, set } from "lodash";
-import { ImageCustom } from "@/components/common/ImageCustom";
-import { Certificate } from "@/components/contest/Certificate";
+import {useParams, useRouter} from "next/navigation";
+import {AspectRatio} from "@/components/ui/aspect-ratio";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,} from "@/components/ui/carousel";
+import {EmailShareButton, FacebookShareButton, TelegramShareButton, TwitterShareButton,} from "react-share";
+import {EmptySearch} from "@/components/common/EmptySearch";
+import {Button} from "@/components/common/Button";
+import {useEffect, useState} from "react";
+import {useTagStore} from "@/store/TagStore";
+import {get, round} from "lodash";
+import {ImageCustom} from "@/components/common/ImageCustom";
+import {Certificate} from "@/components/contest/Certificate";
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();

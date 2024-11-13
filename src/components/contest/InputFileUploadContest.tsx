@@ -1,9 +1,8 @@
 "use client";
-import { Button } from "@/components/common/Button";
+import {Button} from "@/components/common/Button";
 import classNames from "classnames";
-import { X } from "lucide-react";
+import {X} from "lucide-react";
 import React from "react";
-import { toast } from "react-toastify";
 
 type Props = {
   title: string;
