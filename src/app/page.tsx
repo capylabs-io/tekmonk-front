@@ -164,6 +164,7 @@ import {Button} from "@/components/common/Button";
 import {IconDisPlay} from "@/components/contest/IconDisplay";
 import {AccordionContest} from "@/components/contest/rules/AccordionContest";
 import {Contest as TypeContest} from "@/types/common-types";
+import { CONTEST_RULES_DETAILS, SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
 
 export default function Contest() {
   // => use state
@@ -331,7 +332,7 @@ export default function Contest() {
                                 outlined={true}
                                 onClick={() =>
                                   window.open(
-                                    "https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf",
+                                    CONTEST_RULES_DETAILS,
                                     "_blank"
                                   )
                                 }
@@ -343,9 +344,9 @@ export default function Contest() {
                                 outlined={true}
                                 onClick={() =>
                                   shareOnMobile({
-                                    text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+                                    text: SHARE_TEXT,
                                     url: process.env.NEXT_PUBLIC_BASE_URL,
-                                    title: "CUỘC THI SÁNG TẠO TRẺ",
+                                    title: SHARE_TITLE,
                                     // images: ["/image/contest/Frame-43.png"],
                                   })
                                 }
