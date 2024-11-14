@@ -312,7 +312,7 @@ export default function Contest() {
                       >
                         <CardContestContent className="p-0 w-full">
                           <Image
-                            src="/image/contest/22222.jpg"
+                            src="/image/contest/banner-landing.jpg"
                             alt="Contest participants"
                             width={800}
                             height={400}
