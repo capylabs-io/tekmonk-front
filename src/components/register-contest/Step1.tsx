@@ -120,29 +120,23 @@ export const Step1 = () => {
             render={({ field: { value, onChange }, fieldState }) => (
               <div>
                 <DatePicker
-                className={`w-full rounded-xl border ${
-                              fieldState.error
-                                ? "border-red-500"
-                                : "border-grey-300"
-                            } border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none`}
-                onChange={onChange}
-                value={value}
-                onError={() => {
-                  trigger("stepOne.dateOfBirth");
-                }}
-              />
-              {fieldState.error && (
-                            <p className="text-red-500 text-sm">
-                              {fieldState.error.message}
-                            </p>
-                          )}
+                  className={`w-full rounded-xl border ${
+                    fieldState.error ? "border-red-500" : "border-grey-300"
+                  } border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none`}
+                  onChange={onChange}
+                  value={value}
+                  onError={() => {
+                    trigger("stepOne.dateOfBirth");
+                  }}
+                />
+                {fieldState.error && (
+                  <p className="text-red-500 text-sm">
+                    {fieldState.error.message}
+                  </p>
+                )}
               </div>
-              
-              
             )}
-            
           />
-          
         </div>
         <div className="">
           <Label className="text-gray-950 text-SubheadSm">
@@ -245,7 +239,10 @@ export const Step1 = () => {
           />
         </div>
       </div>
-      <div className="text-sm">Lưu ý: Các trường có đánh dấu <span className="text-red-500">*</span> là yêu cầu bắt buộc phải nhập, vui lòng nhập đúng thông tin.</div>
+      <div className="text-sm">
+        Lưu ý: Các trường có đánh dấu <span className="text-red-500">*</span> là
+        yêu cầu bắt buộc phải nhập, vui lòng nhập đúng thông tin.
+      </div>
     </div>
   );
 };

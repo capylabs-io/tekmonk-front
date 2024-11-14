@@ -376,7 +376,7 @@ export default function Contest() {
                               học hỏi từ các chuyên gia đầu ngành và bạn bè quốc
                               tế.
                             </div>
-                            
+
                             <div className=" mt-10 max-mobile:hidden">
                               <ContestRules />
                             </div>

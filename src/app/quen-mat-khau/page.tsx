@@ -1,16 +1,16 @@
 "use client";
-import React, {useState} from "react";
-import {useRouter} from "next/navigation";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {ForgotPasswordSchema} from "@/validation/ForgotPassword";
-import {useSnackbarStore} from "@/store/SnackbarStore";
-import {Input} from "@/components/common/Input";
-import {Button} from "@/components/common/Button";
-import {forgotPasswordRequest} from "@/requests/forgot-password";
-import {MoveRight} from "lucide-react";
-import {get} from "lodash";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ForgotPasswordSchema } from "@/validation/ForgotPassword";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { Input } from "@/components/common/Input";
+import { Button } from "@/components/common/Button";
+import { forgotPasswordRequest } from "@/requests/forgot-password";
+import { MoveRight } from "lucide-react";
+import { get } from "lodash";
 
 export default function ForgotPassword() {
   const router = useRouter();

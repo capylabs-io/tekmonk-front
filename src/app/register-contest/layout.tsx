@@ -2,8 +2,8 @@
 
 import ContestLayout from "@/components/layout/ContestLayout";
 import DotPattern from "@/components/ui/dot-pattern";
-import {LAYERS} from "@/contants/layer";
-import {cn} from "@/lib/utils";
+import { LAYERS } from "@/contants/layer";
+import { cn } from "@/lib/utils";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

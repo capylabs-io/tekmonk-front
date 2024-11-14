@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { TimeLeft } from "@/types/common-types";
 import { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ export const useCountDown = (targetDate: Date) => {
     );
     const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  
+
     return { days, hours, minutes, seconds };
   };
 
@@ -30,10 +30,9 @@ export const useCountDown = (targetDate: Date) => {
   }, [countDownDate]);
 
   return {
-    getReturnValues
+    getReturnValues,
   };
 };
-
 
 // const useCountdown = (targetDate: Date) => {
 //   const countDownDate = new Date(targetDate).getTime();

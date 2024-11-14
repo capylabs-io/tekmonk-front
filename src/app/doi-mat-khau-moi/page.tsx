@@ -1,19 +1,19 @@
 "use client";
-import React, {useState} from "react";
-import {useRouter, useSearchParams} from "next/navigation";
+import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {ResetPasswordSchema} from "@/validation/ForgotPassword";
-import {useSnackbarStore} from "@/store/SnackbarStore";
-import {Input} from "@/components/common/Input";
-import {Button} from "@/components/common/Button";
-import {resetPasswordRequest} from "@/requests/forgot-password";
-import {MoveRight} from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ResetPasswordSchema } from "@/validation/ForgotPassword";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { Input } from "@/components/common/Input";
+import { Button } from "@/components/common/Button";
+import { resetPasswordRequest } from "@/requests/forgot-password";
+import { MoveRight } from "lucide-react";
 import ContestLayout from "@/components/layout/ContestLayout";
 import DotPattern from "@/components/ui/dot-pattern";
-import {LAYERS} from "@/contants/layer";
-import {cn} from "@/lib/utils";
+import { LAYERS } from "@/contants/layer";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export default function ResetPassword() {

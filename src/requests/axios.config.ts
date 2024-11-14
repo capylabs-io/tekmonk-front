@@ -1,6 +1,6 @@
-import axios, {AxiosError, AxiosRequestConfig} from "axios";
-import {useUserStore} from "@/store/UserStore";
-import {getNewToken} from "./authService";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { useUserStore } from "@/store/UserStore";
+import { getNewToken } from "./authService";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

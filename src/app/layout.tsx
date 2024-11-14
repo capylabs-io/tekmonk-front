@@ -1,9 +1,9 @@
-import type {Metadata} from "next";
-import {Dela_Gothic_One, Inter, Nunito_Sans} from "next/font/google";
+import type { Metadata } from "next";
+import { Dela_Gothic_One, Inter, Nunito_Sans } from "next/font/google";
 import "./globals.css";
-import {Loading} from "@/components/common/Loading";
-import {Snackbar} from "@/components/common/Snackbar";
-import {Suspense} from "react";
+import { Loading } from "@/components/common/Loading";
+import { Snackbar } from "@/components/common/Snackbar";
+import { Suspense } from "react";
 import { SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,8 +22,7 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   title: "Tekmonk",
-  description:
-  SHARE_TEXT,
+  description: SHARE_TEXT,
   icons: {
     icon: "/favicon.ico?v=4",
   },

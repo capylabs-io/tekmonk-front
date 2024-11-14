@@ -1,5 +1,5 @@
 import { SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
-import {Metadata} from "next";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: SHARE_TITLE,
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
     siteName: "Tekmonk",
     images: [
       {
-        url: process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
+        url:
+          process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE ||
+          "/default-image.jpg",
         width: 1200,
         height: 630,
         alt: SHARE_TITLE,
@@ -24,7 +26,9 @@ export const metadata: Metadata = {
     site: "@tekmonk",
     title: SHARE_TITLE,
     description: SHARE_TEXT,
-    images: [process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg"],
+    images: [
+      process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
+    ],
   },
   other: {
     "fb:app_id": "1234567890",
@@ -37,5 +41,5 @@ export const metadata: Metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-return <>{children}</>;    
+  return <>{children}</>;
 }

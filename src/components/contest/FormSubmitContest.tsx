@@ -1,39 +1,42 @@
 "use client";
-import {Button} from "@/components/common/Button";
+import { Button } from "@/components/common/Button";
 import {
-    Dialog,
-    DialogContent,
-    DialogContentNoClose,
-    DialogDescription,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogContentNoClose,
+  DialogDescription,
+  DialogTrigger,
 } from "@/components/common/Dialog";
-import {DataContestSubmission} from "@/types/contestSubmit";
-import React, {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {InputField} from "@/components/contest/InputField";
+import { DataContestSubmission } from "@/types/contestSubmit";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InputField } from "@/components/contest/InputField";
 import {
-    createContestSubmission,
-    getContestSubmissionByContestEntry,
-    uploadAssets,
-    uploadSource,
-    uploadThumbnail,
+  createContestSubmission,
+  getContestSubmissionByContestEntry,
+  uploadAssets,
+  uploadSource,
+  uploadThumbnail,
 } from "@/requests/contestSubmit";
-import {InputFileUploadContest} from "@/components/contest/InputFileUploadContest";
-import {InputImgUploadContest} from "@/components/contest/InputImgUploadContest";
-import {DialogTitle} from "@radix-ui/react-dialog";
-import {InputMulImgUploadContest} from "./InputMulImgUploadContest";
-import {useRouter} from "next/navigation";
-import {useUserStore} from "@/store/UserStore";
-import {getContestGroupStageByCandidateNumber, getOneContestEntry,} from "@/requests/contestEntry";
-import {useSnackbarStore} from "@/store/SnackbarStore";
-import {useLoadingStore} from "@/store/LoadingStore";
-import {DialogFooter, DialogHeader} from "../ui/dialog";
-import {getProgress} from "@/requests/code-combat";
-import {get} from "lodash";
-import {InputTags} from "./InputTags";
-import {ContestGroupStage} from "@/types/common-types";
+import { InputFileUploadContest } from "@/components/contest/InputFileUploadContest";
+import { InputImgUploadContest } from "@/components/contest/InputImgUploadContest";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { InputMulImgUploadContest } from "./InputMulImgUploadContest";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/UserStore";
+import {
+  getContestGroupStageByCandidateNumber,
+  getOneContestEntry,
+} from "@/requests/contestEntry";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { DialogFooter, DialogHeader } from "../ui/dialog";
+import { getProgress } from "@/requests/code-combat";
+import { get } from "lodash";
+import { InputTags } from "./InputTags";
+import { ContestGroupStage } from "@/types/common-types";
 
 const submissionSchema = z.object({
   title: z
@@ -65,12 +68,13 @@ const FormSubmitContest = React.forwardRef<
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
   const [showDialogAccept, setShowDialogAccept] = useState(false);
-  const [contestGroupStage, setContestGroupStage] = useState<ContestGroupStage>();
+  const [contestGroupStage, setContestGroupStage] =
+    useState<ContestGroupStage>();
   //use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
-  
+
   const { success, error, warn } = useSnackbarStore();
 
   //define form
@@ -122,7 +126,6 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
-     
       if (await isExistContestSubmission()) {
         warn("Warning", "Bạn đã nộp bài thi rồi!");
         closeDialog();
@@ -145,9 +148,9 @@ const FormSubmitContest = React.forwardRef<
         tags: { data: tags },
         url: data.url,
         contest_entry: contestEntry.id,
-        classIndex: get(contestGroupStage, "id", ''),
-        memberId: codeCombatId != ""? codeCombatId : null,
-        data: null
+        classIndex: get(contestGroupStage, "id", ""),
+        memberId: codeCombatId != "" ? codeCombatId : null,
+        data: null,
       };
 
       const result = await createContestSubmission(contestObj);
@@ -192,8 +195,8 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const onValueTagChange = (value: string) => {
-    setValue('tags', value);
-  }
+    setValue("tags", value);
+  };
   useEffect(() => {
     //if candidate number is null, redirect to home page
     if (!candidateNumber) {
@@ -272,15 +275,15 @@ const FormSubmitContest = React.forwardRef<
             </>
           )}
           <div className="w-full border-t border-gray-200 py-2 sm:py-5">
-          {cansubmitZipFile && 
-          <InputImgUploadContest
-            title="Ảnh dự án"
-            value={thumbnail}
-            onChange={setThumbnail}
-            customClassNames="mt-b sm:mb-5"
-          />
-        }
-            
+            {cansubmitZipFile && (
+              <InputImgUploadContest
+                title="Ảnh dự án"
+                value={thumbnail}
+                onChange={setThumbnail}
+                customClassNames="mt-b sm:mb-5"
+              />
+            )}
+
             {cansubmitZipFile ? (
               <InputMulImgUploadContest
                 title="Ảnh mô tả dự án"
@@ -329,7 +332,13 @@ const FormSubmitContest = React.forwardRef<
               placeholder="VD: B2C, AI, design...."
             /> */}
 
-            <InputTags  error={errors.tags?.message} onValueChange={onValueTagChange} isTooltip={true} isRequired tooltipContent="Để nhập một tag, hãy viết tên tag sau đó ấn enter trên bàn phím"/>
+            <InputTags
+              error={errors.tags?.message}
+              onValueChange={onValueTagChange}
+              isTooltip={true}
+              isRequired
+              tooltipContent="Để nhập một tag, hãy viết tên tag sau đó ấn enter trên bàn phím"
+            />
 
             <InputField
               title="Mô tả"

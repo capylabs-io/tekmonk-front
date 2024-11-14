@@ -1,11 +1,16 @@
 "use client";
 import React from "react";
-import {Tabs, TabsContent, TabsList, TabsTrigger,} from "@/components/common/Tabs";
-import {Dela_Gothic_One} from "next/font/google";
-import {NotiCard} from "@/components/notification/NotiCard";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/common/Tabs";
+import { Dela_Gothic_One } from "next/font/google";
+import { NotiCard } from "@/components/notification/NotiCard";
 import WithAuth from "@/components/hoc/WithAuth";
-import {useNotifications} from "@/lib/hooks/useNotification";
-import {Notification} from "@/types/common-types";
+import { useNotifications } from "@/lib/hooks/useNotification";
+import { Notification } from "@/types/common-types";
 
 const delaGothicOne = Dela_Gothic_One({
   weight: "400",

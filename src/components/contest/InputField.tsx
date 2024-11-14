@@ -1,10 +1,15 @@
-import React, {forwardRef, useMemo} from "react";
-import {Controller} from "react-hook-form";
-import {Input} from "@/components/contest/Input";
+import React, { forwardRef, useMemo } from "react";
+import { Controller } from "react-hook-form";
+import { Input } from "@/components/contest/Input";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
-import {Info} from "lucide-react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,} from "../ui/tooltip";
+import { Info } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 type Props = {
   title: string;
@@ -67,7 +72,11 @@ export const InputField = forwardRef<
                       color={`${isRequired ? "#f70000" : "#0000f7"}`}
                     />
                   </TooltipTrigger>
-                  <TooltipContent side="right" align="start" className="max-w-[200px]">
+                  <TooltipContent
+                    side="right"
+                    align="start"
+                    className="max-w-[200px]"
+                  >
                     <p>{tooltipContent}</p>
                   </TooltipContent>
                 </Tooltip>

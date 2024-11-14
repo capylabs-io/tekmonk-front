@@ -1,9 +1,9 @@
 "use client";
 
-import createGlobe, {COBEOptions} from "cobe";
-import {useCallback, useEffect, useRef, useState} from "react";
+import createGlobe, { COBEOptions } from "cobe";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 const GLOBE_CONFIG: COBEOptions = {
   width: 800,
