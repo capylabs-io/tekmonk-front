@@ -1,5 +1,6 @@
 "use client";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
+import Link from "next/link";
 
 export const ExamTable = () => {
     return (
@@ -33,7 +34,7 @@ export const ExamTable = () => {
                 Thi cá nhân
               </TableCell>
               <TableCell className="border border-slate-300 p-2" rowSpan={3}>
-                Lập trình bằng CodeCombat (Python hoặc JavaScript)
+              Thí sinh vận dụng kiến thức và kĩ năng lập trình để thực hiện các thử thách trên nền tảng CodeCombat <Link href="https://codecombat.com/" target="_blank" className="hover:text-primary-600">(https://codecombat.com/)</Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -76,12 +77,10 @@ export const ExamTable = () => {
               </TableCell>
               <TableCell className="border border-slate-300 p-2">
                 <div>
-                  Sáng tạo sản phẩm công nghệ phục vụ cho các chủ đề giải đáp
-                  (sử dụng Scratch hoặc Python).
+                Thi sản phẩm phần mềm sáng tạo phù hợp với chủ đề của giải đấu (sử dụng Scratch hoặc Python).
                 </div>
                 <div className="mt-2">
-                  Sản phẩm sáng tạo dự thi chưa từng đạt giải các cuộc thi, hội
-                  thi cấp quốc gia, quốc tế.
+                Sản phẩm sáng tạo dự thi chưa từng đạt giải các cuộc thi, hội thi cấp Quốc gia, quốc tế.
                 </div>
               </TableCell>
             </TableRow>

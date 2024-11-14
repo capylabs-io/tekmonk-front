@@ -53,7 +53,7 @@ export const CompetitionContent = () => {
                 <p>Bảng A, B, C: Tham gia thi tập trung tại các điểm thi tại Hà Nội do Ban Tổ chức lựa chọn.</p>
                 <p className="mt-2">Bảng D: Nộp bài trực tuyến theo hướng dẫn của Ban Tổ chức.</p>
               </TableCell>
-              <TableCell>Thi trực tiếp (tại Cung Thiếu Nhi Hà Nội)</TableCell>
+              <TableCell>Thi trực tiếp tại Cung thể thao Quần Ngựa, Ba Đình, Hà Nội</TableCell>
             </TableRow>
           </TableBody>
         </Table>

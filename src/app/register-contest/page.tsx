@@ -31,7 +31,7 @@ const steps = [
     title: "Tài khoản",
     titleHeader: "TẠO TÀI KHOẢN",
     icon: "2",
-    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi và code combat",
+    description: "Dùng để đăng nhập vào hệ thống thi đấu",
   },
   {
     title: "Bảng thi",
@@ -179,7 +179,8 @@ const  RegisterContest = () => {
 
   const handleBackToContest = () => {
     clear();
-    router.push("/");
+    //back to home page with new tab
+    window.open("/", "_blank");
   };
 
   const handleAccept = () => {

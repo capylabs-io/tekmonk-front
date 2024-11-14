@@ -14,10 +14,9 @@ export const CompetitionInstructions = () => {
           <div>
             <div className="text-lg font-semibold mb-2">1.1. Cách đăng ký</div>
             <ul className="list-disc pl-5 space-y-2">
-              <li>Thí sinh truy cập công đăng ký trực tuyến và điền đầy đủ thông tin tại link: olympiad.tekmonk.edu.vn muộn nhất vào 23:59 / trước 0:00 ngày 25/11/2024</li>
-              <li>Thí sinh đóng lệ phí thi theo hướng dẫn tại cổng đăng ký trực tuyến.</li>
+              <li>Thí sinh truy cập công đăng ký trực tuyến và điền đầy đủ thông tin tại link: olympiad.tekmonk.edu.vn muộn nhất vào 23:59 ngày 24/11/2024.</li>
+              <li>Thí sinh đóng lệ phí thi theo hướng dẫn tại email của Ban tổ chức sau khi hoàn tất đăng ký trực tuyến.</li>
             </ul>
-            <p className="mt-2 text-sm italic">Lưu ý: Với bảng D, khi đăng ký theo đội, đội trưởng vui lòng xem kỹ hướng dẫn tại cổng đăng ký.</p>
           </div>
 
           <div>

@@ -108,7 +108,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
 
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
-            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-3 text-bodyMd">
+            <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-4 text-bodyMd">
               <LinkToScroll to="rules" smooth={true} duration={500}>
                 <div
                   className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
@@ -128,7 +128,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                             is_show_full && router.push("/tong-hop-bai-du-thi");
                           }}
                         >
-                          Tổng hợp bài dự thi
+                          Tổng hợp bài thi
                         </div>
                       </TooltipTrigger>
                       {!is_show_full && (
@@ -146,7 +146,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                           className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
                           onClick={handleRedirectToMyContest}
                         >
-                          Bài dự thi của tôi
+                          Bài thi của tôi
                         </div>
                       </TooltipTrigger>
                       {!is_show_full && (

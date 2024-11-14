@@ -148,23 +148,30 @@
 // }
 "use client";
 
-import {useEffect, useMemo, useState} from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import {CardContest, CardContestContent,} from "@/components/common/CardContest";
-import {LAYERS} from "@/contants/layer";
+import {
+  CardContest,
+  CardContestContent,
+} from "@/components/common/CardContest";
+import { LAYERS } from "@/contants/layer";
 import Clock from "@/components/contest/Clock";
 import TypingAnimation from "@/components/ui/typing-animation";
 import BlurFade from "@/components/ui/blur-fade";
-import {shareOnMobile} from "react-mobile-share";
-import {getContest} from "@/requests/contest";
+import { shareOnMobile } from "react-mobile-share";
+import { getContest } from "@/requests/contest";
 import ContestLayout from "@/components/layout/ContestLayout";
-import {Share} from "lucide-react";
+import { Share } from "lucide-react";
 import ContestRules from "@/components/contest/rules/ContestRules";
-import {Button} from "@/components/common/Button";
-import {IconDisPlay} from "@/components/contest/IconDisplay";
-import {AccordionContest} from "@/components/contest/rules/AccordionContest";
-import {Contest as TypeContest} from "@/types/common-types";
-import { CONTEST_RULES_DETAILS, SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
+import { Button } from "@/components/common/Button";
+import { IconDisPlay } from "@/components/contest/IconDisplay";
+import { AccordionContest } from "@/components/contest/rules/AccordionContest";
+import { Contest as TypeContest } from "@/types/common-types";
+import {
+  CONTEST_RULES_DETAILS,
+  SHARE_TEXT,
+  SHARE_TITLE,
+} from "@/contants/contest/tekmonk";
 
 export default function Contest() {
   // => use state
@@ -173,19 +180,16 @@ export default function Contest() {
   const [contestData, setContestData] = useState<TypeContest>();
 
   // => use store
-  
 
   // => function handle
   const fetchContestData = async () => {
     try {
       const res = await getContest();
-    if (res) {
-      setContestData(res);
-    }
-    } catch (error) {
-    }
+      if (res) {
+        setContestData(res);
+      }
+    } catch (error) {}
   };
-  
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -195,13 +199,10 @@ export default function Contest() {
     setScrollY(window.scrollY);
   };
 
-
   //use effect
   useEffect(() => {
-    
     //call api
     fetchContestData();
-    
 
     setIsClient(true);
     window.addEventListener("scroll", handleScroll);
@@ -294,9 +295,7 @@ export default function Contest() {
 
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      {contestData && (
-                        <Clock contestData={contestData}/>
-                      )}
+                      {contestData && <Clock contestData={contestData} />}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>
                       <CardContest
@@ -321,20 +320,18 @@ export default function Contest() {
                           />
 
                           <div className="p-6 w-full max-mobile:p-2">
-                            
-                            <div className="mt-2 flex w-full justify-center items-center gap-x-5 
+                            <div
+                              className="mt-2 flex w-full justify-center items-center gap-x-5 
                             max-mobile:flex-col
                             max-mobile:gap-y-3
                             
-                            ">
-                            <Button
+                            "
+                            >
+                              <Button
                                 className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px] "
                                 outlined={true}
                                 onClick={() =>
-                                  window.open(
-                                    CONTEST_RULES_DETAILS,
-                                    "_blank"
-                                  )
+                                  window.open(CONTEST_RULES_DETAILS, "_blank")
                                 }
                               >
                                 Chi tiết thể lệ cuộc thi
@@ -352,11 +349,10 @@ export default function Contest() {
                                 }
                               >
                                 Chia sẻ cuộc thi
-                                <Share className="ml-2"/>
+                                <Share className="ml-2" />
                               </Button>
-                              
                             </div>
-                            
+
                             <div
                               id="rules"
                               className="mt-6 font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
@@ -364,20 +360,21 @@ export default function Contest() {
                               Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
                             </div>
                             <div className="mt-10 text-gray-950 text-bodyLg max-mobile:text-base">
-                              Giải đấu Tekmonk Coding Olympiad được tổ chức bởi
-                              Học viện Công nghệ Tekmonk, thuộc Tập đoàn Hanoi
-                              Telecom, là sân chơi trí tuệ hàng đầu dành cho học
-                              sinh yêu thích lập trình từ lớp 3 đến lớp 12. Với
-                              sứ mệnh mang lập trình đến gần hơn với thế hệ trẻ,
-                              Tekmonk Coding Olympiad không chỉ là một cuộc thi
-                              mà còn là cơ hội để các em phát triển tư duy logic
-                              và rèn luyện kỹ năng giải quyết vấn đề thực tiễn.
-                            </div>
-                            <div className="mt-6 text-gray-950 text-bodyLg max-mobile:text-base">
-                              Top 20 thí sinh xuất sắc nhất của Giải đấu sẽ được
-                              lựa chọn tham gia Olympic STEM Quốc tế, với cơ hội
-                              dự thi vòng chung kết tại Barcelona, Tây Ban Nha
-                              vào tháng 7 năm 2025.
+                              “Tekmonk Coding Olympiad” là giải vô địch lập
+                              trình nằm trong khuôn khổ cuộc thi Vô địch Quốc
+                              gia STEM, AI và Robotics 2024 (VSAR) do báo Tiền
+                              Phong và báo Hoa Học Trò tổ chức dưới sự chỉ đạo
+                              của Trung ương Đoàn TNCS Hồ Chí Minh, Bộ Khoa học
+                              và Công nghệ, nằm trong hoạt động của ngày hội
+                              STEM quốc gia. Với định hướng đẩy mạnh giáo dục
+                              STEM trong trường học phổ thông, Tekmonk Coding
+                              Olympiad không chỉ là một cuộc thi mà còn là sân
+                              chơi để các em phát triển tư duy logic và rèn
+                              luyện kỹ năng giải quyết vấn đề thực tiễn thông
+                              qua các nhiệm vụ thiết kế, lập trình. Không những
+                              vậy, sự kiện còn là cơ hội để các bạn giao lưu,
+                              học hỏi từ các chuyên gia đầu ngành và bạn bè quốc
+                              tế.
                             </div>
                             
                             <div className=" mt-10 max-mobile:hidden">
@@ -385,9 +382,8 @@ export default function Contest() {
                             </div>
                             {/* for mobile  */}
                             <div className="hidden max-mobile:block">
-                                <AccordionContest />
+                              <AccordionContest />
                             </div>
-
                           </div>
                         </CardContestContent>
                       </CardContest>

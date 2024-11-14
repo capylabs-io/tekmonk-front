@@ -139,7 +139,7 @@ export default function Login() {
           Quên mật khẩu?
         </div> */}
       </div>
-      <div className="bg-[url('/login.jpg')] bg-no-repeat !bg-center bg-cover"></div>
+      <div className="bg-[url('/image/contest/login.png')] bg-no-repeat !bg-center bg-cover"></div>
       {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>

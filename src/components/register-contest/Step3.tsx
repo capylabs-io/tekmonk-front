@@ -89,12 +89,12 @@ export const Step3 = () => {
   return (
     <div className="space-y-4 p-0">
       <div className="text-2xl font-semibold">Thông tin bảng đấu:</div>
-      <div className="mx-auto py-10 overflow-x-auto max-mobile:hidden">
+      <div className="mx-auto py-10 overflow-x-auto">
         <ExamTable />
       </div>
-      <div className="mx-auto min-[440px]:hidden">
+      {/* <div className="mx-auto min-[440px]:hidden">
         <ExamTableOnMobile />
-      </div>
+      </div> */}
       <div>
         <Label className="text-SubheadSm text-gray-950">
           Thí sinh đăng ký bảng đấu <span className="text-red-500">*</span>
@@ -133,13 +133,13 @@ export const Step3 = () => {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4" id="category-D1" />
                 <Label className="text-bodyLg text-black">
-                  Thi cá nhân - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                  Thi cá nhân - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS, THPT)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5" id="category-D2" />
                 <Label className="text-bodyLg text-black">
-                  Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                  Thi nhóm - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS, THPT)
                 </Label>
               </div>
             </RadioGroup>

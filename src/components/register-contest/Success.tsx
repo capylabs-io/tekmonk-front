@@ -15,10 +15,8 @@ export default function SuccessComponent({
         </div>
       </div>
       <div className="text-bodyLg mx-auto">
-        Cảm ơn bạn đã đăng ký tham gia{" "}
-        <b>&quot;Tekmonk coding Olympiad&quot;!</b> Chúng tôi sẽ sớm gửi thông
-        tin chi tiết về sự kiện qua email. Hãy kiểm tra kỹ thông tin đã đăng ký
-        tại mail và làm theo hướng dẫn.
+      Cảm ơn bạn đã đăng ký tham gia{" "}
+        <b>&quot;Giải vô địch Tekmonk Coding Olympiad.&quot;!</b> Bạn vui lòng kiểm tra email và làm theo hướng dẫn để hoàn tất thủ tục dự thi. 
       </div>
       <div className="text-bodyLg mx-auto">
         Số báo danh của bạn là:
