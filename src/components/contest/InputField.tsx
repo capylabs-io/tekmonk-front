@@ -1,5 +1,4 @@
 import React, { forwardRef, useMemo } from "react";
-import { TextArea } from "@/components/common/TextArea";
 import { Controller } from "react-hook-form";
 import { Input } from "@/components/contest/Input";
 import "react-quill/dist/quill.snow.css";
@@ -73,7 +72,11 @@ export const InputField = forwardRef<
                       color={`${isRequired ? "#f70000" : "#0000f7"}`}
                     />
                   </TooltipTrigger>
-                  <TooltipContent side="right" align="start" className="max-w-[200px]">
+                  <TooltipContent
+                    side="right"
+                    align="start"
+                    className="max-w-[200px]"
+                  >
                     <p>{tooltipContent}</p>
                   </TooltipContent>
                 </Tooltip>
@@ -84,7 +87,7 @@ export const InputField = forwardRef<
               </>
             )}
           </label>
-          <div className="flex flex-col w-full max-w-[500px] overflow-hidden">
+          <div className="flex flex-col w-full max-w-3/4 overflow-hidden">
             {control ? ( // If control is passed, use Controller
               <Controller
                 name={name}
@@ -94,7 +97,7 @@ export const InputField = forwardRef<
                     <ReactQuill
                       theme="snow"
                       value={field.value || value || ""}
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[130px]"
+                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[200px]"
                       onChange={field.onChange}
                       placeholder={placeholder}
                     />

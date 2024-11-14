@@ -2,7 +2,7 @@
 import { ImgSubmitPreview } from "@/components/contest/ImgSubmitPreview";
 import classNames from "classnames";
 import { ImagePlus } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   title: string;

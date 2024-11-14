@@ -15,7 +15,7 @@ import DotPattern from "@/components/ui/dot-pattern";
 import { LAYERS } from "@/contants/layer";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { Suspense } from "react";
+
 export default function ResetPassword() {
   const router = useRouter();
 

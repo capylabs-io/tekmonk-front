@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, CheckCircle, Circle } from "lucide-react";
+import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchBar, SearchOption } from "@/components/common/SearchBar";
 import { getContestSubmissionResult } from "@/requests/contestSubmit";
 import { ContestSubmission } from "@/types/contestSubmit";
@@ -45,7 +44,7 @@ export default function CompetitionResults() {
       );
 
       //sort data by QualifiedExam with type is true | false | null
-      response.data.sort((a:any, b:any) => {
+      response.data.sort((a: any, b: any) => {
         const priority = (val: boolean | null): number => {
           if (val === null) return 1;
           return val ? 2 : 0;
@@ -169,7 +168,7 @@ export default function CompetitionResults() {
                           ) : get(contestant, "QualifiedExam") ? (
                             <div className="flex items-center justify-evenly">
                               <p>ĐẠT</p>
-                              <CheckCircle color="#03f701"/>
+                              <CheckCircle color="#03f701" />
                             </div>
                           ) : (
                             <div className="flex item-center justify-evenly">
@@ -186,12 +185,16 @@ export default function CompetitionResults() {
                                 stroke-linejoin="round"
                                 className="lucide lucide-circle-x"
                               >
-                                <circle cx="12" cy="12" r="10" color="#f70000"/>
-                                <path d="m15 9-6 6" color="#f70000"/>
-                                <path d="m9 9 6 6" color="#f70000"/>
+                                <circle
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  color="#f70000"
+                                />
+                                <path d="m15 9-6 6" color="#f70000" />
+                                <path d="m9 9 6 6" color="#f70000" />
                               </svg>
                               {/* <CircleX /> */}
-                              
                             </div>
                           )}
                         </TableCell>

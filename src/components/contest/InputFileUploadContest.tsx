@@ -3,7 +3,6 @@ import { Button } from "@/components/common/Button";
 import classNames from "classnames";
 import { X } from "lucide-react";
 import React from "react";
-import { toast } from "react-toastify";
 
 type Props = {
   title: string;
@@ -15,7 +14,9 @@ type Props = {
   onBlur?: () => void;
 };
 
-const MAX_FILE_SIZE_MB = parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || "10");
+const MAX_FILE_SIZE_MB = parseInt(
+  process.env.NEXT_PUBLIC_MAX_FILE_SIZE || "10"
+);
 
 const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
 
