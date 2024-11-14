@@ -1,10 +1,17 @@
 "use client";
-import {get} from "lodash";
-import {Button} from "../common/Button";
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,} from "../ui/dialog";
-import {memo, useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
-import {ContestGroupStage} from "@/types/common-types";
+import { get } from "lodash";
+import { Button } from "../common/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { memo, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
 
 const GroupStageDialog = ({
@@ -17,9 +24,9 @@ const GroupStageDialog = ({
   //useState
   const [showDialog, setShowDialog] = useState(false);
   const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
-  const [isShowMessage, setIsShowMessage] = useState(false)  
+  const [isShowMessage, setIsShowMessage] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const [isGroupStageCodeCombat, setIsGroupStageCodeCombat] = useState(false);
   //arrow function
   const handleTimeOver = () => {
     setIsGroupStageStarted(true);
@@ -34,14 +41,17 @@ const GroupStageDialog = ({
       }
     }
   };
-
-
-
   useEffect(() => {
     // Check if the group stage has already started
     const hasStarted = new Date(groupStageData.startTime) <= new Date();
     setIsGroupStageStarted(hasStarted);
-    
+    if (
+      groupStageData.code == "A" ||
+      groupStageData.code == "B" ||
+      groupStageData.code == "C"
+    ) {
+      setIsGroupStageCodeCombat(true);
+    }
     setIsClient(true);
   }, [groupStageData.startTime]);
   return (
@@ -74,16 +84,22 @@ const GroupStageDialog = ({
               {isGroupStageStarted ? (
                 <div className="py-4 px-[33px]">
                   <div className="text-gray-700 text-xl text-center">
-                    Cuộc thi đã bắt đầu !
+                    {isGroupStageCodeCombat ? (
+                      "Cuộc thi đã bắt đầu, chúc bạn thi tốt"
+                    ) : (
+                      <div className="gap-y-1">
+                        <div>Cuộc thi đã bắt đầu !</div>
+                        <div className="mt-2">
+                          Thời gian bắt đầu:{" "}
+                          <span className="font-bold">00:00 25/11/2024</span>
+                        </div>
+                        <div>
+                          Thời gian kết thúc:{" "}
+                          <span className="font-bold">23:59 08/12/2024</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                  {/* <div className="max-h-12 max-w-[372px] mx-auto mb-4">
-                    <Input
-                      type="text"
-                      customClassNames="h-full text-bodyLg"
-                      placeholder="Mã tham dự"
-                      onChange={handleCodeCombatId}
-                    />
-                  </div> */}
                   <div></div>
                 </div>
               ) : (
@@ -144,12 +160,14 @@ const GroupStageDialog = ({
                 >
                   Quay lại
                 </Button>
-                {isGroupStageStarted &&                 <Button
-                  className="w-[156px] h-[48px] !rounded-[3rem]"
-                  onClick={handleExam}
-                >
-                  Vào thi
-                </Button>}
+                {isGroupStageStarted && (
+                  <Button
+                    className="w-[156px] h-[48px] !rounded-[3rem]"
+                    onClick={handleExam}
+                  >
+                    Vào thi
+                  </Button>
+                )}
               </div>
             </DialogFooter>
           </DialogContent>
