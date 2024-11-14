@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
+import { Dela_Gothic_One, Inter, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { Loading } from "@/components/common/Loading";
-import { ToastContainer } from "react-toastify";
-import DotPattern from "@/components/ui/dot-pattern";
-import { cn } from "@/lib/utils";
 import { Snackbar } from "@/components/common/Snackbar";
 import { Suspense } from "react";
+import { SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,17 +22,15 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   title: "Tekmonk",
-  description:
-    "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+  description: SHARE_TEXT,
   icons: {
     icon: "/favicon.ico?v=4",
   },
   openGraph: {
     type: "website",
     url: process.env.NEXT_PUBLIC_BASE_URL,
-    title: "CUỘC THI SÁNG TẠO TRẺ",
-    description:
-      "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+    title: SHARE_TITLE,
+    description: SHARE_TEXT,
     siteName: "Tekmonk",
     images: [
       {
@@ -43,26 +39,25 @@ export const metadata: Metadata = {
           "/default-image.jpg",
         width: 1200,
         height: 630,
-        alt: "CUỘC THI SÁNG TẠO TRẺ",
+        alt: SHARE_TITLE,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     site: "@tekmonk",
-    title: "CUỘC THI SÁNG TẠO TRẺ",
-    description:
-      "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+    title: SHARE_TITLE,
+    description: SHARE_TEXT,
     images: [
       process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
     ],
   },
   other: {
     "fb:app_id": "1234567890",
-    "og:image:alt": "CUỘC THI SÁNG TẠO TRẺ",
+    "og:image:alt": SHARE_TITLE,
     "og:locale": "vi_VN",
     "og:site_name": "Tekmonk",
-    "twitter:image:alt": "CUỘC THI SÁNG TẠO TRẺ",
+    "twitter:image:alt": SHARE_TITLE,
     "twitter:creator": "@tekmonk",
   },
 };
@@ -78,9 +73,8 @@ export default function RootLayout({
       className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
     >
       <body>
-        {/* <ToastContainer /> */}
         <Snackbar />
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <div className="relative">{children}</div>
         </Suspense>
         <Loading />

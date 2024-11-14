@@ -21,11 +21,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ExamTable } from "../contest/rules/ExamTable";
+import { ExamTableOnMobile } from "../contest/rules/ExamTableOnMobile";
 export const Step3 = () => {
   const {
     control,
     trigger,
-    register,
     formState: { errors },
     getValues,
     setValue,
@@ -82,94 +83,18 @@ export const Step3 = () => {
       addTeamMember();
     }
   }, [valueGroup]);
+
+  //custom className
+  const customInputClassNames = "max-mobile:placeholder:text-base";
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-0">
       <div className="text-2xl font-semibold">Thông tin bảng đấu:</div>
-      <div className="mx-auto py-10 overflow-x-auto ">
-        <Table className="border-collapse border border-slate-400 min-w-[600px]">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">
-                Bảng
-              </TableHead>
-              <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">
-                Lớp
-              </TableHead>
-              <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">
-                Hình thức thi
-              </TableHead>
-              <TableHead className="border border-slate-300 bg-slate-50 p-2 text-slate-900 font-semibold text-left">
-                Nội dung thi
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="border border-slate-300 p-2">
-                Bảng A
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Tiểu học: Lớp 3 - lớp 5
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Thi cá nhân
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2" rowSpan={3}>
-                Lập trình bằng CodeCombat (Python hoặc JavaScript)
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="border border-slate-300 p-2">
-                Bảng B
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                THCS: Lớp 6 - lớp 9
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Thi cá nhân
-              </TableCell>
-              {/* <TableCell className="border border-slate-300 p-2">
-              Lập trình bằng CodeCombat (Python hoặc JavaScript)
-            </TableCell> */}
-            </TableRow>
-            <TableRow>
-              <TableCell className="border border-slate-300 p-2">
-                Bảng C
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                THPT: Lớp 10 - lớp 12
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Thi cá nhân
-              </TableCell>
-              {/* <TableCell className="border border-slate-300 p-2">
-              Lập trình bằng CodeCombat (Python hoặc JavaScript)
-            </TableCell> */}
-            </TableRow>
-            <TableRow>
-              <TableCell className="border border-slate-300 p-2">
-                Bảng D
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Tiểu học, THCS, THPT (Lớp 3 - 12): Bảng sáng tạo
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                Thi cá nhân hoặc thi theo đội, tối đa 03 thành viên
-              </TableCell>
-              <TableCell className="border border-slate-300 p-2">
-                <div>
-                  Sáng tạo sản phẩm công nghệ phục vụ cho các chủ đề giải đáp
-                  (sử dụng Scratch hoặc Python).
-                </div>
-                <div className="mt-2">
-                  Sản phẩm sáng tạo dự thi chưa từng đạt giải các cuộc thi, hội
-                  thi cấp quốc gia, quốc tế.
-                </div>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+      <div className="mx-auto py-10 overflow-x-auto">
+        <ExamTable />
       </div>
+      {/* <div className="mx-auto min-[440px]:hidden">
+        <ExamTableOnMobile />
+      </div> */}
       <div>
         <Label className="text-SubheadSm text-gray-950">
           Thí sinh đăng ký bảng đấu <span className="text-red-500">*</span>
@@ -208,13 +133,14 @@ export const Step3 = () => {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4" id="category-D1" />
                 <Label className="text-bodyLg text-black">
-                  Thi cá nhân - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                  Thi cá nhân - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS,
+                  THPT)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="5" id="category-D2" />
                 <Label className="text-bodyLg text-black">
-                  Thi nhóm - Bảng D (Bảng sáng tạo cho học sinh THCS, THPT)
+                  Thi nhóm - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS, THPT)
                 </Label>
               </div>
             </RadioGroup>
@@ -264,6 +190,7 @@ export const Step3 = () => {
                             onChange={onChange}
                             placeholder="Câu trả lời"
                             customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                            customInputClassNames={customInputClassNames}
                             error={fieldState && fieldState.error?.message}
                           />
                         </>
@@ -284,6 +211,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}
@@ -304,6 +232,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={get(
                             errors,
                             `stepThree.groupMemberInfo.${index}.phone.message`,
@@ -355,6 +284,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="Câu trả lời"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}
@@ -378,6 +308,7 @@ export const Step3 = () => {
                           onChange={onChange}
                           placeholder="00-000-0000"
                           customClassNames="w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] text-lg focus-visible:outline-none"
+                          customInputClassNames={customInputClassNames}
                           error={fieldState && fieldState.error?.message}
                         />
                       )}

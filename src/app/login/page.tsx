@@ -132,14 +132,19 @@ export default function Login() {
           <Button className="mt-8" onClick={handleLogin}>
             Đăng nhập
           </Button>
-          <div className="text-center cursor-pointer" onClick={() => router.push('quen-mat-khau')}>Quên mật khẩu?</div>
+          <div
+            className="text-center cursor-pointer"
+            onClick={() => router.push("quen-mat-khau")}
+          >
+            Quên mật khẩu?
+          </div>
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">
           Quên mật khẩu?
         </div> */}
       </div>
-      <div className="bg-[url('/login.jpg')] bg-no-repeat !bg-center bg-cover"></div>
+      <div className="bg-[url('/image/contest/login.png')] bg-no-repeat !bg-center bg-cover"></div>
       {/* <ToastContainer /> */}
       {isShowing && <Loading />}
     </div>

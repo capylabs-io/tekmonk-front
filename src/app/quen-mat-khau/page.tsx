@@ -9,7 +9,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
 import { forgotPasswordRequest } from "@/requests/forgot-password";
-import { MoveRight, RotateCcw } from "lucide-react";
+import { MoveRight } from "lucide-react";
 import { get } from "lodash";
 
 export default function ForgotPassword() {

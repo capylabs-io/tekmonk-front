@@ -34,8 +34,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { DialogFooter, DialogHeader } from "../ui/dialog";
 import { getProgress } from "@/requests/code-combat";
-import { get, round, set } from "lodash";
-import { Progress } from "@/components/ui/progress";
+import { get } from "lodash";
 import { InputTags } from "./InputTags";
 import { ContestGroupStage } from "@/types/common-types";
 
@@ -59,19 +58,23 @@ const FormSubmitContest = React.forwardRef<
 >(({ children }, ref) => {
   const router = useRouter();
   //use state
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState({
+  //   currentProgress: 0,
+  //   totalProgress: 1
+  // });
   const [isOpen, setIsOpen] = useState(false);
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [imgProject, setImgProject] = useState<File[]>([]);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [cansubmitZipFile, setCansubmitZipFile] = useState(false);
   const [showDialogAccept, setShowDialogAccept] = useState(false);
-  const [contestGroupStage, setContestGroupStage] = useState<ContestGroupStage>();
+  const [contestGroupStage, setContestGroupStage] =
+    useState<ContestGroupStage>();
   //use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
-  
+
   const { success, error, warn } = useSnackbarStore();
 
   //define form
@@ -104,9 +107,9 @@ const FormSubmitContest = React.forwardRef<
       }
       setContestGroupStage(data);
       const res = await getProgress(codeCombatId, Number(get(data, "id", 0)));
-      if (res) {
-        setProgress(round(res.currentProgress * 100, 1));
-      }
+      // if (res) {
+      //   setProgress(res);
+      // }
     } catch (error) {
       return;
     }
@@ -123,7 +126,6 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
-     
       if (await isExistContestSubmission()) {
         warn("Warning", "Bạn đã nộp bài thi rồi!");
         closeDialog();
@@ -146,10 +148,9 @@ const FormSubmitContest = React.forwardRef<
         tags: { data: tags },
         url: data.url,
         contest_entry: contestEntry.id,
-        progress: progress,
-        classIndex: get(contestGroupStage, "id", ''),
-        memberId: codeCombatId != ""? codeCombatId : null,
-        data: null
+        classIndex: get(contestGroupStage, "id", ""),
+        memberId: codeCombatId != "" ? codeCombatId : null,
+        data: null,
       };
 
       const result = await createContestSubmission(contestObj);
@@ -194,9 +195,8 @@ const FormSubmitContest = React.forwardRef<
   };
 
   const onValueTagChange = (value: string) => {
-    console.log('value', value);
-    setValue('tags', value);
-  }
+    setValue("tags", value);
+  };
   useEffect(() => {
     //if candidate number is null, redirect to home page
     if (!candidateNumber) {
@@ -274,14 +274,16 @@ const FormSubmitContest = React.forwardRef<
               </div>
             </>
           )}
-
           <div className="w-full border-t border-gray-200 py-2 sm:py-5">
-            <InputImgUploadContest
-              title="Ảnh dự án"
-              value={thumbnail}
-              onChange={setThumbnail}
-              customClassNames="mt-b sm:mb-5"
-            />
+            {cansubmitZipFile && (
+              <InputImgUploadContest
+                title="Ảnh dự án"
+                value={thumbnail}
+                onChange={setThumbnail}
+                customClassNames="mt-b sm:mb-5"
+              />
+            )}
+
             {cansubmitZipFile ? (
               <InputMulImgUploadContest
                 title="Ảnh mô tả dự án"
@@ -290,7 +292,7 @@ const FormSubmitContest = React.forwardRef<
               />
             ) : (
               <>
-                <div
+                {/* <div
                   className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
                 >
                   <label className="text-SubheadSm text-primary-950 w-1/4">
@@ -298,14 +300,14 @@ const FormSubmitContest = React.forwardRef<
                   </label>
                   <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
                     <Progress
-                      value={progress}
+                      value={progress.currentProgress / progress.totalProgress}
                       className="w-[80%] border border-gray-300 bg-gray-200"
                     />
                     <div className="text-primary-900 text-bodyL">
-                      {progress}%
+                      {progress.currentProgress} / {progress.totalProgress}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </>
             )}
 
@@ -330,7 +332,13 @@ const FormSubmitContest = React.forwardRef<
               placeholder="VD: B2C, AI, design...."
             /> */}
 
-            <InputTags  error={errors.tags?.message} onValueChange={onValueTagChange} />
+            <InputTags
+              error={errors.tags?.message}
+              onValueChange={onValueTagChange}
+              isTooltip={true}
+              isRequired
+              tooltipContent="Để nhập một tag, hãy viết tên tag sau đó ấn enter trên bàn phím"
+            />
 
             <InputField
               title="Mô tả"

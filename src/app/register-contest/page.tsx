@@ -11,7 +11,7 @@ import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import SuccessComponent from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
-import { get, set } from "lodash";
+import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,7 @@ const steps = [
     title: "Tài khoản",
     titleHeader: "TẠO TÀI KHOẢN",
     icon: "2",
-    description: "Dùng để đăng nhập vào tài khoản cho cuộc thi và code combat",
+    description: "Dùng để đăng nhập vào hệ thống thi đấu",
   },
   {
     title: "Bảng thi",
@@ -49,14 +49,14 @@ const steps = [
   },
 ];
 
-const  RegisterContest = () => {
+const RegisterContest = () => {
   //init data
   const initInvalidCodeCombat = {
     username: false,
     email: false,
     other: false,
-    reload: false
-  }
+    reload: false,
+  };
   const router = useRouter();
   //use state
   const [currentStep, setCurrentStep] = useState(0);
@@ -67,7 +67,7 @@ const  RegisterContest = () => {
     username: false,
     email: false,
     other: false,
-    reload: false
+    reload: false,
   });
   const [isCreateCodeCombat, setIsCreateCodeCombat] = useState(false);
   const [codeCombatId, setCodeCombatId] = useState<string>("");
@@ -125,21 +125,33 @@ const  RegisterContest = () => {
       setIsSubmitted(true);
     } catch (err) {
       const message = HandleReturnMessgaeErrorAxios(err);
-      if(message === "username") {
+      if (message === "username") {
         error("Lỗi", "Tên tài khoản đã tồn tại");
-        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, username: true, reload: !prev.reload}));
+        setIsInvalidCodeCombat((prev) => ({
+          ...initInvalidCodeCombat,
+          username: true,
+          reload: !prev.reload,
+        }));
         setCurrentStep(1);
         return;
       }
-      if(message === "email") {
+      if (message === "email") {
         error("Lỗi", "Email đã tồn tại");
-        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, email: true, reload: !prev.reload}));
+        setIsInvalidCodeCombat((prev) => ({
+          ...initInvalidCodeCombat,
+          email: true,
+          reload: !prev.reload,
+        }));
         setCurrentStep(1);
         return;
       }
-      if(message === "unknown") {
+      if (message === "unknown") {
         error("Lỗi", "Có lỗi xảy ra");
-        setIsInvalidCodeCombat((prev) => ({...initInvalidCodeCombat, other: true, reload: !prev.reload}));
+        setIsInvalidCodeCombat((prev) => ({
+          ...initInvalidCodeCombat,
+          other: true,
+          reload: !prev.reload,
+        }));
         setCurrentStep(1);
         return;
       }
@@ -162,7 +174,7 @@ const  RegisterContest = () => {
       case 0:
         return <Step1 />;
       case 1:
-        return <Step2 stateCodeCombat={isInvalidCodeCombat}/>;
+        return <Step2 stateCodeCombat={isInvalidCodeCombat} />;
       case 2:
         return <Step3 />;
       case 3:
@@ -179,7 +191,8 @@ const  RegisterContest = () => {
 
   const handleBackToContest = () => {
     clear();
-    router.push("/");
+    //back to home page with new tab
+    window.open("/", "_blank");
   };
 
   const handleAccept = () => {
@@ -195,7 +208,9 @@ const  RegisterContest = () => {
     <>
       <div className="h-full mt-4 overflow-auto">
         <div className="px-2">
-          <div className="w-full text-[40px] text-primary-700 font-dela max-w-[720px] max-[580px]:text-[32px] max-[370px]:text-[28px] mx-auto rounded-2x text-center">Đăng ký thông tin dự thi</div>
+          <div className="w-full text-[40px] text-primary-700 font-dela max-w-[720px] max-[580px]:text-[32px] max-[370px]:text-[28px] mx-auto rounded-2x text-center">
+            Đăng ký thông tin dự thi
+          </div>
         </div>
 
         <div className="p-2">
@@ -317,7 +332,7 @@ const  RegisterContest = () => {
         </div>
       </div>
     </>
-  ) ;
-}
+  );
+};
 
 export default RegisterContestGuard(RegisterContest);
