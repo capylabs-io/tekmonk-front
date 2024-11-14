@@ -6,9 +6,9 @@ export const getProgress = async (memberId: string, classIndex: number) => {
         if(res.status === 200){
             return res.data as TProgressResult[];
         }
-        return 0;
+        return [] as TProgressResult[];
     } catch (error) {
-        return 0;
+        return [] as TProgressResult[];
     }
 
 }
