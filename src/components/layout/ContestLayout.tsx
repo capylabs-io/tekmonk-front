@@ -128,7 +128,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                             is_show_full && router.push("/tong-hop-bai-du-thi");
                           }}
                         >
-                          Tổng hợp bài thi
+                          Tất cả bài thi
                         </div>
                       </TooltipTrigger>
                       {!is_show_full && (
@@ -163,14 +163,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
                         onClick={handleRedirectResultContest}
                       >
-                        Kết quả vòng loại
+                        Kết quả
                       </div>
                     </TooltipTrigger>
-                    {!is_show_full && (
-                      <TooltipContent>
+                    <TooltipContent>
+                    {!is_show_full ? (
                         <p>Sắp diễn ra</p>
+                      ) : <p>Kết quả vòng loại</p>}
                       </TooltipContent>
-                    )}
                   </Tooltip>
                 </>
               )}
