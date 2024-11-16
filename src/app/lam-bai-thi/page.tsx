@@ -199,7 +199,7 @@ const ContestGroupStageEntry = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup className="bg-white">
-                          {progress.map(
+                          {progress.length && progress.map(
                             (item: TProgressResult, index: number) => {
                               return (
                                 <>
