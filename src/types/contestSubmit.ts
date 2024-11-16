@@ -4,7 +4,7 @@ type TResultCodeCombat = {
   name: string;
   totalLevel: number;
   currentLevel: number;
-}
+};
 
 export type ContestSubmission = {
   id: string;
@@ -18,7 +18,7 @@ export type ContestSubmission = {
   url?: string;
   source?: any;
   data?: any;
-  resultCodeCombat?: TResultCodeCombat[]; 
+  resultCodeCombat?: TResultCodeCombat[];
   QualifiedExam: boolean | null;
 };
 
@@ -32,5 +32,5 @@ export type DataContestSubmission = {
   contest_entry: string | null;
   classIndex?: string; //group stage id (0 -> 5)
   memberId?: string | null; // code combat id in local storage
-  data?: any
+  data?: any;
 };

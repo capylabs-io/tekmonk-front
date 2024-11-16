@@ -167,10 +167,12 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                    {!is_show_full ? (
+                      {!is_show_full ? (
                         <p>Sắp diễn ra</p>
-                      ) : <p>Kết quả vòng loại</p>}
-                      </TooltipContent>
+                      ) : (
+                        <p>Kết quả vòng loại</p>
+                      )}
+                    </TooltipContent>
                   </Tooltip>
                 </>
               )}

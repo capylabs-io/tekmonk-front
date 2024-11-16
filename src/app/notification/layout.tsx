@@ -1,14 +1,14 @@
 "use client";
-import {Button} from "@/components/common/Button";
-import {EventList} from "@/components/home/EventList";
-import {PointCard} from "@/components/home/PointCard";
+import { Button } from "@/components/common/Button";
+import { EventList } from "@/components/home/EventList";
+import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
-import {useState} from "react";
-import {CreateProfileModal} from "@/components/home/CreateProfileModal";
-import {useProfileStore} from "@/store/ProfileStore";
-import {MenuLayout} from "@/components/home/MenuLayout";
+import { useState } from "react";
+import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { useProfileStore } from "@/store/ProfileStore";
+import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
-import {useEvents} from "@/lib/hooks/useEvent";
+import { useEvents } from "@/lib/hooks/useEvent";
 
 export default function Layout({
   children, // will be a page or nested layout

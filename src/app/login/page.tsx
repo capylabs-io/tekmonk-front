@@ -132,7 +132,12 @@ export default function Login() {
           <Button className="mt-8" onClick={handleLogin}>
             Đăng nhập
           </Button>
-          <div className="text-center cursor-pointer" onClick={() => router.push('quen-mat-khau')}>Quên mật khẩu?</div>
+          <div
+            className="text-center cursor-pointer"
+            onClick={() => router.push("quen-mat-khau")}
+          >
+            Quên mật khẩu?
+          </div>
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">

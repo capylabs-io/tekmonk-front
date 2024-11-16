@@ -169,14 +169,14 @@ h6 {
 }
 .hide-scrollbar::-webkit-scrollbar {
   /* Completely hides the scrollbar */
-  width: 0;              /* For vertical scroll */
-  height: 0;             /* For horizontal scroll */
+  width: 0; /* For vertical scroll */
+  height: 0; /* For horizontal scroll */
 }
 
 .hide-scrollbar::-webkit-scrollbar-thumb {
   /* Custom thumb design (scrollbar "handle") before being hidden */
   background-color: #888; /* Add color before it disappears */
-  border-radius: 10px;    /* Smooth edges for better appearance */
+  border-radius: 10px; /* Smooth edges for better appearance */
 }
 
 .hide-scrollbar::-webkit-scrollbar-track {
@@ -201,20 +201,20 @@ h6 {
   content: attr(data-placeholder);
   font-style: normal !important;
   color: #9ca3af !important;
-  border: none !important; 
+  border: none !important;
   @apply text-lg font-normal outline-none;
 }
 
 .ql-editor[contenteditable="true"]:focus::before,
 .ql-editor:not(.ql-blank)::before {
-  content: ""; 
+  content: "";
 }
 
 .ql-toolbar {
-  border: none !important; 
+  border: none !important;
 }
 
 .ql-container {
-  border: none !important; 
+  border: none !important;
   min-height: 150px !important;
 }

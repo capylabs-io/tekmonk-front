@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {TimeLeft} from "@/types/common-types";
+import { useEffect, useState } from "react";
+import { TimeLeft } from "@/types/common-types";
 
 const DateTimeDisplay = ({
   dataTime,
@@ -28,7 +28,7 @@ const DateTimeDisplay = ({
   };
 
   useEffect(() => {
-    if(new Date() > new Date(dataTime)) {
+    if (new Date() > new Date(dataTime)) {
       if (onTimeOver) {
         onTimeOver(); // Gọi callback from parent component
         return;
@@ -77,12 +77,14 @@ const DateTimeDisplay = ({
     }
   }, [countDown, type]);
 
-  return (
-    getReturnValues().days +
-      getReturnValues().hours +
-      getReturnValues().minutes +
-      getReturnValues().seconds >
-      0 ? <>{timeValue}</> : <>00</>
+  return getReturnValues().days +
+    getReturnValues().hours +
+    getReturnValues().minutes +
+    getReturnValues().seconds >
+    0 ? (
+    <>{timeValue}</>
+  ) : (
+    <>00</>
   );
 };
 

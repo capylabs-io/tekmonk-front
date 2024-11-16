@@ -1,28 +1,28 @@
 "use client";
 
-import {memo, useEffect, useState} from "react";
-import {CardContest} from "../common/CardContest";
-import {Button} from "../common/Button";
-import {useRouter} from "next/navigation";
-import {useUserStore} from "@/store/UserStore";
-import {Link as LinkToScroll} from "react-scroll";
-import {getContestGroupStageByCandidateNumber} from "@/requests/contestEntry";
+import { memo, useEffect, useState } from "react";
+import { CardContest } from "../common/CardContest";
+import { Button } from "../common/Button";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/UserStore";
+import { Link as LinkToScroll } from "react-scroll";
+import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 import GroupStageDialog from "./GroupStageDialog";
-import {Contest, ContestGroupStage} from "@/types/common-types";
+import { Contest, ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger,} from "../ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 type StateTime = {
   started: boolean;
   ended: boolean;
 };
 
-const Clock = ({
-  contestData,
-}: {
-  contestData: Contest;
-  
-}) => {
+const Clock = ({ contestData }: { contestData: Contest }) => {
   const router = useRouter();
   //ENV
   const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
@@ -39,7 +39,6 @@ const Clock = ({
   });
 
   const [groupStage, setGroupStage] = useState<ContestGroupStage>();
-
 
   const [timeLeft, setTimeLeft] = useState<string>(contestData.startTime);
   const [textShowContest, setTextShowContest] = useState<string>(
@@ -65,7 +64,8 @@ const Clock = ({
         setTextShowContest("Đã hết thời gian đăng ký !");
         return;
       }
-      if(groupStage && (new Date() < new Date(groupStage.startTime))) { // có lẽ lỗi do contestGroupStageData chưa load kịp thì đã skip logic rồi => thêm isConnected()
+      if (groupStage && new Date() < new Date(groupStage.startTime)) {
+        // có lẽ lỗi do contestGroupStageData chưa load kịp thì đã skip logic rồi => thêm isConnected()
         setTextShowContest("Cuộc thi sắp diễn ra! bắt đầu sau:");
         setTimeLeft(groupStage.startTime); // => gọi api bất chấp =>  holy sh*t => fix later
         return;
@@ -102,12 +102,12 @@ const Clock = ({
       console.error(err);
       return;
     }
-  }
-  
+  };
+
   useEffect(() => {
     fetchContestGroupStageData();
-  },[candidateNumber])
-  
+  }, [candidateNumber]);
+
   return (
     <div className="text-center mb-12">
       <TooltipProvider>
@@ -121,40 +121,36 @@ const Clock = ({
               "
               outlined={false}
               onClick={() => router.push("register-contest")}
-              disabled={
-                !isContestStarted.started ||
-                isContestStarted.ended
-              }
+              disabled={!isContestStarted.started || isContestStarted.ended}
             >
               Đăng ký
             </Button>
-          ) : groupStage && (
-            <GroupStageDialog groupStageData={groupStage} />
-          )
-          }
-          {is_show_full && 
-          <Tooltip>
-            <TooltipTrigger>
-              <Button
-                className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg 
+          ) : (
+            groupStage && <GroupStageDialog groupStageData={groupStage} />
+          )}
+          {is_show_full && (
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg 
                 max-[460px]:text-[16px]
                 max-[460px]:h-[50px]
                 "
-                outlined={true}
-                onClick={() => {
-                  is_show_full && router.push("tong-hop-bai-du-thi")
-                }}
-              >
-                Tổng hợp bài dự thi
-              </Button>
-            </TooltipTrigger>
-            {!is_show_full && 
-            <TooltipContent>
-              <p>Sắp diễn ra</p>
-            </TooltipContent>}
-            
-          </Tooltip>
-          }
+                  outlined={true}
+                  onClick={() => {
+                    is_show_full && router.push("tong-hop-bai-du-thi");
+                  }}
+                >
+                  Tổng hợp bài dự thi
+                </Button>
+              </TooltipTrigger>
+              {!is_show_full && (
+                <TooltipContent>
+                  <p>Sắp diễn ra</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          )}
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 

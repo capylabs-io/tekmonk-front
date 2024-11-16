@@ -133,7 +133,8 @@ export const Step3 = () => {
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="4" id="category-D1" />
                 <Label className="text-bodyLg text-black">
-                  Thi cá nhân - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS, THPT)
+                  Thi cá nhân - Bảng D (Bảng sáng tạo cho HS Tiểu học, THCS,
+                  THPT)
                 </Label>
               </div>
               <div className="flex items-center space-x-2">

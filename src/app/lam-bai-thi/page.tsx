@@ -79,7 +79,7 @@ const ContestGroupStageEntry = ({
       }
       setShowProgress(true);
       if (!codeCombatId) return;
-      const res:any = await getProgress(
+      const res: any = await getProgress(
         codeCombatId,
         Number(get(contestGroupStage, "id", 0))
       );

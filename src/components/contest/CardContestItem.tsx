@@ -2,7 +2,7 @@
 
 import Tag from "@/components/contest/Tag";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id: string;

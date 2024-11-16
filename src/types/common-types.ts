@@ -189,10 +189,10 @@ export type TimeLeft = {
   hours: number;
   minutes: number;
   seconds: number;
-}
+};
 
 export type TProgressResult = {
-  name: string,
-  currentLevel: number,
-  totalLevel: number
-}
+  name: string;
+  currentLevel: number;
+  totalLevel: number;
+};

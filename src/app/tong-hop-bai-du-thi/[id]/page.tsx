@@ -1,22 +1,40 @@
 "use client";
 
 import Tag from "@/components/contest/Tag";
-import {Dock, DockIcon} from "@/components/ui/dock";
-import {getOneContestSubmission} from "@/requests/contestSubmit";
-import {ContestSubmission} from "@/types/contestSubmit";
-import {ArrowLeft, Download, Facebook, Mail, Send, Twitter,} from "lucide-react";
+import { Dock, DockIcon } from "@/components/ui/dock";
+import { getOneContestSubmission } from "@/requests/contestSubmit";
+import { ContestSubmission } from "@/types/contestSubmit";
+import {
+  ArrowLeft,
+  Download,
+  Facebook,
+  Mail,
+  Send,
+  Twitter,
+} from "lucide-react";
 import Image from "next/image";
-import {useParams, useRouter} from "next/navigation";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
-import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,} from "@/components/ui/carousel";
-import {EmailShareButton, FacebookShareButton, TelegramShareButton, TwitterShareButton,} from "react-share";
-import {EmptySearch} from "@/components/common/EmptySearch";
-import {Button} from "@/components/common/Button";
-import {useEffect, useState} from "react";
-import {useTagStore} from "@/store/TagStore";
-import {get, round} from "lodash";
-import {ImageCustom} from "@/components/common/ImageCustom";
-import {Certificate} from "@/components/contest/Certificate";
+import { useParams, useRouter } from "next/navigation";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+} from "react-share";
+import { EmptySearch } from "@/components/common/EmptySearch";
+import { Button } from "@/components/common/Button";
+import { useEffect, useState } from "react";
+import { useTagStore } from "@/store/TagStore";
+import { get, round } from "lodash";
+import { ImageCustom } from "@/components/common/ImageCustom";
+import { Certificate } from "@/components/contest/Certificate";
 
 const ContestDetail: React.FC = () => {
   const router = useRouter();
@@ -198,13 +216,13 @@ const ContestDetail: React.FC = () => {
                           <CarouselContent className="m-0">
                             {contestDetail.resultCodeCombat?.map(
                               (item, index) => (
-                                <CarouselItem
-                                  key={index}
-                                >
+                                <CarouselItem key={index}>
                                   <Certificate
                                     name={contestDetail.title} //default with stage A, B, C title is fullName user
                                     progress={round(
-                                      (item.currentLevel / item.totalLevel) * 100, 1
+                                      (item.currentLevel / item.totalLevel) *
+                                        100,
+                                      1
                                     )}
                                     course={item.name}
                                   />
@@ -213,8 +231,8 @@ const ContestDetail: React.FC = () => {
                             )}
                           </CarouselContent>
 
-                          <CarouselPrevious className="mr-0 max-[450px]:hidden"/>
-                          <CarouselNext className="ml-0 max-[450px]:hidden"/>
+                          <CarouselPrevious className="mr-0 max-[450px]:hidden" />
+                          <CarouselNext className="ml-0 max-[450px]:hidden" />
                         </Carousel>
                       )}
                   </>

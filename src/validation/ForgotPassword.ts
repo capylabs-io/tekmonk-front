@@ -7,12 +7,16 @@ export const ForgotPasswordSchema = z.object({
     .min(1, "Email là bắt buộc"),
 });
 
-export const ResetPasswordSchema = z.object({
+export const ResetPasswordSchema = z
+  .object({
     password: z
-        .string({ required_error: "Mật khẩu là bắt buộc" })
-        .min(5, "Mật khẩu tối thiểu 5 ký tự"),
+      .string({ required_error: "Mật khẩu là bắt buộc" })
+      .min(5, "Mật khẩu tối thiểu 5 ký tự"),
     confirmPassword: z
-        .string({ required_error: "Xác nhận mật khẩu là bắt buộc" })
-        .min(1, "Xác nhận mật khẩu là bắt buộc"),
-    }).refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu không khớp", path: ["confirmPassword"], });
+      .string({ required_error: "Xác nhận mật khẩu là bắt buộc" })
+      .min(1, "Xác nhận mật khẩu là bắt buộc"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Mật khẩu không khớp",
+    path: ["confirmPassword"],
+  });

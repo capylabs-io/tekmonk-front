@@ -1,8 +1,8 @@
 "use client";
-import {ImgSubmitPreview} from "@/components/contest/ImgSubmitPreview";
+import { ImgSubmitPreview } from "@/components/contest/ImgSubmitPreview";
 import classNames from "classnames";
-import {ImagePlus} from "lucide-react";
-import React, {useEffect, useState} from "react";
+import { ImagePlus } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   title: string;
