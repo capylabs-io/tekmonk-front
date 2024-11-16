@@ -39,7 +39,8 @@ const Step2Schema = z
       .min(1, "Email là bắt buộc"),
     username: z
       .string({ required_error: "Tên đăng nhập là bắt buộc" })
-      .min(5, "Tên đăng nhập tối thiếu 5 ký tự"),
+      .min(5, "Tên đăng nhập tối thiếu 5 ký tự")
+      .regex(/^[a-zA-Z0-9]+$/, "Tên đăng nhập chỉ được chứa chữ cái không dấu và số"),
     password: z
       .string({ required_error: "Mật khẩu là bắt buộc" })
       .min(5, "Mật khẩu tối thiểu 5 ký tự"),
