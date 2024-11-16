@@ -9,6 +9,7 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useEvents } from "@/lib/hooks/useEvent";
+
 export default function Layout({
   children, // will be a page or nested layout
 }: {

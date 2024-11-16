@@ -7,36 +7,6 @@ import { Controller, useFormContext } from "react-hook-form";
 import { WizardSchema } from "@/validation/ContestRegister";
 
 export const Step1 = () => {
-  const { studentDob } = useContestRegisterStore((state) => {
-    return {
-      studentDob: state.studentDob,
-    };
-  });
-  const change = useContestRegisterStore((state) => state.change);
-  type IFormValue = {
-    fullName: string;
-    schoolName: string;
-    studentAddress?: string;
-    studentDob?: string;
-    className: string;
-    schoolAddress: string;
-    parentName: string;
-    parentPhoneNumber: string;
-  };
-  const defaultValues: IFormValue = {
-    fullName: "",
-    schoolName: "",
-    studentAddress: "",
-    studentDob: "",
-    className: "",
-    schoolAddress: "",
-    parentName: "",
-    parentPhoneNumber: "",
-  };
-  const handleChangeStudentDob = (text: string) => {
-    change("studentDob", text);
-  };
-
   const {
     control,
     trigger,
@@ -44,6 +14,8 @@ export const Step1 = () => {
     formState: { errors },
   } = useFormContext<WizardSchema>();
 
+  //custom className
+  const customInputClassNames = "max-mobile:placeholder:text-base";
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
@@ -62,6 +34,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2 mb-0"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -81,6 +54,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -99,28 +73,39 @@ export const Step1 = () => {
                 value={value}
                 onChange={onChange}
                 placeholder="Câu trả lời"
-                error={fieldState && fieldState.error?.message}
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
+                error={fieldState && fieldState.error?.message}
               />
             )}
           />
         </div>
         <div className="mt-2">
           <Label className=" text-gray-950 text-SubheadSm">
-            Ngày sinh của học sinh
+            Ngày sinh của học sinh<span className="text-red-500">*</span>
           </Label>
           <Controller
             control={control}
             name="stepOne.dateOfBirth"
             render={({ field: { value, onChange }, fieldState }) => (
-              <DatePicker
-                className="w-full rounded-xl border border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none"
-                onChange={onChange}
-                value={value}
-                onError={() => {
-                  trigger("stepOne.dateOfBirth");
-                }}
-              />
+              <div>
+                <DatePicker
+                  className={`w-full rounded-xl border ${
+                    fieldState.error ? "border-red-500" : "border-grey-300"
+                  } border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none`}
+                  onChange={onChange}
+                  format="dd/MM/yyyy"
+                  value={value}
+                  onError={() => {
+                    trigger("stepOne.dateOfBirth");
+                  }}
+                />
+                {fieldState.error && (
+                  <p className="text-red-500 text-sm">
+                    {fieldState.error.message}
+                  </p>
+                )}
+              </div>
             )}
           />
         </div>
@@ -138,6 +123,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -157,6 +143,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="VD: Quận Hoàn Kiếm - Hà Nội"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -176,6 +163,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -195,6 +183,7 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="00-000-0000"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
@@ -214,11 +203,16 @@ export const Step1 = () => {
                 onChange={onChange}
                 placeholder="Câu trả lời"
                 customClassNames="mt-2"
+                customInputClassNames={customInputClassNames}
                 error={fieldState && fieldState.error?.message}
               />
             )}
           />
         </div>
+      </div>
+      <div className="text-sm">
+        Lưu ý: Các trường có đánh dấu <span className="text-red-500">*</span> là
+        yêu cầu bắt buộc phải nhập, vui lòng nhập đúng thông tin.
       </div>
     </div>
   );

@@ -45,7 +45,11 @@ export function SearchBar({
           <SelectGroup>
             <SelectLabel>Loại</SelectLabel>
             {searchOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value} className="cursor-pointer hover:bg-gray-300">
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                className="cursor-pointer hover:bg-gray-300"
+              >
                 {option.label}
               </SelectItem>
             ))}
@@ -61,18 +65,17 @@ export function SearchBar({
       />
       <div className="h-8 w-8 ml-2.5">
         <svg
-        className="h-full w-full text-gray-400 cursor-pointer"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-      </svg>
+          className="h-full w-full text-gray-400 cursor-pointer"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
       </div>
-      
     </div>
   );
 }

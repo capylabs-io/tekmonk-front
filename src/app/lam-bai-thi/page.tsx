@@ -6,14 +6,22 @@ import { Button } from "@/components/common/Button";
 import FormSubmitContest from "@/components/contest/FormSubmitContest";
 import { useRouter } from "next/navigation";
 import GroupStageGuard from "@/components/hoc/GroupStageGuard";
-import { ContestGroupStage } from "@/types/common-types";
+import { ContestGroupStage, TProgressResult } from "@/types/common-types";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { useUserStore } from "@/store/UserStore";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
-import { Progress } from "@/components/ui/progress";
 import { getProgress } from "@/requests/code-combat";
-import { get, round } from "lodash";
+import { get } from "lodash";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ContestGroupStageEntry = ({
   contestGroupStage,
@@ -29,18 +37,22 @@ const ContestGroupStageEntry = ({
     contestGroupStage.endTime
   );
   const [isClient, setIsClient] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<TProgressResult[]>([]);
+  const [course, setCourse] = useState<string>("");
+  const [showResult, setShowResult] = useState({
+    currentLevel: 0,
+    totalLevel: 0,
+  });
+  const [showProgress, setShowProgress] = useState(false);
 
-  //
+  // use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
-  
   const codeCombatId = useUserStore((state) => state.codeCombatId);
 
-  const [showProgress, setShowProgress] = useState(false);
+  //function handler
   const handleTimeOver = () => {
     setTimeOver(true);
   };
-  //function handler
   const handleRedirectToMyContest = async () => {
     try {
       if (!candidateNumber) return;
@@ -66,19 +78,19 @@ const ContestGroupStageEntry = ({
         return;
       }
       setShowProgress(true);
-      if(!codeCombatId) return;
-      
-      const res = await getProgress(codeCombatId, Number(get(contestGroupStage, "id", 0)));
-      if(res){
-        setProgress(round(res.currentProgress * 100, 1));
+      if (!codeCombatId) return;
+      const res: any = await getProgress(
+        codeCombatId,
+        Number(get(contestGroupStage, "id", 0))
+      );
+      if (res) {
+        setProgress(res);
       }
-      console.log("progress", progress);
-
     } catch (error) {
       return;
     }
-  }
-  
+  };
+
   useEffect(() => {
     setIsClient(true);
     //check if start time is less than current time
@@ -88,17 +100,16 @@ const ContestGroupStageEntry = ({
 
     handleGetProgress();
     setGroupStageTimeLeft(contestGroupStage.endTime);
-    
 
-    if (!isSubmitted) {
+    if (!isSubmitted && !timeOver) {
       const interval = setInterval(() => {
         handleGetProgress();
       }, 30000);
-  
+
       // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
       return () => clearInterval(interval);
     }
-  }, [progress, isSubmitted]);
+  }, [isSubmitted]);
 
   return (
     isClient && (
@@ -164,13 +175,50 @@ const ContestGroupStageEntry = ({
                     : "Hết giờ"}
                 </div>
               </div>
-              {showProgress && 
-              <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
-                <div className="text-gray-950 text-bodyLg">Tiến trình</div>
-                <Progress value={progress} className="w-[80%] border border-gray-300 bg-gray-200"/>
-                <div className="text-primary-900 text-bodyL">{progress}%</div>
-              </div>
-              }
+              {showProgress && (
+                <div className="flex justify-between items-center h-[56px] px-8 gap-x-1">
+                  <div className="text-gray-950 text-bodyLg flex items-center gap-x-3">
+                    {/* <div>Tiến trình</div> */}
+                    <Select
+                      value={course}
+                      onValueChange={(e) => {
+                        setCourse(e);
+                        const selectedCourse = progress.find(
+                          (item) => item.name === e
+                        );
+                        if (selectedCourse) {
+                          setShowResult({
+                            currentLevel: selectedCourse.currentLevel,
+                            totalLevel: selectedCourse.totalLevel,
+                          });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-[150px]">
+                        <SelectValue placeholder="Chọn khóa học" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup className="bg-white">
+                          {progress.length && progress.map(
+                            (item: TProgressResult, index: number) => {
+                              return (
+                                <>
+                                  <SelectItem key={index} value={item.name}>
+                                    <SelectLabel>{item.name}</SelectLabel>
+                                  </SelectItem>
+                                </>
+                              );
+                            }
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="font-semibold">
+                    {showResult.currentLevel} / {showResult.totalLevel}
+                  </div>
+                </div>
+              )}
               <div
                 className="bg-white overflow-hidden"
                 style={{ height: "calc(100vh - 50px)" }}

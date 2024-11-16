@@ -15,7 +15,6 @@ const DateTimeDisplay = ({
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
   );
-  const [isValidCountDonw, setIsValidCountDonw] = useState(true);
 
   const getReturnValues = (): TimeLeft => {
     const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
@@ -29,7 +28,7 @@ const DateTimeDisplay = ({
   };
 
   useEffect(() => {
-    if(new Date() > new Date(dataTime)) {
+    if (new Date() > new Date(dataTime)) {
       if (onTimeOver) {
         onTimeOver(); // Gọi callback from parent component
         return;
@@ -78,12 +77,14 @@ const DateTimeDisplay = ({
     }
   }, [countDown, type]);
 
-  return (
-    getReturnValues().days +
-      getReturnValues().hours +
-      getReturnValues().minutes +
-      getReturnValues().seconds >
-      0 ? <>{timeValue}</> : <>00</>
+  return getReturnValues().days +
+    getReturnValues().hours +
+    getReturnValues().minutes +
+    getReturnValues().seconds >
+    0 ? (
+    <>{timeValue}</>
+  ) : (
+    <>00</>
   );
 };
 
