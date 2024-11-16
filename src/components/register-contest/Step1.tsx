@@ -7,36 +7,6 @@ import { Controller, useFormContext } from "react-hook-form";
 import { WizardSchema } from "@/validation/ContestRegister";
 
 export const Step1 = () => {
-  const { studentDob } = useContestRegisterStore((state) => {
-    return {
-      studentDob: state.studentDob,
-    };
-  });
-  const change = useContestRegisterStore((state) => state.change);
-  type IFormValue = {
-    fullName: string;
-    schoolName: string;
-    studentAddress?: string;
-    studentDob?: string;
-    className: string;
-    schoolAddress: string;
-    parentName: string;
-    parentPhoneNumber: string;
-  };
-  const defaultValues: IFormValue = {
-    fullName: "",
-    schoolName: "",
-    studentAddress: "",
-    studentDob: "",
-    className: "",
-    schoolAddress: "",
-    parentName: "",
-    parentPhoneNumber: "",
-  };
-  const handleChangeStudentDob = (text: string) => {
-    change("studentDob", text);
-  };
-
   const {
     control,
     trigger,
@@ -124,6 +94,7 @@ export const Step1 = () => {
                     fieldState.error ? "border-red-500" : "border-grey-300"
                   } border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none`}
                   onChange={onChange}
+                  format="dd/MM/yyyy"
                   value={value}
                   onError={() => {
                     trigger("stepOne.dateOfBirth");
