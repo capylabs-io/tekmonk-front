@@ -1,16 +1,16 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import {Input} from "@/components/common/Input";
-import {Button} from "@/components/common/Button";
-import {useUserStore} from "@/store/UserStore";
-import {useRouter} from "next/navigation";
+import { Input } from "@/components/common/Input";
+import { Button } from "@/components/common/Button";
+import { useUserStore } from "@/store/UserStore";
+import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
-import {Role} from "@/contants/role";
-import {get} from "lodash";
-import {Loading} from "@/components/common/Loading";
-import {useLoadingStore} from "@/store/LoadingStore";
-import {useSnackbarStore} from "@/store/SnackbarStore";
+import { Role } from "@/contants/role";
+import { get } from "lodash";
+import { Loading } from "@/components/common/Loading";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -80,30 +80,31 @@ export default function Login() {
     <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
       <div className="relative flex flex-col justify-center items-center h-screen">
         <div className="flex w-full absolute top-10 left-10">
-          <div className={`flex gap-2.5 hover:cursor-pointer`} onClick={() => router.push("/")}>
+          <div
+            className={`flex gap-2.5 hover:cursor-pointer`}
+            onClick={() => router.push("/")}
+          >
             <svg
-                className="w-2 fill-primary-700"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 320 512"
+              className="w-2 fill-primary-700"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 320 512"
             >
-              <path
-                  d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
             </svg>
             <div
-                className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-                onClick={() => router.push("/")}
+              className="text-primary-700 font-semibold text-base hover:cursor-pointer"
+              onClick={() => router.push("/")}
             >
               Quay lại
             </div>
           </div>
-
         </div>
         <Image
-            src="/image/app-logox4.png"
-            alt="app logo"
-            width={318}
-            height={64}
-            className="text-red-600"
+          src="/image/app-logox4.png"
+          alt="app logo"
+          width={318}
+          height={64}
+          className="text-red-600"
         />
         <div className="text-primary-900 text-4xl font-bold text-center mt-16">
           Đăng nhập
@@ -111,10 +112,10 @@ export default function Login() {
         <div className="flex gap-x-1 mt-2">
           <div>Chưa có tài khoản?</div>
           <div
-              className="font-bold underline hover:cursor-pointer"
-              onClick={() => router.push("/register-contest")}
+            className="font-bold underline hover:cursor-pointer"
+            onClick={() => router.push("/register-contest")}
           >
-          Đăng ký
+            Đăng ký
           </div>
           <div>ngay</div>
         </div>

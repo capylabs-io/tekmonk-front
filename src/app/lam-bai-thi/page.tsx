@@ -199,17 +199,18 @@ const ContestGroupStageEntry = ({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup className="bg-white">
-                          {progress.length && progress.map(
-                            (item: TProgressResult, index: number) => {
-                              return (
-                                <>
-                                  <SelectItem key={index} value={item.name}>
-                                    <SelectLabel>{item.name}</SelectLabel>
-                                  </SelectItem>
-                                </>
-                              );
-                            }
-                          )}
+                          {progress.length &&
+                            progress.map(
+                              (item: TProgressResult, index: number) => {
+                                return (
+                                  <>
+                                    <SelectItem key={index} value={item.name}>
+                                      <SelectLabel>{item.name}</SelectLabel>
+                                    </SelectItem>
+                                  </>
+                                );
+                              }
+                            )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>

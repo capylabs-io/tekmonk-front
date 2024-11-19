@@ -9,7 +9,7 @@ import { CommonInfo } from "./CommonInfo";
 import { CompetitionContent } from "./CompetitionContent";
 import { CompetitionInstructions } from "./CompetitionInstructions";
 import { TechnicalRegulations } from "./TechnicalRegulations";
-import {CardContactInfo} from "@/components/contest/rules/CardContactInfo";
+import { CardContactInfo } from "@/components/contest/rules/CardContactInfo";
 
 const tabs = [
   { id: "1", label: "Thông tin chung", value: <CommonInfo /> },

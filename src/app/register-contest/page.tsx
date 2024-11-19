@@ -1,23 +1,23 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {Card, CardContent} from "@/components/ui/card";
-import {Check} from "lucide-react";
-import {Step1} from "@/components/register-contest/Step1";
-import {Step2} from "@/components/register-contest/Step2";
-import {Step3} from "@/components/register-contest/Step3";
-import {Step4} from "@/components/register-contest/Step4";
-import {useContestRegisterStore} from "@/store/ContestRegisterStore";
-import {SuccessComponent} from "@/components/register-contest/Success";
-import {Button} from "@/components/common/Button";
-import {useRouter} from "next/navigation";
-import {get} from "lodash";
-import {useLoadingStore} from "@/store/LoadingStore";
-import {FormProvider, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {wizardSchema, WizardSchema} from "@/validation/ContestRegister";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Check } from "lucide-react";
+import { Step1 } from "@/components/register-contest/Step1";
+import { Step2 } from "@/components/register-contest/Step2";
+import { Step3 } from "@/components/register-contest/Step3";
+import { Step4 } from "@/components/register-contest/Step4";
+import { useContestRegisterStore } from "@/store/ContestRegisterStore";
+import { SuccessComponent } from "@/components/register-contest/Success";
+import { Button } from "@/components/common/Button";
+import { useRouter } from "next/navigation";
+import { get } from "lodash";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
-import {useSnackbarStore} from "@/store/SnackbarStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
 
 const steps = [
