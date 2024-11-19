@@ -1,9 +1,9 @@
 "use client";
-import {useState} from "react";
-import {RadioGroup, RadioGroupItem} from "../ui/radio-group";
+import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import Link from "next/link";
-import {CONTEST_RULES_DETAILS} from "@/contants/contest/tekmonk";
-import {ContactInfo} from "@/components/contest/ContactInfo";
+import { CONTEST_RULES_DETAILS } from "@/contants/contest/tekmonk";
+import { ContactInfo } from "@/components/contest/ContactInfo";
 
 export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
   const [isChecked, setIsChecked] = useState(false);
