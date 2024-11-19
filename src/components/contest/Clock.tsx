@@ -10,12 +10,14 @@ import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 import GroupStageDialog from "./GroupStageDialog";
 import { Contest, ContestGroupStage } from "@/types/common-types";
 import DateTimeDisplay from "./DateTimeDisplay";
+import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import {CONTEST_QUESTION_AND_ANSWER} from "@/contants/contest/tekmonk";
 
 type StateTime = {
   started: boolean;
@@ -108,14 +110,17 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
     fetchContestGroupStageData();
   }, [candidateNumber]);
 
+
   return (
     <div className="text-center mb-12">
       <TooltipProvider>
-        <div className="mt-[52px] flex items-center justify-center gap-4 flex-col">
+        <div className={`mt-[52px] w-[75%] mx-auto grid ${is_show_full ? "grid-cols-2" : "grid-cols-1"} items-center justify-center gap-y-4 gap-x-20 flex-col place-items-center
+        max-md:grid-cols-1
+        `}>
           {!isConnected() ? (
             <Button
-              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem]  shadow-custom-primary text-SubheadLg 
-              
+              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem]  shadow-custom-primary text-SubheadLg
+
               max-[460px]:text-[16px]
                 max-[460px]:h-[50px]
               "
@@ -128,11 +133,21 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
           ) : (
             groupStage && <GroupStageDialog groupStageData={groupStage} />
           )}
+          <Button
+              className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg
+                max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+                "
+              outlined={true}
+          >
+            <Link href={`${CONTEST_QUESTION_AND_ANSWER}`} target={`_blank`}>Các câu hỏi thường gặp</Link>
+          </Button>
           {is_show_full && (
             <Tooltip>
               <TooltipTrigger>
                 <Button
-                  className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg 
+                  className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg
+
                 max-[460px]:text-[16px]
                 max-[460px]:h-[50px]
                 "
