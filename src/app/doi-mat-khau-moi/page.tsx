@@ -62,20 +62,25 @@ export default function ResetPassword() {
   const passWordChange = (
     <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
       <div className="relative flex flex-col items-center h-screen">
-        <div className="flex w-full gap-2.5 absolute top-10 left-10">
-          <svg
-            className="w-2 fill-primary-700"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 320 512"
+        <div className="flex w-full  absolute top-10 left-10">
+          <div className={`flex gap-2.5 hover:cursor-pointer`}
+               onClick={() => router.push('/')}
           >
-            <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-          </svg>
-          <div
-            className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-            onClick={() => router.back()}
-          >
-            Quay lại
+            <svg
+                className="w-2 fill-primary-700"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+            >
+              <path
+                  d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+            </svg>
+            <div
+                className="text-primary-700 font-semibold text-base hover:cursor-pointer"
+            >
+              Về trang chủ
+            </div>
           </div>
+
         </div>
         <div className="max-w-[372px] md:w-[372px] flex flex-col justify-center items-center mt-[180px]">
           <div className="w-full">
@@ -86,9 +91,9 @@ export default function ResetPassword() {
               Đặt lại mật khẩu mới mà bạn mong muốn
             </div>
             <Controller
-              name="password"
-              control={control}
-              render={({ field: { value, onChange }, fieldState }) => (
+                name="password"
+                control={control}
+                render={({field: {value, onChange}, fieldState }) => (
                 <Input
                   type="password"
                   placeholder="Mật khẩu mới"
