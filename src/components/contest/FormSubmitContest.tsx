@@ -127,7 +127,7 @@ const FormSubmitContest = React.forwardRef<
   const onSubmit = async (data: any) => {
     try {
       if (await isExistContestSubmission()) {
-        warn("Warning", "Bạn đã nộp bài thi rồi!");
+        warn("Không thành công", "Bạn đã nộp bài thi rồi!");
         closeDialog();
         return;
       }
@@ -171,11 +171,11 @@ const FormSubmitContest = React.forwardRef<
 
       await Promise.all(uploadPromises);
 
-      success("Success", "Nộp bài thi thành công!");
+      success("Xong", "Nộp bài thi thành công!");
       useUserStore.setState({ isSubmitted: true });
       router.push("tong-hop-bai-du-thi/" + result.id);
     } catch (err) {
-      error("Error", "Có lỗi xảy ra khi nộp bài thi");
+      error("Lỗi", "Có lỗi xảy ra khi nộp bài thi");
     } finally {
       useLoadingStore.getState().hide();
     }
