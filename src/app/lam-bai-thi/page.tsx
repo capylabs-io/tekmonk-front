@@ -10,7 +10,7 @@ import { ContestGroupStage, TProgressResult } from "@/types/common-types";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { useUserStore } from "@/store/UserStore";
-import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import {createContestSubmission, getContestSubmissionByContestEntry} from "@/requests/contestSubmit";
 import { getProgress } from "@/requests/code-combat";
 import { get } from "lodash";
 import {
@@ -48,9 +48,39 @@ const ContestGroupStageEntry = ({
   // use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
+  const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
 
   //function handler
+  const handleAutoSubmit = async () => {
+    try {
+     //check if user already submitted => return
+      if (isSubmitted) return;
+      //check if contestGroupStage is not D1 or D2 => auto submit
+      const firstChar = candidateNumber?.charAt(0);
+      if (firstChar != "D") {
+        const contestEntry = await getOneContestEntry(
+            useUserStore.getState().candidateNumber || ""
+        );
+        const contestResult = {
+          title: fullNameUser || "",
+          tags: { data: ["codecombat"] },
+          contest_entry: contestEntry.id,
+          classIndex: get(contestGroupStage, "id", ""),
+          memberId: codeCombatId || "",
+          data: null,
+        }
+        await createContestSubmission(contestResult);
+      }
+      return;
+    } catch (err) {
+      //console.error(err);
+      return;
+    }
+  }
   const handleTimeOver = () => {
+    if(!isSubmitted) {
+      handleAutoSubmit();
+    }
     setTimeOver(true);
   };
   const handleRedirectToMyContest = async () => {
@@ -101,16 +131,18 @@ const ContestGroupStageEntry = ({
     handleGetProgress();
     setGroupStageTimeLeft(contestGroupStage.endTime);
 
+
+  }, [isSubmitted]);
+
+  useEffect(() => {
     if (!isSubmitted && !timeOver) {
       const interval = setInterval(() => {
         handleGetProgress();
       }, 30000);
 
-      // Xóa interval khi component unmount hoặc khi isSubmitted thay đổi
       return () => clearInterval(interval);
     }
-  }, [isSubmitted]);
-
+  }, [showResult.currentLevel, showResult.totalLevel]);
   return (
     isClient && (
       <div className="min-h-screen max-w-[768px] mx-auto bg-white mb-10">
