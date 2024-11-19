@@ -1,17 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Image from "next/image";
-import { Input } from "@/components/common/Input";
-import { Button } from "@/components/common/Button";
-import { useUserStore } from "@/store/UserStore";
-import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import {Input} from "@/components/common/Input";
+import {Button} from "@/components/common/Button";
+import {useUserStore} from "@/store/UserStore";
+import {useRouter} from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
-import { Role } from "@/contants/role";
-import { get } from "lodash";
-import { Loading } from "@/components/common/Loading";
-import { useLoadingStore } from "@/store/LoadingStore";
-import { useSnackbarStore } from "@/store/SnackbarStore";
+import {Role} from "@/contants/role";
+import {get} from "lodash";
+import {Loading} from "@/components/common/Loading";
+import {useLoadingStore} from "@/store/LoadingStore";
+import {useSnackbarStore} from "@/store/SnackbarStore";
 
 export default function Login() {
   const [user, setUser] = useState({

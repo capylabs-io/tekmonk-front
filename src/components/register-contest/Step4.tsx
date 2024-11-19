@@ -1,13 +1,12 @@
 "use client";
-import { useState } from "react";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
+import {RadioGroup, RadioGroupItem} from "../ui/radio-group";
+import {useRouter} from "next/navigation";
 import Link from "next/link";
-import { CONTEST_RULES_DETAILS } from "@/contants/contest/tekmonk";
+import {CONTEST_RULES_DETAILS} from "@/contants/contest/tekmonk";
 import {ContactInfo} from "@/components/contest/ContactInfo";
 
 export const Step4 = ({ updateStatus }: { updateStatus: any }) => {
-  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {

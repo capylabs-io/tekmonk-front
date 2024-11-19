@@ -69,8 +69,6 @@ const RegisterContest = () => {
     other: false,
     reload: false,
   });
-  const [isCreateCodeCombat, setIsCreateCodeCombat] = useState(false);
-  const [codeCombatId, setCodeCombatId] = useState<string>("");
 
   //store
   const [register, clear] = useContestRegisterStore((state) => [
