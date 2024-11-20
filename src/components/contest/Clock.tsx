@@ -114,10 +114,8 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
     <div className="text-center mb-12">
       <TooltipProvider>
         <div
-          className={`mt-[52px] w-[75%] mx-auto grid ${
-            is_show_full ? "grid-cols-2" : "grid-cols-1"
-          } items-center justify-center gap-y-4 gap-x-20 flex-col place-items-center
-        max-md:grid-cols-1
+          className={`mt-[52px] w-[75%] mx-auto grid grid-cols-1
+           items-center justify-center gap-y-4 gap-x-20 flex-col place-items-center
         `}
         >
           {!isConnected() ? (
@@ -136,17 +134,7 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
           ) : (
             groupStage && <GroupStageDialog groupStageData={groupStage} />
           )}
-          <Button
-            className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg
-                max-[460px]:text-[16px]
-                max-[460px]:h-[50px]
-                "
-            outlined={true}
-          >
-            <Link href={`${CONTEST_QUESTION_AND_ANSWER}`} target={`_blank`}>
-              Các câu hỏi thường gặp
-            </Link>
-          </Button>
+          
           {is_show_full && (
             <Tooltip>
               <TooltipTrigger>
