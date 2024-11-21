@@ -1,4 +1,4 @@
-import { SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
+import {CONTEST_SHARE_IMAGE_LINK, SHARE_TEXT, SHARE_TITLE} from "@/contants/contest/tekmonk";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: "Tekmonk",
     images: [
       {
-        url: "/image/contest/banner-landing.jpg",
+        url: CONTEST_SHARE_IMAGE_LINK,
         width: 1200,
         height: 630,
         alt: SHARE_TITLE,
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: SHARE_TITLE,
     description: SHARE_TEXT,
     images: [
-      "/image/contest/banner-landing.jpg",
+      CONTEST_SHARE_IMAGE_LINK,
     ],
   },
   other: {

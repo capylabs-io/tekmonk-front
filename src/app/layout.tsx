@@ -4,7 +4,7 @@ import "./globals.css";
 import { Loading } from "@/components/common/Loading";
 import { Snackbar } from "@/components/common/Snackbar";
 import { Suspense } from "react";
-import { SHARE_TEXT, SHARE_TITLE } from "@/contants/contest/tekmonk";
+import {CONTEST_SHARE_IMAGE_LINK, SHARE_TEXT, SHARE_TITLE} from "@/contants/contest/tekmonk";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     images: [
       {
         url:
-          "/image/contest/banner-landing.jpg",
+        CONTEST_SHARE_IMAGE_LINK,
         width: 1200,
         height: 630,
         alt: SHARE_TITLE,
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     title: SHARE_TITLE,
     description: SHARE_TEXT,
     images: [
-      "/image/contest/banner-landing.jpg",
+      CONTEST_SHARE_IMAGE_LINK,
     ],
   },
   other: {
