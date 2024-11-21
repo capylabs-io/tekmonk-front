@@ -173,7 +173,7 @@ const FormSubmitContest = React.forwardRef<
 
       success("Xong", "Nộp bài thi thành công!");
       useUserStore.setState({ isSubmitted: true });
-      router.push("tong-hop-bai-du-thi/" + result.id);
+      router.push("/lam-bai-thi");
     } catch (err) {
       error("Lỗi", "Có lỗi xảy ra khi nộp bài thi");
     } finally {
