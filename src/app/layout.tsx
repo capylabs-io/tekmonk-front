@@ -35,8 +35,7 @@ export const metadata: Metadata = {
     images: [
       {
         url:
-          process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE ||
-          "/default-image.jpg",
+          "/image/contest/banner-landing.jpg",
         width: 1200,
         height: 630,
         alt: SHARE_TITLE,
@@ -49,7 +48,7 @@ export const metadata: Metadata = {
     title: SHARE_TITLE,
     description: SHARE_TEXT,
     images: [
-      process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
+      "/image/contest/banner-landing.jpg",
     ],
   },
   other: {
