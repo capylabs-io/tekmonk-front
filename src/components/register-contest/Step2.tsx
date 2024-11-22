@@ -145,7 +145,7 @@ export const Step2 = ({
           </div>
         </div>
       </div>
-      <div className="text-sm mt-4">
+      <div className="text-sm mt-4 font-bold">
         Lưu ý: Email chưa từng tạo tài khoản trên nền tảng CodeCombat.
       </div>
     </>

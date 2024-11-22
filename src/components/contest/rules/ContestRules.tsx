@@ -5,12 +5,14 @@ import { CommonInfo } from "./CommonInfo";
 import { CompetitionContent } from "./CompetitionContent";
 import { CompetitionInstructions } from "./CompetitionInstructions";
 import { TechnicalRegulations } from "./TechnicalRegulations";
+import { CardContactInfo } from "@/components/contest/rules/CardContactInfo";
 
 const tabs = [
   { id: "1", label: "Thông tin chung" },
   { id: "2", label: "Nội dung thi đấu" },
   { id: "3", label: "Hướng dẫn thi đấu" },
   { id: "4", label: "Quy định kỹ thuật" },
+  { id: "5", label: "Thông tin liên hệ" },
 ];
 const ContestRules = () => {
   const [activeTab, setActiveTab] = useState("1");
@@ -47,6 +49,7 @@ const ContestRules = () => {
         {activeTab === "2" && <CompetitionContent />}
         {activeTab === "3" && <CompetitionInstructions />}
         {activeTab === "4" && <TechnicalRegulations />}
+        {activeTab === "5" && <CardContactInfo />}
       </div>
     </div>
   );

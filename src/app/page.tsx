@@ -360,21 +360,27 @@ export default function Contest() {
                               Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
                             </div>
                             <div className="mt-10 text-gray-950 text-bodyLg max-mobile:text-base">
-                              “Tekmonk Coding Olympiad” là giải vô địch lập
-                              trình nằm trong khuôn khổ cuộc thi Vô địch Quốc
-                              gia STEM, AI và Robotics 2024 (VSAR) do báo Tiền
-                              Phong và báo Hoa Học Trò tổ chức dưới sự chỉ đạo
-                              của Trung ương Đoàn TNCS Hồ Chí Minh, Bộ Khoa học
-                              và Công nghệ, nằm trong hoạt động của ngày hội
-                              STEM quốc gia. Với định hướng đẩy mạnh giáo dục
-                              STEM trong trường học phổ thông, Tekmonk Coding
-                              Olympiad không chỉ là một cuộc thi mà còn là sân
-                              chơi để các em phát triển tư duy logic và rèn
-                              luyện kỹ năng giải quyết vấn đề thực tiễn thông
-                              qua các nhiệm vụ thiết kế, lập trình. Không những
-                              vậy, sự kiện còn là cơ hội để các bạn giao lưu,
-                              học hỏi từ các chuyên gia đầu ngành và bạn bè quốc
-                              tế.
+                              <b>“Tekmonk Coding Olympiad”</b> là giải vô địch
+                              lập trình nằm trong khuôn khổ{" "}
+                              <b>
+                                cuộc thi Vô địch Quốc gia STEM, AI và Robotics
+                                2024 (VSAR)
+                              </b>{" "}
+                              do <b>báo Tiền Phong và báo Hoa Học Trò</b> tổ
+                              chức dưới sự chỉ đạo của{" "}
+                              <b>
+                                Trung ương Đoàn TNCS Hồ Chí Minh, Bộ Khoa học và
+                                Công nghệ, nằm trong hoạt động của ngày hội STEM
+                                quốc gia.
+                              </b>{" "}
+                              Với định hướng đẩy mạnh giáo dục STEM trong trường
+                              học phổ thông, Tekmonk Coding Olympiad không chỉ
+                              là một cuộc thi mà còn là sân chơi để các em phát
+                              triển tư duy logic và rèn luyện kỹ năng giải quyết
+                              vấn đề thực tiễn thông qua các nhiệm vụ thiết kế,
+                              lập trình. Không những vậy, sự kiện còn là cơ hội
+                              để các bạn giao lưu, học hỏi từ các chuyên gia đầu
+                              ngành và bạn bè quốc tế.
                             </div>
 
                             <div className=" mt-10 max-mobile:hidden">

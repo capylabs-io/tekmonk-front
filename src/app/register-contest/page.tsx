@@ -8,7 +8,7 @@ import { Step2 } from "@/components/register-contest/Step2";
 import { Step3 } from "@/components/register-contest/Step3";
 import { Step4 } from "@/components/register-contest/Step4";
 import { useContestRegisterStore } from "@/store/ContestRegisterStore";
-import SuccessComponent from "@/components/register-contest/Success";
+import { SuccessComponent } from "@/components/register-contest/Success";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
 import { get } from "lodash";
@@ -69,8 +69,6 @@ const RegisterContest = () => {
     other: false,
     reload: false,
   });
-  const [isCreateCodeCombat, setIsCreateCodeCombat] = useState(false);
-  const [codeCombatId, setCodeCombatId] = useState<string>("");
 
   //store
   const [register, clear] = useContestRegisterStore((state) => [
