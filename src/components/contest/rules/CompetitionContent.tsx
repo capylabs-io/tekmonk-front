@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Table,
@@ -6,9 +6,9 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ExamTable } from "./ExamTable";
+  TableRow
+} from '@/components/ui/table'
+import { ExamTable } from './ExamTable'
 
 export const CompetitionContent = () => {
   return (
@@ -47,7 +47,7 @@ export const CompetitionContent = () => {
                 <TableCell className="font-medium border-r whitespace-nowrap">
                   Hạn đăng kí
                 </TableCell>
-                <TableCell className="border-r">23:59 24/11/2024</TableCell>
+                <TableCell className="border-r">23:59 28/11/2024</TableCell>
                 <TableCell>
                   Theo thông báo của Ban Tổ chức sau khi có kết quả Vòng Loại
                 </TableCell>
@@ -81,5 +81,5 @@ export const CompetitionContent = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
