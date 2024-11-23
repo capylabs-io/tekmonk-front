@@ -25,17 +25,19 @@ const nunitoSans = Nunito_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Giải vô địch lập trình Tekmonk Coding Olympiad',
+  metadataBase: new URL('https://olympiad.tekmonk.edu.vn'),
+  title: SHARE_TITLE,
   description: SHARE_TEXT,
   icons: {
     icon: '/favicon.ico?v=4'
   },
   openGraph: {
     type: 'website',
+    locale: 'vi_VN',
     url: process.env.NEXT_PUBLIC_BASE_URL,
     title: SHARE_TITLE,
     description: SHARE_TEXT,
-    siteName: 'Tekmonk',
+    siteName: SHARE_TITLE,
     images: [
       {
         url: CONTEST_SHARE_IMAGE_LINK,
@@ -44,6 +46,17 @@ export const metadata: Metadata = {
         alt: SHARE_TITLE
       }
     ]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1
+    }
   },
   twitter: {
     card: 'summary_large_image',
