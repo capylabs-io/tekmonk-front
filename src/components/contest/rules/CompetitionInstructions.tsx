@@ -1,5 +1,5 @@
-"use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+'use client'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const CompetitionInstructions = () => {
   return (
@@ -17,7 +17,7 @@ export const CompetitionInstructions = () => {
               <li>
                 Thí sinh truy cập công đăng ký trực tuyến và điền đầy đủ thông
                 tin tại link: olympiad.tekmonk.edu.vn muộn nhất vào 23:59 ngày
-                24/11/2024.
+                28/11/2024.
               </li>
               <li>
                 Thí sinh đóng lệ phí thi theo hướng dẫn tại email của Ban tổ
@@ -116,7 +116,7 @@ export const CompetitionInstructions = () => {
 
           <div>
             <div className="text-lg font-semibold mb-2">
-              1. Công bố kết quả Vòng Loại
+              1.5 Công bố kết quả Vòng Loại
             </div>
             <ul className="list-disc pl-5">
               <li>
@@ -214,5 +214,5 @@ export const CompetitionInstructions = () => {
         </CardContent>
       </Card>
     </div>
-  );
-};
+  )
+}

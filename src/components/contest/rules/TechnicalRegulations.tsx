@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Table,
@@ -6,16 +6,14 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  TableRow
+} from '@/components/ui/table'
 export const TechnicalRegulations = () => {
   return (
     <>
       <div className="w-full max-w-4xl mx-auto px-4 space-y-12">
         <div>
-          <div className="text-2xl font-bold mb-4">
-            Các thời điểm quan trọng của giải đấu
-          </div>
+          <div className="text-2xl font-bold mb-4">Quy định kỹ thuật</div>
           <ul className="list-disc list-inside mt-2">
             <li>
               Tại các vòng thi, thí sinh tự trang bị theo laptop, đảm bảo các
@@ -28,7 +26,7 @@ export const TechnicalRegulations = () => {
             </li>
           </ul>
 
-          <div className="border rounded-lg overflow-x-auto">
+          <div className="border rounded-lg overflow-x-auto mt-3">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-100">
@@ -67,7 +65,7 @@ export const TechnicalRegulations = () => {
               </TableBody>
             </Table>
           </div>
-          <div>
+          <div className="mt-4">
             Thí sinh không được phép sử dụng các công cụ trí tuệ nhân tạo để hỗ
             trợ quá trình làm bài thi. Căn cứ ý kiến của Hội đồng Giám khảo, Ban
             Tổ chức xem xét hủy các bài nộp có sử dụng các câu lệnh/công cụ hỗ
@@ -77,5 +75,5 @@ export const TechnicalRegulations = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

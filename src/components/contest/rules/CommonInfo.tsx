@@ -1,5 +1,5 @@
-"use client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+'use client'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 export const CommonInfo = () => {
   return (
@@ -31,14 +31,14 @@ export const CommonInfo = () => {
             Chi tiết cơ cấu giải thưởng tương ứng với mỗi bảng thi đấu như sau:
           </p>
           <ul className="list-disc list-inside mt-2">
-            <li>01 Giải Vàng</li>
-            <li>01 Giải Bạc</li>
-            <li>01 Giải Đồng</li>
-            <li>05 Giải Khuyến khích</li>
-            <li>03 Giải Tiềm năng</li>
+            <li>02 Giải Vàng</li>
+            <li>02 Giải Bạc</li>
+            <li>02 Giải Đồng</li>
+            <li>40 Giải Khuyến khích</li>
+            <li>48 Giải Tiềm năng</li>
           </ul>
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
