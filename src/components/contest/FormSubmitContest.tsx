@@ -347,7 +347,7 @@ const FormSubmitContest = React.forwardRef<
               error={errors.description?.message}
               type="text-area"
               customClassNames="transition-all ease-linear min-h-[100px]"
-              placeholder="Viết vài dòng giới thiệu tổng quan dự án"
+              placeholder="Mô tả ngắn gọn mục tiêu và ý tưởng của dự án"
             />
           </div>
         </section>
