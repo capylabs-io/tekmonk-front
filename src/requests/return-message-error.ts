@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 
 //just for register contest - (axios - strapi)
-const HandleReturnMessgaeErrorAxios = (error: any) => {
+export const HandleReturnMessgaeErrorAxios = (error: any) => {
   if (error.response) {
     const { data } = error.response;
     if (data.error.message == "Username") {
@@ -20,4 +20,23 @@ const HandleReturnMessgaeErrorAxios = (error: any) => {
     return "Lỗi không xác định";
   }
 };
-export default HandleReturnMessgaeErrorAxios;
+
+export const HandleReturnMessgaeErrorLogin = (error: any) => {
+  if (error.response) {
+    const { data } = error.response;
+    if (data.error.message == "Invalid identifier") {
+      return "Người dùng không tồn tại trên hệ thống";
+    }
+    if (data.error.message == "Invalid password") {
+      return "Mật khẩu không chính xác";
+    }
+    if(data.error.message == "password is a required field") {
+      return "Vui lòng nhập mật khẩu";
+    }
+    return "Lỗi không xác định";
+  } else if (error.request) {
+    return "Không thể kết nối đến server";
+  } else {
+    return "Lỗi không xác định";
+  }
+}
