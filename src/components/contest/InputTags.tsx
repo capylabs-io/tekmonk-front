@@ -60,8 +60,8 @@ export const InputTags = ({
   return (
     <TooltipProvider>
       <div className="space-y-1.5 w-full">
-        <div className="relative flex w-full items-center">
-          <div className="w-[25%] flex">
+        <div className="relative flex w-full items-start">
+          <div className="w-[25%] flex text-primary-950 text-SubheadSm">
             Tags
             {isTooltip ? (
               <>
@@ -112,7 +112,7 @@ export const InputTags = ({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent min-w-[120px] w-full text-lg font-normal outline-none bg-grey-50 border-grey-300 "
+                  className="flex-1 bg-transparent min-w-[120px] w-full text-base font-normal outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-base"
                   placeholder={tags.length === 0 ? "Nhập tags ..." : ""}
                 />
               </div>
@@ -120,7 +120,7 @@ export const InputTags = ({
             {error && (
               <div className="text-red-500 text-xs min-h-[48px]">{error}</div>
             )}
-            <div className={`text-sm`}>Tags được phân cách bằng nút Enter</div>
+            <div className={`text-[14px]`}>Tags được phân cách bằng nút Enter</div>
           </div>
         </div>
       </div>
