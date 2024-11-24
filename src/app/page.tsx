@@ -166,48 +166,30 @@ import ContestRules from "@/components/contest/rules/ContestRules";
 import { Button } from "@/components/common/Button";
 import { IconDisPlay } from "@/components/contest/IconDisplay";
 import { AccordionContest } from "@/components/contest/rules/AccordionContest";
-import { ContestGroupStage, Contest as TypeContest } from "@/types/common-types";
-import { useUserStore } from "@/store/UserStore";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import { Contest as TypeContest } from "@/types/common-types";
+import {
+  CONTEST_RULES_DETAILS,
+  SHARE_TEXT,
+  SHARE_TITLE,
+} from "@/contants/contest/tekmonk";
 
 export default function Contest() {
   // => use state
   const [scrollY, setScrollY] = useState(0);
   const [isClient, setIsClient] = useState<boolean>(false);
   const [contestData, setContestData] = useState<TypeContest>();
-  const [contestGroupStageData, setContestGroupStageData] = useState<ContestGroupStage>();
 
   // => use store
-  const candidateNumber = useUserStore((state) => state.candidateNumber);
 
   // => function handle
   const fetchContestData = async () => {
     try {
       const res = await getContest();
-    if (res) {
-      setContestData(res);
-    }
-    } catch (error) {
-    }
+      if (res) {
+        setContestData(res);
+      }
+    } catch (error) {}
   };
-  const fetchContestGroupStageData = async () => {
-    try {
-      if (!candidateNumber) {
-        return;
-      }
-      const response = await getContestGroupStageByCandidateNumber(
-        candidateNumber
-      );
-      if (!response) {
-        return;
-      }
-      setContestGroupStageData(response);
-      return;
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-  }
 
   const handleScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -217,14 +199,10 @@ export default function Contest() {
     setScrollY(window.scrollY);
   };
 
-
   //use effect
   useEffect(() => {
-    
     //call api
-    fetchContestGroupStageData();
     fetchContestData();
-    
 
     setIsClient(true);
     window.addEventListener("scroll", handleScroll);
@@ -244,6 +222,7 @@ export default function Contest() {
       />
     );
   }, []);
+
   return (
     isClient && (
       <div className="relative overflow-hidden">
@@ -316,9 +295,7 @@ export default function Contest() {
 
                   <div className=" mt-0 p-0">
                     <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      {contestData && (
-                        <Clock contestData={contestData} contestGroupStageData={contestGroupStageData} />
-                      )}
+                      {contestData && <Clock contestData={contestData} />}
                     </BlurFade>
                     <BlurFade delay={0.25 + 4 * 0.05} inView>
                       <CardContest
@@ -335,7 +312,7 @@ export default function Contest() {
                       >
                         <CardContestContent className="p-0 w-full">
                           <Image
-                            src="/image/contest/22222.jpg"
+                            src="/image/contest/banner-landing.jpg"
                             alt="Contest participants"
                             width={800}
                             height={400}
@@ -343,20 +320,18 @@ export default function Contest() {
                           />
 
                           <div className="p-6 w-full max-mobile:p-2">
-                            
-                            <div className="mt-2 flex w-full justify-center items-center gap-x-5 
+                            <div
+                              className="mt-2 flex w-full justify-center items-center gap-x-5 
                             max-mobile:flex-col
                             max-mobile:gap-y-3
                             
-                            ">
-                            <Button
+                            "
+                            >
+                              <Button
                                 className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px] "
                                 outlined={true}
                                 onClick={() =>
-                                  window.open(
-                                    "https://tekdojo-be.s3.ap-southeast-1.amazonaws.com/Contest-Submission/Tekmonk_rule_1ed7a0d6b8.pdf",
-                                    "_blank"
-                                  )
+                                  window.open(CONTEST_RULES_DETAILS, "_blank")
                                 }
                               >
                                 Chi tiết thể lệ cuộc thi
@@ -366,19 +341,18 @@ export default function Contest() {
                                 outlined={true}
                                 onClick={() =>
                                   shareOnMobile({
-                                    text: "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+                                    text: SHARE_TEXT,
                                     url: process.env.NEXT_PUBLIC_BASE_URL,
-                                    title: "CUỘC THI SÁNG TẠO TRẺ",
+                                    title: SHARE_TITLE,
                                     // images: ["/image/contest/Frame-43.png"],
                                   })
                                 }
                               >
                                 Chia sẻ cuộc thi
-                                <Share className="ml-2"/>
+                                <Share className="ml-2" />
                               </Button>
-                              
                             </div>
-                            
+
                             <div
                               id="rules"
                               className="mt-6 font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
@@ -386,30 +360,36 @@ export default function Contest() {
                               Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
                             </div>
                             <div className="mt-10 text-gray-950 text-bodyLg max-mobile:text-base">
-                              Giải đấu Tekmonk Coding Olympiad được tổ chức bởi
-                              Học viện Công nghệ Tekmonk, thuộc Tập đoàn Hanoi
-                              Telecom, là sân chơi trí tuệ hàng đầu dành cho học
-                              sinh yêu thích lập trình từ lớp 3 đến lớp 12. Với
-                              sứ mệnh mang lập trình đến gần hơn với thế hệ trẻ,
-                              Tekmonk Coding Olympiad không chỉ là một cuộc thi
-                              mà còn là cơ hội để các em phát triển tư duy logic
-                              và rèn luyện kỹ năng giải quyết vấn đề thực tiễn.
+                              <b>“Tekmonk Coding Olympiad”</b> là giải vô địch
+                              lập trình nằm trong khuôn khổ{" "}
+                              <b>
+                                cuộc thi Vô địch Quốc gia STEM, AI và Robotics
+                                2024 (VSAR)
+                              </b>{" "}
+                              do <b>báo Tiền Phong và báo Hoa Học Trò</b> tổ
+                              chức dưới sự chỉ đạo của{" "}
+                              <b>
+                                Trung ương Đoàn TNCS Hồ Chí Minh, Bộ Khoa học và
+                                Công nghệ, nằm trong hoạt động của ngày hội STEM
+                                quốc gia.
+                              </b>{" "}
+                              Với định hướng đẩy mạnh giáo dục STEM trong trường
+                              học phổ thông, Tekmonk Coding Olympiad không chỉ
+                              là một cuộc thi mà còn là sân chơi để các em phát
+                              triển tư duy logic và rèn luyện kỹ năng giải quyết
+                              vấn đề thực tiễn thông qua các nhiệm vụ thiết kế,
+                              lập trình. Không những vậy, sự kiện còn là cơ hội
+                              để các bạn giao lưu, học hỏi từ các chuyên gia đầu
+                              ngành và bạn bè quốc tế.
                             </div>
-                            <div className="mt-6 text-gray-950 text-bodyLg max-mobile:text-base">
-                              Top 20 thí sinh xuất sắc nhất của Giải đấu sẽ được
-                              lựa chọn tham gia Olympic STEM Quốc tế, với cơ hội
-                              dự thi vòng chung kết tại Barcelona, Tây Ban Nha
-                              vào tháng 7 năm 2025.
-                            </div>
-                            
+
                             <div className=" mt-10 max-mobile:hidden">
                               <ContestRules />
                             </div>
                             {/* for mobile  */}
                             <div className="hidden max-mobile:block">
-                                <AccordionContest />
+                              <AccordionContest />
                             </div>
-
                           </div>
                         </CardContestContent>
                       </CardContest>

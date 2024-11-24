@@ -1,24 +1,29 @@
 "use client";
 
-import { Check } from "lucide-react";
+import Image from "next/image";
+import React from "react";
 
-export default function SuccessComponent({
+export const SuccessComponent = ({
   candidateNumber,
 }: {
   candidateNumber: string;
-}) {
+}) => {
   return (
     <div className="text-center space-y-6">
       <div className="flex justify-center">
         <div className="w-[84px] h-[84px] bg-pink-500 rounded-full flex items-center justify-center">
-          <Check className="w-[84px] h-[84px] text-white" />
+          <Image
+            alt=""
+            src={"/image/icon/done-progress.png"}
+            width={84}
+            height={84}
+          />
         </div>
       </div>
       <div className="text-bodyLg mx-auto">
         Cảm ơn bạn đã đăng ký tham gia{" "}
-        <b>&quot;Tekmonk coding Olympiad&quot;!</b> Chúng tôi sẽ sớm gửi thông
-        tin chi tiết về sự kiện qua email. Hãy kiểm tra kỹ thông tin đã đăng ký
-        tại mail và làm theo hướng dẫn.
+        <b>&quot;Giải vô địch Tekmonk Coding Olympiad.&quot;!</b> Bạn vui lòng
+        kiểm tra email và làm theo hướng dẫn để hoàn tất thủ tục dự thi.
       </div>
       <div className="text-bodyLg mx-auto">
         Số báo danh của bạn là:
@@ -29,4 +34,4 @@ export default function SuccessComponent({
       </div>
     </div>
   );
-}
+};

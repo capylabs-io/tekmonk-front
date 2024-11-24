@@ -1,76 +1,84 @@
-import type { Metadata } from "next";
-import { Inter, Dela_Gothic_One, Nunito_Sans } from "next/font/google";
-import "./globals.css";
-import { Loading } from "@/components/common/Loading";
-import { ToastContainer } from "react-toastify";
-import DotPattern from "@/components/ui/dot-pattern";
-import { cn } from "@/lib/utils";
-import { Snackbar } from "@/components/common/Snackbar";
-import { Suspense } from "react";
+import type { Metadata } from 'next'
+import { Dela_Gothic_One, Inter, Nunito_Sans } from 'next/font/google'
+import './globals.css'
+import { Loading } from '@/components/common/Loading'
+import { Snackbar } from '@/components/common/Snackbar'
+import { Suspense } from 'react'
+import {
+  CONTEST_SHARE_IMAGE_LINK,
+  SHARE_TEXT,
+  SHARE_TITLE
+} from '@/contants/contest/tekmonk'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 const delaGothicOne = Dela_Gothic_One({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-dela",
-});
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-dela'
+})
 
 const nunitoSans = Nunito_Sans({
   // weight: "600",
-  subsets: ["latin"],
-  variable: "--font-nunito",
-});
+  subsets: ['latin'],
+  variable: '--font-nunito'
+})
 
 export const metadata: Metadata = {
-  title: "Tekmonk",
-  description:
-    "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
+  metadataBase: new URL('https://olympiad.tekmonk.edu.vn'),
+  title: SHARE_TITLE,
+  description: SHARE_TEXT,
   icons: {
-    icon: "/favicon.ico?v=4",
+    icon: '/favicon.ico?v=4'
   },
   openGraph: {
-    type: "website",
+    type: 'website',
+    locale: 'vi_VN',
     url: process.env.NEXT_PUBLIC_BASE_URL,
-    title: "CUỘC THI SÁNG TẠO TRẺ",
-    description:
-      "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-    siteName: "Tekmonk",
+    title: SHARE_TITLE,
+    description: SHARE_TEXT,
+    siteName: SHARE_TITLE,
     images: [
       {
-        url:
-          process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE ||
-          "/default-image.jpg",
+        url: CONTEST_SHARE_IMAGE_LINK,
         width: 1200,
         height: 630,
-        alt: "CUỘC THI SÁNG TẠO TRẺ",
-      },
-    ],
+        alt: SHARE_TITLE
+      }
+    ]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1
+    }
   },
   twitter: {
-    card: "summary_large_image",
-    site: "@tekmonk",
-    title: "CUỘC THI SÁNG TẠO TRẺ",
-    description:
-      "Học viện công nghệ Tekmonk phối hợp cùng Công ty cổ phần Tiền Phong tổ chức cuộc thi “VIETNAM CODING OLYMPIAD 2024” được bảo trợ bởi Báo Tiền Phong với chủ đề: “Năng Lượng Xanh”. Cuộc thi với mục tiêu tạo sân chơi, cơ hội giao lưu và học tập cho học sinh trên toàn quốc.",
-    images: [
-      process.env.NEXT_PUBLIC_METADATA_CONTEST_IMAGE || "/default-image.jpg",
-    ],
+    card: 'summary_large_image',
+    site: '@tekmonk',
+    title: SHARE_TITLE,
+    description: SHARE_TEXT,
+    images: [CONTEST_SHARE_IMAGE_LINK]
   },
   other: {
-    "fb:app_id": "1234567890",
-    "og:image:alt": "CUỘC THI SÁNG TẠO TRẺ",
-    "og:locale": "vi_VN",
-    "og:site_name": "Tekmonk",
-    "twitter:image:alt": "CUỘC THI SÁNG TẠO TRẺ",
-    "twitter:creator": "@tekmonk",
-  },
-};
+    'fb:app_id': '1234567890',
+    'og:image:alt': SHARE_TITLE,
+    'og:locale': 'vi_VN',
+    'og:site_name': 'Tekmonk',
+    'twitter:image:alt': SHARE_TITLE,
+    'twitter:creator': '@tekmonk'
+  }
+}
 
 export default function RootLayout({
-  children,
+  children
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html
@@ -78,13 +86,12 @@ export default function RootLayout({
       className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
     >
       <body>
-        {/* <ToastContainer /> */}
         <Snackbar />
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <div className="relative">{children}</div>
         </Suspense>
         <Loading />
       </body>
     </html>
-  );
+  )
 }
