@@ -119,8 +119,8 @@ const FileInfo = ({
 
 const UploadPrompt = () => (
   <>
-    <p>Kéo thả file dự án để bắt đầu đăng tải</p>
-    <p className="text-gray-500">hoặc</p>
+    <p className="text-[14px]">Tải lên Hồ sơ dự án theo yêu cầu (Lưu ý không quá 100MB)</p>
+    {/* <p className="text-gray-500">hoặc</p> */}
     <Button
       className="rounded-[4rem] px-6 font-sans"
       outlined={false}

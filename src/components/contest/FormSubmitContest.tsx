@@ -313,7 +313,7 @@ const FormSubmitContest = React.forwardRef<
 
             {cansubmitZipFile && (
               <InputFileUploadContest
-                title="File dự án"
+                title="Hồ sơ dự án"
                 onChange={handleFileChange}
                 value={projectFile}
               />
@@ -347,7 +347,8 @@ const FormSubmitContest = React.forwardRef<
               error={errors.description?.message}
               type="text-area"
               customClassNames="transition-all ease-linear min-h-[100px]"
-              placeholder="Viết vài dòng giới thiệu tổng quan dự án"
+              placeholder="- Mô tả ngắn gọn về dự án                                                                    
+                          - Đính kèm link youtube/drive của video thuyết trình"
             />
           </div>
         </section>

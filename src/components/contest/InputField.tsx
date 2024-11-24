@@ -75,7 +75,7 @@ export const InputField = forwardRef<
     return (
       <TooltipProvider>
         <div
-          className={`flex flex-wrap sm:flex-nowrap items-center ${customClassNames}`}
+          className={`flex flex-wrap sm:flex-nowrap items-start ${customClassNames}`}
         >
           <label
             htmlFor={name}
@@ -117,11 +117,11 @@ export const InputField = forwardRef<
                     <ReactQuill
                       theme="snow"
                       value={field.value || value || ""}
-                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[200px]"
+                      className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none min-h-[200px]"
                       onChange={field.onChange}
                       placeholder={placeholder}
                       modules={modules} 
-                      formats={formats} 
+                      formats={formats}
                     />
                   ) : (
                     <Input
@@ -129,8 +129,9 @@ export const InputField = forwardRef<
                       type={type}
                       value={value}
                       placeholder={placeholder}
-                      customInputClassNames={`${customInputClassNames}`}
-                      customClassNames={`h-10 flex items-center text-bodyXs ${customInputClassNames}`}
+                      customInputClassNames={`${customInputClassNames} placeholder:text-base text-[14px]`}
+                      customClassNames={`h-10 flex items-center !text-base ${customInputClassNames}`}
+                    
                     />
                   )
                 }
@@ -138,7 +139,7 @@ export const InputField = forwardRef<
             ) : type === "text-area" ? (
               <ReactQuill
                 theme="snow"
-                className="w-full rounded-xl bg-grey-50 outline-none !text-bodyXs min-h-[200px] transition-all ease-linear"
+                className="w-full rounded-xl bg-grey-50 outline-none !text-[20px] min-h-[200px] transition-all ease-linear"
                 value={value}
                 onChange={() => {}} // Handle value change as needed
                 placeholder={placeholder}
@@ -151,7 +152,7 @@ export const InputField = forwardRef<
                 type={type}
                 placeholder={placeholder}
                 customInputClassNames={`${customInputClassNames}`}
-                customClassNames={`h-10 flex items-center text-bodyXs ${customInputClassNames}`}
+                customClassNames={`h-10 flex items-center !text-SubheadSm ${customInputClassNames}`}
               />
             )}
             {/* Display error message */}
