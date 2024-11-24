@@ -52,6 +52,26 @@ export const InputField = forwardRef<
       []
     );
 
+    const modules = {
+      toolbar: [
+        [{ list: 'ordered' }, { list: 'bullet' }], // Hỗ trợ bullet và numbered lists
+        ['bold', 'italic', 'underline'],
+        [{ 'header': [1, 2, 3, false] }],
+        ['link', 'image'],
+      ],
+    }
+    const formats = [
+      'list', // Bao gồm cả 'ordered' và 'bullet'
+      'bullet',
+      'ordered',
+      'bold',
+      'italic',
+      'underline',
+      'header',
+      'link',
+      'image',
+    ];
+
     return (
       <TooltipProvider>
         <div
@@ -100,6 +120,8 @@ export const InputField = forwardRef<
                       className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-bodyXs min-h-[200px]"
                       onChange={field.onChange}
                       placeholder={placeholder}
+                      modules={modules} 
+                      formats={formats} 
                     />
                   ) : (
                     <Input
@@ -120,6 +142,8 @@ export const InputField = forwardRef<
                 value={value}
                 onChange={() => {}} // Handle value change as needed
                 placeholder={placeholder}
+                modules={modules} 
+                formats={formats} 
               />
             ) : (
               <Input
