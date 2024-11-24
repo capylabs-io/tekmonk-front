@@ -113,13 +113,14 @@ export const InputTags = ({
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                   className="flex-1 bg-transparent min-w-[120px] w-full text-lg font-normal outline-none bg-grey-50 border-grey-300 "
-                  placeholder={tags.length === 0 ? "Nhập tag..." : ""}
+                  placeholder={tags.length === 0 ? "Mô tả ngắn gọn mục tiêu và ý tưởng của dự án" : ""}
                 />
               </div>
             </div>
             {error && (
               <div className="text-red-500 text-xs min-h-[48px]">{error}</div>
             )}
+            <div className={`text-sm`}>Tags được phân cách bằng nút Enter</div>
           </div>
         </div>
       </div>
