@@ -16,7 +16,7 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
-import HandleReturnMessgaeErrorAxios from "@/requests/return-message-error";
+import {HandleReturnMessgaeErrorAxios} from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
 
@@ -119,7 +119,7 @@ const RegisterContest = () => {
       });
 
       setCandidateNumber(get(res, "candidateNumber", ""));
-      success("Xong!", "Đăng ký thành công");
+      success("Xong!", "Chúc mừng bạn đăng ký thành công");
       setIsSubmitted(true);
     } catch (err) {
       const message = HandleReturnMessgaeErrorAxios(err);
