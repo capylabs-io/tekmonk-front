@@ -259,7 +259,8 @@ export const Step3 = () => {
                                 : "border-grey-300"
                             } bg-grey-50 p-2 outline-none min-h-[52.5px] text-lg focus-visible:outline-none`}
                             onChange={onChange}
-                            value={member.dob ? member.dob : value}
+                            format="dd/MM/yyyy"
+                            value={value}
                           />
                           {fieldState.error && (
                             <p className="text-red-500 text-sm">
