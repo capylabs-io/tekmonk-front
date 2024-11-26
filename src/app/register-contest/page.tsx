@@ -19,6 +19,7 @@ import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
 import {HandleReturnMessgaeErrorAxios} from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
+import moment from "moment";
 
 const steps = [
   {
@@ -112,6 +113,11 @@ const RegisterContest = () => {
   const handleNext = async (formData: any) => {
     try {
       show();
+      //use momen to format date at step 3
+      for (let i = 0; i < formData.stepThree.groupMemberInfo.length; i++) {
+        formData.stepThree.groupMemberInfo[i].dob = moment(formData.stepThree.groupMemberInfo[i].dob, "DD/MM/YYYY", true).format("DD-MM-YYYY");
+      }
+
       const res = await register({
         ...get(formData, "stepOne", {}),
         ...get(formData, "stepTwo", {}),
