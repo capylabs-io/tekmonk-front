@@ -188,6 +188,11 @@ const ContestGroupStageEntry = ({
                   {!timeOver
                     ? contestGroupStage.endTime && (
                         <>
+                        <DateTimeDisplay
+                            dataTime={groupStageTimeLeft}
+                            type="days"
+                          />
+                          <span>:</span>
                           <DateTimeDisplay
                             dataTime={groupStageTimeLeft}
                             type="hours"
