@@ -92,13 +92,13 @@ export const InputFileUploadContest = ({
               onBlur={onBlur}
             />
           </div>
-          <div className="text-red-600 text-[14px] mt-2">
+          {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}
+          {/* <div className="text-red-600 text-[14px] mt-2">
             Dung lượng tối đa của file là {MAX_FILE_SIZE_MB} MB
-          </div>
+          </div> */}
         </div>
       </div>
       {/* Display any error message */}
-      {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}
     </>
   )
 }
