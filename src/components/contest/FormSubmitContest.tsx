@@ -42,14 +42,15 @@ const submissionSchema = z.object({
   title: z
     .string({ required_error: 'Tên dự án không được để trống' })
     .min(1, 'Tên dự án phải có ít nhất 1 ký tự'),
-  tags: z
-    .string({ required_error: 'Tags không được để trống' })
-    .regex(
-      /^\s*[a-zA-Z0-9]+\s*(,\s*[a-zA-Z0-9]+\s*)*$/,
-      'Tags không được để trống'
-    ),
+    tags: z
+    .string()
+    // .regex(
+    //   /^\s*([a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿđĐ\s]+)(\s*,\s*[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿđĐ\s]+)*\s*$/,
+    //   'Tags phải được phân tách bằng dấu phẩy, không chứa ký tự đặc biệt'
+    // )
+    .optional(), // Cho phép bỏ trống // Đánh dấu là tùy chọn
   url: z.string(),
-  description: z.string()
+  description: z.string().min(1, 'Mô tả không được để trống')
 })
 
 const FormSubmitContest = React.forwardRef<
