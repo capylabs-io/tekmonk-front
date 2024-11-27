@@ -75,7 +75,6 @@ const ContestDetail: React.FC = () => {
     if (!id) return;
     fetchContestDetail();
   }, [id]);
-
   const handleClickTag = (tag: string) => {
     // Store the tag in Zustand store
     setSelectedTag(tag);
@@ -238,17 +237,15 @@ const ContestDetail: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    {contestDetail.assets &&
-                      contestDetail.assets?.length > 0 && (
+                    {contestDetail.thumbnail && (
                         <div className="w-full mx-auto pt-4 sm:px-8">
-                          <div className="hidden sm:block">
+                          <div className="sm:block">
                             <AspectRatio ratio={16 / 9}>
-                              {contestDetail.assets?.[selectedImageIndex]
-                                ?.url && (
+                              {contestDetail.thumbnail.url && (
                                 <div className="relative w-full h-full">
                                   <ImageCustom
                                     src={
-                                      contestDetail.assets[selectedImageIndex]
+                                      contestDetail.thumbnail
                                         .url
                                     }
                                     alt={`Selected image for ${contestDetail.title}`}
@@ -259,45 +256,6 @@ const ContestDetail: React.FC = () => {
                                 </div>
                               )}
                             </AspectRatio>
-                          </div>
-                          <div className="mt-6 mb-4 sm:px-12 px-14">
-                            <Carousel
-                              opts={{ align: "center" }}
-                              className="w-full"
-                            >
-                              <CarouselContent className="m-0">
-                                {contestDetail.assets?.map((item, index) => (
-                                  <CarouselItem
-                                    key={index}
-                                    className="pl-1 md:basis-1/2 lg:basis-1/3 select-none"
-                                  >
-                                    <div
-                                      className={`relative cursor-pointer rounded-md overflow-hidden ${
-                                        selectedImageIndex === index
-                                          ? "border-2 border-blue-500"
-                                          : ""
-                                      }`}
-                                      style={{ aspectRatio: "16 / 9" }}
-                                      onClick={() =>
-                                        setSelectedImageIndex(index)
-                                      }
-                                    >
-                                      <ImageCustom
-                                        src={item.url}
-                                        alt={`Contest entry image ${index + 1}`}
-                                        fill
-                                        className="object-contain"
-                                        quality={40}
-                                        sizes="(max-width: 640px) 25vw, 20vw"
-                                        loading="lazy"
-                                      />
-                                    </div>
-                                  </CarouselItem>
-                                ))}
-                              </CarouselContent>
-                              <CarouselPrevious />
-                              <CarouselNext />
-                            </Carousel>
                           </div>
                         </div>
                       )}
