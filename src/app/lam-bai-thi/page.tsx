@@ -47,7 +47,6 @@ const ContestGroupStageEntry = ({
     totalLevel: 0,
   });
   const [showProgress, setShowProgress] = useState(false);
-
   // use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
@@ -176,6 +175,7 @@ const ContestGroupStageEntry = ({
                     style={{ borderRadius: "4rem" }}
                     className=" h-[40px] rounded-[3rem]"
                     onClick={handleRedirectToMyContest}
+                    disabled={process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "false"}
                   >
                     Bài dự thi của tôi
                   </Button>
