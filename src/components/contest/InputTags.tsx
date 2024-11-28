@@ -60,8 +60,8 @@ export const InputTags = ({
   return (
     <TooltipProvider>
       <div className="space-y-1.5 w-full">
-        <div className="relative flex w-full items-start">
-          <div className="w-[25%] flex text-primary-950 text-SubheadSm items-center">
+        <div className="relative block sm:flex w-full items-start">
+          <div className="w-full sm:w-1/4 flex text-primary-950 text-SubheadSm items-center">
             <div>Tags</div>
             {isTooltip ? (
               <>
@@ -89,7 +89,7 @@ export const InputTags = ({
             )}
           </div>
 
-          <div className="w-full">
+          <div className="w-full flex-wrap">
             <div className="min-h-[3rem] w-full rounded-xl border border-input bg-gray-50 px-3 py-2 text-sm">
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag, index) => (

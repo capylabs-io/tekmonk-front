@@ -8,7 +8,7 @@ const DateTimeDisplay = ({
 }: {
   dataTime: string;
   type: string;
-  onTimeOver?: () => void; // Callback function from parent component
+  onTimeOver?: (validCountDown: boolean) => void; // Callback function from parent component
 }) => {
   const [timeValue, setTimeValue] = useState<string>("0");
   const countDownDate = new Date(dataTime).getTime();
@@ -30,7 +30,7 @@ const DateTimeDisplay = ({
   useEffect(() => {
     if (new Date() > new Date(dataTime)) {
       if (onTimeOver) {
-        onTimeOver(); // Gọi callback from parent component
+        onTimeOver(false); // callback from parent component
         return;
       }
     }
@@ -42,7 +42,7 @@ const DateTimeDisplay = ({
       if (newCountDown <= 0) {
         clearInterval(interval);
         if (onTimeOver) {
-          onTimeOver(); // Gọi callback from parent component
+          onTimeOver(true); // callback from parent component
         }
       }
     }, 1000);

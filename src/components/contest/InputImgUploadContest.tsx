@@ -1,8 +1,8 @@
 "use client";
-import { ImgSubmitPreview } from "@/components/contest/ImgSubmitPreview";
+import {ImgSubmitPreview} from "@/components/contest/ImgSubmitPreview";
 import classNames from "classnames";
-import { ImagePlus } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import {ImagePlus} from "lucide-react";
+import React, {useEffect, useRef, useState} from "react";
 
 type Props = {
   title: string;
@@ -26,7 +26,8 @@ export const InputImgUploadContest = ({
   const hiddenFileInput = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(value);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
-
+  const [isExceedFileSize, setIsExceedFileSize] = useState(false);
+  const MAX_IMAGE_SIZE = parseInt(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE_UPLOAD || '15');
   useEffect(() => {
     if (file) {
       const url = URL.createObjectURL(file);
@@ -38,6 +39,10 @@ export const InputImgUploadContest = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     if (selectedFile && ALLOWED_FILE_TYPES.includes(selectedFile.type)) {
+      if (selectedFile.size > MAX_IMAGE_SIZE * 1024 * 1024) {
+        setIsExceedFileSize(true);
+        return;
+      }
       setFile(selectedFile);
       onChange?.(selectedFile);
     }
@@ -54,8 +59,9 @@ export const InputImgUploadContest = ({
     <>
       <div
         className={classNames(
-          "flex flex-wrap w-full items-start",
-          customClassNames
+          "flex flex-wrap w-full items-start sm:mb-5",
+          customClassNames,
+            isExceedFileSize && '!mb-10'
         )}
       >
         <div className="w-full sm:w-1/5 mb-1">
@@ -78,23 +84,29 @@ export const InputImgUploadContest = ({
               className="mr-2"
               onRemove={removeImg}
             />
-          ) : (
-            <div
-              className="rounded-lg p-8 flex items-center justify-center relative bg-primary-50 cursor-pointer"
-              onClick={handleClick}
-            >
-              <ImagePlus size={24} className="absolute text-gray-500" />
-              <input
-                type="file"
-                name="file_input"
-                className="hidden"
-                ref={hiddenFileInput}
-                accept={ALLOWED_FILE_TYPES.join(", ")}
-                onChange={handleFileChange}
-                onBlur={onBlur}
-              />
-            </div>
-          )}
+              ) :
+              <div>
+                <div
+                    className="rounded-lg p-8 flex items-center justify-center relative bg-primary-50 cursor-pointer"
+                    onClick={handleClick}
+                >
+                  <ImagePlus size={24} className="absolute text-gray-500"/>
+                  <input
+                      type="file"
+                      name="file_input"
+                      className="hidden"
+                      ref={hiddenFileInput}
+                      accept={ALLOWED_FILE_TYPES.join(", ")}
+                      onChange={handleFileChange}
+                      onBlur={onBlur}
+                  />
+
+                </div>
+                {isExceedFileSize && (
+                    <><p className="mt-2 self-start text-sm text-red-600 ">Ảnh không quá {MAX_IMAGE_SIZE} MB</p></>
+                )}
+              </div>
+          }
         </div>
       </div>
       {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}
