@@ -27,7 +27,7 @@ export const InputImgUploadContest = ({
   const [file, setFile] = useState<File | null>(value);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [isExceedFileSize, setIsExceedFileSize] = useState(false);
-  const MAX_IMAGE_SIZE = parseInt(process.env.NEXT_PUBLIC_MAX_SIZE_FILE_UPLOAD || '15');
+  const MAX_IMAGE_SIZE = parseInt(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE_UPLOAD || '15');
   useEffect(() => {
     if (file) {
       const url = URL.createObjectURL(file);
