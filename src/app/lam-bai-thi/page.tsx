@@ -139,7 +139,7 @@ const ContestGroupStageEntry = ({
     setIsClient(true);
     //check if start time is less than current time
     if (new Date(contestGroupStage.startTime) > new Date()) {
-      router.push("/");
+      router.push("/contest-tekmonk");
     }
 
     handleGetProgress();
@@ -166,7 +166,7 @@ const ContestGroupStageEntry = ({
                   outlined={true}
                   style={{ borderRadius: "4rem" }}
                   className="w-[110px] h-[40px] rounded-[3rem] border"
-                  onClick={() => router.push("/")}
+                  onClick={() => router.back()}
                 >
                   Quay lại
                 </Button>

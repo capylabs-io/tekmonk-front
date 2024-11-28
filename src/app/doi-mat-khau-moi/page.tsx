@@ -46,7 +46,7 @@ export default function ResetPassword() {
   };
   const backToMainPage = () => {
     setIsPasswordChanged(false);
-    router.push("/");
+    router.push("/contest-tekmonk");
   };
   const backToLoginPage = () => {
     router.push("/login");
@@ -61,7 +61,7 @@ export default function ResetPassword() {
         <div className="flex w-full  absolute top-10 left-10">
           <div
             className={`flex gap-2.5 hover:cursor-pointer`}
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/contest-tekmonk")}
           >
             <svg
               className="w-2 fill-primary-700"

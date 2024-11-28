@@ -169,7 +169,7 @@ const RegisterContest = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     } else {
-      router.push("/");
+      router.push("/contest-tekmonk");
     }
   };
 

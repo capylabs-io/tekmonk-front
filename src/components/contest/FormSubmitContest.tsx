@@ -201,7 +201,7 @@ const FormSubmitContest = React.forwardRef<
   useEffect(() => {
     //if candidate number is null, redirect to home page
     if (!candidateNumber) {
-      router.push('/')
+      router.push('/contest-tekmonk')
     }
     const firstChar = candidateNumber?.charAt(0)
     console.log('firstChar', firstChar)

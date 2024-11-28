@@ -12,12 +12,7 @@ import { useRouter } from "next/navigation";
 
 const Home = () => {
   //set for contest page
-  const router = useRouter();
-  useEffect(() => {
-    if (router) {
-      router.push("/");
-    }
-  }, []);
+  
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>

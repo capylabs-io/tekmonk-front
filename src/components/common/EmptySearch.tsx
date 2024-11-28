@@ -21,7 +21,7 @@ export const EmptySearch = ({
     if (onAction) {
       onAction();
     } else {
-      router.push("/"); // Redirect to the homepage
+      router.push("/contest-tekmonk"); // Redirect to the homepage
     }
   };
 

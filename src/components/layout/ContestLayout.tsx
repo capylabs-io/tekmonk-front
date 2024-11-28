@@ -60,7 +60,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   const redirectContest = () => {
     //handle if user is not at main page =>  refirect to main page
     if (pathname != "/") {
-      router.push("/");
+      router.push("/contest-tekmonk");
       return;
     }
     return;
@@ -103,7 +103,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
               width={159}
               height={32}
               className="hover:cursor-pointer h-8 w-40"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/contest-tekmonk")}
             />
 
             {/* Desktop Menu */}
@@ -221,7 +221,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 <DrawerContent className="bg-white !p-0">
                   <div className="w-full max-w-sm">
                     <div className=" pb-0 gap-y-4">
-                      <Button outlined={true} onClick={() => router.push("/")}>
+                      <Button outlined={true} onClick={() => router.push("/contest-tekmonk")}>
                         <div
                           className="text-black text-base"
                           onClick={redirectContest}

@@ -33,7 +33,7 @@ const RegisterContestGuard = (WrappedComponent: React.FC) => {
 
     useEffect(() => {
       if (canRegister === false) {
-        router.push("/");
+        router.push("/contest-tekmonk");
       }
     }, [canRegister]);
 

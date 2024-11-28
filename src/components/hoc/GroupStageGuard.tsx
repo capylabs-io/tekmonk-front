@@ -27,7 +27,7 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
 
     const fetchContestGroupStage = async () => {
       if (!candidateNumber) {
-        router.push("/");
+        router.push("/contest-tekmonk");
         return;
       }
       try {
@@ -44,7 +44,7 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
     //get contest submission by candidate number
     const checkExistContestSubmission = async () => {
       if (!candidateNumber) {
-        router.push("/");
+        router.push("/contest-tekmonk");
         return;
       }
       const contestEntry = await getOneContestEntry(candidateNumber);
@@ -63,7 +63,7 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
       return <div>Loading...</div>; // or any loading indicator
     }
     if (contestGroupStage.startTime > new Date().toISOString()) {
-      router.push("/");
+      router.push("/contest-tekmonk");
     } else
       return (
         <WrappedComponent
