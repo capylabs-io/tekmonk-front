@@ -12,6 +12,8 @@ const delaGothicOne = Dela_Gothic_One({
   variable: "--font-delo",
 });
 
+
+
 export default function Landing() {
   const router = useRouter();
   // phụ huynh
@@ -75,11 +77,11 @@ export default function Landing() {
         </div>
         <div className="z-50 flex flex-col items-center text-center justify-center w-full mt-16">
           <div
-            className={`mt-3 text-[58px] text-primary-950 font-bold ${kanit.className} w-2/5 leading-none`}
+            className={`mt-3 text-[64px] text-primary-950 font-[600px] ${kanit.className} w-2/5 leading-[72px]`}
           >
             Vui chơi, sáng tạo và kết nối cộng đồng
           </div>
-          <div className="text-xl text-gray-500 w-1/4 mt-6">
+          <div className="text-2xl font-bold text-gray-500 w-1/4 mt-6 leading-[32px]">
             Được tin dùng bởi hàng nghìn học sinh và phụ huynh của Tekmonk
           </div>
         </div>

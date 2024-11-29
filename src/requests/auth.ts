@@ -1,5 +1,5 @@
 import tekdojoAxios from "./axios.config";
-import { BASE_URL } from "@/contants/api-url";
+import {BASE_URL} from "@/contants/api-url";
 
 type LoginBody = {
   identifier: string;

@@ -1,16 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/common/Input";
 import { Button } from "@/components/common/Button";
 import { useUserStore } from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
-import { Role } from "@/contants/role";
 import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { RadioGroup } from "@/components/common/RadioGroup";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -70,9 +68,9 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full grid grid-cols-2 h-screen">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 h-screen">
       <div className="flex flex-col justify-center items-center h-screen relative">
-        <div className="w-11/12 -mt-5 absolute top-10 left-2 ">
+        <div className="w-11/12 -mt-5 absolute top-10 left-5 ">
           <Image
             src="/image/app-logox2.png"
             alt="app logo"
@@ -103,13 +101,9 @@ export default function Login() {
           <div className="text-gray-800 text-center mt-3 text-bodyLg ">
             Chỉ cần 30s là đã có ngay tài khoản TekMonk
           </div>
-          <div
-            className="w-[348px] text-gray-950 text-SubheadMd mt-8"
-            style={{}}
-          >
-            Họ tên
-          </div>
-          <div className="w-full mt-2 flex flex-col gap-y-2">
+
+          <div className="w-full mt-8 flex flex-col gap-y-2">
+            <div className="w-[348px] text-gray-950 text-SubheadMd ">Họ tên</div>
             <Input
               type="text"
               placeholder="Nhập họ tên tên của bạn"
@@ -117,7 +111,7 @@ export default function Login() {
               value={user.username}
               onChange={handleChangeUsername}
             />
-            <div className=" text-gray-950 text-SubheadMd mt-4">Email</div>
+            <div className=" text-gray-950 text-SubheadMd mt-2">Email</div>
             <Input
               type="text"
               placeholder="Nhập tên tài khoản email của bạn"
@@ -125,7 +119,7 @@ export default function Login() {
               value={user.email}
               onChange={handleChangeEmail}
             />
-            <div className="text-gray-950 text-SubheadMd mt-4">Mật khẩu</div>
+            <div className="text-gray-950 text-SubheadMd mt-2">Mật khẩu</div>
             <Input
               type="password"
               placeholder="Nhập mật khẩu"
@@ -136,7 +130,7 @@ export default function Login() {
               {/*handle button check box here*/}
               <input
                 type="checkbox"
-                className="w-5 h-5 rounded-3xl bg-gray-100 border-gray-300 mr-2 font-semibold"
+                className="w-5 h-5 rounded-3xl bg-red-100 border-red-300 mr-2 font-semibold"
               />
               <div className="text-bodyLg text-gray-950">
                 Tôi đồng ý với các điều khoản

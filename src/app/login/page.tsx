@@ -57,7 +57,7 @@ export default function Login() {
 
       if (roleName === Role.STUDENT) {
         success("Xong!", "Chúc mừng bạn đã đăng nhập thành công");
-        router.push("/");
+        router.push("/home");
       } else {
         useUserStore.getState().clear();
         setUser({
@@ -115,7 +115,7 @@ export default function Login() {
           <div>Chưa có tài khoản?</div>
           <div
             className="font-bold underline hover:cursor-pointer"
-            onClick={() => router.push("/register-contest")}
+            onClick={() => router.push("/register")}
           >
             Đăng ký
           </div>
