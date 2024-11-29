@@ -25,7 +25,8 @@ export const InputMulImgUploadContest = ({
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
   const [fileUrls, setFileUrls] = useState<string[]>([]);
   const MAX_UPLOAD_FILES = parseInt(process.env.MAX_NUMBER_IMG_UPLOAD || "5");
-
+  const MAX_FILE_SIZE_MB = parseInt(process.env.NEXT_PUBLIC_MAX_SIZE_IMAGE_UPLOAD || "15");
+  const [isExceedFileSize, setIsExceedFileSize] = useState(false);
   useEffect(() => {
     const urls = imgArr.map(URL.createObjectURL);
     setFileUrls(urls);
@@ -33,11 +34,18 @@ export const InputMulImgUploadContest = ({
   }, [imgArr]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setIsExceedFileSize(false);
     const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
+    const selectedFile = e.target.files ? e.target.files[0] : null;
     const validFiles = selectedFiles.filter((file) =>
       ["image/png", "image/jpeg", "image/svg+xml"].includes(file.type)
     );
-
+    if(selectedFile) {
+      if (selectedFile.size >MAX_FILE_SIZE_MB * 1024 * 10) {
+        setIsExceedFileSize(true);
+        return;
+      }
+    }
     const updatedFiles = [...imgArr, ...validFiles].slice(0, MAX_UPLOAD_FILES);
     onChange && onChange(updatedFiles);
   };
@@ -92,7 +100,6 @@ export const InputMulImgUploadContest = ({
               <ImagePlus size={24} className="absolute text-gray-500" />
               <input
                 type="file"
-                multiple
                 name="file_input"
                 className="outline-none w-full grow bg-transparent opacity-0 hidden"
                 ref={hiddenFileInput}
@@ -105,9 +112,9 @@ export const InputMulImgUploadContest = ({
         </div>
       </div>
       {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}
-      {imgArr.length >= MAX_UPLOAD_FILES && (
-        <p className="mt-2 self-start text-sm text-yellow-600">
-          Chỉ có thể tải lên tối đa {MAX_UPLOAD_FILES} ảnh.
+      {isExceedFileSize && (
+        <p className="mt-2 self-start text-sm text-red-600">
+          Giới hạn ảnh tối đa là {MAX_FILE_SIZE_MB} MB
         </p>
       )}
     </>

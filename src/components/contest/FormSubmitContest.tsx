@@ -42,14 +42,15 @@ const submissionSchema = z.object({
   title: z
     .string({ required_error: 'Tên dự án không được để trống' })
     .min(1, 'Tên dự án phải có ít nhất 1 ký tự'),
-  tags: z
-    .string({ required_error: 'Tags không được để trống' })
-    .regex(
-      /^\s*[a-zA-Z0-9]+\s*(,\s*[a-zA-Z0-9]+\s*)*$/,
-      'Tags không được để trống'
-    ),
+    tags: z
+    .string()
+    // .regex(
+    //   /^\s*([a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿđĐ\s]+)(\s*,\s*[a-zA-Z0-9ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿđĐ\s]+)*\s*$/,
+    //   'Tags phải được phân tách bằng dấu phẩy, không chứa ký tự đặc biệt'
+    // )
+    .optional(), // Cho phép bỏ trống // Đánh dấu là tùy chọn
   url: z.string(),
-  description: z.string()
+  description: z.string().min(1, 'Mô tả không được để trống')
 })
 
 const FormSubmitContest = React.forwardRef<
@@ -66,7 +67,7 @@ const FormSubmitContest = React.forwardRef<
   const [projectFile, setProjectFile] = useState<File | null>(null)
   const [imgProject, setImgProject] = useState<File[]>([])
   const [thumbnail, setThumbnail] = useState<File | null>(null)
-  const [cansubmitZipFile, setCansubmitZipFile] = useState(false)
+  const [canSubmitZipFile, setCanSubmitZipFile] = useState(false)
   const [showDialogAccept, setShowDialogAccept] = useState(false)
   const [contestGroupStage, setContestGroupStage] =
     useState<ContestGroupStage>()
@@ -97,7 +98,7 @@ const FormSubmitContest = React.forwardRef<
   //handle function
   const handleGetProgress = async () => {
     try {
-      if (cansubmitZipFile) return
+      if (canSubmitZipFile) return
       if (!codeCombatId || !candidateNumber) {
         return
       }
@@ -143,7 +144,7 @@ const FormSubmitContest = React.forwardRef<
       )
 
       const contestObj: DataContestSubmission = {
-        title: cansubmitZipFile ? data.title : fullNameUser || '',
+        title: canSubmitZipFile ? data.title : fullNameUser || '',
         description: data.description,
         tags: { data: tags },
         url: data.url,
@@ -205,13 +206,13 @@ const FormSubmitContest = React.forwardRef<
     const firstChar = candidateNumber?.charAt(0)
     console.log('firstChar', firstChar)
     if (firstChar != 'A' && firstChar != 'B' && firstChar != 'C') {
-      setCansubmitZipFile(true)
+      setCanSubmitZipFile(true)
     } else {
-      setCansubmitZipFile(false)
+      setCanSubmitZipFile(false)
       setValue('title', fullNameUser || 'user')
     }
     handleGetProgress()
-  }, [candidateNumber, cansubmitZipFile])
+  }, [candidateNumber, canSubmitZipFile])
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -246,7 +247,7 @@ const FormSubmitContest = React.forwardRef<
           </p>
         </div>
         <section className="px-6 h-full overflow-y-auto hide-scrollbar">
-          {cansubmitZipFile ? (
+          {canSubmitZipFile ? (
             <>
               <InputField
                 title="Tên dự án"
@@ -276,43 +277,16 @@ const FormSubmitContest = React.forwardRef<
             </>
           )}
           <div className="w-full pb-2 sm:pb-5">
-            {!cansubmitZipFile && (
-              <InputImgUploadContest
-                title="Ảnh dự án"
-                value={thumbnail}
-                onChange={setThumbnail}
-                customClassNames="mt-b sm:mb-5"
-              />
+            {canSubmitZipFile && (
+                <InputImgUploadContest
+                    title="Ảnh dự án"
+                    value={thumbnail}
+                    onChange={setThumbnail}
+                    customClassNames="mt-b "
+                />
             )}
 
-            {cansubmitZipFile ? (
-              <InputMulImgUploadContest
-                title="Ảnh mô tả dự án"
-                imgArr={imgProject}
-                onChange={handleImgChange}
-              />
-            ) : (
-              <>
-                {/* <div
-                  className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
-                >
-                  <label className="text-SubheadSm text-primary-950 w-1/4">
-                    Tiến trình
-                  </label>
-                  <div className="flex w-full justify-between items-center max-w-[500px] rounded-xl overflow-hidden gap-x-2">
-                    <Progress
-                      value={progress.currentProgress / progress.totalProgress}
-                      className="w-[80%] border border-gray-300 bg-gray-200"
-                    />
-                    <div className="text-primary-900 text-bodyL">
-                      {progress.currentProgress} / {progress.totalProgress}
-                    </div>
-                  </div>
-                </div> */}
-              </>
-            )}
-
-            {cansubmitZipFile && (
+            {canSubmitZipFile && (
               <InputFileUploadContest
                 title="Hồ sơ dự án"
                 onChange={handleFileChange}

@@ -47,17 +47,27 @@ const ContestGroupStageEntry = ({
     totalLevel: 0,
   });
   const [showProgress, setShowProgress] = useState(false);
-
   // use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
 
   //function handler
+  const isExistContestSubmission = async () => {
+    if(!candidateNumber) return false;
+    const contestEntry = await getOneContestEntry(
+        candidateNumber
+    )
+    const contestSubmission = await getContestSubmissionByContestEntry(
+        contestEntry.id
+    )
+    return contestSubmission.data.length > 0
+  }
   const handleAutoSubmit = async () => {
     try {
       //check if user already submitted => return
       if (isSubmitted) return;
+      if(await isExistContestSubmission()) return;
       //check if contestGroupStage is not D1 or D2 => auto submit
       const firstChar = candidateNumber?.charAt(0);
       if (firstChar != "D") {
@@ -73,6 +83,7 @@ const ContestGroupStageEntry = ({
           data: null,
         };
         await createContestSubmission(contestResult);
+        useUserStore.setState({ isSubmitted: true })
       }
       return;
     } catch (err) {
@@ -80,11 +91,11 @@ const ContestGroupStageEntry = ({
       return;
     }
   };
-  const handleTimeOver = () => {
-    if (!isSubmitted) {
+  const handleTimeOver = (validCountDown: boolean) => {
+    setTimeOver(true);
+    if (!isSubmitted && validCountDown) {
       handleAutoSubmit();
     }
-    setTimeOver(true);
   };
   const handleRedirectToMyContest = async () => {
     try {
@@ -164,6 +175,7 @@ const ContestGroupStageEntry = ({
                     style={{ borderRadius: "4rem" }}
                     className=" h-[40px] rounded-[3rem]"
                     onClick={handleRedirectToMyContest}
+                    disabled={process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "false"}
                   >
                     Bài dự thi của tôi
                   </Button>
