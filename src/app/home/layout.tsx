@@ -47,6 +47,7 @@ export default function Layout({
             <Button className="w-full !rounded-3xl" onClick={handleOpenModal}>
               Đăng tải
             </Button>
+
             <UserProfileLink userName={userName} userRank={userRank} />
           </div>
         </div>

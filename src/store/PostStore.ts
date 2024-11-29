@@ -1,41 +1,28 @@
-import { getPostsPagination } from "@/requests/post";
-import { PostType } from "@/types";
+import {getPostsPagination, uploadMedia, uploadPost} from "@/requests/post";
+import {TPostUpload, SingleResponseDto} from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type Actions = {
   getAllPost: () => Promise<void>;
-  createPost: (post: PostType) => Promise<void>;
-  // deletePost: (postId: string) => Promise<void>;
-  // updatePost: (post: PostType) => Promise<void>;
-  // getPost: (postId: string) => Promise<void>;
-  // likePost: (postId: string) => Promise<void>;
-  // unlikePost: (postId: string) => Promise<void>;
-  // commentPost: (postId: string, comment: string) => Promise<void>;
-  // sharePost: (postId: string) => Promise<void>;
-  // reportPost: (postId: string) => Promise<void>;
-  // hidePost: (postId: string) => Promise<void>;
-  // blockUser: (userId: string) => Promise<void>;
-  // unblockUser: (userId: string) => Promise<void>;
-  // getPostByUser: (userId: string) => Promise<void>;
-  // getPostByType: (type: string) => Promise<void>;
-
+  createPost: (user_id: string, post: TPostUpload) => Promise<SingleResponseDto>;
   clearList: () => void;
+  uploadMedia: (formData: FormData) => Promise<SingleResponseDto>;
 };
 
 type State = {
-  posts: PostType[];
+  posts: TPostUpload[];
   page: number;
   limit: number;
 };
-const defautValueStates: State = {
+const defaultValueStates: State = {
   posts: [],
   page: 1,
   limit: 10,
 };
 //create store using Zustand
 export const usePostStore = create<State & Actions>()((set, get) => ({
-  ...defautValueStates,
+  ...defaultValueStates,
   getAllPost: async () => {
     //fetch all post
     const response = await getPostsPagination(get().page, get().limit);
@@ -46,12 +33,15 @@ export const usePostStore = create<State & Actions>()((set, get) => ({
       posts: [...get().posts, ...response.posts],
     });
   },
-  createPost: async (post: PostType) => {
-    //create post
+  createPost: async (user_id: string, post: TPostUpload): Promise<SingleResponseDto> => {
+    return await uploadPost(user_id, post);
   },
   clearList: () => {
     set({
-      ...defautValueStates,
+      ...defaultValueStates,
     });
   },
+    uploadMedia: async (formData: FormData): Promise<SingleResponseDto> => {
+      return await uploadMedia(formData);
+    },
 }));

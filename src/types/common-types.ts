@@ -1,5 +1,3 @@
-import { BackgroundCard } from "@/components/shop/BackgroundCard";
-import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
 export type Event = {
   title: string;
   day: string;
@@ -48,6 +46,10 @@ export type User = {
   fullName?: string;
   user_role?: UserRole[] | UserRole | any;
 };
+
+export type TPost = {
+
+}
 
 export type ContestGroupStage = {
   id?: string;

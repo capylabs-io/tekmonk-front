@@ -1,4 +1,4 @@
-import { PostType } from "@/types";
+import {TPostUpload, SingleResponseDto} from "@/types";
 import tekdojoAxios from "./axios.config";
 import { BASE_URL } from "@/contants/api-url";
 
@@ -21,7 +21,45 @@ export const getPostsPagination = async (page: number, limit: number) => {
   return response.data;
 };
 
-export const uploadPost = async (postBody: PostType) => {
-  const response = await tekdojoAxios.post(`${BASE_URL}/users/me`, postBody);
-  return response.data;
+export const uploadPost = async (user_id: string, postBody: TPostUpload): Promise<SingleResponseDto> => {
+  try {
+      const convertData = {
+        ...postBody,
+        postedBy: user_id,
+      }
+    const response = await tekdojoAxios.post(`${BASE_URL}/posts`, convertData);
+    if(response.status == 201) {
+        return {
+            status: true,
+            message: "Upload post successfully",
+            value: response.data,
+        };
+    }
+    return {
+        status: false,
+        message: "Upload post failed with status code " + response.status,
+    };
+  }catch (error) {
+    console.error("Error when upload post", error);
+    return {
+      status: false,
+      message: "Error when upload post",
+    };
+  }
+};
+
+export const uploadMedia = async (formData: FormData): Promise<SingleResponseDto> => {
+  try {
+    const res = await tekdojoAxios.post(`/upload`, formData);
+      return {
+          status: res.status == 200,
+          message: "Upload media successfully",
+      }
+  }catch (error) {
+    console.error("Error when upload media", error);
+   return {
+     status: false,
+        message: "Error when upload media",
+   }
+  }
 };

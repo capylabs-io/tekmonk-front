@@ -1,7 +1,6 @@
-export type PostType = {
-  content: string | null;
-  media?: string | null;
-  postedBy: string | number | null;
-  type: string | null;
-  metadata: string | null;
+export type TPostUpload = {
+  name: string,
+  description?: string,
+  tags?: string,
+  url?: string,
 };

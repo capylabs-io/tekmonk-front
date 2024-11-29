@@ -8,12 +8,12 @@ type Props = {
   customInputClassNames?: string;
   customClassNames?: string;
   error?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: File[]) => void;
   onBlur?: () => void;
 };
 const BASE_CLASS =
   "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 min-h-[64px] flex flex-col items-center justify-center relative text-sm";
-export const InputFileUpdload = ({
+export const InputFileUpload = ({
   value,
   error,
   onChange,
@@ -21,10 +21,10 @@ export const InputFileUpdload = ({
   customInputClassNames,
   customClassNames,
 }: Props) => {
-  const [showPassword, setshowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
+    const newVal = e.target.files ? Array.from(e.target.files) : [];
     onChange && onChange(newVal);
   };
   const handleOnBlur = () => {
@@ -34,13 +34,13 @@ export const InputFileUpdload = ({
     hiddenFileInput.current!.click();
   };
   const handleShowPassword = () => {
-    setshowPassword((prev) => !prev);
+    setShowPassword((prev) => !prev);
   };
   return (
     <>
       <div
         className={classNames(
-          "flex w-full items-center text-base font-bold gap-x-4",
+          "flex w-full items-center text-base font-bold gap-x-4 hover:cursor-pointer",
           customClassNames
         )}
       >
@@ -64,7 +64,8 @@ export const InputFileUpdload = ({
             type="file"
             lang="en-US"
             className="outline-none w-full grow bg-transparent opacity-0"
-            value={value}
+            multiple={true}
+            // value={value}
             ref={hiddenFileInput}
             onChange={handleOnChange}
             onBlur={handleOnBlur}

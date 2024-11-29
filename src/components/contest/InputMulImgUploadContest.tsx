@@ -41,7 +41,7 @@ export const InputMulImgUploadContest = ({
       ["image/png", "image/jpeg", "image/svg+xml"].includes(file.type)
     );
     if(selectedFile) {
-      if (selectedFile.size >MAX_FILE_SIZE_MB * 1024 * 10) {
+      if (selectedFile.size >MAX_FILE_SIZE_MB * 1024 * 1024) {
         setIsExceedFileSize(true);
         return;
       }

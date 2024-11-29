@@ -262,7 +262,7 @@ const FormSubmitContest = React.forwardRef<
             </>
           ) : (
             <>
-              <div
+            <div
                 className={`mb-2 flex flex-wrap sm:flex-nowrap items-center`}
               >
                 <label className="text-SubheadSm text-primary-950 w-1/4">
