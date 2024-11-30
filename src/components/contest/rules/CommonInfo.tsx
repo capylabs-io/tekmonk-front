@@ -34,8 +34,8 @@ export const CommonInfo = () => {
             <li>02 Giải Vàng</li>
             <li>02 Giải Bạc</li>
             <li>02 Giải Đồng</li>
-            <li>40 Giải Khuyến khích</li>
-            <li>48 Giải Tiềm năng</li>
+            <li>10 Giải Khuyến khích</li>
+            <li>12 Giải Tiềm năng</li>
           </ul>
         </div>
       </CardContent>
