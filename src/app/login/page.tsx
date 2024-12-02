@@ -11,6 +11,7 @@ import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -55,7 +56,7 @@ export default function Login() {
       const roleName = get(resUserInfo, "role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT) {
-        success("Xong!", "Đăng nhập thành công");
+        success("Xong!", "Chúc mừng bạn đã đăng nhập thành công");
         router.push("/");
       } else {
         useUserStore.getState().clear();
@@ -63,14 +64,15 @@ export default function Login() {
           identifier: "",
           password: "",
         });
-        error("Lỗi", "Đăng nhập thất bại");
+        error("Lỗi", "Đăng nhập thất bại, vui lòng thử lại sau");
       }
     } catch (err) {
-      setUser({
-        identifier: "",
-        password: "",
-      });
-      error("Lỗi", "Đăng nhập thất bại");
+      // setUser({
+      //   identifier: "",
+      //   password: "",
+      // });
+      const message = HandleReturnMessgaeErrorLogin(err);
+      error("Lỗi", message);
     } finally {
       hide();
     }

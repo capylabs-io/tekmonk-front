@@ -65,11 +65,13 @@ export const CompetitionContent = () => {
                 </TableCell>
                 <TableCell className="border-r">
                   <p>
-                    Bảng A, B, C: Tham gia thi tập trung tại các điểm thi tại Hà
-                    Nội do Ban Tổ chức lựa chọn.
+                    <span className="font-semibold">Bảng A, B, C:</span> True
+                    North International School, Lô TH-03, Khu đô thị Mỗ Lao, Hà
+                    Đông, Hà Nội
                   </p>
                   <p className="mt-2">
-                    Bảng D: Nộp bài trực tuyến theo hướng dẫn của Ban Tổ chức.
+                    <span className="font-semibold">Bảng D:</span> Nộp bài trực
+                    tuyến theo hướng dẫn của Ban Tổ chức.
                   </p>
                 </TableCell>
                 <TableCell>

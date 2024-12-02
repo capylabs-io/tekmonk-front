@@ -218,3 +218,20 @@ h6 {
   border: none !important;
   min-height: 150px !important;
 }
+
+.ql-editor ul {
+  list-style-type: disc; /* Hiển thị bullet */
+  padding-left: 20px; /* Căn lề để hiển thị đẹp hơn */
+}
+
+.ql-editor ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+}
+
+.ql-editor.ql-blank::before {
+  color: #aaa; /* Tailwind gray-400 equivalent */
+  font-size: 16px; /* Tailwind text-2xl equivalent */
+  font-style: italic; /* Tailwind italic equivalent */
+  content: attr(placeholder); /* Ensure the placeholder text is displayed */
+}
