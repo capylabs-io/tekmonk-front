@@ -59,6 +59,10 @@ export type ContestGroupStage = {
   startTime: string;
   endTime: string;
   contestEntryFile?: any;
+  listCourses?: {
+    name: string;
+    slugs: string[];
+  }[];
 };
 
 export interface Certificate {
@@ -193,6 +197,7 @@ export type TimeLeft = {
 
 export type TProgressResult = {
   name: string;
+  listSlug: string[],
   currentLevel: number;
   totalLevel: number;
 };
