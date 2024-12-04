@@ -49,6 +49,13 @@ export type User = {
   user_role?: UserRole[] | UserRole | any;
 };
 
+export type TListCourse = {
+  courseId: string;
+  courseInstanceId: string;
+  name: string;
+  slugs: string[];
+}
+
 export type ContestGroupStage = {
   id?: string;
   name?: string;
@@ -59,10 +66,7 @@ export type ContestGroupStage = {
   startTime: string;
   endTime: string;
   contestEntryFile?: any;
-  listCourses?: {
-    name: string;
-    slugs: string[];
-  }[];
+  listCourses?: TListCourse[];
 };
 
 export interface Certificate {
