@@ -21,7 +21,7 @@ const DialogAccept = ({isOpen, onOpenChange}: { isOpen: boolean, onOpenChange: (
             <div className="w-full border-t border-gray-300 "></div>
 
             <div className="flex flex-col items-center justify-center h-[120px]">
-              <div className="w-full px-3 text-center">Thí sinh chỉ được phép làm bài và nộp bài một lần duy nhất. Một khi đã nhấn nút "Làm bài", thời gian sẽ tự động đếm ngược trong vòng 75 phút.</div>
+              <div className="w-full px-3 text-center">Thí sinh chỉ được phép làm bài và nộp bài một lần duy nhất. Một khi đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động đếm ngược trong vòng 75 phút.</div>
             </div>
             <div className="w-full border-t border-gray-300 "></div>
             <DialogFooter className="p-0 m-0 pb-3">
@@ -85,7 +85,7 @@ export default function GroupStageCodeCombatInfo() {
 
             <p>
               4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất. Mỗi
-              thí đã nhấn nút "Làm bài", thời gian sẽ tự động đếm ngược trong
+              thí đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động đếm ngược trong
               vòng 75 phút.
             </p>
 
