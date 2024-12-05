@@ -347,7 +347,7 @@ const GroupStageCodeCombat = ({
                     
                      `}
                   onClick={() => handleRedirectToCodeCombat(item)}
-                  disabled={isCompleted || isSubmitted}
+                  disabled={isSubmitted}
                 >
                   <div className={`flex items-center gap-x-3`}>
                     {isCompleted && <CheckCircle className="text-primary-900" />}
