@@ -295,11 +295,6 @@ const GroupStageCodeCombat = ({
                     <>
                       <DateTimeDisplay
                         dataTime={groupStageTimeLeft}
-                        type="days"
-                      />
-                      <span>:</span>
-                      <DateTimeDisplay
-                        dataTime={groupStageTimeLeft}
                         type="hours"
                       />
                       <span>:</span>
