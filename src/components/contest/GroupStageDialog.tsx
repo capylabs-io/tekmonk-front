@@ -39,12 +39,17 @@ const GroupStageDialog = ({
     setIsGroupStageStarted(true);
   };
 
+  const redirectGroupStageCodeCombat = () => {
+    if (router) {
+      router.push(`/bang-dau-codecombat`);
+    }
+  }
+
   const handleExam = () => {
     if (!isGroupStageStarted) {
       setIsShowMessage(true);
     } else {
       if (router) {
-        console.log("groupStageData.code", groupStageData.code);
         if (
           groupStageData.code == "A" ||
           groupStageData.code == "B" ||
@@ -114,7 +119,7 @@ const GroupStageDialog = ({
                 max-[460px]:h-[50px]
               "
               outlined={false}
-              onClick={handleExam}
+              onClick={redirectGroupStageCodeCombat}
             >
               Vào làm bài
             </Button>}
