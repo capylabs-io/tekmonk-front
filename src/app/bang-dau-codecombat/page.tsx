@@ -1,59 +1,165 @@
 "use client";
 import { Button } from "@/components/common/Button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-const DialogAccept = ({isOpen, onOpenChange}: { isOpen: boolean, onOpenChange: (open: boolean) => void }) => {
-  const router = useRouter()
+import { ContestGroupStage } from "@/types/common-types";
+import { useUserStore } from "@/store/UserStore";
+import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
+import { get } from "lodash";
 
+type TDialogAccept = {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  contestGroupStage: ContestGroupStage;
+}
+
+const DialogAccept = ({isOpen, onOpenChange, contestGroupStage}: TDialogAccept) => {
+  const router = useRouter();
+  const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
+  const [isShowMessage, setIsShowMessage] = useState(false);
+  const handleExam = () => {
+    if (!isGroupStageStarted) {
+      setIsShowMessage(true);
+    } else {
+      if (router) {
+        router.push(`/bang-dau-codecombat/lam-bai-thi`);
+      }
+    }
+  };
+  const handleTimeOver = () => {
+    setIsGroupStageStarted(true);
+  };
+  useEffect(() => {
+    const hasStarted = new Date(contestGroupStage.startTime) <= new Date();
+    setIsGroupStageStarted(hasStarted);
+  },[])
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-          <DialogContent
-            className="sm:max-w-[480px] bg-white p-0"
-            style={{ borderRadius: "16px" }}
-          >
-            <DialogHeader className="pt-6">
-              <DialogTitle className="text-center text-SubheadLg text-primary-900 m-0 p-0">
-                Xác nhận làm bài
-              </DialogTitle>
-            </DialogHeader>
-            <div className="w-full border-t border-gray-300 "></div>
+              
+              <DialogContent
+                className="sm:max-w-[500px] bg-white p-0"
+                style={{ borderRadius: "16px" }}
+              >
+                <DialogHeader className="pt-6">
+                  <DialogTitle className="text-center text-SubheadLg text-primary-900 m-0 p-0">
+                  Xác nhận làm bài
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="w-full border-t border-gray-300 "></div>
 
-            <div className="flex flex-col items-center justify-center h-[120px]">
-              <div className="w-full px-3 text-center">Thí sinh chỉ được phép làm bài và nộp bài một lần duy nhất. Một khi đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động đếm ngược trong vòng 75 phút.</div>
-            </div>
-            <div className="w-full border-t border-gray-300 "></div>
-            <DialogFooter className="p-0 m-0 pb-3">
-              <div className="flex items-center justify-center gap-4 w-full">
-                <Button
-                  outlined={true}
-                  className="w-[156px] h-[48px] !rounded-[3rem] border"
-                  onClick={() => onOpenChange(false)}
-                >
-                  Quay lại
-                </Button>
-                  <Button
-                    className="w-[156px] h-[48px] !rounded-[3rem]"
-                    onClick={() => router.push("/bang-dau-codecombat/lam-bai-thi")}
-                  >
-                    Vào thi
-                  </Button>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+                <div className="flex flex-col items-center justify-center h-[120px]">
+                  {isGroupStageStarted ? (
+                    <div className="py-4 px-[33px]">
+                        
+                      <div className="w-full px-3 text-center">Thí sinh chỉ được phép làm bài và nộp bài một lần duy nhất. Một khi đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động đếm ngược trong vòng 75 phút.</div>
+                          
+                      <div></div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="text-bodyLg">Mở cổng thi sau</div>
+                      <div className="text-gray-700">
+                        <span className="text-SubheadLg text-gray-950 flex items-center justify-center gap-x-2">
+                          {
+                            <DateTimeDisplay
+                              dataTime={contestGroupStage.startTime}
+                              type={"days"}
+                            />
+                          }{" "}
+                          <span className="mt-1 text-bodyLg">Ngày</span>{" "}
+                          {
+                            <DateTimeDisplay
+                              dataTime={contestGroupStage.startTime}
+                              type={"hours"}
+                            />
+                          }{" "}
+                          <span className="mt-1 text-bodyLg">Giờ</span>{" "}
+                          {
+                            <DateTimeDisplay
+                              dataTime={contestGroupStage.startTime}
+                              type={"minutes"}
+                            />
+                          }{" "}
+                          <span className="mt-1 text-bodyLg">Phút</span>{" "}
+                          {
+                            <DateTimeDisplay
+                              dataTime={contestGroupStage.startTime}
+                              type={"seconds"}
+                              onTimeOver={handleTimeOver}
+                            />
+                          }{" "}
+                          <span className="mt-1 text-bodyLg">Giây</span>
+                        </span>
+                      </div>
+                      {isShowMessage && (
+                        <div className="text-bodyLg text-red-700 text-center">
+                          Chưa đến giờ cuộc thi diễn ra, vui lòng truy cập sau
+                          bạn nhé!
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div className="w-full border-t border-gray-300 "></div>
+                <DialogFooter className="p-0 m-0 pb-3">
+                  <div className="flex items-center justify-center gap-4 w-full">
+                    <Button
+                      outlined={true}
+                      className="w-[156px] h-[48px] !rounded-[3rem] border"
+                      onClick={() => {
+                        onOpenChange(false);
+                        setIsShowMessage(false);
+                      }}
+                    >
+                      Quay lại
+                    </Button>
+                    {isGroupStageStarted && (
+                      <Button
+                        className="w-[156px] h-[48px] !rounded-[3rem]"
+                        onClick={handleExam}
+                      >
+                        Vào thi
+                      </Button>
+                    )}
+                  </div>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
   )
 };
 
 export default function GroupStageCodeCombatInfo() {
-  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   }
-  
+  const [contestGroupStage, setContestGroupStage] =
+      useState<ContestGroupStage | null>(null);
+    const candidateNumber = useUserStore((state) => state.candidateNumber);
+
+    const fetchContestGroupStage = async () => {
+      if (!candidateNumber) {
+        router.push("/");
+        return;
+      }
+      try {
+        const data = await getContestGroupStageByCandidateNumber(
+          candidateNumber
+        );
+        data && setContestGroupStage(data);
+      } catch (error) {
+        return;
+      }
+    };
+
+    useEffect(() => {
+      fetchContestGroupStage();
+    }, [candidateNumber]);
   return (
     <div className="max-w-[720px] mx-auto mb-2">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
@@ -182,7 +288,7 @@ export default function GroupStageCodeCombatInfo() {
               >
                 Làm bài
               </Button>
-              <DialogAccept isOpen={isOpen} onOpenChange={setIsOpen}/>
+              {contestGroupStage && <DialogAccept isOpen={isOpen} onOpenChange={setIsOpen} contestGroupStage={contestGroupStage} />}
             </div>
       </div>
     </div>
