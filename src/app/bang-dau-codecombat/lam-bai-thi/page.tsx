@@ -343,7 +343,7 @@ const GroupStageCodeCombat = ({
                 <Button
                   key={index}
                   outlined={true}
-                  className={`h-12 border font-bold text-lg
+                  className={`h-12 border font-bold text-lg hover:bg-primary-100
                     
                      `}
                   onClick={() => handleRedirectToCodeCombat(item)}
