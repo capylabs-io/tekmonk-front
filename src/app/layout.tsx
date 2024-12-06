@@ -1,39 +1,41 @@
-import type { Metadata } from 'next'
-import { Dela_Gothic_One, Inter, Nunito_Sans } from 'next/font/google'
-import './globals.css'
-import { Loading } from '@/components/common/Loading'
-import { Snackbar } from '@/components/common/Snackbar'
-import { Suspense } from 'react'
+import type { Metadata } from "next";
+import { Dela_Gothic_One, Inter, Nunito_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import "./globals.css";
+import { Loading } from "@/components/common/Loading";
+import { Snackbar } from "@/components/common/Snackbar";
+import { Suspense } from "react";
 import {
   CONTEST_SHARE_IMAGE_LINK,
   SHARE_TEXT,
-  SHARE_TITLE
-} from '@/contants/contest/tekmonk'
+  SHARE_TITLE,
+} from "@/contants/contest/tekmonk";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
-const delaGothicOne = Dela_Gothic_One({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-dela'
-})
+const delaGothicOne = localFont({
+  src: ".././assets/fonts/DelaGothicOne-Regular.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-dela",
+});
 
 const nunitoSans = Nunito_Sans({
   // weight: "600",
-  subsets: ['latin'],
-  variable: '--font-nunito'
-})
+  subsets: ["latin"],
+  variable: "--font-nunito",
+});
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://olympiad.tekmonk.edu.vn'),
+  metadataBase: new URL("https://olympiad.tekmonk.edu.vn"),
   title: SHARE_TITLE,
   description: SHARE_TEXT,
   icons: {
-    icon: '/favicon.ico?v=4'
+    icon: "/favicon.ico?v=4",
   },
   openGraph: {
-    type: 'website',
-    locale: 'vi_VN',
+    type: "website",
+    locale: "vi_VN",
     url: process.env.NEXT_PUBLIC_BASE_URL,
     title: SHARE_TITLE,
     description: SHARE_TEXT,
@@ -43,9 +45,9 @@ export const metadata: Metadata = {
         url: CONTEST_SHARE_IMAGE_LINK,
         width: 1200,
         height: 630,
-        alt: SHARE_TITLE
-      }
-    ]
+        alt: SHARE_TITLE,
+      },
+    ],
   },
   robots: {
     index: true,
@@ -53,32 +55,32 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1
-    }
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   twitter: {
-    card: 'summary_large_image',
-    site: '@tekmonk',
+    card: "summary_large_image",
+    site: "@tekmonk",
     title: SHARE_TITLE,
     description: SHARE_TEXT,
-    images: [CONTEST_SHARE_IMAGE_LINK]
+    images: [CONTEST_SHARE_IMAGE_LINK],
   },
   other: {
-    'fb:app_id': '1234567890',
-    'og:image:alt': SHARE_TITLE,
-    'og:locale': 'vi_VN',
-    'og:site_name': 'Tekmonk',
-    'twitter:image:alt': SHARE_TITLE,
-    'twitter:creator': '@tekmonk'
-  }
-}
+    "fb:app_id": "1234567890",
+    "og:image:alt": SHARE_TITLE,
+    "og:locale": "vi_VN",
+    "og:site_name": "Tekmonk",
+    "twitter:image:alt": SHARE_TITLE,
+    "twitter:creator": "@tekmonk",
+  },
+};
 
 export default function RootLayout({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html
@@ -93,5 +95,5 @@ export default function RootLayout({
         <Loading />
       </body>
     </html>
-  )
+  );
 }

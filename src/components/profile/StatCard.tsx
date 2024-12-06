@@ -1,11 +1,13 @@
 "use client";
 import { Dela_Gothic_One } from "next/font/google";
 import React from "react";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../.././assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 type Props = {
   value: string;

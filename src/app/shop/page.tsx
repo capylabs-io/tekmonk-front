@@ -9,11 +9,13 @@ import { useRouter } from "next/navigation";
 import WithAuth from "@/components/hoc/WithAuth";
 import { useAvatarShops } from "@/lib/hooks/useAvatarShop";
 import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../.././assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 
 const Shop: React.FC = () => {

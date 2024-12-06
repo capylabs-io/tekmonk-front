@@ -3,11 +3,13 @@ import React from "react";
 import Image from "next/image";
 import classNames from "classnames";
 import { Dela_Gothic_One } from "next/font/google";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../../assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 type Props = {
   imageUrl: string;
