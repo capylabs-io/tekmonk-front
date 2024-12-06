@@ -181,7 +181,7 @@ export default function GroupStageCodeCombatInfo() {
 
             <p>
             1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-blue-600">https://codecombat.com/ </Link>
-            với email đăng ký dự thi là {email}.
+            với email đăng ký dự thi là <span className={`text-blue-600`}>{email}</span>.
             </p>
             <p>
             2. Thí sinh tự chuẩn bị máy tính (laptop, PC, máy tính bảng, điện
@@ -268,7 +268,7 @@ export default function GroupStageCodeCombatInfo() {
             className="group-hover:border-primary-600"
           />
           <div className="text-base font-medium text-gray-900 cursor-pointer">
-            Tôi đã đọc, nắm bắt thông tin về giải đấu
+            Tôi đã đọc kỹ quy chế thi Vòng loại.
           </div>
         </div>
       </RadioGroup>

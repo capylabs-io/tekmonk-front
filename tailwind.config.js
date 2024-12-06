@@ -88,7 +88,8 @@ module.exports = {
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},
   		fontFamily: {
-  			dela: ['var(--font-dela)', 'cursive']
+  			dela: ['var(--font-dela)', 'cursive'],
+			nutito: ['var(--font-nunito)', 'cursive'],
   		},
   		boxShadow: {
   			'custom-gray': '0px 4px 0px rgb(208, 213, 221) ',

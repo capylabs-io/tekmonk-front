@@ -4,7 +4,7 @@ import ContestLayout from "@/components/layout/ContestLayout";
 import DotPattern from "@/components/ui/dot-pattern";
 import { LAYERS } from "@/contants/layer";
 import { cn } from "@/lib/utils";
-import { Dela_Gothic_One } from "next/font/google";
+import { Dela_Gothic_One, Nunito_Sans } from "next/font/google";
 const delaGothicOne = Dela_Gothic_One({
   weight: '400',
   subsets: ['latin'],

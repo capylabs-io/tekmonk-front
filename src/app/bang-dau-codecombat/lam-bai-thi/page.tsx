@@ -97,6 +97,7 @@ const GroupStageCodeCombat = ({
   contestGroupStage: ContestGroupStage;
   isSubmitted: boolean;
 }) => {
+  
   const router = useRouter();
   //use state
   const [timeOver, setTimeOver] = useState(false);
@@ -254,20 +255,19 @@ const GroupStageCodeCombat = ({
     // }
   }, [isSubmitted, timeOver]);
   return (
-    <div className="max-w-3xl mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
+    <div className="max-w-3xl mx-auto">
+      <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
+      max-md:text-[30px] max-sm:text-[25px]
+      ">Quy chế thi Vòng Loại - Bảng {contestGroupStage.code}</div>
+      <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
       <div className={``}>
         <div className={`w-full flex item-center justify-between px-8 py-3`}>
-          <Button
-            outlined={true}
-            className={`border border-gray-300 !rounded-[3rem] w-[120px] h-[44px]`}
-            onClick={() => router.back()}
-          >
-            Quay lại
-          </Button>
+          <div></div>
           {!isSubmitted ? (
             <Button
               className={`!rounded-[3rem] w-[120px] h-[44px]`}
               onClick={() => setDialogOpen(true)}
+              disabled={timeOver}
             >
               Nộp bài
             </Button>
@@ -358,8 +358,9 @@ const GroupStageCodeCombat = ({
             })}
           </div>
 
-          <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 ">
-            <li>Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></li>
+          <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 font-nutito">
+
+            <li className="!p-0 !m-0">Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></li>
             <li>Thí sinh nhấn vào từng thử thách để làm bài.</li>
             <li>
               Thí sinh đã được điền trước trong CodeCombat trong một tab mới.
@@ -388,6 +389,7 @@ const GroupStageCodeCombat = ({
           </div>
         </ScrollArea>
       </Card>
+    </div>
     </div>
   );
 };
