@@ -50,7 +50,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     setIsClient(true);
   }, []);
   const isSubmitted = useUserStore((state) => state.isSubmitted);
-
+  const email = useUserStore((state) => state.userInfo?.email);
   //handle function
   const handleLogout = () => {
     clear();
@@ -163,7 +163,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
                         onClick={handleRedirectResultContest}
                       >
-                        Kết quả
+                        {email}
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>

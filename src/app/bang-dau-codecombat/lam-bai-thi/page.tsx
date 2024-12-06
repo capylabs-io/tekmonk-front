@@ -258,7 +258,7 @@ const GroupStageCodeCombat = ({
     <div className="max-w-3xl mx-auto">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
       max-md:text-[30px] max-sm:text-[25px]
-      ">Quy chế thi Vòng Loại - Bảng {contestGroupStage.code}</div>
+      ">Đề thi Chính thức Vòng Loại - Bảng {contestGroupStage.code}</div>
       <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
       <div className={``}>
         <div className={`w-full flex item-center justify-between px-8 py-3`}>
@@ -361,10 +361,10 @@ const GroupStageCodeCombat = ({
           <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 font-nutito">
 
             <li className="!p-0 !m-0">Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></li>
+            <li>Các câu hỏi được sắp xếp theo độ khó tăng dần.</li>
             <li>Thí sinh nhấn vào từng thử thách để làm bài.</li>
             <li>
-              Thí sinh đã được điền trước trong CodeCombat trong một tab mới.
-              Khi đó, thí sinh làm bài trong tab này
+            Mỗi câu hỏi sẽ mở ra thử thách CodeCombat tương ứng, trong một tab mới. Thí sinh làm bài trong tab này.
             </li>
             <li>
               Khi làm xong 1 thử thách, thí sinh nhấn nút <span className="font-bold"> Done </span>, đóng tab
@@ -372,7 +372,7 @@ const GroupStageCodeCombat = ({
             </li>
             <li>Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở <span className="font-bold"> Trang thi </span>.</li>
             <li>Khi hoàn thành hết các thử thách, thí sinh nhấn nút <span className="font-bold"> Nộp bài </span>.</li>
-            <li>Trong trường hợp hết giờ mà thí sinh <span className="text-red-500"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
+            <li>Trong trường hợp hết giờ mà thí sinh <span className="text-red-500 font-bold"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
             kết quả được ghi nhận ở thời điểm hết giờ.
             </li>
             <li className="">
@@ -380,7 +380,7 @@ const GroupStageCodeCombat = ({
               <Link
                 href="http://localhost:3000/bang-dau-codecombat"
                 target="_blank"
-                className="text-primary-950 underline"
+                className="text-primary-950 underline font-bold"
               >
                 tại đây
               </Link>

@@ -180,12 +180,11 @@ export default function GroupStageCodeCombatInfo() {
             </p>
 
             <p>
-            1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-blue-600">https://codecombat.com/ </Link>
-            với email đăng ký dự thi là <span className={`text-blue-600`}>{email}</span>.
+            1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-primary-800">https://codecombat.com/ </Link>
+            với email đăng ký dự thi là <span className={`text-primary-800`}>{email}</span>.
             </p>
             <p>
-            2. Thí sinh tự chuẩn bị máy tính (laptop, PC, máy tính bảng, điện
-              thoại...) có kết nối Internet ổn định và hoạt động bình thường.
+            2. Thí sinh tự chuẩn bị máy tính cá nhân có kết nối Internet ổn định và hoạt động bình thường.
             </p>
 
             <p>
@@ -193,51 +192,43 @@ export default function GroupStageCodeCombatInfo() {
             </p>
 
             <p>
-              4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất. Mỗi
-              thí đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động được tính.
+              4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất. Một khi đã nhấn nút <span className="text-primary-800 font-bold"> Làm bài </span>, thời gian sẽ được tính.
             </p>
 
             <p>
-              5. Thí sinh sẽ được làm bài thông qua website
-              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> Không tự ý đăng nhập trực tiếp vào
-              CodeCombat trong suốt quá trình thi.
+              5. Thí sinh làm bài trực tiếp trên website
+              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> Website cuộc thi sẽ tự động điều hướng sang CodeCombat trong tab mới. Thí sinh không tự ý mở CodeCombat.
+
             </p>
 
             <p>
-              6. Có tổng số 30 thử thách cần hoàn thiện. Thí sinh hoàn thành các
-              thử thách đã trình trên nền tảng CodeCombat theo yêu cầu của đề
-              thi, với độ khó tăng dần.
+              6.  Thí sinh hoàn thành các thử thách theo yêu cầu của đề thi. Có 30 thử thách với độ khó tăng dần. 
             </p>
 
             <p>
-              7. Tiến độ làm bài sẽ được cập nhật mỗi 1 phút và hiển thị trên cùng của trang làm bài thi.
-              Nếu thí sinh đã hoàn thiện thử thách
-              sau 5 phút mà tiến độ làm bài chưa được cập nhập, vui lòng liên
-              hệ với Ban tổ chức thi.
+              7. Tiến độ làm bài sẽ được cập nhật mỗi 1 phút và hiển thị trên trang làm bài thi. Nếu thí sinh đã hoàn thiện thử thách sau 5 phút mà tiến độ làm bài chưa được cập nhập, vui lòng liên hệ với Ban tổ chức thi.
+
             </p>
 
             <p>
-              8. Tiêu chí xếp hạng Vòng Loại là thí sinh hoàn thiện nhiều thử
-              thách nhất trong thời gian ngắn nhất.
+              8. Tiêu chí xếp hạng Vòng Loại là thí sinh hoàn thiện nhiều thử thách nhất trong thời gian ngắn nhất.
+
             </p>
 
             <p>
-              9. Nếu thí sinh vô tình đóng cửa sổ hay thoát trang làm bài thì,
-              vui lòng truy cập lại vào trang làm bài thi, tiến độ làm bài sẽ
-              không bị ảnh hưởng. Tuy nhiên, thời gian vẫn bị tính. Vì thế vui
-              lòng chuẩn bị thiết bị và đường truyền Internet thật ổn định.
+              9. Nếu thí sinh vô tình đóng cửa sổ hay thoát trang làm bài thì, vui lòng truy cập lại vào trang làm bài thi, tiến độ làm bài sẽ không bị ảnh hưởng. Tuy nhiên, thời gian vẫn bị tính. Vì thế vui lòng chuẩn bị thiết bị và đường truyền Internet thật ổn định.
+
             </p>
 
             <p>
-              10. Thí sinh không được quay, chụp, sao chép, in, chia sẻ hình ảnh
-              về nội dung trong làm bài, đề thi trên website
-              olympiad.tekmonk.edu.vn và thử thách trên CodeCombat.
+              10. Thí sinh không được quay, chụp, sao chép, in, chia sẻ hình ảnh hay nội dung trang làm bài, đề thi trên website
+              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> hay thử thách trên CodeCombat.
+
             </p>
 
             <p className="">
-              11. Khi gặp vấn đề kỹ thuật hoặc có thắc mắc, vui lòng liên hệ với
-              Ban tổ chức Giải về địch Tekmonk Coding Olympics thông qua một
-              trong các cách sau:
+              11. Khi gặp vấn đề kỹ thuật hoặc có thắc mắc, vui lòng liên hệ với Ban tổ chức Giải vô địch Tekmonk Coding Olympiad thông qua một trong các cách sau:
+
             </p>
 
             <div className="ml-4 space-y-2">
