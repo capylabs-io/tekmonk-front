@@ -9,6 +9,7 @@ import { useUserStore } from "@/store/UserStore";
 import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { get } from "lodash";
+import Link from "next/link";
 
 type TDialogAccept = {
   isOpen: boolean;
@@ -141,7 +142,7 @@ export default function GroupStageCodeCombatInfo() {
   const [contestGroupStage, setContestGroupStage] =
       useState<ContestGroupStage | null>(null);
     const candidateNumber = useUserStore((state) => state.candidateNumber);
-
+    const email = useUserStore((state) => state.userInfo?.email);
     const fetchContestGroupStage = async () => {
       if (!candidateNumber) {
         router.push("/");
@@ -175,42 +176,43 @@ export default function GroupStageCodeCombatInfo() {
         <div className={`p-6 px-8`}>
           <div className="space-y-4 text-base font-normal">
             <p>
-              1. Thí sinh tự chuẩn bị máy tính (laptop, PC, máy tính bảng, điện
+              
+            </p>
+
+            <p>
+            1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-blue-600">https://codecombat.com/ </Link>
+            với email đăng ký dự thi là {email}.
+            </p>
+            <p>
+            2. Thí sinh tự chuẩn bị máy tính (laptop, PC, máy tính bảng, điện
               thoại...) có kết nối Internet ổn định và hoạt động bình thường.
             </p>
 
             <p>
-              2. Trang làm bài thi sẽ được mở trong vòng 24 giờ: từ 00:00 đến
-              23:59 ngày 08/12/2024.
-            </p>
-
-            <p>
-              3. Thời gian làm bài là 75 phút. Thí sinh có thể vào làm bài nhiều
-              lần nhưng chỉ được nộp bài 1 lần trong ngày.
+              3. Thời gian làm bài là 75 phút.
             </p>
 
             <p>
               4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất. Mỗi
-              thí đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động đếm ngược trong
-              vòng 75 phút.
+              thí đã nhấn nút &quot;Làm bài&quot;, thời gian sẽ tự động được tính.
             </p>
 
             <p>
               5. Thí sinh sẽ được làm bài thông qua website
-              olympiad.tekmonk.edu.vn. Những thí ý đăng nhập trực tiếp vào
+              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> Không tự ý đăng nhập trực tiếp vào
               CodeCombat trong suốt quá trình thi.
             </p>
 
             <p>
               6. Có tổng số 30 thử thách cần hoàn thiện. Thí sinh hoàn thành các
               thử thách đã trình trên nền tảng CodeCombat theo yêu cầu của đề
-              thi, và đồ thời gian.
+              thi, với độ khó tăng dần.
             </p>
 
             <p>
-              7. Tiến độ làm bài sẽ được chấm điểm. Nếu thí sinh đã hoàn thành
-              trong thời gian làm bài thi. Nếu thí sinh đã hoàn thành thử thách
-              sau 5 phút mà thí đã đủ làm bài chưa được cập nhập, vui lòng liên
+              7. Tiến độ làm bài sẽ được cập nhật mỗi 1 phút và hiển thị trên cùng của trang làm bài thi.
+              Nếu thí sinh đã hoàn thiện thử thách
+              sau 5 phút mà tiến độ làm bài chưa được cập nhập, vui lòng liên
               hệ với Ban tổ chức thi.
             </p>
 

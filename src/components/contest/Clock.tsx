@@ -135,30 +135,7 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
             groupStage && <GroupStageDialog groupStageData={groupStage} />
           )}
           
-          {is_show_full && (
-            <Tooltip>
-              <TooltipTrigger>
-                <Button
-                  className="w-[312px] h-[52px] max-[460px]:w-[280px]  border border-gray-200 shadow-custom-gray text-SubheadLg
-
-                max-[460px]:text-[16px]
-                max-[460px]:h-[50px]
-                "
-                  outlined={true}
-                  onClick={() => {
-                    is_show_full && router.push("tong-hop-bai-du-thi");
-                  }}
-                >
-                  Tổng hợp bài dự thi
-                </Button>
-              </TooltipTrigger>
-              {!is_show_full && (
-                <TooltipContent>
-                  <p>Sắp diễn ra</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-          )}
+          
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 

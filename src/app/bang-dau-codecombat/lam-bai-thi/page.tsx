@@ -295,11 +295,6 @@ const GroupStageCodeCombat = ({
                     <>
                       <DateTimeDisplay
                         dataTime={groupStageTimeLeft}
-                        type="days"
-                      />
-                      <span>:</span>
-                      <DateTimeDisplay
-                        dataTime={groupStageTimeLeft}
                         type="hours"
                       />
                       <span>:</span>
@@ -331,7 +326,7 @@ const GroupStageCodeCombat = ({
                   <div className={`border border-gray-300 w-full`}></div>
       <Card className="px-6 border-none">
         <ScrollArea className="h-[calc(100vh-200px)]">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
             {Array.isArray(listSlugs)&&listSlugs.map((item:TCourseRender, index:number) => {
               //handle function check if slug is match with current slug
               let isCompleted = false;
@@ -348,11 +343,11 @@ const GroupStageCodeCombat = ({
                 <Button
                   key={index}
                   outlined={true}
-                  className={`h-12 border font-bold text-lg
+                  className={`h-12 border font-bold text-lg hover:bg-primary-100
                     
                      `}
                   onClick={() => handleRedirectToCodeCombat(item)}
-                  disabled={isCompleted || isSubmitted}
+                  disabled={isSubmitted}
                 >
                   <div className={`flex items-center gap-x-3`}>
                     {isCompleted && <CheckCircle className="text-primary-900" />}
@@ -363,30 +358,33 @@ const GroupStageCodeCombat = ({
             })}
           </div>
 
-          <div className="mt-6 space-y-4 text-base text-gray-600 font-semibold">
-            <p>Thí sinh nhấn vào từng thứ tự để làm bài.</p>
-            <p>
+          <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 ">
+            <li>Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></li>
+            <li>Thí sinh nhấn vào từng thử thách để làm bài.</li>
+            <li>
               Thí sinh đã được điền trước trong CodeCombat trong một tab mới.
-            </p>
-            <p>Thí sinh làm bài trong tab này.</p>
-            <p>
-              Khi làm xong 1 thử thách, thí sinh nhấn nút Done, đóng tab
-              CodeCombat, sau đó quay trở lại trang đề thi để tiếp tục.
-            </p>
-            <p>Tiến độ làm bài sẽ được cập nhật mỗi 01 phút.</p>
-            <p>Khi hoàn thành hết các thử thách, thí sinh nhấn nút Nộp bài.</p>
-            <p>Bài thi sẽ tự động nộp khi hết thời gian.</p>
-            <p>
+              Khi đó, thí sinh làm bài trong tab này
+            </li>
+            <li>
+              Khi làm xong 1 thử thách, thí sinh nhấn nút <span className="font-bold"> Done </span>, đóng tab
+              CodeCombat, sau đó quay trở lại <span className="font-bold"> Trang thi </span> để tiếp tục.
+            </li>
+            <li>Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở <span className="font-bold"> Trang thi </span>.</li>
+            <li>Khi hoàn thành hết các thử thách, thí sinh nhấn nút <span className="font-bold"> Nộp bài </span>.</li>
+            <li>Trong trường hợp hết giờ mà thí sinh <span className="text-red-500"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
+            kết quả được ghi nhận ở thời điểm hết giờ.
+            </li>
+            <li className="">
               Xem hướng dẫn chi tiết{" "}
               <Link
-                href="#"
+                href="http://localhost:3000/bang-dau-codecombat"
                 target="_blank"
                 className="text-primary-950 underline"
               >
                 tại đây
               </Link>
               .
-            </p>
+            </li>
           </div>
         </ScrollArea>
       </Card>
