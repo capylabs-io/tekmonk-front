@@ -1,6 +1,6 @@
 import { ContestEntry, Media } from "@/types/common-types";
 
-type TResultCodeCombat = {
+export type TResultCodeCombat = {
   name: string;
   totalLevel: number;
   currentLevel: number;

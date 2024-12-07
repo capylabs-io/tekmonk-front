@@ -246,13 +246,13 @@ const GroupStageCodeCombat = ({
   }, [currentResult]);
 
   useEffect(() => {
-    // if (!isSubmitted && !timeOver) {
+    if (!isSubmitted && !timeOver) {
       const interval = setInterval(() => {
         handleGetProgress();
       }, 10000);
 
       return () => clearInterval(interval);
-    // }
+    }
   }, [isSubmitted, timeOver]);
   return (
     <div className="max-w-3xl mx-auto">
@@ -374,17 +374,6 @@ const GroupStageCodeCombat = ({
             <li>Khi hoàn thành hết các thử thách, thí sinh nhấn nút <span className="font-bold"> Nộp bài </span>.</li>
             <li>Trong trường hợp hết giờ mà thí sinh <span className="text-red-500 font-bold"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
             kết quả được ghi nhận ở thời điểm hết giờ.
-            </li>
-            <li className="">
-              Xem hướng dẫn chi tiết{" "}
-              <Link
-                href="http://localhost:3000/bang-dau-codecombat"
-                target="_blank"
-                className="text-primary-950 underline font-bold"
-              >
-                tại đây
-              </Link>
-              .
             </li>
           </div>
         </ScrollArea>
