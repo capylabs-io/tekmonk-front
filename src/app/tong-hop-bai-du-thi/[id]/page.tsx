@@ -3,7 +3,7 @@
 import Tag from "@/components/contest/Tag";
 import { Dock, DockIcon } from "@/components/ui/dock";
 import { getOneContestSubmission } from "@/requests/contestSubmit";
-import { ContestSubmission } from "@/types/contestSubmit";
+import { ContestSubmission, TResultCodeCombat } from "@/types/contestSubmit";
 import {
   ArrowLeft,
   Download,
@@ -47,12 +47,39 @@ const ContestDetail: React.FC = () => {
   const setSelectedTag = useTagStore((state) => state.setSelectedTag);
   const [isShowCodeCombatCert, setIsShowCodeCombatCert] = useState(false);
 
+  const mergeCourses = (courses: TResultCodeCombat[]): TResultCodeCombat[] => {
+    const mergedMap = new Map<string, TResultCodeCombat>();
+  
+    for (const course of courses) {
+      if (mergedMap.has(course.name)) {
+        const existing = mergedMap.get(course.name)!;
+  
+        existing.currentLevel += course.currentLevel;
+        existing.totalLevel += course.totalLevel;
+      } else {
+        mergedMap.set(course.name, { ...course });
+      }
+    }
+  
+    return Array.from(mergedMap.values());
+  }
+
   const fetchContestDetail = async () => {
     setIsLoading(true);
     try {
       const response = await getOneContestSubmission(id as string);
       if (response && response.data) {
         setContestDetail(response.data);
+        if (response.data.resultCodeCombat) {
+          const courses = mergeCourses(response.data.resultCodeCombat);
+          setContestDetail((prevState) => {
+            if (!prevState) return prevState;
+            return {
+              ...prevState,
+              resultCodeCombat: courses,
+            };
+          });
+        }
         const firstChar = get(
           response.data,
           "contest_entry.candidateNumber",
@@ -74,6 +101,16 @@ const ContestDetail: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     fetchContestDetail();
+    if(contestDetail?.resultCodeCombat) {
+      const courses = mergeCourses(contestDetail.resultCodeCombat);
+      setContestDetail((prevState) => {
+        if (!prevState) return prevState;
+        return {
+          ...prevState,
+          resultCodeCombat: courses,
+        };
+      });
+    }
   }, [id]);
   const handleClickTag = (tag: string) => {
     // Store the tag in Zustand store
@@ -151,7 +188,7 @@ const ContestDetail: React.FC = () => {
                     href={contestDetail?.source?.[0]?.url}
                     target="_blank"
                   >
-                    <div className="max-mobile:hidden">Tải về dạng .zip</div>
+                    <div className="max-mobile:hidden">Tải xuống bài dự thi</div>
                   </a>
                 </Button>
               )}

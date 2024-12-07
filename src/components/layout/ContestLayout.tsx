@@ -50,7 +50,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     setIsClient(true);
   }, []);
   const isSubmitted = useUserStore((state) => state.isSubmitted);
-
+  const email = useUserStore((state) => state.userInfo?.email);
   //handle function
   const handleLogout = () => {
     clear();
@@ -109,6 +109,18 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-4 text-bodyMd">
+            <Tooltip>
+                    <TooltipTrigger>
+                      <div
+                        className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
+                      >
+                        {email}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {email}
+                    </TooltipContent>
+                  </Tooltip>
               <LinkToScroll to="rules" smooth={true} duration={500}>
                 <div
                   className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
@@ -157,23 +169,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Tooltip>
                   )}
 
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <div
-                        className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
-                        onClick={handleRedirectResultContest}
-                      >
-                        Kết quả
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {!is_show_full ? (
-                        <p>Sắp diễn ra</p>
-                      ) : (
-                        <p>Kết quả vòng loại</p>
-                      )}
-                    </TooltipContent>
-                  </Tooltip>
+                  
                 </>
               )}
 

@@ -7,11 +7,13 @@ import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
 import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
 import WithAuth from "@/components/hoc/WithAuth";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../../../assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 
 const BackgroundShop: React.FC = () => {

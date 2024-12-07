@@ -8,11 +8,13 @@ import { Recruitment } from "@/types/common-types";
 import { Pagination } from "@/components/common/Pagination";
 import axios from "axios";
 import { API_POST } from "@/contants/api-url";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../.././assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 
 const itemsPerPage = 12;

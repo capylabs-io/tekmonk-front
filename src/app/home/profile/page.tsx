@@ -27,11 +27,13 @@ import { useAchievements } from "@/lib/hooks/useAchievement";
 import { Achievement, Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
 import { get } from "lodash";
+import localFont from "next/font/local";
 
-const delaGothicOne = Dela_Gothic_One({
+const delaGothicOne = localFont({
+  src: "../../.././assets/fonts/DelaGothicOne-Regular.ttf",
   weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
+  style: "normal",
+  variable: "--font-dela",
 });
 
 const Profile: React.FC = () => {

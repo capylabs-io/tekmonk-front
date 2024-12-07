@@ -51,51 +51,10 @@ const ContestGroupStageEntry = ({
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
-
-  //function handler
-  const isExistContestSubmission = async () => {
-    if(!candidateNumber) return false;
-    const contestEntry = await getOneContestEntry(
-        candidateNumber
-    )
-    const contestSubmission = await getContestSubmissionByContestEntry(
-        contestEntry.id
-    )
-    return contestSubmission.data.length > 0
-  }
-  const handleAutoSubmit = async () => {
-    try {
-      //check if user already submitted => return
-      if (isSubmitted) return;
-      if(await isExistContestSubmission()) return;
-      //check if contestGroupStage is not D1 or D2 => auto submit
-      const firstChar = candidateNumber?.charAt(0);
-      if (firstChar != "D") {
-        const contestEntry = await getOneContestEntry(
-          useUserStore.getState().candidateNumber || ""
-        );
-        const contestResult = {
-          title: fullNameUser || "",
-          tags: { data: ["codecombat"] },
-          contest_entry: contestEntry.id,
-          classIndex: get(contestGroupStage, "id", ""),
-          memberId: codeCombatId || "",
-          data: null,
-        };
-        await createContestSubmission(contestResult);
-        useUserStore.setState({ isSubmitted: true })
-      }
-      return;
-    } catch (err) {
-      //console.error(err);
-      return;
-    }
-  };
+  
   const handleTimeOver = (validCountDown: boolean) => {
     setTimeOver(true);
-    if (!isSubmitted && validCountDown) {
-      handleAutoSubmit();
-    }
+    
   };
   const handleRedirectToMyContest = async () => {
     try {
@@ -127,6 +86,7 @@ const ContestGroupStageEntry = ({
         codeCombatId,
         Number(get(contestGroupStage, "id", 0))
       );
+      
       if (res) {
         setProgress(res);
       }

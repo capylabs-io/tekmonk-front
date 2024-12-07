@@ -124,7 +124,7 @@ const FileInfo = ({
 const UploadPrompt = () => (
   <>
     <p className="text-[14px]">
-      Tải lên Hồ sơ dự án theo yêu cầu (Lưu ý không quá {MAX_FILE_SIZE_MB} MB)
+      Tải lên hồ sơ dự án với định dạng .zip theo yêu cầu (Hồ sơ không quá {MAX_FILE_SIZE_MB} MB)
     </p>
     {/* <p className="text-gray-500">hoặc</p> */}
     <Button
