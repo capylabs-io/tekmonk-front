@@ -75,23 +75,23 @@ const GroupStageDialog = ({
     setIsSubmitted(contestSubmission.data.length > 0);
   };
 
-  // const handleRedirectToMyContest = async () => {
-  //   try {
-  //     // if (!is_show_full) return;
-  //     const contestEntry = await getOneContestEntry(
-  //       useUserStore.getState().candidateNumber || ""
-  //     );
-  //     const contestSubmission = await getContestSubmissionByContestEntry(
-  //       contestEntry.id
-  //     );
-  //     if (contestSubmission.data.length === 0) {
-  //       return;
-  //     }
-  //     router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
+  const handleRedirectToMyContest = async () => {
+    try {
+      // if (!is_show_full) return;
+      const contestEntry = await getOneContestEntry(
+        useUserStore.getState().candidateNumber || ""
+      );
+      const contestSubmission = await getContestSubmissionByContestEntry(
+        contestEntry.id
+      );
+      if (contestSubmission.data.length === 0) {
+        return;
+      }
+      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
     // Check if the group stage has already started
     const hasStarted = new Date(groupStageData.startTime) <= new Date();
@@ -125,6 +125,18 @@ const GroupStageDialog = ({
           </>
         ) : (
           <>
+          {isSubmitted ? <>
+            <Button
+              className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg 
+              max-[460px]:text-[16px]
+                max-[460px]:h-[50px]
+              "
+              outlined={false}
+              onClick={handleRedirectToMyContest}
+            >
+              Xem bài thi
+            </Button>
+          </> : 
             <Dialog open={showDialog} onOpenChange={setShowDialog}>
               <DialogTrigger>
                 <Button
@@ -244,6 +256,7 @@ const GroupStageDialog = ({
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+          }
           </>
         )}
       </>
