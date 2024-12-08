@@ -66,27 +66,27 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
     return;
   };
 
-  const handleRedirectToMyContest = async () => {
-    try {
-      if (!is_show_full) return;
-      const contestEntry = await getOneContestEntry(
-        useUserStore.getState().candidateNumber || ""
-      );
-      const contestSubmission = await getContestSubmissionByContestEntry(
-        contestEntry.id
-      );
-      if (contestSubmission.data.length === 0) {
-        return;
-      }
-      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const handleRedirectToMyContest = async () => {
+  //   try {
+  //     if (!is_show_full) return;
+  //     const contestEntry = await getOneContestEntry(
+  //       useUserStore.getState().candidateNumber || ""
+  //     );
+  //     const contestSubmission = await getContestSubmissionByContestEntry(
+  //       contestEntry.id
+  //     );
+  //     if (contestSubmission.data.length === 0) {
+  //       return;
+  //     }
+  //     router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   const handleRedirectResultContest = () => {
     if (!is_show_full) return;
-    router.push("/ket-qua-vong-loai");
+    // router.push("/ket-qua-vong-loai");
   };
 
   return (
@@ -131,7 +131,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
               </LinkToScroll>
               {is_show_full && (
                 <>
-                  <div>
+                  {/* <div>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <div
@@ -149,9 +149,9 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         </TooltipContent>
                       )}
                     </Tooltip>
-                  </div>
+                  </div> */}
 
-                  {isConnected() && isSubmitted && (
+                  {/* {isConnected() && isSubmitted && (
                     <Tooltip>
                       <TooltipTrigger>
                         <div
@@ -167,7 +167,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         </TooltipContent>
                       )}
                     </Tooltip>
-                  )}
+                  )} */}
 
                   
                 </>
@@ -227,7 +227,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                       </Button>
                       {is_show_full && (
                         <>
-                          <Button
+                          {/* <Button
                             outlined={true}
                             onClick={() => {
                               is_show_full &&
@@ -237,8 +237,8 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                             <div className="text-black text-base">
                               Tổng hợp bài dự thi
                             </div>
-                          </Button>
-                          {isConnected() && isSubmitted && (
+                          </Button> */}
+                          {/* {isConnected() && isSubmitted && (
                             <Button
                               outlined={true}
                               onClick={handleRedirectToMyContest}
@@ -247,16 +247,16 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                                 Bài dự thi của tôi
                               </div>
                             </Button>
-                          )}
+                          )} */}
 
-                          <Button
+                          {/* <Button
                             outlined={true}
                             onClick={handleRedirectResultContest}
                           >
                             <div className="text-black text-base">
                               Kết quả vòng loại
                             </div>
-                          </Button>
+                          </Button> */}
                         </>
                       )}
 

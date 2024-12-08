@@ -56,22 +56,22 @@ const ContestGroupStageEntry = ({
     setTimeOver(true);
     
   };
-  const handleRedirectToMyContest = async () => {
-    try {
-      if (!candidateNumber) return;
-      const contestEntry = await getOneContestEntry(candidateNumber);
-      const contestSubmission = await getContestSubmissionByContestEntry(
-        contestEntry.id
-      );
-      if (contestSubmission.data.length === 0) {
-        return;
-      }
-      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
-    } catch (err) {
-      //console.error(err);
-      return;
-    }
-  };
+  // const handleRedirectToMyContest = async () => {
+  //   try {
+  //     if (!candidateNumber) return;
+  //     const contestEntry = await getOneContestEntry(candidateNumber);
+  //     const contestSubmission = await getContestSubmissionByContestEntry(
+  //       contestEntry.id
+  //     );
+  //     if (contestSubmission.data.length === 0) {
+  //       return;
+  //     }
+  //     router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
+  //   } catch (err) {
+  //     //console.error(err);
+  //     return;
+  //   }
+  // };
 
   const handleGetProgress = async () => {
     try {
@@ -130,16 +130,7 @@ const ContestGroupStageEntry = ({
                 >
                   Quay lại
                 </Button>
-                {isSubmitted ? (
-                  <Button
-                    style={{ borderRadius: "4rem" }}
-                    className=" h-[40px] rounded-[3rem]"
-                    onClick={handleRedirectToMyContest}
-                    disabled={process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "false"}
-                  >
-                    Bài dự thi của tôi
-                  </Button>
-                ) : (
+                {!isSubmitted && (
                   <FormSubmitContest>
                     <Button
                       style={{ borderRadius: "4rem" }}

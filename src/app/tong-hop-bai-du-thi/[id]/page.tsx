@@ -116,7 +116,7 @@ const ContestDetail: React.FC = () => {
     // Store the tag in Zustand store
     setSelectedTag(tag);
     // Navigate to the all contest entries page
-    router.push("/tong-hop-bai-du-thi");
+    // router.push("/tong-hop-bai-du-thi");
   };
 
   if (isLoading) {
@@ -140,7 +140,7 @@ const ContestDetail: React.FC = () => {
         <EmptySearch
           buttonText="Trở về"
           message="Không tìm thấy bài thi"
-          onAction={() => router.push("/tong-hop-bai-du-thi")}
+          // onAction={() => router.push("/tong-hop-bai-du-thi")}
         />
       </div>
     );
