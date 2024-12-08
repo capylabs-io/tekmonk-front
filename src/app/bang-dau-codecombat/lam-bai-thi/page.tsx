@@ -193,22 +193,22 @@ const GroupStageCodeCombat = ({
       handleAutoSubmit();
     }
   };
-  const handleRedirectToMyContest = async () => {
-    try {
-      if (!candidateNumber) return;
-      const contestEntry = await getOneContestEntry(candidateNumber);
-      const contestSubmission = await getContestSubmissionByContestEntry(
-        contestEntry.id
-      );
-      if (contestSubmission.data.length === 0) {
-        return;
-      }
-      router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
-    } catch (err) {
-      //console.error(err);
-      return;
-    }
-  };
+  // const handleRedirectToMyContest = async () => {
+  //   try {
+  //     if (!candidateNumber) return;
+  //     const contestEntry = await getOneContestEntry(candidateNumber);
+  //     const contestSubmission = await getContestSubmissionByContestEntry(
+  //       contestEntry.id
+  //     );
+  //     if (contestSubmission.data.length === 0) {
+  //       return;
+  //     }
+  //     router.push(`/tong-hop-bai-du-thi/${contestSubmission.data[0].id}`);
+  //   } catch (err) {
+  //     //console.error(err);
+  //     return;
+  //   }
+  // };
 
   const handleRenderSlugs = (listCourse: TListCourse[]): TCourseRender[] => {
     return listCourse.flatMap((item) =>
@@ -263,18 +263,13 @@ const GroupStageCodeCombat = ({
       <div className={``}>
         <div className={`w-full flex item-center justify-between px-8 py-3`}>
           <div></div>
-          {!isSubmitted ? (
+          {!isSubmitted && (
             <Button
               className={`!rounded-[3rem] w-[120px] h-[44px]`}
               onClick={() => setDialogOpen(true)}
               disabled={timeOver}
             >
               Nộp bài
-            </Button>
-          ) : (
-            <Button className={`!rounded-[3rem] w-[170px] h-[44px]`}
-            onClick={handleRedirectToMyContest}>
-              Bài dự thi của tôi
             </Button>
           )}
           <DialogAcceptSubmit

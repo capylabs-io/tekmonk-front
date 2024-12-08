@@ -151,7 +151,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                     </Tooltip>
                   </div>
 
-                  {isConnected() && isSubmitted && (
+                  {/* {isConnected() && isSubmitted && (
                     <Tooltip>
                       <TooltipTrigger>
                         <div
@@ -167,7 +167,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                         </TooltipContent>
                       )}
                     </Tooltip>
-                  )}
+                  )} */}
 
                   
                 </>
