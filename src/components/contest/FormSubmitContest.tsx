@@ -57,6 +57,7 @@ const FormSubmitContest = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode }
 >(({ children }, ref) => {
+  const SIZE_FILE_LIMIT = parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '100')
   const router = useRouter()
   //use state
   // const [progress, setProgress] = useState({
@@ -132,6 +133,14 @@ const FormSubmitContest = React.forwardRef<
         closeDialog();
         return;
       }
+
+      if(projectFile && projectFile.size > SIZE_FILE_LIMIT * 1024 * 1024) {
+        warn('Không thành công', 'Dung lượng file dự án không được vượt quá 100MB!')
+        closeDialog();
+        return
+      }
+
+      
       if (await isExistContestSubmission()) {
         warn('Không thành công', 'Bạn đã nộp bài thi rồi!')
         closeDialog()
