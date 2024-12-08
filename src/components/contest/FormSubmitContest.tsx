@@ -127,6 +127,11 @@ const FormSubmitContest = React.forwardRef<
 
   const onSubmit = async (data: any) => {
     try {
+      if(!projectFile) {
+        warn('Không thành công', 'Vui lòng tải lên file dự án!')
+        closeDialog();
+        return;
+      }
       if (await isExistContestSubmission()) {
         warn('Không thành công', 'Bạn đã nộp bài thi rồi!')
         closeDialog()
