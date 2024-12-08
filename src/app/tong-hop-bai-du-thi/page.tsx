@@ -148,7 +148,7 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1">
+    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1 mb-3 mt-3 pb-3">
       <div className="space-y-6">
         <Image
           src={`/image/contest/tong-hop-bai-du-thi.jpg`}
@@ -169,8 +169,8 @@ export default function SearchInterface() {
         />
       </div>
 
-      <div className="flex flex-col justify-between">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+      <div className="flex flex-col justify-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-5">
           {loading
             ? Array(12)
                 .fill(0)
