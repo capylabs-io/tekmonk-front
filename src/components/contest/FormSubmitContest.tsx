@@ -135,7 +135,7 @@ const FormSubmitContest = React.forwardRef<
       }
 
       if(projectFile && projectFile.size > SIZE_FILE_LIMIT * 1024 * 1024) {
-        warn('Không thành công', 'Dung lượng file dự án không được vượt quá 100MB!')
+        warn('Không thành công', `Dung lượng file dự án không được vượt quá ${SIZE_FILE_LIMIT}MB!`)
         closeDialog();
         return
       }
