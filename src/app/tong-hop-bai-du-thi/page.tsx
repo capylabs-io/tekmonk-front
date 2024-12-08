@@ -108,9 +108,9 @@ export default function SearchInterface() {
     setPage(1);
   };
 
-  const navigateDetailItem = (id: string) => {
-    router.push(`/tong-hop-bai-du-thi/${id}`);
-  };
+  // const navigateDetailItem = (id: string) => {
+  //   router.push(`/tong-hop-bai-du-thi/${id}`);
+  // };
 
   const handleFilterByTag = (tag: string) => {
     setTag(tag);
@@ -179,7 +179,7 @@ export default function SearchInterface() {
                 <div key={card.id} className="flex flex-col">
                   <Card
                     className="overflow-hidden flex-1 items-center justify-center cursor-pointer"
-                    onClick={() => navigateDetailItem(card.id)}
+                    // onClick={() => navigateDetailItem(card.id)}
                   >
                     <CardHeader className="p-0 items-center w-full h-full min-h-[148px] justify-center">
                       <AspectRatio ratio={16 / 9}>
@@ -202,13 +202,13 @@ export default function SearchInterface() {
                   <CardContent className="p-0 py-2">
                     <div
                       className="text-bodySm cursor-pointer text-gray-800"
-                      onClick={() => navigateDetailItem(card.id)}
+                      // onClick={() => navigateDetailItem(card.id)}
                     >
                       {card.contest_entry?.candidateNumber}
                     </div>
                     <div
                       className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
-                      onClick={() => navigateDetailItem(card.id)}
+                      // onClick={() => navigateDetailItem(card.id)}
                     >
                       {card.title}
                     </div>
