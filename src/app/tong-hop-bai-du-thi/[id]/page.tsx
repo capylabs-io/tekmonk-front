@@ -188,7 +188,7 @@ const ContestDetail: React.FC = () => {
                     href={contestDetail?.source?.[0]?.url}
                     target="_blank"
                   >
-                    <div className="max-mobile:hidden">Tải xuống bài dự thi</div>
+                    <div className="max-mobile:hidden">Tải xuống</div>
                   </a>
                 </Button>
               )}
