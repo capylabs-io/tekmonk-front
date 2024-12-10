@@ -197,6 +197,10 @@ h6 {
   all: revert;
 }
 
+.ql-viewer img {
+  max-width: 100%;
+}
+
 .ql-editor[contenteditable="true"]::before {
   content: attr(data-placeholder);
   font-style: normal !important;
