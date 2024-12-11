@@ -1,9 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
-import { ContestSubmission } from "@/types/contestSubmit";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
@@ -33,8 +31,7 @@ const searchResultScheme = z.object({
     .regex(phoneRegex, "Số điện thoại không hợp lệ"),
 });
 
-export default function searchResults() {
-  const router = useRouter();
+export default function SearchResults() {
 
   //define state
   const method = useForm({
@@ -69,16 +66,13 @@ export default function searchResults() {
   const handleSearch = async (data: any) => {
     showLoading();
     try {
-      //call api here
       showLoading();
       const query = {
         filters: {
           contest_entry: {
             candidateNumber: { $eq: data.candidateNumber },
-            // candidateNumber: { $eq: "D2-0186429357" },
             user: {
               parentPhoneNumber: { $eq: data.phoneNumber },
-              // parentPhoneNumber: { $eq: "01231235246" },
             },
           },
         },
