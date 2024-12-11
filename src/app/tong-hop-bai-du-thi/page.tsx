@@ -213,22 +213,26 @@ export default function SearchInterface() {
                       {card.title}
                     </div>
                     <Carousel className="mt-1">
-                      <CarouselContent className="-ml-4 pl-2">
-                        {get(card, "tags", [])?.map((tag, index) => (
-                          <CarouselItem
-                            key={index}
-                            className="w-fit basis-auto select-none pl-2"
-                          >
-                            <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
-                              <Tag
-                                text={tag}
-                                type="secondary"
-                                size="x-small"
-                                onClick={() => handleFilterByTag(tag)}
-                              />
-                            </div>
-                          </CarouselItem>
-                        ))}
+                      <CarouselContent className="-ml-4 pl-2 flex">
+                        {get(card, "tags", [])?.map((tag, index) => {
+                          if(tag != "")
+                            return (
+                              <CarouselItem
+                                key={index}
+                                className="w-fit basis-auto select-none pl-2"
+                              >
+                                <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
+                                  <Tag
+                                    text={tag}
+                                    type="secondary"
+                                    size="x-small"
+                                    onClick={() => handleFilterByTag(tag)}
+                                  />
+                                </div>
+                              </CarouselItem>
+                            )
+                        })
+                        }
                       </CarouselContent>
                     </Carousel>
                   </CardContent>
