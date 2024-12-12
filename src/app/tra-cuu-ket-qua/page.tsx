@@ -11,35 +11,41 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import qs from "qs";
 import { getResultSearchContestSubmisson } from "@/requests/contest-submission";
 import { get } from "lodash";
+import classNames from "classnames";
+import { useRouter } from "next/navigation";
+import { ROUTE } from "@/contants/router";
 
 type TSearchResultsProps = {
+  id?: number;
   QualifiedExam: boolean | null;
   fullName: string;
   contest_group_stage: string;
   category: string;
   group_member: string[];
+  title?: string;
+  description?: string;
 };
 
 const phoneRegex = /^(\+84|0)\d{9,10}$/;
+const candidateNumberRegex = /^(A|B|C|D\d{1})-\d{10}$/;
 const searchResultScheme = z.object({
   candidateNumber: z
     .string({ required_error: "Số báo danh không được để trống" })
-    .min(1, "Số báo danh ít nhất 1 ký tự"),
+    .regex(candidateNumberRegex, "Vui lòng nhập chính xác số báo danh"),
   phoneNumber: z
     .string({ required_error: "Số điện thoại của phụ huynh là bắt buộc" })
-    .min(1, "Số điện thoại của phụ huynh là bắt buộc")
     .regex(phoneRegex, "Số điện thoại không hợp lệ"),
 });
 
 export default function SearchResults() {
-
+  const router = useRouter();
   //define state
   const method = useForm({
     resolver: zodResolver(searchResultScheme),
     mode: "onChange",
     defaultValues: {
       candidateNumber: "",
-      phoneNumber: "01231235246",
+      phoneNumber: "",
     },
   });
 
@@ -48,11 +54,14 @@ export default function SearchResults() {
     undefined
   );
   const [showResult, setShowResult] = useState<TSearchResultsProps>({
+    id: undefined,
     QualifiedExam: null,
     fullName: "",
     contest_group_stage: "",
     category: "",
     group_member: [],
+    title: undefined,
+    description: undefined,
   });
 
   //use store
@@ -102,6 +111,17 @@ export default function SearchResults() {
     }
   };
 
+  const handleClick = () => {
+    try {
+      if (!router) return;
+      const contestSubmissionId = get(searchResults, "id");
+      if (!contestSubmissionId) return;
+      router.push(`${ROUTE.CONTEST_SUBMISSION}/${contestSubmissionId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (searchResults) {
       const group_stage = searchResults.contest_entry.candidateNumber
@@ -119,17 +139,19 @@ export default function SearchResults() {
         contest_group_stage: group_stage,
         category: category,
         group_member: [],
+        title: get(searchResults, "title"),
+        description: get(searchResults, "description"),
       });
-      const members: string[] = []
+      const members: string[] = [];
       if (searchResults.contest_entry.groupMemberInfo != null) {
         searchResults.contest_entry.groupMemberInfo.map((member: any) => {
           members.push(member.name);
         });
-        setShowResult((prev) => ({ ...prev, group_member: members}));
+        setShowResult((prev) => ({ ...prev, group_member: members }));
       }
     }
   }, [searchResults]);
-  showResult && console.log("data", showResult);
+
   return (
     <div
       className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] 
@@ -154,9 +176,12 @@ export default function SearchResults() {
           cứu thông tin
         </div>
         <div
-          className="w-full h-[76px] sm:flex mt-8 items-end px-4 gap-x-2 
-            max-sm:h-[255px] 
-          "
+          className={classNames(
+            "w-full flex sm:flex mt-8 px-4 gap-x-2 max-sm:h-[255px]",
+            Object.keys(method.formState.errors).length > 0
+              ? "items-center"
+              : "items-end"
+          )}
         >
           <FormProvider {...method}>
             <div className="sm:w-11/12 sm:flex gap-x-3 ">
@@ -200,7 +225,7 @@ export default function SearchResults() {
               </div>
             </div>
             <Button
-              className={`!rounded-[3rem] h-[40px] sm:w-2/12 sm:max-w-[106px] max-sm:mt-3 max-sm:w-full`}
+              className={`!rounded-[3rem] h-[48px] sm:w-2/12 sm:max-w-[106px] max-sm:mt-3 max-sm:w-full items-center`}
               onClick={method.handleSubmit(handleSearch)}
             >
               Tra cứu
@@ -218,36 +243,61 @@ export default function SearchResults() {
               <div className={`text-SubheadLg text-gray-950`}>
                 Thông tin thí sinh
               </div>
-              <Button
-                outlined={true}
-                className={`border border-gray-300 !rounded-[3rem] w-[132px] h-10`}
-              >
-                Xem bài thi
-              </Button>
+              {/* only show this button when in group D */}
+              {!!showResult.title &&
+                get(showResult, ["contest_group_stage"], "").includes("D") && (
+                  <Button
+                    outlined={true}
+                    className={classNames(
+                      `border border-gray-300 !rounded-[3rem] w-[132px] h-10 text-gray-400`,
+                      showResult.QualifiedExam == true
+                        ? "text-green-500"
+                        : "text-red-500"
+                    )}
+                    onClick={handleClick}
+                  >
+                    Xem bài thi
+                  </Button>
+                )}
             </div>
             <div className={`mt-4 px-4 grid sm:grid-cols-2 grid-cols-1`}>
-              <div className="flex gap-3">
-                <div className="text-bodyLg text-gray-600 space-y-3">
-                  <div>Họ tên:</div>
-                  <div>Bảng thi:</div>
-                  <div>Hạng mục:</div>
-                </div>
-                <div className="text-SubheadMd text-gray-800 space-y-2">
-                  <div>{get(showResult, ["fullName"], "")}</div>
-                  <div>{get(showResult, ["contest_group_stage"], "")}</div>
-                  <div className="">{get(showResult, ["category"], "")}</div>
+              <div>
+                <div className="text-bodyLg text-gray-600 space-y-2">
+                  <div className="flex items-center">
+                    <div className="w-[30%] flex-shrink-0">Họ tên:</div>
+                    <div className="text-SubheadMd text-gray-800 flex-grow">
+                      {get(showResult, ["fullName"], "")}
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-[30%] flex-shrink-0">Bảng thi:</div>
+                    <div className="text-SubheadMd text-gray-800 flex-grow">
+                      {get(showResult, ["contest_group_stage"], "")}
+                    </div>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="w-[30%] flex-shrink-0">Hạng mục:</div>
+                    <div className="text-SubheadMd text-gray-800 flex-grow">
+                      {get(showResult, ["category"], "")}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-3 max-sm:mt-3">
-                <div className="text-bodyLg text-gray-600 space-y-3">
+
+              <div className="max-sm:mt-3 text-bodyLg text-gray-600 space-y-3">
+                <div className="flex items-center">
                   {/* <div>Điểm số:</div> */}
-                  <div>Kết quả:</div>
+                  <div className=" w-[30%] flex-shrink-0">Kết quả:</div>
+                  <div className="text-SubheadMd text-gray-800 flex-grow">
+                    {/* <div>30/100</div> */}
+                    {showResult.QualifiedExam != null
+                      ? showResult.QualifiedExam == true
+                        ? "Đạt"
+                        : "Không đạt"
+                      : "Chưa chấm"}
+                    {/* <div className="">1</div> */}
+                  </div>
                   {/* <div>Xấp hạng:</div> */}
-                </div>
-                <div className="text-SubheadMd text-gray-800 space-y-2">
-                  {/* <div>30/100</div> */}
-                  <div>{showResult.QualifiedExam != null ? showResult.QualifiedExam == true ? "Đạt" : "Không đạt" : "Chưa chấm"}</div>
-                  {/* <div className="">1</div> */}
                 </div>
               </div>
             </div>
@@ -263,9 +313,12 @@ export default function SearchResults() {
               quality={100}
               className="mx-auto"
             />
-            <div className="text-red-700">Không có kết quả trùng khớp</div>
+            {Array.isArray(searchResults) && searchResults.length === 0 && (
+              <div className="text-red-700">Không có kết quả trùng khớp</div>
+            )}
           </div>
         )}
+
         {showResult.group_member.length > 0 && (
           <div className="mb-3">
             <div className={`mt-8 w-full border border-gray-300`}></div>
@@ -273,22 +326,26 @@ export default function SearchResults() {
               {/**
                * show group member info here
                */}
-              <div className={`text-SubheadLg text-gray-950`}>
-                Thành viên cùng nhóm
+              <div
+                className={`text-SubheadLg text-gray-950 h-14 flex items-center`}
+              >
+                <div>Thành viên cùng nhóm</div>
               </div>
-              <div className="mt-4 flex gap-3">
-                <div className="text-bodyLg text-gray-600 space-y-3">
-                  <div>Họ tên:</div>
-                  {showResult.group_member.length > 1 && 
-                    <div>Họ tên:</div>
-                  }
-                </div>
-                <div className="text-SubheadMd text-gray-800 space-y-2">
-                  <div>{showResult.group_member[0]}</div>
-                  {showResult.group_member.length > 1 &&
-                    <div>{showResult.group_member[1]}</div>
-                  }
-                </div>
+
+              <div className="mt-4 grid sm:grid-cols-2 grid-cols-1 text-bodyLg text-gray-600 gap-2">
+                {Array.isArray(showResult.group_member) &&
+                  showResult.group_member.map((member) => {
+                    return (
+                      <div key={member}>
+                        <div className="flex items-center">
+                          <div className="w-[30%] flex-shrink-0">Họ tên:</div>
+                          <div className="text-SubheadMd text-gray-800 flex-grow">
+                            {member}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
