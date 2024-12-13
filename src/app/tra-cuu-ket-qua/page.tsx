@@ -365,6 +365,13 @@ export default function SearchResults() {
             có điểm thi Vòng loại cao nhất
           </div>
         )}
+        {showResult.QualifiedExam === false && (
+          <div className="text-justify mt-8 text-SubheadMd text-primary-950 mx-4">
+            Ban Tổ chức hy vọng cuộc thi đã mang lại cho con những trải nghiệm
+            thú vị và bổ ích. Chúc con giữ vững đam mê với lập trình và hẹn gặp
+            lại con trong Giải đấu Lập trình Tekmonk Coding Olympiad 2025!
+          </div>
+        )}
       </div>
     </div>
   );
