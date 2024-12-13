@@ -256,6 +256,7 @@ export default function SearchResults() {
               </div>
               {/* only show this button when in group D */}
               {!!showResult.title &&
+                false &&
                 get(showResult, ["contest_group_stage"], "").includes("D") && (
                   <Button
                     outlined={true}
