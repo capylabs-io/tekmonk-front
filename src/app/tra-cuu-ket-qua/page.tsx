@@ -24,6 +24,8 @@ type TSearchResultsProps = {
   group_member: string[];
   title?: string;
   description?: string;
+  score?: string;
+  topUser?: string;
 };
 
 const phoneRegex = /^(\+84|0)\d{9,10}$/;
@@ -62,6 +64,8 @@ export default function SearchResults() {
     group_member: [],
     title: undefined,
     description: undefined,
+    score: undefined,
+    topUser: undefined,
   });
 
   //use store
@@ -141,6 +145,8 @@ export default function SearchResults() {
         group_member: [],
         title: get(searchResults, "title"),
         description: get(searchResults, "description"),
+        score: get(searchResults, "score"),
+        topUser: get(searchResults, "topUser"),
       });
       const members: string[] = [];
       if (searchResults.contest_entry.groupMemberInfo != null) {
@@ -291,7 +297,6 @@ export default function SearchResults() {
 
               <div className="max-sm:mt-3 text-bodyLg text-gray-600 space-y-3">
                 <div className="flex items-center">
-                  {/* <div>Điểm số:</div> */}
                   <div className=" w-[30%] flex-shrink-0">Kết quả:</div>
                   <div className="text-SubheadMd text-gray-800 flex-grow">
                     {/* <div>30/100</div> */}
@@ -300,9 +305,7 @@ export default function SearchResults() {
                         ? "Đạt"
                         : "Không đạt"
                       : "Chưa chấm"}
-                    {/* <div className="">1</div> */}
                   </div>
-                  {/* <div>Xấp hạng:</div> */}
                 </div>
               </div>
             </div>
@@ -353,6 +356,13 @@ export default function SearchResults() {
                   })}
               </div>
             </div>
+          </div>
+        )}
+
+        {showResult.QualifiedExam && (
+          <div className="text-center mt-8 text-SubheadMd text-primary-950">
+            Chúc mừng bạn đã thuộc nhóm {get(showResult, "topUser")}% thí sinh
+            có điểm thi Vòng loại cao nhất
           </div>
         )}
       </div>
