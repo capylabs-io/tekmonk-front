@@ -171,9 +171,14 @@ export default function SearchResults() {
       </div>
 
       <div className="mt-8 text-bodyLg">
-        <div className="text-center">
+        <div className="text-center px-16">
           Thí sinh nhập số báo danh và số điện thoại vào các ô dưới đây để tra
           cứu thông tin
+        </div>
+        <div className="text-center mt-4 px-16">
+          Nếu quá trình thực hiện không thành công, Quý phụ huynh và thí sinh
+          vui lòng liên hệ Ban tổ chức cuộc thi theo số{" "}
+          <span className="font-bold">085 851 4499</span> để được hỗ trợ.
         </div>
         <div
           className={classNames(
