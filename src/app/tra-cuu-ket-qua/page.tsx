@@ -298,8 +298,16 @@ export default function SearchResults() {
               <div className="max-sm:mt-3 text-bodyLg text-gray-600 space-y-3">
                 <div className="flex items-center">
                   <div className=" w-[30%] flex-shrink-0">Kết quả:</div>
-                  <div className="text-SubheadMd text-gray-800 flex-grow">
-                    {/* <div>30/100</div> */}
+                  <div
+                    className={classNames(
+                      "text-SubheadMd flex-grow",
+                      showResult.QualifiedExam === true
+                        ? "text-green-500"
+                        : showResult.QualifiedExam === false
+                        ? "text-red-500"
+                        : "text-gray-800"
+                    )}
+                  >
                     {showResult.QualifiedExam != null
                       ? showResult.QualifiedExam == true
                         ? "Đạt"
