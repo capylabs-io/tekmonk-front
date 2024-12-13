@@ -173,6 +173,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                 </>
               )}
 
+                <div
+                  className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
+                  onClick={() => {
+                    router.push("/tra-cuu-ket-qua");
+                  }}
+                >
+                  Tra cứu
+                </div>
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
