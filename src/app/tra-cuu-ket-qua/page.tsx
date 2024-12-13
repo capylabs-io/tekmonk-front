@@ -10,7 +10,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import qs from "qs";
 import { getResultSearchContestSubmisson } from "@/requests/contest-submission";
-import { get } from "lodash";
+import { first, get } from "lodash";
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 import { ROUTE } from "@/contants/router";
@@ -100,11 +100,14 @@ export default function SearchResults() {
       const result = await getResultSearchContestSubmisson(
         qs.stringify(query, { encodeValuesOnly: true })
       );
-      if (result) {
-        setSearchResults(result[0]);
+      console.log(result);
+      if (result && first(result)) {
+        console.log(first(result));
+        setSearchResults(first(result));
         hideLoading();
       } else {
-        setSearchResults(undefined);
+        console.log("No result");
+        setSearchResults(null);
         hideLoading();
       }
     } catch (error) {
@@ -330,13 +333,13 @@ export default function SearchResults() {
               quality={100}
               className="mx-auto"
             />
-            {Array.isArray(searchResults) && searchResults.length === 0 && (
+            {searchResults === null && (
               <div className="text-red-700">Không có kết quả trùng khớp</div>
             )}
           </div>
         )}
 
-        {showResult.group_member.length > 0 && (
+        {!!searchResults && showResult.group_member.length > 0 && (
           <div className="mb-3">
             <div className={`mt-8 w-full border border-gray-300`}></div>
             <div className="mt-4 px-4">
@@ -368,13 +371,13 @@ export default function SearchResults() {
           </div>
         )}
 
-        {showResult.QualifiedExam && (
+        {!!searchResults && showResult.QualifiedExam && (
           <div className="text-center mt-8 text-SubheadMd text-primary-950">
             Chúc mừng bạn đã thuộc nhóm {get(showResult, "topUser")}% thí sinh
             có điểm thi Vòng loại cao nhất
           </div>
         )}
-        {showResult.QualifiedExam === false && (
+        {!!searchResults && showResult.QualifiedExam === false && (
           <div className="text-justify mt-8 text-SubheadMd text-primary-950 mx-4">
             Ban Tổ chức hy vọng cuộc thi đã mang lại cho con những trải nghiệm
             thú vị và bổ ích. Chúc con giữ vững đam mê với lập trình và hẹn gặp
