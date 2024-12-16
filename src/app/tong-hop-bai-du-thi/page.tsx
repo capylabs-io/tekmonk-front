@@ -256,7 +256,7 @@ export default function SearchInterface() {
             <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
           </div>
         )}
-        {searchResults.length != 0 && 
+        {searchResults.length != 0 &&
           <Pagination className="">
             <PaginationContent>
               <PaginationItem>
