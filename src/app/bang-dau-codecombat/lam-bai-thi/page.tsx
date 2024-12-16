@@ -354,22 +354,22 @@ const GroupStageCodeCombat = ({
           </div>
 
           <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 font-nutito">
-
-            <li className="!p-0 !m-0">Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></li>
-            <li>Các câu hỏi được sắp xếp theo độ khó tăng dần.</li>
-            <li>Thí sinh nhấn vào từng thử thách để làm bài.</li>
-            <li>
-            Mỗi câu hỏi sẽ mở ra thử thách CodeCombat tương ứng, trong một tab mới. Thí sinh làm bài trong tab này.
-            </li>
-            <li>
-              Khi làm xong 1 thử thách, thí sinh nhấn nút <span className="font-bold"> Done </span>, đóng tab
+            
+            <div className="!p-0 !m-0 custom_li">• Hiện tại thí sinh đang ở <span className="font-bold">Trang thi</span></div>
+            <div>• Các câu hỏi được sắp xếp theo độ khó tăng dần.</div>
+            <div>• Thí sinh nhấn vào từng thử thách để làm bài.</div>
+            <div>
+            • Mỗi câu hỏi sẽ mở ra thử thách CodeCombat tương ứng, trong một tab mới. Thí sinh làm bài trong tab này.
+            </div>
+            <div>
+            • Khi làm xong 1 thử thách, thí sinh nhấn nút <span className="font-bold"> Done </span>, đóng tab
               CodeCombat, sau đó quay trở lại <span className="font-bold"> Trang thi </span> để tiếp tục.
-            </li>
-            <li>Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở <span className="font-bold"> Trang thi </span>.</li>
-            <li>Khi hoàn thành hết các thử thách, thí sinh nhấn nút <span className="font-bold"> Nộp bài </span>.</li>
-            <li>Trong trường hợp hết giờ mà thí sinh <span className="text-red-500 font-bold"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
+            </div>
+            <div>• Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở <span className="font-bold"> Trang thi </span>.</div>
+            <div>• Khi hoàn thành hết các thử thách, thí sinh nhấn nút <span className="font-bold"> Nộp bài </span>.</div>
+            <div>• Trong trường hợp hết giờ mà thí sinh <span className="text-red-500 font-bold"> chưa </span> ấn <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự động nộp bài,
             kết quả được ghi nhận ở thời điểm hết giờ.
-            </li>
+            </div>
           </div>
         </ScrollArea>
       </Card>
