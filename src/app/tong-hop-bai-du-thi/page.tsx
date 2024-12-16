@@ -148,7 +148,7 @@ export default function SearchInterface() {
   );
 
   return (
-    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-4px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1 mb-3 mt-3 pb-3">
+    <div className="mx-auto max-w-[720px] border-gray-200 bg-white min-h-[calc(100vh-64px-24px)] shadow-md border-l border-r border-b border-b-gray-300 rounded-none rounded-b-xl border-t-0 grid grid-cols-1 mb-3 mt-3 pb-3">
       <div className="space-y-6">
         <Image
           src={`/image/contest/tong-hop-bai-du-thi.jpg`}
@@ -200,14 +200,14 @@ export default function SearchInterface() {
                     </CardHeader>
                   </Card>
                   <CardContent className="p-0 py-2">
-                    <div
+                    {/* <div
                       className="text-bodySm cursor-pointer text-gray-800"
                       onClick={() => navigateDetailItem(card.id)}
                     >
                       {card.contest_entry?.candidateNumber}
-                    </div>
+                    </div> */}
                     <div
-                      className="text-SubheadXs cursor-pointer text-gray-800 line-clamp-2"
+                      className="text-SubheadLg cursor-pointer text-gray-800 line-clamp-2"
                       onClick={() => navigateDetailItem(card.id)}
                     >
                       {card.title}
@@ -221,7 +221,7 @@ export default function SearchInterface() {
                                 key={index}
                                 className="w-fit basis-auto select-none pl-2"
                               >
-                                <div className="text-bodySm cursor-pointer text-gray-800 whitespace-nowrap">
+                                <div className="text-bodyXs cursor-pointer text-gray-800 whitespace-nowrap">
                                   <Tag
                                     text={tag}
                                     type="secondary"
@@ -237,8 +237,15 @@ export default function SearchInterface() {
                     </Carousel>
                   </CardContent>
                   <CardFooter className="p-0">
-                    <div className="text-bodySm text-gray-800">
+                    <div className="text-bodySm text-gray-800 flex gap-x-2">
                       {get(card, "contest_entry.user.fullName", "Unknown")}
+
+                    <div
+                      className="text-bodySm cursor-pointer text-gray-800"
+                      onClick={() => navigateDetailItem(card.id)}
+                    >
+                      {card.contest_entry?.candidateNumber}
+                    </div>
                     </div>
                   </CardFooter>
                 </div>
@@ -249,49 +256,51 @@ export default function SearchInterface() {
             <EmptySearch message="Oops! Không thể tìm thấy bài thi nào" />
           </div>
         )}
-        <Pagination className="">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={() => handlePageChange(Math.max(1, page - 1))}
-                className={page === 1 ? "pointer-events-none opacity-50" : ""}
-              />
-            </PaginationItem>
-            {[...Array(totalPages)].map((_, index) => {
-              const pageNumber = index + 1;
-              if (
-                pageNumber === 1 ||
-                pageNumber === totalPages ||
-                (pageNumber >= page - 1 && pageNumber <= page + 1)
-              ) {
-                return (
-                  <PaginationItem key={pageNumber}>
-                    <PaginationLink
-                      href="#"
-                      isActive={pageNumber === page}
-                      onClick={() => handlePageChange(pageNumber)}
-                    >
-                      {pageNumber}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              } else if (pageNumber === page - 2 || pageNumber === page + 2) {
-                return <PaginationEllipsis key={pageNumber} />;
-              }
-              return null;
-            })}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
-                className={
-                  page === totalPages ? "pointer-events-none opacity-50" : ""
+        {searchResults.length != 0 && 
+          <Pagination className="">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={() => handlePageChange(Math.max(1, page - 1))}
+                  className={page === 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, index) => {
+                const pageNumber = index + 1;
+                if (
+                  pageNumber === 1 ||
+                  pageNumber === totalPages ||
+                  (pageNumber >= page - 1 && pageNumber <= page + 1)
+                ) {
+                  return (
+                    <PaginationItem key={pageNumber}>
+                      <PaginationLink
+                        href="#"
+                        isActive={pageNumber === page}
+                        onClick={() => handlePageChange(pageNumber)}
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                } else if (pageNumber === page - 2 || pageNumber === page + 2) {
+                  return <PaginationEllipsis key={pageNumber} />;
                 }
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+                return null;
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={() => handlePageChange(Math.min(totalPages, page + 1))}
+                  className={
+                    page === totalPages ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        }
       </div>
     </div>
   );
