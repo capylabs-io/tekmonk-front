@@ -258,7 +258,7 @@ const GroupStageCodeCombat = ({
     <div className="max-w-3xl mx-auto">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
       max-md:text-[30px] max-sm:text-[25px]
-      ">Đề thi Chính thức Vòng Loại - Bảng {contestGroupStage.code}</div>
+      ">Đề thi Chính thức Vòng Chung Kết Bảng {contestGroupStage.code}</div>
       <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
       <div className={``}>
         <div className={`w-full flex item-center justify-between px-8 py-3`}>
