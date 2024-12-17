@@ -327,7 +327,7 @@ const GroupStageCodeCombat = ({
               let isCompleted = false;
               for (const result of currentResult) {
                 for (const slug of result.listSlug) {
-                  if (slug === item.slug) {
+                  if (slug.name === item.slug) {
                     isCompleted = true;
                     break;
                   }
