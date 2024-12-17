@@ -47,6 +47,10 @@ export type User = {
   parentPhoneNumber?: string;
   fullName?: string;
   user_role?: UserRole[] | UserRole | any;
+  data?: {
+    contestId?: string;
+    isAccountForFinalRound?: boolean;
+  }
 };
 
 export type TListCourse = {
