@@ -205,7 +205,7 @@ export type TimeLeft = {
 
 export type TProgressResult = {
   name: string;
-  listSlug: string[],
+  listSlug: {name: string, playtime: number}[],
   currentLevel: number;
   totalLevel: number;
 };
