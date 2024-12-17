@@ -222,6 +222,7 @@ const ContestDetail: React.FC = () => {
                     ))}
                   </div>
                 </header>
+                <div className="py-4 px-8 font-bold text-gray-800 text-lg">{get(contestDetail, "title", "")}</div>
                 <div
                   className="py-4 px-8 ql-viewer"
                   dangerouslySetInnerHTML={{

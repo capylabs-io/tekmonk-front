@@ -47,6 +47,10 @@ export type User = {
   parentPhoneNumber?: string;
   fullName?: string;
   user_role?: UserRole[] | UserRole | any;
+  data?: {
+    contestId?: string;
+    isAccountForFinalRound?: boolean;
+  }
 };
 
 export type TListCourse = {
@@ -201,7 +205,7 @@ export type TimeLeft = {
 
 export type TProgressResult = {
   name: string;
-  listSlug: string[],
+  listSlug: {name: string, playtime: number}[],
   currentLevel: number;
   totalLevel: number;
 };

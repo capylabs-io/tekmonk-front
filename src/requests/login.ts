@@ -11,7 +11,7 @@ type LoginBody = {
 
 // set up axios interceptor
 export const postLogin = async (body: LoginBody) => {
-  const response = await tekdojoAxios.post(`${BASE_URL}/auth/local`, body);
+  const response = await tekdojoAxios.post(`${BASE_URL}/custom-auth/login`, body);
   return response.data;
 };
 export const postRegister = async (body: LoginBody) => {
