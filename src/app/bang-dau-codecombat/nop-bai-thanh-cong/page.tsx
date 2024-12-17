@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/common/Button";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { CheckCircle, Clock9, X } from "lucide-react";
 import {
   Table,
@@ -12,41 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { useUserStore } from "@/store/UserStore";
-import { getProgress } from "@/requests/code-combat";
-import { get } from "lodash";
 import { useEffect, useState } from "react";
-import GroupStageGuard from "@/components/hoc/GroupStageGuard";
-import { ContestGroupStage, TListCourse } from "@/types/common-types";
+import ShowResultGuard, { TResultCodeCombatFinal } from "@/components/hoc/ShowResultGuard";
 
 
-
-const data = [
-  { id: 1, sentence: "Câu 1", status: "Xong", time: "30s" },
-  { id: 2, sentence: "Câu 2", status: "Xong", time: "45s" },
-  { id: 3, sentence: "Câu 3", status: "Xong", time: "50s" },
-  { id: 4, sentence: "Câu 4", status: "Xong", time: "50s" },
-  { id: 5, sentence: "Câu 5", status: "Xong", time: "50s" },
-  { id: 6, sentence: "Câu 6", status: "Xong", time: "50s" },
-  { id: 7, sentence: "Câu 7", status: "Xong", time: "50s" },
-  { id: 8, sentence: "Câu 8", status: "Xong", time: "50s" },
-  { id: 9, sentence: "Câu 9", status: "Xong", time: "50s" },
-  { id: 10, sentence: "Câu 10", status: "Xong", time: "50s" },
-  { id: 11, sentence: "Câu 11", status: "Xong", time: "50s" },
-  { id: 12, sentence: "Câu 12", status: "Xong", time: "50s" },
-  { id: 13, sentence: "Câu 13", status: "Xong", time: "50s" },
-  { id: 14, sentence: "Câu 14", status: "Xong", time: "50s" },
-];
-
-type TResultCodeCombat = {
-  slug: string;
-  courseId: string;
-  courseInstanceId: string;
-  name: string;
-}
-
-const TableResult = ({data} : {data: any}) => {
+const TableResult = ({data} : {data: TResultCodeCombatFinal[]}) => {
   return (
     <div className="container mx-auto py-10 mt-3 overflow-x-auto h-[400px]">
       <Table>
@@ -58,14 +27,14 @@ const TableResult = ({data} : {data: any}) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((row: any, index:number) => (
-        <TableRow key={row.id}>
+        {data.map((row, index:number) => (
+        <TableRow key={index}>
           <TableCell className="font-medium text-left">Câu {index + 1}</TableCell>
           <TableCell className="text-left">
-            Xong
+            {row.isCompleted ? "Hoàn thành" : "Chưa hoàn thành"}
           </TableCell>
-          <TableCell className="hidden md:table-cell text-left">
-            30s
+          <TableCell className="md:table-cell text-left">
+            {row.isCompleted ? row.playtime : "--"}
           </TableCell>
         </TableRow>
           ))}
@@ -77,54 +46,23 @@ const TableResult = ({data} : {data: any}) => {
 
 
 const NopBaiThanhCong = ({
-  contestGroupStage,
-  isSubmitted: isSubmitted,
-}: {
-  contestGroupStage: ContestGroupStage;
-  isSubmitted: boolean;
-}) => {
+  resultData,
+}: { resultData: TResultCodeCombatFinal[] }) => {
   const router = useRouter();
-  const candidateNumber = useUserStore((state) => state.candidateNumber);
-  const codeCombatId = useUserStore((state) => state.codeCombatId);
-  const [listSlugs, setListSlugs] = useState<TResultCodeCombat[]>([]);
-  const [result, setResult] = useState<any>(null);
-
-  const handleRenderSlugs = (listCourse: TListCourse[]): TResultCodeCombat[] => {
-      return listCourse.flatMap((item) =>
-        item.slugs.map((slug) => ({
-          slug,
-          courseId: item.courseId,
-          courseInstanceId: item.courseInstanceId,
-          name: item.name,
-        }))
-      );
-    };
-
-  const handleGetProgress = async () => {
-      try {
-        const firstChar = candidateNumber?.charAt(0);
-        if(firstChar == "D") return;
-        if (!codeCombatId) return;
-        const res: any = await getProgress(
-          codeCombatId,
-          Number(get(contestGroupStage, "id", 6))
-        );
-        
-        if (res) {
-          setResult(res);
-        }
-      } catch (error) {
-        return;
-      }
-    };
+  const [totalTime, setTotalTime] = useState<number>(0);
+  const [totalCompleted, setTotalCompleted] = useState<number>(0);
+  const [totalNotCompleted, setTotalNotCompleted] = useState<number>(0);
 
   useEffect(() => {
-    handleGetProgress();
-    if (contestGroupStage.listCourses) {
-      setListSlugs(handleRenderSlugs(contestGroupStage.listCourses));
-    }
-  },[])
-  listSlugs && console.log(listSlugs);
+    const totalTime = resultData.reduce((acc, curr) => {
+      return acc + curr.playtime;
+    }, 0);
+    setTotalTime(totalTime);
+    const totalCompleted = resultData.filter((item) => item.isCompleted).length;
+    setTotalCompleted(totalCompleted);
+    const totalNotCompleted = resultData.filter((item) => !item.isCompleted).length;
+    setTotalNotCompleted(totalNotCompleted);
+  })
   return (
     <>
       <div className="min-h-screen w-full max-md:p-2">
@@ -139,7 +77,7 @@ const NopBaiThanhCong = ({
             <div className="mt-5 w-[90%] h-[80px] border border-gray-300 rounded-lg grid grid-cols-3">
               <div className="flex flex-col items-center justify-center">
                 <CheckCircle className="text-primary-900" />
-                <div>20</div>
+                <div>{totalCompleted}</div>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <svg
@@ -158,14 +96,14 @@ const NopBaiThanhCong = ({
                   <path d="m15 9-6 6" />
                   <path d="m9 9 6 6" />
                 </svg>
-                <div>10</div>
+                <div>{totalNotCompleted}</div>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <Clock9 />
-                <div>3000 s</div>
+                <div>{totalTime} s</div>
               </div>
             </div>
-            <TableResult data={listSlugs}/>
+            <TableResult data={resultData}/>
           </div>
           <div className="w-full h-16 border-t border-gray-300 flex justify-between items-center px-14 max-tabletHeader:px-8 max-mobile:px-1">
             <Button
@@ -187,4 +125,4 @@ const NopBaiThanhCong = ({
     </>
   );
 }
-export default GroupStageGuard(NopBaiThanhCong);
+export default ShowResultGuard(NopBaiThanhCong);
