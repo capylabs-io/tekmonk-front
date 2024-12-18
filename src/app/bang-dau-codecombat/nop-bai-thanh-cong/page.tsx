@@ -12,8 +12,23 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useEffect, useState } from "react";
-import ShowResultGuard, { TResultCodeCombatFinal } from "@/components/hoc/ShowResultGuard";
+import { getProgress } from "@/requests/code-combat";
+import { get } from "lodash";
+import { getContestGroupStageByCandidateNumber, getOneContestEntry } from "@/requests/contestEntry";
+import { useUserStore } from "@/store/UserStore";
+import { ContestGroupStage, TListCourse } from "@/types/common-types";
 
+
+export type TTimeContest = {
+  startTime: string;
+  endTime: string;
+}
+
+export type TResultCodeCombatFinal = {
+    slug: string;
+    playtime: number;
+    isCompleted: boolean;
+}
 
 const TableResult = ({data} : {data: TResultCodeCombatFinal[]}) => {
   return (
@@ -45,25 +60,149 @@ const TableResult = ({data} : {data: TResultCodeCombatFinal[]}) => {
 }
 
 
-const NopBaiThanhCong = ({
-  resultData,
-}: { resultData: TResultCodeCombatFinal[] }) => {
+export default function NopBaiThanhCong() {
   const router = useRouter();
   const [totalTime, setTotalTime] = useState<number>(0);
   const [totalCompleted, setTotalCompleted] = useState<number>(0);
   const [totalNotCompleted, setTotalNotCompleted] = useState<number>(0);
 
+  const [progress, setProgress] = useState<any>();
+      const [listCourse, setListCourse] = useState<TListCourse[]>();
+      const [result, setResult] = useState<TResultCodeCombatFinal[]>();
+      const [timeContest, setTimeContest] = useState<TTimeContest>();
+      //use state
+      
+      //
+      const [contestGroupStage, setContestGroupStage] =
+        useState<ContestGroupStage | null>(null);
+  
+      //use store
+      const candidateNumber = useUserStore((state) => state.candidateNumber);
+      const codeCombatId = useUserStore((state) => state.codeCombatId);
+  
+      const fetchContestGroupStage = async () => {
+        if (!candidateNumber) {
+          router.push("/");
+          return;
+        }
+        try {
+          const data = await getContestGroupStageByCandidateNumber(
+            candidateNumber
+          );
+          data && setContestGroupStage(data);
+          data && setListCourse(data.listCourses);
+        } catch (error) {
+          return;
+        }
+      };
+  
+      const handleGetProgress = async () => {
+          try {
+            const firstChar = candidateNumber?.charAt(0);
+            if(firstChar == "D") return;
+            if (!codeCombatId) return;
+            const res: any = await getProgress(
+              codeCombatId,
+              Number(get(contestGroupStage, "id", 6))
+            );
+            
+            if (res) {
+              setProgress(res);
+            }
+          } catch (error) {
+            return;
+          }
+      };
+  
+      function transformData(progress: any[], listcourse: any[]): TResultCodeCombatFinal[] {
+          const result: TResultCodeCombatFinal[] = [];
+        
+          for (const course of listcourse) {
+            // Tìm thông tin progress tương ứng với course hiện tại
+            const courseProgress = progress.find(
+              (p) => p.courseId === course.courseId && p.courseInstanceId === course.courseInstanceId
+            );
+        
+            // Tạo một Map từ listSlug của progress để dễ dàng tra cứu playtime
+            const playtimeMap = new Map<string, number>(
+              courseProgress?.listSlug.map((slugObj: { name: string; playtime: number }) => [
+                slugObj.name,
+                slugObj.playtime,
+              ])
+            );
+        
+            // Lấy currentLevel từ progress để đánh dấu các slug đã hoàn thành
+            const currentLevel = courseProgress?.currentLevel || 0;
+        
+            for (let i = 0; i < course.slugs.length; i++) {
+              const slug = course.slugs[i];
+              const playtime = playtimeMap.get(slug) || 0;
+              const isCompleted = i < currentLevel;
+        
+              result.push({
+                slug,
+                playtime,
+                isCompleted,
+              });
+            }
+          }
+        
+          return result;
+      }
+  
+      const handleGetContestEntry = async () => {
+        try {
+          if(!candidateNumber) return;
+          const contestEntry = await getOneContestEntry(candidateNumber);
+          if(contestEntry) {
+            return contestEntry;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const handleGetTimeResultContest = async () => {
+        try {
+          const data = await handleGetContestEntry();
+            const startTime = new Date(get(data, "startTime", localStorage.getItem('startTime')?.toString() || "")).toLocaleString();
+            const endTime = new Date(get(data, "endTime", "")).toLocaleString();
+            setTimeContest({
+            startTime,
+            endTime
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      const fetAllData = async () => {
+        await fetchContestGroupStage();
+        await handleGetProgress();
+        await handleGetTimeResultContest();
+      }
+      
+      useEffect(() => {
+        fetAllData();
+      }, [candidateNumber]);
+
+      useEffect(() => {
+        if (listCourse && progress) {
+            const transformedResult = transformData(progress, listCourse);
+            setResult(transformedResult);
+        }
+      }, [listCourse, progress]);
+
   useEffect(() => {
-    const totalTime = resultData.reduce((acc, curr) => {
+    if(!result) return;
+    const totalTime = result.reduce((acc, curr) => {
       return acc + curr.playtime;
     }, 0);
     setTotalTime(totalTime);
-    const totalCompleted = resultData.filter((item) => item.isCompleted).length;
+    const totalCompleted = result.filter((item) => item.isCompleted).length;
     setTotalCompleted(totalCompleted);
-    const totalNotCompleted = resultData.filter((item) => !item.isCompleted).length;
+    const totalNotCompleted = result.filter((item) => !item.isCompleted).length;
     setTotalNotCompleted(totalNotCompleted);
-  })
-  return (
+  },[result])
+  return result && (
     <>
       <div className="min-h-screen w-full max-md:p-2">
         <div className="md:w-[720px] min-h-[calc(100vh-200px)] bg-white border border-gray-300 rounded-2xl mx-auto flex flex-col justify-between">
@@ -103,7 +242,11 @@ const NopBaiThanhCong = ({
                 <div>{totalTime} s</div>
               </div>
             </div>
-            <TableResult data={resultData}/>
+            <div className="flex">
+              <div>Thời gian bắt đầu làm bài: </div>
+              <div className="font-bold">{timeContest?.startTime}</div>
+            </div>
+            <TableResult data={result}/>
           </div>
           <div className="w-full h-16 border-t border-gray-300 flex justify-between items-center px-14 max-tabletHeader:px-8 max-mobile:px-1">
             <Button
@@ -125,4 +268,3 @@ const NopBaiThanhCong = ({
     </>
   );
 }
-export default ShowResultGuard(NopBaiThanhCong);
