@@ -177,6 +177,9 @@ export type ContestEntry = {
   candidateNumber: string;
   groupMemberInfo: object | null;
   user: User;
+  isContestStarted?: boolean;
+  startTime?: string;
+  endTime?: string;
 };
 
 export type ContestRegister = {

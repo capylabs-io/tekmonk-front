@@ -16,6 +16,7 @@ import DateTimeDisplay from "./DateTimeDisplay";
 import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 const GroupStageDialog = ({
   groupStageData,
@@ -32,14 +33,22 @@ const GroupStageDialog = ({
   const [isGroupStageCodeCombat, setIsGroupStageCodeCombat] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  
   //use store
   const candidateNumber = useUserStore((state) => state.candidateNumber);
+  const data = useUserStore((state) => state.userInfo?.data);
+  const warning = useSnackbarStore((state) => state.warn);
   //arrow function
   const handleTimeOver = () => {
     setIsGroupStageStarted(true);
   };
 
   const redirectGroupStageCodeCombat = () => {
+    if(!data) {
+      warning("Không thành công","Tài khoản của bạn không thuộc vòng chung kết");
+      router.push("/");
+      return;
+    }
     if (router) {
       router.push(`/bang-dau-codecombat`);
     }
@@ -57,7 +66,7 @@ const GroupStageDialog = ({
         ) {
           router.push(`/bang-dau-codecombat`);
         } else {
-          router.push(`/lam-bai-thi`);
+          router.push(`/`);
         }
       }
     }

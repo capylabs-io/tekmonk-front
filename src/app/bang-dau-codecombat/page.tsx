@@ -6,10 +6,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ContestGroupStage } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
-import { getContestGroupStageByCandidateNumber } from "@/requests/contestEntry";
+import { getContestGroupStageByCandidateNumber, getOneContestEntry, updateContestEntry } from "@/requests/contestEntry";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { get } from "lodash";
 import Link from "next/link";
+import GroupStageGuard from "@/components/hoc/GroupStageGuard";
 
 type TDialogAccept = {
   isOpen: boolean;
@@ -21,11 +22,39 @@ const DialogAccept = ({isOpen, onOpenChange, contestGroupStage}: TDialogAccept) 
   const router = useRouter();
   const [isGroupStageStarted, setIsGroupStageStarted] = useState(false);
   const [isShowMessage, setIsShowMessage] = useState(false);
-  const handleExam = () => {
+
+  //use store
+  const candidateNumber = useUserStore((state) => state.candidateNumber);
+  const handleGetContestEntry = async () => {
+    try {
+      if(!candidateNumber) return;
+      const data = await getOneContestEntry(candidateNumber);
+      if(data) {
+        return data;
+      }
+      return undefined;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const handleUpdateContestEntry = async () => {
+    try {
+      const entry = await handleGetContestEntry();
+      if(!entry) return;
+      if(entry.isContestStarted) return;
+      const startTimeToStore = new Date().toISOString();
+      localStorage.setItem("startTime", startTimeToStore);
+      await updateContestEntry(entry.id, startTimeToStore, true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const handleExam = async () => {
     if (!isGroupStageStarted) {
       setIsShowMessage(true);
     } else {
       if (router) {
+        await handleUpdateContestEntry();
         router.push(`/bang-dau-codecombat/lam-bai-thi`);
       }
     }
@@ -132,7 +161,7 @@ const DialogAccept = ({isOpen, onOpenChange, contestGroupStage}: TDialogAccept) 
   )
 };
 
-export default function GroupStageCodeCombatInfo() {
+const GroupStageCodeCombatInfo = () => {
   const router = useRouter();
   const [isChecked, setIsChecked] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -162,10 +191,12 @@ export default function GroupStageCodeCombatInfo() {
       fetchContestGroupStage();
     }, [candidateNumber]);
   return (
+    <GroupStageGuard>
+
     <div className="max-w-[720px] mx-auto mb-2">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
       max-md:text-[30px] max-sm:text-[25px]
-      ">Quy chế thi Vòng Loại - Bảng A, B, C</div>
+      ">Quy chế thi Vòng Chung Kết - Bảng A, B, C</div>
       <div className="mx-auto  bg-white border border-gray-300 rounded-2xl ">
       <div className="">
         <div className=" text-lg font-bold items-center text-primary-800 w-full h-[60px] py-3 px-8">
@@ -286,5 +317,10 @@ export default function GroupStageCodeCombatInfo() {
       </div>
     </div>
     </div>
+    </GroupStageGuard>
+    
   );
 }
+
+
+export default GroupStageCodeCombatInfo;
