@@ -34,6 +34,15 @@ export default function GroupStageGuard ({children}:any) {
         state.hide,
     ]);
 
+    const isExistContestSubmission = async () => {
+      if (!candidateNumber) return false;
+      const contestEntry = await getOneContestEntry(candidateNumber);
+      const contestSubmission = await getContestSubmissionByContestEntry(
+        contestEntry.id
+      );
+      return contestSubmission.data.length > 0;
+    };
+
     const fetchContestGroupStage = async () => {
       if (!candidateNumber) {
         warning("Không thành công","Không tìm thấy số báo danh, vui lòng đăng nhập lại");
@@ -83,6 +92,11 @@ export default function GroupStageGuard ({children}:any) {
           router.push("/");
           return;
         };
+        const checkIsSubmited = await isExistContestSubmission();
+        if(checkIsSubmited) {
+          warning("Không thành công","Bạn đã nộp bài thi");
+          router.push("/");
+        }
         const groupStage = await fetchContestGroupStage();
         await checkExistContestSubmission();
         if (!groupStage) {
