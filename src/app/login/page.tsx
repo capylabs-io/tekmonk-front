@@ -111,7 +111,7 @@ export default function Login() {
         <div className="text-primary-900 text-4xl font-bold text-center mt-16">
           Đăng nhập
         </div>
-        <div className="flex gap-x-1 mt-2">
+        {/* <div className="flex gap-x-1 mt-2">
           <div>Chưa có tài khoản?</div>
           <div
             className="font-bold underline hover:cursor-pointer"
@@ -120,7 +120,7 @@ export default function Login() {
             Đăng ký
           </div>
           <div>ngay</div>
-        </div>
+        </div> */}
         <div className="w-[348px] mt-8 flex flex-col gap-y-4">
           <Input
             type="text"
@@ -138,12 +138,12 @@ export default function Login() {
           <Button className="mt-8" onClick={handleLogin}>
             Đăng nhập
           </Button>
-          <div
+          {/* <div
             className="text-center cursor-pointer"
             onClick={() => router.push("quen-mat-khau")}
           >
             Quên mật khẩu?
-          </div>
+          </div> */}
         </div>
         {/* @TODO: forget passwork function */}
         {/* <div className="text-gray-600 text-sm text-center mt-5">
