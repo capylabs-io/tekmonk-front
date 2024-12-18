@@ -6,7 +6,7 @@ import { ContestGroupStage, TListCourse, TProgressResult } from "@/types/common-
 import Link from "next/link";
 import { Button } from "@/components/common/Button";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { get, round, set } from "lodash";
 import {
   Dialog,
@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getOneContestEntry } from "@/requests/contestEntry";
+import { getContestGroupStageByCandidateNumber, getOneContestEntry } from "@/requests/contestEntry";
 import { createContestSubmission, getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useUserStore } from "@/store/UserStore";
 import { getProgress } from "@/requests/code-combat";
@@ -90,20 +90,12 @@ const DialogAcceptSubmit = (data: TDialogSubmit) => {
   );
 };
 
-const GroupStageCodeCombat = ({
-  contestGroupStage,
-  isSubmitted: isSubmitted,
-}: {
-  contestGroupStage: ContestGroupStage;
-  isSubmitted: boolean;
-}) => {
+const GroupStageCodeCombat = () => {
   
   const router = useRouter();
   //use state
   const [timeOver, setTimeOver] = useState(false);
-  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<string>(
-    contestGroupStage.endTime
-  );
+  const [groupStageTimeLeft, setGroupStageTimeLeft] = useState<string>();
   const candidateNumber = useUserStore((state) => state.candidateNumber);
   const codeCombatId = useUserStore((state) => state.codeCombatId);
 
@@ -113,7 +105,10 @@ const GroupStageCodeCombat = ({
   const [currentResult, setCurrentResult] = useState<TProgressResult[]>([]);
   const [listSlugs, setListSlugs] = useState<TCourseRender[]>([]);
   const [reloadProgress, setReloadProgress] = useState(false);
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [contestGroupStage, setContestGroupStage] = useState<ContestGroupStage>();
+  //random a number 10000 - 20000
+  const [randomTimeTofetch, setRandomTimeToFetch] = useState(Math.floor(Math.random() * 10000) + 10000);
   //use store
   const fullNameUser = useUserStore((state) => state.userInfo?.fullName);
   const [success, error, warn] = useSnackbarStore((state) => [
@@ -123,6 +118,10 @@ const GroupStageCodeCombat = ({
   ]);
   
   //handle function
+  const handleRedirectToCodeCombat = (data: TCourseRender) => {
+    const url = `https://codecombat.com/play/level/${data.slug}?course=${data.courseId}&course-instance=${data.courseInstanceId}`;
+    window.open(url, "_blank");
+  }
   const isExistContestSubmission = async () => {
     if(!candidateNumber) return false;
     const contestEntry = await getOneContestEntry(
@@ -169,14 +168,16 @@ const GroupStageCodeCombat = ({
       useLoadingStore.getState().hide()
     }
   };
-  const handleGetProgress = async () => {
+  const handleGetProgress = useCallback(async () => {
     try {
+      if(!contestGroupStage) return;
       const firstChar = candidateNumber?.charAt(0);
       if(firstChar == "D") return;
       if (!codeCombatId) return;
-      const res: any = await getProgress(
+      const res = await getProgress(
         codeCombatId,
-        Number(get(contestGroupStage, "id", 0))
+        Number(contestGroupStage.id)
+        // Number(get(contestGroupStage, "id", 6))
       );
       
       if (res) {
@@ -184,14 +185,35 @@ const GroupStageCodeCombat = ({
         setReloadProgress(!reloadProgress);
       }
     } catch (error) {
-      return;
+      console.log("error", error);
     }
-  };
+  }, [contestGroupStage])
+
   const handleTimeOver = (validCountDown: boolean) => {
     setTimeOver(true);
     if (!isSubmitted && validCountDown) {
       handleAutoSubmit();
     }
+  };
+  const fetchContestGroupStage = async () => {
+      if (!candidateNumber) {
+        router.push("/");
+        return;
+      }
+      try {
+        const data = await getContestGroupStageByCandidateNumber(
+          candidateNumber
+        );
+        if(data) {
+          setContestGroupStage(data);
+          setGroupStageTimeLeft(data.endTime);
+          if (data && data.listCourses) {
+            setListSlugs(handleRenderSlugs(data.listCourses));
+          }
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
   };
   // const handleRedirectToMyContest = async () => {
   //   try {
@@ -220,18 +242,13 @@ const GroupStageCodeCombat = ({
       }))
     );
   };
-  const handleRedirectToCodeCombat = (data: TCourseRender) => {
-    const url = `https://codecombat.com/play/level/${data.slug}?course=${data.courseId}&course-instance=${data.courseInstanceId}`;
-    window.open(url, "_blank");
+  const fetchAllData = async () => {
+    await fetchContestGroupStage();
+    // await handleGetProgress();
   }
-
   //use effect
   useEffect(() => {
-    setGroupStageTimeLeft(contestGroupStage.endTime);
-    if (contestGroupStage.listCourses) {
-      setListSlugs(handleRenderSlugs(contestGroupStage.listCourses));
-    }
-    handleGetProgress();
+    fetchAllData();
   },[]);
 
   useEffect(() => {
@@ -249,16 +266,17 @@ const GroupStageCodeCombat = ({
     if (!isSubmitted && !timeOver) {
       const interval = setInterval(() => {
         handleGetProgress();
-      }, 10000);
+      }, randomTimeTofetch);
 
       return () => clearInterval(interval);
     }
-  }, [isSubmitted, timeOver]);
-  return (
+  }, [isSubmitted, timeOver, contestGroupStage]);
+
+    return contestGroupStage ?  (
     <div className="max-w-3xl mx-auto">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
       max-md:text-[30px] max-sm:text-[25px]
-      ">Đề thi Chính thức Vòng Chung Kết Bảng {contestGroupStage.code}</div>
+      ">Đề thi Chính thức Vòng Chung Kết Bảng {get(contestGroupStage, "code")}</div>
       <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
       <div className={``}>
         <div className={`w-full flex item-center justify-between px-8 py-3`}>
@@ -282,11 +300,11 @@ const GroupStageCodeCombat = ({
         <div className="space-y-2 block">
           <div className="flex justify-between items-center h-[48px] px-8">
             <div className="text-SubheadLg text-primary-900">
-              BẢNG {contestGroupStage.code}
+              BẢNG {get(contestGroupStage, "code")}
             </div>
             <div className="text-SubheadLg text-primary-900">
               {!timeOver
-                ? contestGroupStage.endTime && (
+                ? contestGroupStage && groupStageTimeLeft && (
                     <>
                       <DateTimeDisplay
                         dataTime={groupStageTimeLeft}
@@ -375,7 +393,7 @@ const GroupStageCodeCombat = ({
       </Card>
     </div>
     </div>
-  );
+  ) : <div>Loading . . .</div>;
 };
 
-export default GroupStageGuard(GroupStageCodeCombat);
+export default GroupStageCodeCombat;
