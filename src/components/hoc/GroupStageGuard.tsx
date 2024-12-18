@@ -8,25 +8,35 @@ import {
 } from "@/requests/contestEntry";
 import { ContestGroupStage } from "@/types/common-types";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
+import { getMe } from "@/requests/login";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useLoadingStore } from "@/store/LoadingStore";
 
-interface WrappedComponentProps {
-  contestGroupStage: ContestGroupStage;
-  isSubmitted: boolean;
-}
 
-const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
-  const Comp: React.FC = (props) => {
+export default function GroupStageGuard ({children}:any) {
     const router = useRouter();
 
     //use state
     const [isSubmitted, setIsSubmitted] = useState(false);
     //
     const [contestGroupStage, setContestGroupStage] =
-      useState<ContestGroupStage | null>(null);
+      useState<ContestGroupStage | undefined>(undefined);
+    const [isValid, setIsValid] = useState<boolean>(false);
+
+      //use store
     const candidateNumber = useUserStore((state) => state.candidateNumber);
+    const data = useUserStore((state) => state.userInfo?.data);
+    const getme = useUserStore((state) => state.getMe);
+    const warning = useSnackbarStore((state) => state.warn);
+    const [isShowing, show, hide] = useLoadingStore((state) => [
+        state.isShowing,
+        state.show,
+        state.hide,
+    ]);
 
     const fetchContestGroupStage = async () => {
       if (!candidateNumber) {
+        warning("Không thành công","Không tìm thấy số báo danh, vui lòng đăng nhập lại");
         router.push("/");
         return;
       }
@@ -34,9 +44,13 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
         const data = await getContestGroupStageByCandidateNumber(
           candidateNumber
         );
-        data && setContestGroupStage(data);
+        console.log("guard stage", data);
+        if(!!data) {
+          setContestGroupStage(data);
+          return data;
+        }
       } catch (error) {
-        return;
+        console.error(error);
       }
     };
 
@@ -53,28 +67,52 @@ const GroupStageGuard = (WrappedComponent: React.FC<WrappedComponentProps>) => {
       );
       setIsSubmitted(contestSubmission.data.length > 0);
     };
+    
+    const reloadData = async () => {
+      await getme();
+    }
+
+    const fetAllData = async () => {
+      console.log('fetAllData')
+      try {
+        show();
+        await reloadData();
+        if(!data) {
+          warning("Không thành công","Tài khoản của bạn không thuộc vòng chung kết");
+          hide();
+          router.push("/");
+          return;
+        };
+        const groupStage = await fetchContestGroupStage();
+        await checkExistContestSubmission();
+        if (!groupStage) {
+          warning("Không thành công","Lỗi lấy dữ liệu cho cuộc thi");
+          router.push("/");
+          return; // or any loading indicator
+        }
+        if (new Date(groupStage.startTime) > new Date()) {
+          warning("Không thành công","Vòng chung kết chưa bắt đầu");
+          router.push("/");
+          return;
+        }
+        if (new Date(groupStage.endTime) < new Date()) {
+          warning("Không thành công","Vòng chung kết đã kết thúc");
+          router.push("/");
+          return;
+        }
+        setIsValid(true);
+      } catch (error) {
+        // hide();
+        console.error(error);
+      } finally {
+        hide();
+      }
+    }
 
     useEffect(() => {
-      fetchContestGroupStage();
-      checkExistContestSubmission();
-    }, [candidateNumber]);
+      fetAllData();
+    }, []);
 
-    if (contestGroupStage === null) {
-      return <div>Loading...</div>; // or any loading indicator
-    }
-    if (contestGroupStage.startTime > new Date().toISOString()) {
-      router.push("/");
-    } else
-      return (
-        <WrappedComponent
-          {...props}
-          contestGroupStage={contestGroupStage}
-          isSubmitted={isSubmitted}
-        />
-      );
+    return isValid ? children : <div>Loading</div>;
   };
 
-  return Comp;
-};
-
-export default GroupStageGuard;
