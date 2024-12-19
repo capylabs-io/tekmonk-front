@@ -24,6 +24,7 @@ import {
 import {
   getContestGroupStageByCandidateNumber,
   getOneContestEntry,
+  updateEndTimeContestEntry,
 } from "@/requests/contestEntry";
 import {
   createContestSubmission,
@@ -37,6 +38,7 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useRouter } from "next/navigation";
 import GroupStageGuard from "@/components/hoc/GroupStageGuard";
+import AuthFinalGuard from "@/components/hoc/AuthFinalGuard";
 type TDialogSubmit = {
   isOpen: boolean;
   onClose: () => void;
@@ -149,7 +151,7 @@ const GroupStageCodeCombat = () => {
       //check if user already submitted => return
       useLoadingStore.getState().show();
       if ((await isExistContestSubmission()) || isSubmitted) {
-        warn("Lỗi", "Bạn đã nộp bài rồi");
+        warn("Không thành công", "Bạn đã nộp bài rồi");
         return;
       }
       //check if contestGroupStage is not D1 or D2 => auto submit
@@ -158,6 +160,10 @@ const GroupStageCodeCombat = () => {
         const contestEntry = await getOneContestEntry(
           useUserStore.getState().candidateNumber || ""
         );
+        //update endTime
+        const endTime = new Date().toISOString();
+        localStorage.setItem("endTime", endTime);
+        await updateEndTimeContestEntry(contestEntry.id, endTime);
         const contestResult = {
           title: fullNameUser || "",
           tags: { data: ["codecombat"] },
@@ -209,6 +215,7 @@ const GroupStageCodeCombat = () => {
   };
   const fetchContestGroupStage = async () => {
     if (!candidateNumber) {
+      warn("Không thành công", "Vui lòng đăng nhập lại");
       router.push("/");
       return;
     }
@@ -283,162 +290,171 @@ const GroupStageCodeCombat = () => {
     }
   }, [isSubmitted, timeOver, contestGroupStage]);
 
-  return contestGroupStage ? (
-    <GroupStageGuard>
-      <div className="max-w-3xl mx-auto">
-        <div
-          className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
+  return (
+    <AuthFinalGuard>
+      <GroupStageGuard>
+        {" "}
+        {contestGroupStage ? (
+          <div className="max-w-3xl mx-auto">
+            <div
+              className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
             max-md:text-[30px] max-sm:text-[25px]
         "
-        >
-          Đề thi Chính thức Vòng Chung Kết Bảng {get(contestGroupStage, "code")}
-        </div>
-        <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
-          <div className={``}>
-            <div
-              className={`w-full flex item-center justify-between px-8 py-3`}
             >
-              <div></div>
-              {!isSubmitted && (
-                <Button
-                  className={`!rounded-[3rem] w-[120px] h-[44px]`}
-                  onClick={() => setDialogOpen(true)}
-                  disabled={timeOver}
+              Đề thi Chính thức Vòng Chung Kết Bảng{" "}
+              {get(contestGroupStage, "code")}
+            </div>
+            <div className=" mx-auto border border-gray-300 rounded-xl space-y-6 bg-white mt-3 mb-3">
+              <div className={``}>
+                <div
+                  className={`w-full flex item-center justify-between px-8 py-3`}
                 >
-                  Nộp bài
-                </Button>
-              )}
-              <DialogAcceptSubmit
-                isOpen={diaLogOpen}
-                onClose={() => setDialogOpen(false)}
-                handleSubmid={handleAutoSubmit}
-              />
-            </div>
-            <div className={`border w-full border-gray-300`}></div>
-            <div className="space-y-2 block">
-              <div className="flex justify-between items-center h-[48px] px-8">
-                <div className="text-SubheadLg text-primary-900">
-                  BẢNG {get(contestGroupStage, "code")}
-                </div>
-                <div className="text-SubheadLg text-primary-900">
-                  {!timeOver
-                    ? contestGroupStage &&
-                      groupStageTimeLeft && (
-                        <>
-                          <DateTimeDisplay
-                            dataTime={groupStageTimeLeft}
-                            type="hours"
-                          />
-                          <span>:</span>
-                          <DateTimeDisplay
-                            dataTime={groupStageTimeLeft}
-                            type="minutes"
-                          />
-                          <span>:</span>
-                          <DateTimeDisplay
-                            dataTime={groupStageTimeLeft}
-                            type="seconds"
-                            onTimeOver={handleTimeOver}
-                          />
-                        </>
-                      )
-                    : "Hết giờ"}
-                </div>
-              </div>
-              <div className="flex items-center justify-center space-x-4">
-                <div className="text-primary-700 font-semibold max-md:hidden">
-                  Tiến độ
-                </div>
-                <Progress
-                  value={round(
-                    (progress / (totalProgress != 0 ? totalProgress : 1)) * 100,
-                    1
+                  <div></div>
+                  {!isSubmitted && (
+                    <Button
+                      className={`!rounded-[3rem] w-[120px] h-[44px]`}
+                      onClick={() => setDialogOpen(true)}
+                      disabled={timeOver}
+                    >
+                      Nộp bài
+                    </Button>
                   )}
-                  className="h-3 bg-gray-100 w-3/4"
-                />
-                <div className="text-primary-700 font-semibold">
-                  {progress}/{totalProgress != 0 ? totalProgress : 1}
+                  <DialogAcceptSubmit
+                    isOpen={diaLogOpen}
+                    onClose={() => setDialogOpen(false)}
+                    handleSubmid={handleAutoSubmit}
+                  />
+                </div>
+                <div className={`border w-full border-gray-300`}></div>
+                <div className="space-y-2 block">
+                  <div className="flex justify-between items-center h-[48px] px-8">
+                    <div className="text-SubheadLg text-primary-900">
+                      BẢNG {get(contestGroupStage, "code")}
+                    </div>
+                    <div className="text-SubheadLg text-primary-900">
+                      {!timeOver
+                        ? contestGroupStage &&
+                          groupStageTimeLeft && (
+                            <>
+                              <DateTimeDisplay
+                                dataTime={groupStageTimeLeft}
+                                type="hours"
+                              />
+                              <span>:</span>
+                              <DateTimeDisplay
+                                dataTime={groupStageTimeLeft}
+                                type="minutes"
+                              />
+                              <span>:</span>
+                              <DateTimeDisplay
+                                dataTime={groupStageTimeLeft}
+                                type="seconds"
+                                onTimeOver={handleTimeOver}
+                              />
+                            </>
+                          )
+                        : "Hết giờ"}
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className="text-primary-700 font-semibold max-md:hidden">
+                      Tiến độ
+                    </div>
+                    <Progress
+                      value={round(
+                        (progress / (totalProgress != 0 ? totalProgress : 1)) *
+                          100,
+                        1
+                      )}
+                      className="h-3 bg-gray-100 w-3/4"
+                    />
+                    <div className="text-primary-700 font-semibold">
+                      {progress}/{totalProgress != 0 ? totalProgress : 1}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div className={`border border-gray-300 w-full`}></div>
-          <Card className="px-6 border-none">
-            <ScrollArea className="h-[calc(100vh-200px)]">
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
-                {Array.isArray(listSlugs) &&
-                  listSlugs.map((item: TCourseRender, index: number) => {
-                    //handle function check if slug is match with current slug
-                    let isCompleted = false;
-                    for (const result of currentResult) {
-                      for (const slug of result.listSlug) {
-                        if (slug.name === item.slug) {
-                          isCompleted = true;
-                          break;
+              <div className={`border border-gray-300 w-full`}></div>
+              <Card className="px-6 border-none">
+                <ScrollArea className="h-[calc(100vh-200px)]">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                    {Array.isArray(listSlugs) &&
+                      listSlugs.map((item: TCourseRender, index: number) => {
+                        //handle function check if slug is match with current slug
+                        let isCompleted = false;
+                        for (const result of currentResult) {
+                          for (const slug of result.listSlug) {
+                            if (slug.name === item.slug) {
+                              isCompleted = true;
+                              break;
+                            }
+                          }
+                          if (isCompleted) break;
                         }
-                      }
-                      if (isCompleted) break;
-                    }
-                    return (
-                      <Button
-                        key={index}
-                        outlined={true}
-                        className={`h-12 border font-bold text-lg hover:bg-primary-100
+                        return (
+                          <Button
+                            key={index}
+                            outlined={true}
+                            className={`h-12 border font-bold text-lg hover:bg-primary-100
                     
                      `}
-                        onClick={() => handleRedirectToCodeCombat(item)}
-                        disabled={isSubmitted}
-                      >
-                        <div className={`flex items-center gap-x-3`}>
-                          {isCompleted && (
-                            <CheckCircle className="text-primary-900" />
-                          )}
-                          {!isCompleted && index + 1}
-                        </div>
-                      </Button>
-                    );
-                  })}
-              </div>
+                            onClick={() => handleRedirectToCodeCombat(item)}
+                            disabled={isSubmitted}
+                          >
+                            <div className={`flex items-center gap-x-3`}>
+                              {isCompleted && (
+                                <CheckCircle className="text-primary-900" />
+                              )}
+                              {!isCompleted && index + 1}
+                            </div>
+                          </Button>
+                        );
+                      })}
+                  </div>
 
-              <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 font-nutito">
-                <div className="!p-0 !m-0 custom_li">
-                  • Hiện tại thí sinh đang ở{" "}
-                  <span className="font-bold">Trang thi</span>
-                </div>
-                <div>• Các câu hỏi được sắp xếp theo độ khó tăng dần.</div>
-                <div>• Thí sinh nhấn vào từng thử thách để làm bài.</div>
-                <div>
-                  • Mỗi câu hỏi sẽ mở ra thử thách CodeCombat tương ứng, trong
-                  một tab mới. Thí sinh làm bài trong tab này.
-                </div>
-                <div>
-                  • Khi làm xong 1 thử thách, thí sinh nhấn nút{" "}
-                  <span className="font-bold"> Done </span>, đóng tab
-                  CodeCombat, sau đó quay trở lại{" "}
-                  <span className="font-bold"> Trang thi </span> để tiếp tục.
-                </div>
-                <div>
-                  • Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở{" "}
-                  <span className="font-bold"> Trang thi </span>.
-                </div>
-                <div>
-                  • Khi hoàn thành hết các thử thách, thí sinh nhấn nút{" "}
-                  <span className="font-bold"> Nộp bài </span>.
-                </div>
-                <div>
-                  • Trong trường hợp hết giờ mà thí sinh{" "}
-                  <span className="text-red-500 font-bold"> chưa </span> ấn{" "}
-                  <span className="font-bold"> Nộp bài, </span> hệ thống sẽ tự
-                  động nộp bài, kết quả được ghi nhận ở thời điểm hết giờ.
-                </div>
-              </div>
-            </ScrollArea>
-          </Card>
-        </div>
-      </div>
-    </GroupStageGuard>
-  ) : (
-    <div>Loading . . .</div>
+                  <div className="mt-6 mb-10 space-y-4 text-base text-gray-600 font-nutito">
+                    <div className="!p-0 !m-0 custom_li">
+                      • Hiện tại thí sinh đang ở{" "}
+                      <span className="font-bold">Trang thi</span>
+                    </div>
+                    <div>• Các câu hỏi được sắp xếp theo độ khó tăng dần.</div>
+                    <div>• Thí sinh nhấn vào từng thử thách để làm bài.</div>
+                    <div>
+                      • Mỗi câu hỏi sẽ mở ra thử thách CodeCombat tương ứng,
+                      trong một tab mới. Thí sinh làm bài trong tab này.
+                    </div>
+                    <div>
+                      • Khi làm xong 1 thử thách, thí sinh nhấn nút{" "}
+                      <span className="font-bold"> Done </span>, đóng tab
+                      CodeCombat, sau đó quay trở lại{" "}
+                      <span className="font-bold"> Trang thi </span> để tiếp
+                      tục.
+                    </div>
+                    <div>
+                      • Tiến độ làm bài sẽ được cập nhật mỗi 01 phút ở{" "}
+                      <span className="font-bold"> Trang thi </span>.
+                    </div>
+                    <div>
+                      • Khi hoàn thành hết các thử thách, thí sinh nhấn nút{" "}
+                      <span className="font-bold"> Nộp bài </span>.
+                    </div>
+                    <div>
+                      • Trong trường hợp hết giờ mà thí sinh{" "}
+                      <span className="text-red-500 font-bold"> chưa </span> ấn{" "}
+                      <span className="font-bold"> Nộp bài, </span> hệ thống sẽ
+                      tự động nộp bài, kết quả được ghi nhận ở thời điểm hết
+                      giờ.
+                    </div>
+                  </div>
+                </ScrollArea>
+              </Card>
+            </div>
+          </div>
+        ) : (
+          <div>Loading . . .</div>
+        )}
+      </GroupStageGuard>
+    </AuthFinalGuard>
   );
 };
 
