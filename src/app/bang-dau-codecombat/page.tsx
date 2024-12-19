@@ -11,6 +11,7 @@ import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { get } from "lodash";
 import Link from "next/link";
 import GroupStageGuard from "@/components/hoc/GroupStageGuard";
+import CheckContestStartGuard from "@/components/hoc/CheckContestStartGuard";
 
 type TDialogAccept = {
   isOpen: boolean;
@@ -191,7 +192,7 @@ const GroupStageCodeCombatInfo = () => {
       fetchContestGroupStage();
     }, [candidateNumber]);
   return (
-    <GroupStageGuard>
+    <CheckContestStartGuard>
 
     <div className="max-w-[720px] mx-auto mb-2">
       <div className="text-[35px] text-center mb-12 mt-3 text-primary-700 font-dela 
@@ -317,7 +318,7 @@ const GroupStageCodeCombatInfo = () => {
       </div>
     </div>
     </div>
-    </GroupStageGuard>
+    </CheckContestStartGuard>
     
   );
 }
