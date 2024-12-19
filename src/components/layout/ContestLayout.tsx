@@ -300,7 +300,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
           </div>
         </TooltipProvider>
 
-        <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80">
+        <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 min-h-[calc(100vh-64px)] ">
           {children}
         </main>
       </div>
