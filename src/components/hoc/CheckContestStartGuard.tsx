@@ -8,12 +8,11 @@ import {
 } from "@/requests/contestEntry";
 import { ContestGroupStage } from "@/types/common-types";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
-import { getMe } from "@/requests/login";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 
 
-export default function GroupStageGuard ({children}:any) {
+export default function CheckContestStartGuard ({children}:any) {
     const router = useRouter();
 
     //use state
@@ -25,6 +24,8 @@ export default function GroupStageGuard ({children}:any) {
 
       //use store
     const candidateNumber = useUserStore((state) => state.candidateNumber);
+    const data = useUserStore((state) => state.userInfo?.data);
+    const getme = useUserStore((state) => state.getMe);
     const warning = useSnackbarStore((state) => state.warn);
     const [isShowing, show, hide] = useLoadingStore((state) => [
         state.isShowing,
@@ -75,12 +76,21 @@ export default function GroupStageGuard ({children}:any) {
       setIsSubmitted(contestSubmission.data.length > 0);
     };
     
-    
+    const reloadData = async () => {
+      await getme();
+    }
 
     const fetAllData = async () => {
       console.log('fetAllData')
       try {
         show();
+        await reloadData();
+        if(!data) {
+          warning("Không thành công","Tài khoản của bạn không thuộc vòng chung kết");
+          hide();
+          router.push("/");
+          return;
+        };
         const checkIsSubmited = await isExistContestSubmission();
         if(checkIsSubmited) {
           warning("Không thành công","Bạn đã nộp bài thi");
@@ -92,11 +102,6 @@ export default function GroupStageGuard ({children}:any) {
           warning("Không thành công","Lỗi lấy dữ liệu cho cuộc thi");
           router.push("/");
           return; // or any loading indicator
-        }
-        if (new Date(groupStage.startTime) > new Date()) {
-          warning("Không thành công","Vòng chung kết chưa bắt đầu");
-          router.push("/");
-          return;
         }
         if (new Date(groupStage.endTime) < new Date()) {
           warning("Không thành công","Vòng chung kết đã kết thúc");
