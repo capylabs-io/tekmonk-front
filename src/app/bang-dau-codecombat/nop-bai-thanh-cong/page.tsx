@@ -194,7 +194,6 @@ export default function NopBaiThanhCong() {
     listcourse: any[]
   ): TResultCodeCombatFinal[] => {
     const result: TResultCodeCombatFinal[] = [];
-
     for (const course of listcourse) {
       // Tìm thông tin progress tương ứng với course hiện tại
       const courseProgress = progress.find(
@@ -212,14 +211,14 @@ export default function NopBaiThanhCong() {
           ]
         )
       );
-
       // Lấy currentLevel từ progress để đánh dấu các slug đã hoàn thành
       const currentLevel = courseProgress?.currentLevel || 0;
+      console.log('currentLevel', currentLevel);
 
       for (let i = 0; i < course.slugs.length; i++) {
         const slug = course.slugs[i];
         const playtime = playtimeMap.get(slug) || 0;
-        const isCompleted = i < currentLevel;
+        const isCompleted = playtime > 0;
 
         result.push({
           slug,
@@ -228,7 +227,6 @@ export default function NopBaiThanhCong() {
         });
       }
     }
-
     return result;
   };
 
@@ -313,67 +311,67 @@ export default function NopBaiThanhCong() {
               <div className="text-center w-full flex flex-col h-[calc(100%-64px-64px)] overflow-y-auto">
                 <div className="flex flex-col gap-y-6 p-5 border-b border-gray-300">
 
-                <div className="text-xl text-[rgb(42,43,43)] text-SubheadXl mt-[14px]">
-                  Thành tích của bạn
-                </div>
-                <div className="w-full h-[120px] rounded-lg grid grid-cols-3 gap-x-3">
-                  <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
-                    <Image
-                      src={"/image/contest/completed.png"}
-                      alt=""
-                      width={32}
-                      height={32}
-                    />
-                    <div className="text-bodyMd text-gray-500 mt-2">
-                      Số câu đã làm
-                    </div>
-                    <div className="text-SubheadLg">{totalCompleted}</div>
+                  <div className="text-xl text-[rgb(42,43,43)] text-SubheadXl mt-[14px]">
+                    Thành tích của bạn
                   </div>
-                  <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
-                    <Image
-                      src={"/image/contest/failed.png"}
-                      alt=""
-                      width={32}
-                      height={32}
-                    />
-                    <div className="text-bodyMd text-gray-500 mt-2">
-                      Số câu chưa làm
+                  <div className="w-full h-[120px] rounded-lg grid grid-cols-3 gap-x-3">
+                    <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
+                      <Image
+                        src={"/image/contest/completed.png"}
+                        alt=""
+                        width={32}
+                        height={32}
+                      />
+                      <div className="text-bodyMd text-gray-500 mt-2">
+                        Số câu đã làm
+                      </div>
+                      <div className="text-SubheadLg">{totalCompleted}</div>
                     </div>
-                    <div className="text-SubheadLg">{totalNotCompleted}</div>
-                  </div>
-                  <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
-                    <Image
-                      src={"/image/contest/time_cc.png"}
-                      alt=""
-                      width={32}
-                      height={32}
-                    />
-                    <div className="text-bodyMd text-gray-500 mt-2">
-                      Thời gian thi trên Codecombat
+                    <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
+                      <Image
+                        src={"/image/contest/failed.png"}
+                        alt=""
+                        width={32}
+                        height={32}
+                      />
+                      <div className="text-bodyMd text-gray-500 mt-2">
+                        Số câu chưa làm
+                      </div>
+                      <div className="text-SubheadLg">{totalNotCompleted}</div>
                     </div>
-                    <div className="text-SubheadLg">{totalTime} s</div>
+                    <div className="flex flex-col items-center justify-center border border-gray-300 rounded-2xl px-3">
+                      <Image
+                        src={"/image/contest/time_cc.png"}
+                        alt=""
+                        width={32}
+                        height={32}
+                      />
+                      <div className="text-bodyMd text-gray-500 mt-2">
+                        Thời gian thi trên Codecombat
+                      </div>
+                      <div className="text-SubheadLg">{totalTime} s</div>
+                    </div>
                   </div>
-                </div>
-                <div className="flex w-[90%]">
-                  {/* <div>Thời gian bắt đầu làm bài: </div>
+                  <div className="flex w-[90%]">
+                    {/* <div>Thời gian bắt đầu làm bài: </div>
                   <div className="font-bold">{timeContest?.startTime}</div> */}
-                  <div className="flex flex-col items-start">
-                    <div className="text-bodyMd text-gray-500">
-                      Thời gian bắt đầu làm bài:
+                    <div className="flex flex-col items-start">
+                      <div className="text-bodyMd text-gray-500">
+                        Thời gian bắt đầu làm bài:
+                      </div>
+                      <div className="text-SubheadMd font-bold">
+                        {timeContest?.startTime}
+                      </div>
                     </div>
-                    <div className="text-SubheadMd font-bold">
-                      {timeContest?.startTime}
+                    <div className="flex flex-col items-start ml-[62px]">
+                      <div className="text-bodyMd text-gray-500">
+                        Thời gian hoàn thành bài thi:
+                      </div>
+                      <div className="text-SubheadMd font-bold">
+                        {timeContest?.endTime}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-start ml-[62px]">
-                    <div className="text-bodyMd text-gray-500">
-                      Thời gian hoàn thành bài thi:
-                    </div>
-                    <div className="text-SubheadMd font-bold">
-                      {timeContest?.endTime}
-                    </div>
-                  </div>
-                </div>
                 </div>
                 <TableResult data={result} />
               </div>
