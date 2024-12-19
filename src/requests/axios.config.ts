@@ -6,6 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const config: AxiosRequestConfig = {
   baseURL: BASE_URL,
+  timeout: 60000
 };
 
 const tekdojoAxios = axios.create(config);
