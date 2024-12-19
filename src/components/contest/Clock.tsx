@@ -118,7 +118,7 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
            items-center justify-center gap-y-4 gap-x-20 flex-col place-items-center
         `}
         >
-          {!isConnected() ? (
+          {/* {!isConnected() ? (
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem]  shadow-custom-primary text-SubheadLg
 
@@ -133,7 +133,8 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
             </Button>
           ) : (
             groupStage && <GroupStageDialog groupStageData={groupStage} />
-          )}
+          )} */}
+          {groupStage && <GroupStageDialog groupStageData={groupStage} />}
           
           
           <LinkToScroll to="rules" smooth={true} duration={500}>
