@@ -24,16 +24,11 @@ export const HandleReturnMessgaeErrorAxios = (error: any) => {
 export const HandleReturnMessgaeErrorLogin = (error: any) => {
   if (error.response) {
     const { data } = error.response;
-    if (data.error.message == "Invalid identifier") {
-      return "Người dùng không tồn tại trên hệ thống";
+    if (!!data.error.message) {
+      console.log(data.error.message);
+      return data.error.message.toString();
     }
-    if (data.error.message == "Invalid password") {
-      return "Mật khẩu không chính xác";
-    }
-    if(data.error.message == "password is a required field") {
-      return "Vui lòng nhập mật khẩu";
-    }
-    return "Lỗi không xác định";
+    return data.error.message.toString();
   } else if (error.request) {
     return "Không thể kết nối đến server";
   } else {
