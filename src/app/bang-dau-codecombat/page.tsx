@@ -212,11 +212,11 @@ const GroupStageCodeCombatInfo = () => {
             </p>
 
             <p>
-            1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-primary-800">https://codecombat.com/ </Link>
+            1. Thí sinh tự đăng nhập vào <Link href={`https://codecombat.com/`} target="_blank" className="text-primary-800">https://codecombat.com </Link>
             với email đăng ký dự thi là <span className={`text-primary-800`}>{email}</span>.
             </p>
             <p>
-            2. Thí sinh tự chuẩn bị máy tính cá nhân có kết nối Internet ổn định và hoạt động bình thường.
+            2. Thí sinh tự chuẩn bị máy tính cá nhân có thể kết nối Internet ổn định (có dây hoặc không dây) và hoạt động bình thường.
             </p>
 
             <p>
@@ -224,31 +224,32 @@ const GroupStageCodeCombatInfo = () => {
             </p>
 
             <p>
-              4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất. Một khi đã nhấn nút <span className="text-primary-800 font-bold"> Làm bài </span>, thời gian sẽ được tính.
+              4. Thí sinh chỉ được phép làm bài và nộp bài 1 lần duy nhất.
             </p>
 
             <p>
               5. Thí sinh làm bài trực tiếp trên website
-              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> Website cuộc thi sẽ tự động điều hướng sang CodeCombat trong tab mới. Thí sinh không tự ý mở CodeCombat.
+              <Link href="https://olympiad.tekmonk.edu.vn/" target="_blank" className="text-primary-800"> olympiad.tekmonk.edu.vn. </Link> Website cuộc thi sẽ tự động điều hướng sang CodeCombat trong tab mới. Thí sinh không trực tiếp mở CodeCombat khi chưa có sự đồng ý của giám thị coi thi.
+
 
             </p>
 
             <p>
-              6.  Thí sinh hoàn thành các thử thách theo yêu cầu của đề thi. Có 30 thử thách với độ khó tăng dần. 
+              6.  Thí sinh hoàn thành 30 thử thách theo yêu cầu của đề thi. Thí sinh không bắt buộc hoàn thành các thử thách theo thứ tự. Thí sinh có thể bỏ qua một vài thử thách để tiếp tục làm các thử thách khác sao cho hoàn thành nhiều nhất có thể.
             </p>
 
             <p>
-              7. Tiến độ làm bài sẽ được cập nhật mỗi 1 phút và hiển thị trên trang làm bài thi. Nếu thí sinh đã hoàn thiện thử thách sau 5 phút mà tiến độ làm bài chưa được cập nhập, vui lòng liên hệ với Ban tổ chức thi.
-
-            </p>
-
-            <p>
-              8. Tiêu chí xếp hạng Vòng Loại là thí sinh hoàn thiện nhiều thử thách nhất trong thời gian ngắn nhất.
+              7. Tiến độ làm bài sẽ được cập nhật mỗi 1 phút và hiển thị trên trang làm bài thi. Nếu thí sinh đã hoàn thiện thử thách sau 5 phút mà tiến độ làm bài chưa được cập nhập, vui lòng thông báo với giám thị coi thi tại khu vực.
 
             </p>
 
             <p>
-              9. Nếu thí sinh vô tình đóng cửa sổ hay thoát trang làm bài thì, vui lòng truy cập lại vào trang làm bài thi, tiến độ làm bài sẽ không bị ảnh hưởng. Tuy nhiên, thời gian vẫn bị tính. Vì thế vui lòng chuẩn bị thiết bị và đường truyền Internet thật ổn định.
+              8. Tiêu chí xếp hạng Vòng Quốc gia là thí sinh hoàn thiện nhiều thử thách nhất trong thời gian ngắn nhất. Thời gian làm bài của thí sinh được tính bằng tổng thời gian thực hiện thử thách trên CodeCombat, không tính theo thời gian nộp bài.
+
+            </p>
+
+            <p>
+              9. Nếu thí sinh vô tình đóng cửa sổ hay thoát trang làm bài thì, vui lòng truy cập lại vào trang làm bài thi, tiến độ làm bài sẽ không bị ảnh hưởng.
 
             </p>
 
@@ -259,16 +260,9 @@ const GroupStageCodeCombatInfo = () => {
             </p>
 
             <p className="">
-              11. Khi gặp vấn đề kỹ thuật hoặc có thắc mắc, vui lòng liên hệ với Ban tổ chức Giải vô địch Tekmonk Coding Olympiad thông qua một trong các cách sau:
+              11. Khi gặp vấn đề kỹ thuật hoặc có thắc mắc, vui lòng liên hệ với giám thị khu vực.
 
             </p>
-
-            <div className="ml-4 space-y-2">
-              <p>a. Email: tekmonk.academy@gmail.com</p>
-              <p>b. Hotline: 0985-051-4498</p>
-              <p>c. Facebook: Học viện Coding Nghệ Tekmonk</p>
-              <p>d. Website: tekmonk.edu.vn</p>
-            </div>
           </div>
 
           <div className="mt-8 space-y-6">
