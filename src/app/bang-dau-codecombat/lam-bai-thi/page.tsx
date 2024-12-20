@@ -375,8 +375,8 @@ const GroupStageCodeCombat = () => {
                 </div>
               </div>
               <div className={`border border-gray-300 w-full`}></div>
-              <Card className="px-6 border-none">
-                <ScrollArea className="h-[calc(100vh-200px)]">
+              <div className="px-6 border-none">
+                <div className="">
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
                     {Array.isArray(listSlugs) &&
                       listSlugs.map((item: TCourseRender, index: number) => {
@@ -446,8 +446,8 @@ const GroupStageCodeCombat = () => {
                       giờ.
                     </div>
                   </div>
-                </ScrollArea>
-              </Card>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
