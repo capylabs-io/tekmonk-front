@@ -212,11 +212,11 @@ const GroupStageCodeCombatInfo = () => {
             </p>
 
             <p>
-            1. Thí sinh tự động đăng nhập trước trên <Link href={`https://codecombat.com/`} target="_blank" className="text-primary-800">https://codecombat.com/ </Link>
+            1. Thí sinh tự đăng nhập vào <Link href={`https://codecombat.com/`} target="_blank" className="text-primary-800">https://codecombat.com </Link>
             với email đăng ký dự thi là <span className={`text-primary-800`}>{email}</span>.
             </p>
             <p>
-            2. Thí sinh tự chuẩn bị máy tính cá nhân có kết nối Internet ổn định và hoạt động bình thường.
+            2. Thí sinh tự chuẩn bị máy tính cá nhân có thể kết nối Internet ổn định (có dây hoặc không dây) và hoạt động bình thường.
             </p>
 
             <p>
