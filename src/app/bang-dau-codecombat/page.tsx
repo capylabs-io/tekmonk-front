@@ -285,7 +285,7 @@ const GroupStageCodeCombatInfo = () => {
             className="group-hover:border-primary-600"
           />
           <div className="text-base font-medium text-gray-900 cursor-pointer">
-            Tôi đã đọc kỹ quy chế thi Vòng loại.
+            Tôi đã đọc kỹ quy chế thi Vòng Chung kết.
           </div>
         </div>
       </RadioGroup>
