@@ -45,24 +45,37 @@ h6 {
 }
 
 .text-bodyXs {
-  font-size: 10px;
-  font-family: var(--font-nunito);
-  @apply leading-3 font-normal;
+  font-size: 12px;
+  font-family: var(--font-kanit);
+  @apply leading-4 font-light;
 }
 
 .text-bodySm {
-  font-family: var(--font-nunito);
-  @apply text-xs !leading-4 font-normal;
+  font-family: var(--font-kanit);
+  font-size: 14px;
+  @apply !leading-5 font-light;
 }
 
 .text-bodyMd {
-  font-family: var(--font-nunito);
-  @apply text-sm !leading-5 font-normal;
+  font-family: var(--font-kanit);
+  @apply text-base !leading-6 font-light;
 }
 
 .text-bodyLg {
-  font-family: var(--font-nunito);
-  @apply text-base !leading-5 font-normal;
+  font-family: var(--font-kanit);
+  @apply text-xl !leading-7 font-light;
+}
+
+.text-body-sm-link {
+  font-family: var(--font-kanit);
+  font-size: 14px;
+  @apply !leading-5 font-light;
+}
+
+.text-label-caption {
+  font-family: var(--font-kanit);
+  font-size: 10px;
+  @apply !leading-3 font-light;
 }
 
 .text-SubheadXXs {
@@ -73,23 +86,23 @@ h6 {
 }
 
 .text-SubheadXs {
-  font-family: var(--font-nunito);
-  @apply text-xs !leading-4 font-bold;
+  font-family: var(--font-kanit);
+  @apply text-xs !leading-4 font-medium;
 }
 
 .text-SubheadSm {
-  font-family: var(--font-nunito);
-  @apply text-sm !leading-5 font-bold;
+  font-family: var(--font-kanit);
+  @apply text-sm !leading-5 font-medium;
 }
 
 .text-SubheadMd {
-  font-family: var(--font-nunito);
-  @apply text-base !leading-6 font-bold;
+  font-family: var(--font-kanit);
+  @apply text-base !leading-6 font-medium;
 }
 
 .text-SubheadLg {
-  font-family: var(--font-nunito);
-  @apply text-xl !leading-6 font-bold;
+  font-family: var(--font-kanit);
+  @apply text-xl !leading-7 font-medium;
 }
 
 .text-SubheadXl {
@@ -114,10 +127,56 @@ h6 {
   @apply text-[40px] leading-[48px] font-bold;
 }
 
+.text-HeaderXs {
+  font-family: var(--font-kanit);
+  @apply text-lg !leading-7 font-semibold;
+}
+
+.text-HeaderSm {
+  font-family: var(--font-kanit);
+  @apply text-2xl !leading-8 font-semibold;
+}
+
+.text-HeaderMd {
+  font-family: var(--font-kanit);
+  @apply text-3xl !leading-10 font-semibold;
+}
+
+.text-HeaderLg {
+  font-family: var(--font-kanit);
+  @apply text-[40px] !leading-[48px] font-semibold;
+}
+
+.text-DisplayXs {
+  font-family: var(--font-kanit);
+  @apply text-5xl !leading-[56px]  font-semibold;
+}
+
+.text-DisplaySm {
+  font-family: var(--font-kanito);
+  @apply text-[56px] !leading-[64px] font-semibold;
+}
+
+.text-DisplayMd {
+  font-family: var(--font-kanit);
+  @apply text-[64px] !leading-[72px] font-semibold;
+}
+
+.text-DisplayLg {
+  font-family: var(--font-kanit);
+  @apply text-[72px] !leading-[76px] font-semibold;
+}
+
+.text-DisplayXl {
+  font-family: var(--font-kanit);
+  @apply text-[80px] !leading-[84px] font-semibold;
+}
+
 .text-Heading4xl {
   font-family: var(--font-nunito);
   @apply font-bold max-sm:text-[32px] max-sm:leading-10 md:text-[40px] md:leading-[48px];
 }
+
 
 .text-Heading3xl {
   font-family: var(--font-nunito);

@@ -19,6 +19,19 @@ module.exports = {
   	extend: {
   		colors: {
   			primary: {
+				"00": "#FCF7FB",
+				"05": "#FBF3FA",
+				"10": "#F9E7F6",
+				"20": "#F5D0EF",
+				"30": "#EEABE4",
+				"40": "#E578D5",
+				"50": "#DC58C8",
+				"60": "#BC4CAC",
+				"70": "#9A1595",
+				"80": "#83077E",
+				"90": "#5A0057",
+				"95": "#320130",
+
   				'25': '#FCF7FB',
   				'50': '#FBF3FA',
   				'100': '#F9E7F6',
@@ -45,45 +58,42 @@ module.exports = {
   				'800': '#1D2939',
   				'900': '#101828',
   				'950': '#0C111D'
-  			}
+  			},
+			gray: {
+				"00": "#FFFFFF",
+				"05": "#F9FAFB",
+				"10": "#F2F4F7",
+				"20": "#EBE4EC",
+				"30": "#DDD0DD",
+				"40": "#AC9EB1",
+				"50": "#7C6C80",
+				"60": "#5F4C62",
+				"70": "#4B3C4E",
+				"80": "#2F2433",
+				"90": "#241028",
+				"95": "#1A0C1D"
+
+			}
   		},
   		keyframes: {
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
-  			},
-  			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
-  			},
-  			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
-  			}
+			'accordion-down': {
+				from: {
+					height: '0'
+				},
+				to: {
+					height: 'var(--radix-accordion-content-height)'
+				}
+			},
+			'accordion-up': {
+				from: {
+					height: 'var(--radix-accordion-content-height)'
+				},
+				to: {
+					height: '0'
+				}
+			}
   		},
   		animation: {
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out',
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		},

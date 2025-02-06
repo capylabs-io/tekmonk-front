@@ -5,6 +5,7 @@ import "./globals.css";
 import { Loading } from "@/components/common/Loading";
 import { Snackbar } from "@/components/common/Snackbar";
 import { Suspense } from "react";
+import { localKanitFont } from "@/fonts";
 import {
   CONTEST_SHARE_IMAGE_LINK,
   SHARE_TEXT,
@@ -85,7 +86,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
+      className={`${nunitoSans.variable} ${delaGothicOne.variable} ${localKanitFont.variable}`}
     >
       <body>
         <Snackbar />
