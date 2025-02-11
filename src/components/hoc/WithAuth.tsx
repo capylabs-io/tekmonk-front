@@ -11,7 +11,7 @@ const WithAuth = (WrappedComponent: React.FC) => {
     useEffect(() => {
       if (!isConnected()) {
         toast.error("You must be login first.");
-        router.push("/login");
+        router.push("/dang-nhap");
       }
     }, [isConnected, router]);
 

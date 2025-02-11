@@ -49,7 +49,7 @@ export default function ResetPassword() {
     router.push("/");
   };
   const backToLoginPage = () => {
-    router.push("/login");
+    router.push("/dang-nhap");
     setIsPasswordChanged(false);
   };
   const { control, handleSubmit } = useForm({

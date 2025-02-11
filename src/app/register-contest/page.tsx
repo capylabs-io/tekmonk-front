@@ -16,7 +16,7 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { wizardSchema, WizardSchema } from "@/validation/ContestRegister";
-import {HandleReturnMessgaeErrorAxios} from "@/requests/return-message-error";
+import { HandleReturnMessgaeErrorAxios } from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import RegisterContestGuard from "@/components/hoc/RegisterContestGuard";
 import moment from "moment";
@@ -115,7 +115,11 @@ const RegisterContest = () => {
       show();
       //use momen to format date at step 3
       for (let i = 0; i < formData.stepThree.groupMemberInfo.length; i++) {
-        formData.stepThree.groupMemberInfo[i].dob = moment(formData.stepThree.groupMemberInfo[i].dob, "DD/MM/YYYY", true).format("DD-MM-YYYY");
+        formData.stepThree.groupMemberInfo[i].dob = moment(
+          formData.stepThree.groupMemberInfo[i].dob,
+          "DD/MM/YYYY",
+          true
+        ).format("DD-MM-YYYY");
       }
 
       const res = await register({
@@ -190,7 +194,7 @@ const RegisterContest = () => {
 
   const handleBackToLogin = () => {
     clear();
-    router.push("/login");
+    router.push("/dang-nhap");
   };
 
   const handleBackToContest = () => {

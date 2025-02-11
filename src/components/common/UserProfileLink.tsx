@@ -21,7 +21,7 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
   };
   const handleLogout = () => {
     useUserStore.getState().clear();
-    router.push("/login");
+    router.push("/dang-nhap");
   };
 
   return (

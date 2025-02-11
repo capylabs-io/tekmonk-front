@@ -91,7 +91,7 @@ export default function Login() {
             </svg>
             <div
               className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-              onClick={() => router.push("/login")}
+              onClick={() => router.push("/dang-nhap")}
             >
               Quay lại
             </div>

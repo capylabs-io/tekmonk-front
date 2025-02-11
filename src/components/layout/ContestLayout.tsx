@@ -55,7 +55,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
   const handleLogout = () => {
     clear();
     success("Success", "Đăng xuất thành công");
-    router.push("/login");
+    router.push("/dang-nhap");
   };
   const redirectContest = () => {
     //handle if user is not at main page =>  refirect to main page
@@ -109,18 +109,14 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
             {/* Desktop Menu */}
             {/* Nếu sử dụng router hay Link thì khi nhập thông tin phần đăng ký contest sẽ bị lỗi => tạm thời dùng thẻ a */}
             <nav className="hidden md:flex w-[450] h-full items-center justify-around text-gray-950 gap-x-4 text-bodyMd">
-            <Tooltip>
-                    <TooltipTrigger>
-                      <div
-                        className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
-                      >
-                        {email}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {email}
-                    </TooltipContent>
-                  </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold">
+                    {email}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>{email}</TooltipContent>
+              </Tooltip>
               <LinkToScroll to="rules" smooth={true} duration={500}>
                 <div
                   className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
@@ -168,19 +164,17 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                       )}
                     </Tooltip>
                   )} */}
-
-                  
                 </>
               )}
 
-                <div
-                  className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
-                  onClick={() => {
-                    router.push("/tra-cuu-ket-qua");
-                  }}
-                >
-                  Tra cứu
-                </div>
+              <div
+                className="text-gray-950 cursor-pointer min-[920px]:text-lg font-semibold"
+                onClick={() => {
+                  router.push("/tra-cuu-ket-qua");
+                }}
+              >
+                Tra cứu
+              </div>
               {isConnected() ? (
                 <div
                   className="text-red-600 text-bodyMd hover:cursor-pointer min-[920px]:!text-lg !font-semibold"
@@ -189,11 +183,11 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                   Đăng xuất
                 </div>
               ) : (
-                // <a href="/login" className="cursor-pointer">
+                // <a href="/dang-nhap" className="cursor-pointer">
                 //   Đăng nhập
                 // </a>
                 <div
-                  onClick={() => router.push("/login")}
+                  onClick={() => router.push("/dang-nhap")}
                   className=" hover:cursor-pointer min-[920px]:text-lg font-semibold"
                 >
                   Đăng nhập
@@ -271,7 +265,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
                       {!isConnected() && (
                         <Button
                           outlined={true}
-                          onClick={() => router.push("/login")}
+                          onClick={() => router.push("/dang-nhap")}
                         >
                           <div className="text-black text-base">Đăng nhập</div>
                         </Button>

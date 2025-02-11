@@ -39,7 +39,7 @@ const ContestHeader = () => {
 
   const handleLogout = () => {
     useUserStore.getState().clear();
-    router.push("/login");
+    router.push("/dang-nhap");
   };
 
   return (
@@ -95,7 +95,7 @@ const ContestHeader = () => {
                 {!isConnected() ? (
                   <div
                     className="cursor-pointer"
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push("/dang-nhap")}
                   >
                     Đăng nhập
                   </div>
@@ -159,7 +159,7 @@ const ContestHeader = () => {
                 {!isConnected() ? (
                   <li
                     className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push("/dang-nhap")}
                   >
                     Đăng nhập
                   </li>
