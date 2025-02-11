@@ -1,178 +1,117 @@
 "use client";
-import React, { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ResetPasswordSchema } from "@/validation/ForgotPassword";
-import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Input } from "@/components/common/Input";
-import { Button } from "@/components/common/Button";
-import { resetPasswordRequest } from "@/requests/forgot-password";
-import { MoveRight } from "lucide-react";
-import ContestLayout from "@/components/layout/ContestLayout";
-import DotPattern from "@/components/ui/dot-pattern";
-import { LAYERS } from "@/contants/layer";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { CommonButton } from "@/components/common/button/CommonButton";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 export default function ResetPassword() {
-  const router = useRouter();
+  const router = useCustomRouter();
 
-  const [isPasswordChanged, setIsPasswordChanged] = useState(false);
-  const [error, success] = useSnackbarStore((state) => [
-    state.error,
-    state.success,
-  ]);
-  const searchParams = useSearchParams();
+  const [text, setText] = useState<string>("");
+  const [step, setStep] = useState<number>(1);
+  const [email, setEmail] = useState<string>("hieu123123@gmail.com");
+  const handleOnChange = (text: string) => {
+    setText(text);
+  };
 
-  const token = searchParams.get("token");
-  const handleSendEmail = async (data: any) => {
-    const dataBody = {
-      ...data,
-      token: token,
-    };
-    try {
-      const res = await resetPasswordRequest(dataBody);
-      if (!res) {
-        error("Lỗi!", "Mật khẩu không khớp");
-        return;
-      }
-      success("Thành công!", "Mật khẩu đã được thay đổi");
-      setIsPasswordChanged(true);
-    } catch (err) {
-      error("Lỗi!", "Lỗi không xác định, vui lòng thử lại sau");
+  const handleResetPassword = () => {
+    console.log("Resetting password for:", text);
+    if (step == 3) {
+      router.push("/");
     }
+    if (step == 2) {
+      console.log("Sending reset password request for:", email);
+    }
+    setStep(step + 1);
   };
-  const backToMainPage = () => {
-    setIsPasswordChanged(false);
-    router.push("/");
-  };
-  const backToLoginPage = () => {
-    router.push("/dang-nhap");
-    setIsPasswordChanged(false);
-  };
-  const { control, handleSubmit } = useForm({
-    resolver: zodResolver(ResetPasswordSchema),
-  });
-  const passWordChange = (
-    <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
-      <div className="relative flex flex-col items-center h-screen">
-        <div className="flex w-full  absolute top-10 left-10">
-          <div
-            className={`flex gap-2.5 hover:cursor-pointer`}
-            onClick={() => router.push("/")}
-          >
-            <svg
-              className="w-2 fill-primary-700"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 320 512"
-            >
-              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-            </svg>
-            <div className="text-primary-700 font-semibold text-base hover:cursor-pointer">
-              Về trang chủ
-            </div>
-          </div>
-        </div>
-        <div className="max-w-[372px] md:w-[372px] flex flex-col justify-center items-center mt-[180px]">
-          <div className="w-full">
-            <div className="text-primary-900 text-2xl font-bold text-center">
-              Thiết lập mật khẩu
-            </div>
-            <div className="text-bodyLg text-base text-gray-800 mt-3 text-center">
-              Đặt lại mật khẩu mới mà bạn mong muốn
-            </div>
-            <Controller
-              name="password"
-              control={control}
-              render={({ field: { value, onChange }, fieldState }) => (
-                <Input
-                  type="password"
-                  placeholder="Mật khẩu mới"
-                  customClassNames="w-full mt-8 "
-                  value={value}
-                  onChange={onChange}
-                  error={fieldState && fieldState.error?.message}
-                />
-              )}
-            />
 
-            <Controller
-              name="confirmPassword"
-              control={control}
-              render={({ field: { value, onChange }, fieldState }) => (
-                <Input
-                  type="password"
-                  placeholder="Nhập lại mật khẩu mới"
-                  customClassNames="w-full mt-2 "
-                  value={value}
-                  onChange={onChange}
-                  error={fieldState && fieldState.error?.message}
-                />
+  const handleBackStep = () => {
+    if (step == 1) {
+      router.back();
+    }
+    setStep(step - 1);
+  };
+  useEffect(() => {
+    // Handle extract email to kh*********@gmail.com form
+    const maskedEmail = email.replace(/(.{2})(.*)(?=@)/, (gp1, gp2, gp3) => {
+      return gp2 + "*".repeat(gp3.length);
+    });
+    setEmail(maskedEmail);
+  }, [email]);
+
+  return (
+    <>
+      <div className="w-full min-h-[calc(100vh-64px)] flex justify-center items-center overflow-y-auto p-2">
+        <div
+          className="mt-10 w-[368px] h-[340px] mx-auto flex flex-col gap-6 border-[2px] border-gray-20 p-6 bg-gray-00 rounded-2xl"
+          style={{
+            boxShadow: "0px 4px 0px #DDD0DD",
+          }}
+        >
+          <CommonButton
+            className="w-9 h-9 flex items-center justify-center"
+            variant="secondary"
+            onClick={handleBackStep}
+          >
+            <ArrowLeft color="#000000" size={13} />
+          </CommonButton>
+          <div className="flex flex-col gap-1">
+            <div className="text-HeadingSm text-gray-95">Quên mật khẩu</div>
+            <div className="text-BodySm text-gray-60">
+              {step == 1 ? (
+                <div>
+                  Nhập email, tên tài khoản hoặc số điện thoại để có thể bắt đầu
+                  tìm kiếm mật khẩu.
+                </div>
+              ) : step == 2 ? (
+                <div>
+                  Tài khoản mà bạn đã quên mật khẩu được xác định là
+                  <span className="!text-gray-95 font-medium">
+                    {" "}
+                    {email}
+                  </span>{" "}
+                  Gửi yêu cầu đặt lại mật khẩu đến admin hệ thống để có thể tiến
+                  hành đặt lại mật khẩu.
+                </div>
+              ) : (
+                <div>
+                  {" "}
+                  Yêu cầu reset mật khẩu của tài khoản
+                  <span className="!text-gray-95 font-medium"> {email}</span> đã
+                  được gửi đến hệ thống. Hãy chờ email phản hồi và làm theo
+                  hướng dẫn.
+                </div>
               )}
-            />
-            <Button
-              className="mt-8 w-full !rounded-[3rem]"
-              onClick={handleSubmit(handleSendEmail)}
-            >
-              <div className="flex items-center gap-x-2">
-                Thiết lập mật khẩu
-                <MoveRight className="mt-0.5" size={16} strokeWidth={4} />
-              </div>
-            </Button>
+            </div>
           </div>
+          {step == 1 && (
+            <Input
+              type="text"
+              customClassNames="h-[48px]"
+              placeholder="Nhập thông tin"
+              onChange={handleOnChange}
+            />
+          )}
+          <CommonButton
+            className="h-[52px] w-full"
+            variant={step > 2 ? "secondary" : "primary"}
+            onClick={handleResetPassword}
+          >
+            {step == 1 ? (
+              <div>Reset Password</div>
+            ) : step == 2 ? (
+              <div className="flex items-center justify-center gap-2">
+                <div>Gưi yêu cầu</div>
+                <ArrowRight />
+              </div>
+            ) : (
+              <div>Trở lại trang chủ</div>
+            )}
+          </CommonButton>
         </div>
       </div>
-      <div className="bg-[url('/login.jpg')] bg-no-repeat !bg-center bg-cover"></div>
-    </div>
+    </>
   );
-
-  const passwordChangeSuccess = (
-    <div className="relative">
-      <DotPattern
-        className={cn(
-          "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
-          `absolute top-0 min-h-full h-full z-[${LAYERS.BACKGROUND_1}]`
-        )}
-      />
-      <ContestLayout>
-        <div className="min-h-screen w-full max-md:p-2">
-          <div className="md:w-[720px]  h-[376px] mt-10 bg-white border border-gray-300 rounded-2xl mx-auto flex flex-col justify-between">
-            <div className="w-full border-b border-b-gray-300 h-16 text-SubheadLg text-primary-900 px-8 pt-5">
-              Thay đổi mật khẩu thành công
-            </div>
-            <div className="text-center flex flex-col items-center">
-              <Image
-                alt=""
-                src={"/image/icon/done-progress.png"}
-                width={84}
-                height={84}
-              />
-              <div className="text-xl text-[rgb(42,43,43)] mt-8">
-                Mật khẩu đã được thay đổi. Xin vui lòng đăng nhập lại.
-              </div>
-            </div>
-            <div className="w-full h-16 border-t border-gray-300 flex justify-between items-center px-14 max-tabletHeader:px-8 max-mobile:px-1">
-              <Button
-                outlined={true}
-                className="border border-gray-300 h-10 !rounded-[3rem] max-tabletHeader:p-1"
-                onClick={backToMainPage}
-              >
-                Quay lại trang chủ
-              </Button>
-              <Button
-                className="h-10 !rounded-[3rem] max-mobile:p-3 max-tabletHeader:p-3"
-                onClick={backToLoginPage}
-              >
-                Đăng nhập
-              </Button>
-            </div>
-          </div>
-        </div>
-      </ContestLayout>
-    </div>
-  );
-
-  return <>{isPasswordChanged ? passwordChangeSuccess : passWordChange}</>;
 }
