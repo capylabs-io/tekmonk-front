@@ -9,15 +9,11 @@ import {
 import { Post } from "@/components/home/Post";
 import WithAuth from "@/components/hoc/WithAuth";
 import { useRouter } from "next/navigation";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 const Home = () => {
   //set for contest page
-  const router = useRouter();
-  useEffect(() => {
-    if (router) {
-      router.push("/");
-    }
-  }, []);
+  const router = useCustomRouter();
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>
@@ -77,20 +73,6 @@ const Home = () => {
             likedCount="6.2"
             commentCount="61"
           />
-          <hr className="border-t border-gray-200 my-4" />
-          <div className="flex justify-between">
-            <iframe
-              src="https://www.addictinggames.com/embed/html5-games/10000301"
-              className="rounded-xl w-full"
-              width="604"
-              height="940"
-              style={{ border: "none" }}
-              scrolling="no"
-              title="Game"
-            />
-            {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/fPzsWFJ2JG8?si=LxVvu4u1eLcfFioY" ></iframe> */}
-            {/* <iframe width="604" height="700" src="https://www.addictinggames.com/embed/html5-games/10000373" scrolling="no"></iframe> */}
-          </div>
         </TabsContent>
         <TabsContent value="play" className="overflow-y-auto">
           Play
@@ -100,4 +82,4 @@ const Home = () => {
   );
 };
 
-export default WithAuth(Home);
+export default Home;
