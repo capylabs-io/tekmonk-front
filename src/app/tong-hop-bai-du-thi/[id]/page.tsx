@@ -29,7 +29,7 @@ import {
   TwitterShareButton,
 } from "react-share";
 import { EmptySearch } from "@/components/common/EmptySearch";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { useEffect, useState } from "react";
 import { useTagStore } from "@/store/TagStore";
 import { get, round } from "lodash";
@@ -49,20 +49,20 @@ const ContestDetail: React.FC = () => {
 
   const mergeCourses = (courses: TResultCodeCombat[]): TResultCodeCombat[] => {
     const mergedMap = new Map<string, TResultCodeCombat>();
-  
+
     for (const course of courses) {
       if (mergedMap.has(course.name)) {
         const existing = mergedMap.get(course.name)!;
-  
+
         existing.currentLevel += course.currentLevel;
         existing.totalLevel += course.totalLevel;
       } else {
         mergedMap.set(course.name, { ...course });
       }
     }
-  
+
     return Array.from(mergedMap.values());
-  }
+  };
 
   const fetchContestDetail = async () => {
     setIsLoading(true);
@@ -101,7 +101,7 @@ const ContestDetail: React.FC = () => {
   useEffect(() => {
     if (!id) return;
     fetchContestDetail();
-    if(contestDetail?.resultCodeCombat) {
+    if (contestDetail?.resultCodeCombat) {
       const courses = mergeCourses(contestDetail.resultCodeCombat);
       setContestDetail((prevState) => {
         if (!prevState) return prevState;
@@ -222,7 +222,9 @@ const ContestDetail: React.FC = () => {
                     ))}
                   </div>
                 </header>
-                <div className="py-4 px-8 font-bold text-gray-800 text-lg">{get(contestDetail, "title", "")}</div>
+                <div className="py-4 px-8 font-bold text-gray-800 text-lg">
+                  {get(contestDetail, "title", "")}
+                </div>
                 <div
                   className="py-4 px-8 ql-viewer"
                   dangerouslySetInnerHTML={{
@@ -276,27 +278,24 @@ const ContestDetail: React.FC = () => {
                 ) : (
                   <>
                     {contestDetail.thumbnail && (
-                        <div className="w-full mx-auto pt-4 sm:px-8">
-                          <div className="sm:block">
-                            <AspectRatio ratio={16 / 9}>
-                              {contestDetail.thumbnail.url && (
-                                <div className="relative w-full h-full">
-                                  <ImageCustom
-                                    src={
-                                      contestDetail.thumbnail
-                                        .url
-                                    }
-                                    alt={`Selected image for ${contestDetail.title}`}
-                                    className="rounded-md object-contain"
-                                    quality={80}
-                                    fill
-                                  />
-                                </div>
-                              )}
-                            </AspectRatio>
-                          </div>
+                      <div className="w-full mx-auto pt-4 sm:px-8">
+                        <div className="sm:block">
+                          <AspectRatio ratio={16 / 9}>
+                            {contestDetail.thumbnail.url && (
+                              <div className="relative w-full h-full">
+                                <ImageCustom
+                                  src={contestDetail.thumbnail.url}
+                                  alt={`Selected image for ${contestDetail.title}`}
+                                  className="rounded-md object-contain"
+                                  quality={80}
+                                  fill
+                                />
+                              </div>
+                            )}
+                          </AspectRatio>
                         </div>
-                      )}
+                      </div>
+                    )}
                   </>
                 )}
               </section>

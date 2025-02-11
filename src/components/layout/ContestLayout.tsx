@@ -17,12 +17,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Link as LinkToScroll } from "react-scroll";
+import { useCustomRouter } from "../common/router/CustomRouter";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -34,7 +35,7 @@ type ContestLayoutProps = {
 };
 
 const ContestLayout = ({ children }: ContestLayoutProps) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const pathname = usePathname();
   const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
   //use state
@@ -294,7 +295,7 @@ const ContestLayout = ({ children }: ContestLayoutProps) => {
           </div>
         </TooltipProvider>
 
-        <main className="flex-grow relative z-0 max-w-[960px] w-full mx-auto text-gray-800 bg-opacity-80 min-h-[calc(100vh-64px)] ">
+        <main className="flex-grow relative z-0 container w-full mx-auto text-gray-800 bg-opacity-80 min-h-[calc(100vh-64px)] ">
           {children}
         </main>
       </div>
