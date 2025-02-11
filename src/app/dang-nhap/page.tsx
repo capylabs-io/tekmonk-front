@@ -1,17 +1,15 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { Input } from "@/components/common/Input";
-import { Button } from "@/components/common/Button";
+import { useState } from "react";
 import { useUserStore } from "@/store/UserStore";
-import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 import { Role } from "@/contants/role";
 import { get } from "lodash";
-import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
+import { Input } from "@/components/common/Input";
+import { CommonButton } from "@/components/common/button/CommonButton";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -31,7 +29,7 @@ export default function Login() {
     state.success,
   ]);
 
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const handleChangeUsername = (identifier: string) => {
     setUser((prevState) => ({
@@ -45,6 +43,10 @@ export default function Login() {
       ...prevState,
       password,
     }));
+  };
+
+  const handleForgotPassword = () => {
+    router.push("/doi-mat-khau-moi");
   };
 
   const handleLogin = async () => {
@@ -79,80 +81,63 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full overflow-x-hidden grid grid-cols-2 max-[819px]:grid-cols-1 h-screen black">
-      <div className="relative flex flex-col justify-center items-center h-screen">
-        <div className="flex w-full absolute top-10 left-10">
-          <div
-            className={`flex gap-2.5 hover:cursor-pointer`}
-            onClick={() => router.push("/")}
-          >
-            <svg
-              className="w-2 fill-primary-700"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 320 512"
-            >
-              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
-            </svg>
-            <div
-              className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-              onClick={() => router.push("/")}
-            >
-              Quay lại
+    <div className="mx-auto min-h-[calc(100vh-64px)] flex justify-center items-center p-2">
+      <div
+        className="w-[368px] h-[468px] mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl"
+        style={{
+          boxShadow: "0px 4px 0px #DDD0DD",
+        }}
+      >
+        <div className="w-full">
+          <div className="text-HeadingSm text-gray-95">Đăng nhập</div>
+          <div className="text-BodySm text-gray-60">
+            Tham gia ngay vào cộng đồng Tekmonk
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="w-full flex flex-col gap-2">
+            <div className="text-SubheadSm text-gray-60">
+              Tên tài khoản hoặc email
             </div>
+            <Input
+              type="text"
+              customClassNames="h-[48px]"
+              placeholder="Tên tài khoản hoặc email"
+            />
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <div className="text-SubheadSm text-gray-60">Mật khẩu</div>
+            <Input
+              type="password"
+              customClassNames="h-[48px]"
+              placeholder="Mật khẩu"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              className="w-[20px] h-[20px] text-red-500 accent-primary-80 
+             appearance-none bg-white border border-gray-20 rounded-[4px] outline-none 
+             focus:ring-0 focus:outline-none checked:appearance-auto"
+            />
+
+            <div>Lưu trạng thái đăng nhập</div>
           </div>
         </div>
-        <Image
-          src="/image/app-logox4.png"
-          alt="app logo"
-          width={318}
-          height={64}
-          className="text-red-600"
-        />
-        <div className="text-primary-900 text-4xl font-bold text-center mt-16">
-          Đăng nhập
-        </div>
-        {/* <div className="flex gap-x-1 mt-2">
-          <div>Chưa có tài khoản?</div>
-          <div
-            className="font-bold underline hover:cursor-pointer"
-            onClick={() => router.push("/register-contest")}
+
+        <div className="flex flex-col gap-2">
+          <CommonButton className="h-12" onClick={handleLogin}>
+            Đăng Nhập
+          </CommonButton>
+          <CommonButton
+            className="h-12"
+            variant="secondary"
+            onClick={handleForgotPassword}
           >
-            Đăng ký
-          </div>
-          <div>ngay</div>
-        </div> */}
-        <div className="w-[348px] mt-8 flex flex-col gap-y-4">
-          <Input
-            type="text"
-            placeholder="Tên tài khoản hoặc email"
-            customClassNames="w-full"
-            value={user.identifier}
-            onChange={handleChangeUsername}
-          />
-          <Input
-            type="password"
-            placeholder="Mật khẩu"
-            value={user.password}
-            onChange={handChangePassword}
-          />
-          <Button className="mt-8" onClick={handleLogin}>
-            Đăng nhập
-          </Button>
-          {/* <div
-            className="text-center cursor-pointer"
-            onClick={() => router.push("quen-mat-khau")}
-          >
-            Quên mật khẩu?
-          </div> */}
+            Quên mật khẩu
+          </CommonButton>
         </div>
-        {/* @TODO: forget passwork function */}
-        {/* <div className="text-gray-600 text-sm text-center mt-5">
-          Quên mật khẩu?
-        </div> */}
       </div>
-      <div className="bg-[url('/image/contest/login.png')] bg-no-repeat !bg-center bg-cover"></div>
-      {/* <ToastContainer /> */}
-      {isShowing && <Loading />}
     </div>
   );
 }
