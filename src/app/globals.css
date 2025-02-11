@@ -44,29 +44,29 @@ h6 {
   @apply font-bold;
 }
 
-.text-bodyXs {
+.text-BodyXs {
   font-size: 12px;
   font-family: var(--font-kanit);
   @apply leading-4 font-light;
 }
 
-.text-bodySm {
+.text-BodySm {
   font-family: var(--font-kanit);
   font-size: 14px;
   @apply !leading-5 font-light;
 }
 
-.text-bodyMd {
+.text-BodyMd {
   font-family: var(--font-kanit);
   @apply text-base !leading-6 font-light;
 }
 
-.text-bodyLg {
+.text-BodyLg {
   font-family: var(--font-kanit);
   @apply text-xl !leading-7 font-light;
 }
 
-.text-body-sm-link {
+.text-BodySm-link {
   font-family: var(--font-kanit);
   font-size: 14px;
   @apply !leading-5 font-light;
@@ -127,22 +127,22 @@ h6 {
   @apply text-[40px] leading-[48px] font-bold;
 }
 
-.text-HeaderXs {
+.text-HeadingXs {
   font-family: var(--font-kanit);
   @apply text-lg !leading-7 font-semibold;
 }
 
-.text-HeaderSm {
+.text-HeadingSm {
   font-family: var(--font-kanit);
   @apply text-2xl !leading-8 font-semibold;
 }
 
-.text-HeaderMd {
+.text-HeadingMd {
   font-family: var(--font-kanit);
   @apply text-3xl !leading-10 font-semibold;
 }
 
-.text-HeaderLg {
+.text-HeadingLg {
   font-family: var(--font-kanit);
   @apply text-[40px] !leading-[48px] font-semibold;
 }
@@ -170,32 +170,6 @@ h6 {
 .text-DisplayXl {
   font-family: var(--font-kanit);
   @apply text-[80px] !leading-[84px] font-semibold;
-}
-
-.text-Heading4xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-[32px] max-sm:leading-10 md:text-[40px] md:leading-[48px];
-}
-
-
-.text-Heading3xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-2xl max-sm:!leading-7 md:text-[32px] md:leading-10;
-}
-
-.text-Heading2xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-[28px] md:leading-[32px];
-}
-
-.text-HeadingXl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-2xl md:!leading-7;
-}
-
-.text-HeadingLg {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-base max-sm:!leading-5 md:text-xl md:!leading-6;
 }
 
 .max-width-pc {
@@ -245,11 +219,11 @@ h6 {
 
 /* quill editor */
 .ql-editor {
-  @apply text-bodyMd font-normal not-italic;
+  @apply text-BodyMd font-normal not-italic;
 }
 
 .ql-viewer {
-  @apply text-bodyMd font-normal not-italic;
+  @apply text-BodyMd font-normal not-italic;
 }
 
 .ql-viewer * {
