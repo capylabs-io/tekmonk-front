@@ -2,7 +2,7 @@
 import { ArrowLeft } from "lucide-react";
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
 import WithAuth from "@/components/hoc/WithAuth";

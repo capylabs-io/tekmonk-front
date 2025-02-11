@@ -9,7 +9,7 @@ import { Step3 } from "@/components/register-contest/Step3";
 import { Step4 } from "@/components/register-contest/Step4";
 import { useContestRegisterStore } from "@/store/ContestRegisterStore";
 import { SuccessComponent } from "@/components/register-contest/Success";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { useRouter } from "next/navigation";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";

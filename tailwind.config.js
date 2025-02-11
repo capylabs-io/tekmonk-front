@@ -11,9 +11,13 @@ module.exports = {
   theme: {
   	container: {
   		center: 'true',
-  		padding: '2rem',
+  		padding: '8px',
   		screens: {
-  			'2xl': '1400px'
+  			'2xl': '1400px',
+			'xl': '1200px',
+			'lg': '960px',
+			'md': '720px',
+  			'sm': '640px',
   		}
   	},
   	extend: {
@@ -102,8 +106,8 @@ module.exports = {
 			nutito: ['var(--font-nunito)', 'cursive'],
   		},
   		boxShadow: {
-  			'custom-gray': '0px 4px 0px rgb(208, 213, 221) ',
-  			'custom-primary': '0px 4px 0px rgb(159,42,143)'
+  			'custom-gray': '0px 4px 0px #EBE4EC',
+  			'custom-primary': '0px 4px 0px #9A1595'
   		},
   		screens: {
   			mobile: '440px',

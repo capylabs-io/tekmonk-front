@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { Input } from "@/components/common/Input";
 import { z } from "zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";

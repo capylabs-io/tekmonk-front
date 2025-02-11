@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from "@/components/common/Dialog";
 
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { Label } from "../common/Label";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 export const BackgroundCard = ({

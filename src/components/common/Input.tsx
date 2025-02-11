@@ -17,7 +17,7 @@ type Props = {
   onBlur?: () => void;
 };
 const BASE_CLASS =
-  "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px]";
+  "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] flex items-center justify-center";
 const BASE_INPUT_CLASS =
   "mr-2 w-full text-lg font-normal outline-none bg-grey-50";
 export const Input = ({
@@ -55,7 +55,7 @@ export const Input = ({
           customClassNames
         )}
       >
-        <div className="flex w-full items-center text-base font-bold">
+        <div className="flex w-full items-center  text-base font-bold">
           {isSearch && (
             <Image
               src="/image/contestentries/search-icon.png"

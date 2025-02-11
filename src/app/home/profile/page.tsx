@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { FileEdit, Pencil, Settings } from "lucide-react";
 import {
   Tabs,

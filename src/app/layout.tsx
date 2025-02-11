@@ -12,6 +12,8 @@ import {
   SHARE_TITLE,
 } from "@/contants/contest/tekmonk";
 
+import TopLoader from "nextjs-toploader";
+
 const inter = Inter({ subsets: ["latin"] });
 
 const delaGothicOne = localFont({
@@ -90,6 +92,7 @@ export default function RootLayout({
     >
       <body>
         <Snackbar />
+        <TopLoader showSpinner={false} color="#bc4cac" />
         <Suspense fallback={<Loading />}>
           <div className="relative">{children}</div>
         </Suspense>

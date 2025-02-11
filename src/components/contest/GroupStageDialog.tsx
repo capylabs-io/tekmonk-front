@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { memo, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ContestGroupStage } from "@/types/common-types";
@@ -30,10 +30,10 @@ const GroupStageDialog = ({
   const warning = useSnackbarStore((state) => state.warn);
   const getMe = useUserStore((state) => state.getMe);
   const [isShowing, show, hide] = useLoadingStore((state) => [
-      state.isShowing,
-      state.show,
-      state.hide,
-    ]);
+    state.isShowing,
+    state.show,
+    state.hide,
+  ]);
   //arrow function
 
   const redirectGroupStageCodeCombat = () => {
@@ -68,7 +68,6 @@ const GroupStageDialog = ({
       show();
       await getMe();
       if (!data) {
-        
         router.push("/");
         return;
       }
@@ -95,7 +94,8 @@ const GroupStageDialog = ({
   }, [groupStageData.startTime]);
   isShowButtonResult && console.log("isShowButtonResult", isShowButtonResult);
   return (
-    isClient && isAccountForFinal && (
+    isClient &&
+    isAccountForFinal && (
       <>
         <>
           {!isSubmitted && (
@@ -118,7 +118,9 @@ const GroupStageDialog = ({
               max-[460px]:h-[50px]
             "
               outlined={false}
-              onClick={() => router.push("/bang-dau-codecombat/nop-bai-thanh-cong")}
+              onClick={() =>
+                router.push("/bang-dau-codecombat/nop-bai-thanh-cong")
+              }
             >
               Xem kết quả thi
             </Button>

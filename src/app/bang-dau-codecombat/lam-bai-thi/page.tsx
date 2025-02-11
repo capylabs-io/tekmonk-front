@@ -8,7 +8,7 @@ import {
   TProgressResult,
 } from "@/types/common-types";
 import Link from "next/link";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import DateTimeDisplay from "@/components/contest/DateTimeDisplay";
 import { useCallback, useEffect, useState } from "react";
 import { get, round, set } from "lodash";

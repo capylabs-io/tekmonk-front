@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/common/Input";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { useUserStore } from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";

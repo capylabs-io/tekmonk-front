@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
 import { Recruitment } from "@/types/common-types";

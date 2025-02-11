@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Clock9, X } from "lucide-react";
 import {
@@ -213,7 +213,7 @@ export default function NopBaiThanhCong() {
       );
       // Lấy currentLevel từ progress để đánh dấu các slug đã hoàn thành
       const currentLevel = courseProgress?.currentLevel || 0;
-      console.log('currentLevel', currentLevel);
+      console.log("currentLevel", currentLevel);
 
       for (let i = 0; i < course.slugs.length; i++) {
         const slug = course.slugs[i];
@@ -310,7 +310,6 @@ export default function NopBaiThanhCong() {
               </div>
               <div className="text-center w-full flex flex-col h-[calc(100%-64px-64px)] overflow-y-auto">
                 <div className="flex flex-col gap-y-6 p-5 border-b border-gray-300">
-
                   <div className="text-xl text-[rgb(42,43,43)] text-SubheadXl mt-[14px]">
                     Thành tích của bạn
                   </div>

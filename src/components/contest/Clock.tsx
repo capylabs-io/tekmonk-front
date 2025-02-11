@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { CardContest } from "../common/CardContest";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { Link as LinkToScroll } from "react-scroll";
@@ -135,8 +135,7 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
             groupStage && <GroupStageDialog groupStageData={groupStage} />
           )} */}
           {groupStage && <GroupStageDialog groupStageData={groupStage} />}
-          
-          
+
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 

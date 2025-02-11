@@ -1,7 +1,7 @@
 "use client";
 
 import { EmailShareButton, FacebookShareButton } from "react-share";
-import { Button } from "./Button";
+import { Button } from "./button/Button";
 import { Facebook, Link, Mail, Twitter } from "lucide-react";
 
 export default function Share() {

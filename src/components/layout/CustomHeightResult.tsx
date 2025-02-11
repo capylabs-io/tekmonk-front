@@ -17,7 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { useUserStore } from "@/store/UserStore";
 import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";

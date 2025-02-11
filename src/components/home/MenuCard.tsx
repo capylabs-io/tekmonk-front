@@ -25,7 +25,7 @@ export const MenuCard = ({ title, active, url, iconElement }: Props) => {
       onClick={handleOnClick}
     >
       {iconElement}
-      <span>{title}</span>
+      {title && <span className="xl:block hidden">{title}</span>}
     </div>
   );
 };

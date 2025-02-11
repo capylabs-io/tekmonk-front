@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import React from "react";
 import { Input } from "../common/Input";
 import { TextArea } from "../common/TextArea";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { InputFileUpdload } from "../common/InputFileUpload";
 
 export const CreateProfileModal = () => {

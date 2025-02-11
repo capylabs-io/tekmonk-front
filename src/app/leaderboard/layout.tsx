@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import Image from "next/image";
 import { useState } from "react";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";

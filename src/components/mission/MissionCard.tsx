@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { Check } from "lucide-react";
 
 type Props = {
