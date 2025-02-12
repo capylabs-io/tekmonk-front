@@ -2,13 +2,7 @@
 
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { Navbar } from "@/components/common/Navbar";
-import {
-  ArrowRight,
-  ChevronRight,
-  Heart,
-  MessageCircle,
-  Shield,
-} from "lucide-react";
+import { ChevronRight, Heart, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import { Zap } from "lucide-react";
 import {
