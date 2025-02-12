@@ -5,11 +5,13 @@ import { localKanitFont } from "@/fonts";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
   outlined?: boolean;
+  childrenClassName?: string;
   children: React.ReactNode;
 }
 
 export const CommonButton = ({
   className,
+  childrenClassName,
   variant = "primary",
   children,
   ...props
@@ -25,13 +27,19 @@ export const CommonButton = ({
           " border-[2px] bg-gray-00 hover:bg-gray-10 active:bg-gray-20 text-primary-95 border-gray-20 shadow-custom-gray":
             variant === "secondary",
         },
-        localKanitFont.className,
         className
       )}
       type="button"
       {...props}
     >
-      {children}
+      <div
+        className={cn(childrenClassName, localKanitFont.className, {
+          "text-white": variant === "primary",
+          "text-primary-95": variant === "secondary",
+        })}
+      >
+        {children}
+      </div>
     </button>
   );
 };
