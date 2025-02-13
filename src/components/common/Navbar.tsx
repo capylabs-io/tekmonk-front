@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CommonButton } from "./button/CommonButton";
+import { ROUTE } from "@/contants/router";
 
 export const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -79,7 +80,7 @@ export const Navbar = () => {
                 Olympiad
               </Link>
               <Link
-                href="/tin-tuc"
+                href={ROUTE.NEWS}
                 className="text-sm font-medium text-gray-700 hover:text-gray-900"
               >
                 Tin tức

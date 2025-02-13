@@ -67,7 +67,11 @@ export const Input = ({
           <input
             type={showPassword ? "text" : type}
             lang="en-US"
-            className={classNames(BASE_INPUT_CLASS, customInputClassNames)}
+            className={classNames(
+              BASE_INPUT_CLASS,
+              customInputClassNames,
+              "placeholder:text-BodyMd placeholder:text-gray-70"
+            )}
             placeholder={placeholder || ""}
             value={value}
             name={name}
