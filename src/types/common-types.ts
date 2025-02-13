@@ -50,7 +50,7 @@ export type User = {
   data?: {
     contestId?: string;
     isAccountForFinalRound?: boolean;
-  }
+  };
 };
 
 export type TListCourse = {
@@ -58,7 +58,7 @@ export type TListCourse = {
   courseInstanceId: string;
   name: string;
   slugs: string[];
-}
+};
 
 export type ContestGroupStage = {
   id?: string;
@@ -208,7 +208,24 @@ export type TimeLeft = {
 
 export type TProgressResult = {
   name: string;
-  listSlug: {name: string, playtime: number}[],
+  listSlug: { name: string; playtime: number }[];
   currentLevel: number;
   totalLevel: number;
+};
+
+export type TNews = {
+  id: number;
+  title: string;
+  thumbnail: string;
+  content: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  type: string;
+  tags: string;
+  metadata?: object;
+  createdAt?: string;
+  isActived: boolean;
+  priority: boolean;
+  totalRead?: number;
 };
