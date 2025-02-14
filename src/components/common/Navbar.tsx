@@ -40,7 +40,7 @@ export const Navbar = () => {
   return (
     <header
       className={cn(
-        "container fixed top-0 h-16 left-0 right-0 bg-white border-b z-50 transition-transform duration-300 flex items-center justify-center",
+        "container fixed top-0 h-16 left-0 right-0 bg-white z-50 transition-transform duration-300 flex items-center justify-center",
         !isVisible && "-translate-y-full"
       )}
     >
@@ -109,7 +109,9 @@ export const Navbar = () => {
               Liên hệ
             </Link>
             <CommonButton className="h-10 w-[111px] text-white">
-              <span className="text-SubheadMd">Đăng nhập</span>
+              <Link href={ROUTE.LOGIN} className="text-SubheadMd">
+                Đăng nhập
+              </Link>
             </CommonButton>
           </div>
 

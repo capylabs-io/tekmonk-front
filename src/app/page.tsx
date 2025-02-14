@@ -15,6 +15,11 @@ import { cn } from "@/lib/utils";
 import { Marquee } from "@/components/magicui/marquee";
 import DotPattern from "@/components/ui/dot-pattern";
 import { LAYERS } from "@/contants/layer";
+import { BannerCard } from "@/components/new/BannerCard";
+import { LandingFooter } from "@/components/new/NewsFooter";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
+import Link from "next/link";
 
 type TCourseSection = {
   title: string;
@@ -51,41 +56,6 @@ const accordionData = [
     content: "Content for Tư duy section...",
   },
 ];
-
-const IconShowBanner = () => {
-  return (
-    <>
-      <Image
-        alt="character"
-        src="/image/landing/human1.png"
-        width={323}
-        height={220}
-        className="object-contain absolute -bottom-[90px] -right-10 z-0 lg:block hidden"
-      />
-      <Image
-        alt="icon-left"
-        src="/image/landing/left-stars.png"
-        width={89}
-        height={87}
-        className="object-contain absolute left-20 top-20 z-0 lg:block hidden"
-      />
-      <Image
-        alt="icon-middle"
-        src="/image/landing/middle-stars.png"
-        width={89}
-        height={87}
-        className="object-contain absolute left-48 top-3/4 z-0 lg:block hidden"
-      />
-      <Image
-        alt="icon-right"
-        src="/image/landing/right-stars.png"
-        width={89}
-        height={87}
-        className="object-contain absolute right-10 top-36 z-0 lg:block hidden"
-      />
-    </>
-  );
-};
 
 const CoreValueComponent = () => {
   return (
@@ -350,7 +320,7 @@ const BannerBottom = () => {
             className="text-white border-[2px] w-[203px] h-[52px]"
             childrenClassName="flex items-center justify-center gap-2"
           >
-            <span>Khám phá ngay</span>
+            <Link href={ROUTE.HOME}>Khám phá ngay</Link>
             <ChevronRight size={24} color="#ffffff" className="mt-1" />
           </CommonButton>
         </div>
@@ -360,58 +330,17 @@ const BannerBottom = () => {
   );
 };
 
-const LandingFooter = () => {
-  return (
-    <div className="bg-[#320130] text-white px-4 py-8 md:px-8 w-full">
-      <div className="container mx-auto max-w-7xl">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <div className="space-y-4 mb-6 md:mb-0">
-            {/* Logo */}
-            <Image alt="" src="/image/app-logox2.png" width={159} height={32} />
-
-            {/* Contact Information */}
-            <div className="space-y-2 text-sm">
-              <p className="max-w-md">
-                <span className="font-semibold">Địa chỉ:</span> Tầng 3, Tháp B,
-                Tòa Việt Đức Complex, Ngõ 187 Nguyễn Tuân, P. Nhân Chính, Q.
-                Thanh Xuân,Tp. Hà Nội
-              </p>
-              <p>
-                <span className="font-semibold">Hotline:</span> 0378 247 797
-              </p>
-              <p>
-                <span className="font-semibold">Email:</span>{" "}
-                tekmonk.academy@gmail.com
-              </p>
-            </div>
-          </div>
-
-          {/* Certification Badge */}
-          <div className="w-40 h-auto">
-            <img
-              src=""
-              alt="Đã đăng ký Bộ Công Thương"
-              className="w-full h-auto"
-            />
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="pt-4 text-center text-BodySm">
-          <p>© 2021 TekMonk Academy. All right reserved.</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export default function Page() {
+  const router = useCustomRouter();
+  const handleRedirectMainPage = () => {
+    router.push(`${ROUTE.HOME}`);
+  };
   return (
     <>
       <Navbar />
       <div className="min-h-[calc(100vh-64px)] mt-16 container mx-auto flex flex-col items-center justify-center">
         <div className="overflow-hidden w-full h-[560px] relative">
-          <div className="bg-[url('/image/landing/main-banner.png')] h-full bg-cover bg-no-repeat flex flex-col items-center justify-center gap-9 overflow-hidden">
+          <BannerCard>
             <div className="text-gray-10 lg:text-DisplayXl md:text-DisplayLg sm:text-DisplayMd text-DisplayXs text-center max-w-[800px] z-10 p-2">
               Vui chơi, sáng tạo và kết nối cộng đồng
             </div>
@@ -419,13 +348,14 @@ export default function Page() {
               <div className="text-center text-gray-10 md:text-HeadingSm text-HeadingXs">
                 Được tin dùng bởi hơn 1 triệu phụ huynh và học sinh tại Việt Nam
               </div>
-              <CommonButton className="text-white border-[2px] w-[175px] h-[52px]">
+              <CommonButton
+                className="text-white border-[2px] w-[175px] h-[52px]"
+                onClick={handleRedirectMainPage}
+              >
                 Khám phá ngay
               </CommonButton>
             </div>
-          </div>
-          {/* Show icon, character here */}
-          <IconShowBanner />
+          </BannerCard>
         </div>
         <CoreValueComponent />
         <AboutCourseComponent />

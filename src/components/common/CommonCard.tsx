@@ -2,16 +2,19 @@
 
 import { cn } from "@/lib/utils";
 
-export const CommonCard = ({
-  children,
-  className,
-  size = "medium",
-  isActive = false,
-}: {
+interface CommonCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   className?: string;
   size?: "small" | "medium" | "large";
   isActive?: boolean;
+}
+
+export const CommonCard: React.FC<CommonCardProps> = ({
+  children,
+  className,
+  size = "medium",
+  isActive = false,
+  ...props
 }) => {
   return (
     <div
@@ -33,6 +36,7 @@ export const CommonCard = ({
           ? "0px 4px 0px #DDD0DD"
           : "0px 8px 0px #DDD0DD",
       }}
+      {...props}
     >
       {children}
     </div>

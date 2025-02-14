@@ -16,6 +16,16 @@ import { useProjects } from "@/lib/hooks/useProject";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { MenuCard } from "@/components/home/MenuCard";
+import {
+  Bell,
+  Goal,
+  Home,
+  Newspaper,
+  ShoppingCart,
+  User,
+  Zap,
+} from "lucide-react";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -49,7 +59,50 @@ export default function Layout({
           />
         </div>
         <div className="flex flex-col mt-4">
-          <MenuLayout />
+          <div>
+            <MenuCard
+              title="Trang chủ"
+              active={usePathname() === "/home"}
+              iconElement={<Home size={20} />}
+              url={ROUTE.ADMIN}
+            />
+            <MenuCard
+              active={usePathname() === "/notification"}
+              title="Thông báo"
+              iconElement={<Bell size={20} />}
+              url="/notification"
+            />
+            <MenuCard
+              title="Nhiệm vụ"
+              active={usePathname().includes("/mission")}
+              iconElement={<Goal size={20} />}
+              url="/mission"
+            />
+            <MenuCard
+              title="Cửa hàng"
+              active={usePathname().includes("/shop")}
+              url="/shop"
+              iconElement={<ShoppingCart size={20} />}
+            />
+            <MenuCard
+              title="Bảng xếp hạng"
+              active={usePathname().includes("/leaderboard")}
+              iconElement={<Zap size={20} />}
+              url="/leaderboard"
+            />
+            <MenuCard
+              title="Tin tức"
+              active={usePathname().includes("/news")}
+              iconElement={<Newspaper size={20} />}
+              url={ROUTE.ADMIN + "/tin-tuc"}
+            />
+            <MenuCard
+              title="Hồ sơ"
+              active={usePathname() === "/home/profile"}
+              iconElement={<User size={20} />}
+              url="/home/profile"
+            />
+          </div>
           <div className="grow-0 px-3 w-full">
             <CommonButton
               className="w-full !rounded-3xl h-12 xl:block hidden"

@@ -4,25 +4,25 @@ import {
   CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Navbar } from "@/components/common/Navbar";
 import { TNews } from "@/types/common-types";
 import { CommonCard } from "@/components/common/CommonCard";
 import { CommonTag } from "@/components/common/CommonTag";
 import { Input } from "@/components/common/Input";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
 
 //fake data for news
-const newsData: TNews[] = [
+export const newsData: TNews[] = [
   {
     id: 1,
-    title: "News Title 1",
+    title:
+      "Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025",
     content:
-      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
+      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
     thumbnail: "/image/contest/banner.png",
     startTime: "2023-10-01",
     endTime: "2023-10-01",
@@ -30,10 +30,11 @@ const newsData: TNews[] = [
     tags: "Tin tức, Nổi bật",
     isActived: true,
     priority: true,
+    salary: "20 tỷ USD",
   },
   {
     id: 2,
-    title: "News Title 2",
+    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
     content:
       "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
     thumbnail: "/image/contest/banner.png",
@@ -43,10 +44,11 @@ const newsData: TNews[] = [
     tags: "Tin tức, Nổi bật",
     isActived: true,
     priority: true,
+    salary: "25 tỷ USD",
   },
   {
     id: 3,
-    title: "News Title 3",
+    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
     content:
       "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
     thumbnail: "/image/contest/banner.png",
@@ -56,10 +58,11 @@ const newsData: TNews[] = [
     tags: "Tin tức, Nổi bật",
     isActived: true,
     priority: true,
+    salary: "30 tỷ USD",
   },
   {
     id: 4,
-    title: "News Title 4",
+    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
     content:
       "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
     thumbnail: "/image/contest/banner.png",
@@ -69,13 +72,19 @@ const newsData: TNews[] = [
     tags: "Tin tức, Nổi bật",
     isActived: true,
     priority: true,
+    salary: "22 tỷ USD",
   },
 ];
 
 const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
+  const router = useCustomRouter();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const [api, setApi] = useState<CarouselApi>();
+
+  const handleRedirect = (id: number) => {
+    router.push(`${ROUTE.NEWS}/${id}`);
+  };
 
   // //use effect
   useEffect(() => {
@@ -111,7 +120,10 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
           {data &&
             data.map((item, index) => (
               <CarouselItem key={index}>
-                <div className="w-full h-full relative flex flex-col items-center justify-center gap-4">
+                <div
+                  className="w-full h-full relative flex flex-col items-center justify-center gap-4 cursor-pointer"
+                  onClick={() => handleRedirect(item.id)}
+                >
                   <Image
                     alt=""
                     src={item.thumbnail}
@@ -215,11 +227,13 @@ const FeaturedNewsComponent = () => {
                 ))}
               </div>
 
-              <div className="text-HeadingSm text-gray-95">
+              <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
                 {newsItem.title}
               </div>
 
-              <div className="text-BodyMd text-gray-95">{newsItem.content}</div>
+              <div className="text-BodyMd text-gray-95 max-h-12 overflow-hidden">
+                {newsItem.content}
+              </div>
 
               <time className="text-BodySm text-gray-70">
                 {newsItem.startTime}
@@ -266,7 +280,9 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
             <time className="text-BodySm text-gray-70">
               {newsItem.startTime}
             </time>
-            <div className="text-SubheadMd text-gray-95">{newsItem.title}</div>
+            <div className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden">
+              {newsItem.title}
+            </div>
           </div>
         </CommonCard>
       ))}
@@ -277,10 +293,8 @@ export default function News() {
   //use state
   const [randomCarouselItems, setRandomCarouselItems] =
     useState<TNews[]>(newsData);
-
   return (
     <>
-      <Navbar />
       <div className="w-full min-h-[100vh] mt-16 grid grid-cols-3 gap-4 p-2">
         <div className="lg:col-span-2 col-span-3">
           <ShowCarouselItemsComponent data={randomCarouselItems} />

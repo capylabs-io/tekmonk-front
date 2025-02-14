@@ -17,6 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 
 interface StudentTablePaginationProps {
+  className?: string;
+  showDetails?: boolean;
   totalItems: number;
   currentPage: number;
   itemsPerPage: number;
@@ -37,10 +39,10 @@ const generatePaginationItems = (
   const createPaginationLink = (page: number) => (
     <PaginationItem key={page}>
       <PaginationLink
-        href="#"
         onClick={() => onPageChange(page)}
         isActive={currentPage === page}
         className={cn(
+          "cursor-pointer",
           currentPage === page
             ? "bg-primary-10 border-none text-primary-70"
             : "hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg"
@@ -97,20 +99,32 @@ const generatePaginationItems = (
 };
 
 export default function StudentTablePagination({
+  showDetails = true,
   totalItems,
   currentPage,
   itemsPerPage,
   onPageChange,
   onItemsPerPageChange,
   showEllipsisThreshold = 7, // Add this parameter with a default value
+  className,
 }: StudentTablePaginationProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className="flex flex-col xl:flex-row gap-3 items-center xl:justify-between justify-center py-4 w-full">
-      <div className="flex items-center gap-2 w-full xl:w-auto justify-center xl:justify-start">
+    <div
+      className={cn(
+        "flex flex-col xl:flex-row gap-3 items-center xl:justify-between justify-center py-4 w-full",
+        className
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-center gap-2 w-full xl:w-auto justify-center xl:justify-start",
+          !showDetails && "hidden"
+        )}
+      >
         <span className="text-sm">Hiển thị</span>
         <Select
           value={itemsPerPage.toString()}
@@ -137,11 +151,11 @@ export default function StudentTablePagination({
         <PaginationContent className="flex justify-center xl:justify-end">
           <PaginationItem>
             <PaginationPrevious
-              href="#"
               onClick={() => onPageChange(currentPage - 1)}
-              className={
-                currentPage === 1 ? "pointer-events-none opacity-50" : ""
-              }
+              className={cn(
+                currentPage === 1 ? "pointer-events-none opacity-50" : "",
+                "cursor-pointer"
+              )}
             >
               Trước
             </PaginationPrevious>
@@ -156,13 +170,11 @@ export default function StudentTablePagination({
 
           <PaginationItem>
             <PaginationNext
-              href="#"
               onClick={() => onPageChange(currentPage + 1)}
-              className={
-                currentPage === totalPages
-                  ? "pointer-events-none opacity-50"
-                  : ""
-              }
+              className={cn(
+                currentPage === 1 ? "pointer-events-none opacity-50" : "",
+                "cursor-pointer"
+              )}
             >
               Sau
             </PaginationNext>

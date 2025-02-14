@@ -228,4 +228,5 @@ export type TNews = {
   isActived: boolean;
   priority: boolean;
   totalRead?: number;
+  salary?: string;
 };
