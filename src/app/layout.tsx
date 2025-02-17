@@ -11,8 +11,14 @@ import {
   SHARE_TEXT,
   SHARE_TITLE,
 } from "@/contants/contest/tekmonk";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 
 import TopLoader from "nextjs-toploader";
+import Providers from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -79,7 +85,6 @@ export const metadata: Metadata = {
     "twitter:creator": "@tekmonk",
   },
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -94,7 +99,9 @@ export default function RootLayout({
         <Snackbar />
         <TopLoader showSpinner={false} color="#bc4cac" />
         <Suspense fallback={<Loading />}>
-          <div className="relative">{children}</div>
+          <Providers>
+            <div className="relative">{children}</div>
+          </Providers>
         </Suspense>
         <Loading />
       </body>

@@ -26,6 +26,7 @@
     "@react-pdf-viewer/core": "^3.12.0",
     "@react-pdf-viewer/default-layout": "^3.12.0",
     "@refinedev/react-hook-form": "^4.9.0",
+    "@tanstack/react-query": "^5.66.3",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.3.2",
