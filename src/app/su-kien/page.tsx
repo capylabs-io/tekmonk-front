@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 import { useState } from "react";
-import { newsData } from "../tin-tuc/page";
 import { LandingFooter } from "@/components/new/NewsFooter";
 import { ROUTE } from "@/contants/router";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
@@ -23,7 +22,6 @@ import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { ReqGetAllNews } from "@/requests/news";
 import Loading from "../loading";
-import { TNews } from "@/types/common-types";
 const PAGE_SIZE = 9;
 const EventContentComponent = () => {
   const router = useCustomRouter();

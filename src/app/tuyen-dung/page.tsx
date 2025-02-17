@@ -20,7 +20,6 @@ import {
 import { ROUTE } from "@/contants/router";
 import Image from "next/image";
 import { useState } from "react";
-import { newsData } from "../tin-tuc/page";
 import { Banknote } from "lucide-react";
 import { ReqGetAllNews } from "@/requests/news";
 import Loading from "../loading";

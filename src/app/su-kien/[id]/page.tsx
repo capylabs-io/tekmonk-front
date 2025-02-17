@@ -5,7 +5,6 @@ import { CommonCard } from "@/components/common/CommonCard";
 import { Clock8, Facebook, Linkedin, MapPin } from "lucide-react";
 import { RelatedInfo } from "@/components/new/RelatedInfo";
 import { LandingFooter } from "@/components/new/NewsFooter";
-import { newsData } from "@/app/tin-tuc/page";
 import { CalendarCard } from "@/components/event/CalendarCard";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";

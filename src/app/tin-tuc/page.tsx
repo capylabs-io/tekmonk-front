@@ -15,70 +15,8 @@ import { Input } from "@/components/common/Input";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import Loading from "../loading";
 import qs from "qs";
 import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
-
-//fake data for news
-export const newsData: TNews[] = [
-  {
-    id: 1,
-    title:
-      "Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025 Ngày hội phát triển ứng dụng công nghệ cao 2025",
-    content:
-      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
-    thumbnail: "/image/contest/banner.png",
-    startTime: "2023-10-01",
-    endTime: "2023-10-01",
-    type: "news",
-    tags: "Tin tức, Nổi bật",
-    isActived: true,
-    priority: true,
-    salary: "20 tỷ USD",
-  },
-  {
-    id: 2,
-    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
-    content:
-      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
-    thumbnail: "/image/contest/banner.png",
-    startTime: "2023-10-01",
-    endTime: "2023-10-01",
-    type: "news",
-    tags: "Tin tức, Nổi bật",
-    isActived: true,
-    priority: true,
-    salary: "25 tỷ USD",
-  },
-  {
-    id: 3,
-    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
-    content:
-      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
-    thumbnail: "/image/contest/banner.png",
-    startTime: "2023-10-01",
-    endTime: "2023-10-01",
-    type: "news",
-    tags: "Tin tức, Nổi bật",
-    isActived: true,
-    priority: true,
-    salary: "30 tỷ USD",
-  },
-  {
-    id: 4,
-    title: "Ngày hội phát triển ứng dụng công nghệ cao 2025",
-    content:
-      "Học online đang trở thành xu hướng tất yếu trong thời đại số, đặc biệt là với ngành Marketing. Trong bài viết này, TekMonk sẽ giới thiệu 7 khóa học Marketing",
-    thumbnail: "/image/contest/banner.png",
-    startTime: "2023-10-01",
-    endTime: "2023-10-01",
-    type: "news",
-    tags: "Tin tức, Nổi bật",
-    isActived: true,
-    priority: true,
-    salary: "22 tỷ USD",
-  },
-];
 
 const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   const router = useCustomRouter();
@@ -317,8 +255,6 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
 };
 export default function News() {
   //use state
-  const [randomCarouselItems, setRandomCarouselItems] =
-    useState<TNews[]>(newsData);
 
   const handleLoadMoreContentt = () => {
     if (hasNextPage && !isFetchingNextPage) {

@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { newsData } from "../page";
 import { CommonTag } from "@/components/common/CommonTag";
 import { CommonCard } from "@/components/common/CommonCard";
 import { Facebook, Linkedin } from "lucide-react";
@@ -49,13 +48,6 @@ export default function Page() {
   if (isLoading) {
     return <Loading />;
   }
-  useEffect(() => {
-    if (data?.type === "hiring") {
-      router.push(`${ROUTE.HIRING}/${id}`);
-    } else if (data?.type === "event") {
-      router.push(`${ROUTE.EVENTS}/${id}`);
-    }
-  }, [data]);
   return (
     <div className="w-full flex flex-col items-center gap-8">
       <div className="w-full max-w-[628px] mt-16 p-2 flex flex-col items-center justify-center gap-4 ">

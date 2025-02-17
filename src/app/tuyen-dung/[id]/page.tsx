@@ -5,7 +5,6 @@ import { CommonCard } from "@/components/common/CommonCard";
 import { Banknote, Facebook, Linkedin, MapPin } from "lucide-react";
 import { RelatedInfo } from "@/components/new/RelatedInfo";
 import { LandingFooter } from "@/components/new/NewsFooter";
-import { newsData } from "@/app/tin-tuc/page";
 import { useParams } from "next/navigation";
 import { ReqGetNewsById, ReqGetRamdomNews } from "@/requests/news";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
