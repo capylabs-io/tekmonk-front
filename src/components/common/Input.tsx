@@ -4,7 +4,7 @@ import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import React, { ReactNode, useState } from "react";
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   value?: string;
   type: string;
   customInputClassNames?: string;
@@ -15,7 +15,8 @@ type Props = {
   isSearch?: boolean;
   onChange?: (value: any) => void;
   onBlur?: () => void;
-};
+  onSearch?: () => void;
+}
 const BASE_CLASS =
   "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] flex items-center justify-center";
 const BASE_INPUT_CLASS =
@@ -31,6 +32,8 @@ export const Input = ({
   isSearch = false,
   customInputClassNames,
   customClassNames,
+  onSearch,
+  ...props
 }: Props) => {
   const [showPassword, setshowPassword] = useState(false);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +65,8 @@ export const Input = ({
               alt="search icon"
               width={24}
               height={10}
+              className="cursor-pointer"
+              onClick={onSearch}
             />
           )}
           <input
@@ -77,6 +82,7 @@ export const Input = ({
             name={name}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
+            {...props}
           />
           {type === "password" && (
             <button type="button" onClick={handleShowPassword}>

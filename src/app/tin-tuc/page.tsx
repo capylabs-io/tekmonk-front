@@ -14,6 +14,10 @@ import { CommonTag } from "@/components/common/CommonTag";
 import { Input } from "@/components/common/Input";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import Loading from "../loading";
+import qs from "qs";
+import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
 
 //fake data for news
 export const newsData: TNews[] = [
@@ -111,9 +115,6 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
         setApi={setApi}
-        // opts={{
-        //   startIndex: carouselIndex,
-        // }}
         onSelect={() => setCarouselIndex(api?.selectedScrollSnap() ?? 0)}
       >
         <CarouselContent>
@@ -130,11 +131,11 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
                     width={100}
                     height={360}
                     layout="responsive"
-                    className="w-full h-full object-cover rounded-2xl"
+                    className="w-full h-full max-h-[360px] object-cover rounded-2xl"
                   />
                   <div className="w-full flex flex-col items-start justify-center gap-4">
                     <div className="flex items-center justify-center gap-2">
-                      {item.tags.split(",").map((tag, indexTag) => (
+                      {item.tags?.split(",").map((tag, indexTag) => (
                         <CommonTag key={indexTag}>{tag.trim()}</CommonTag>
                       ))}
                     </div>
@@ -174,7 +175,19 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   );
 };
 
-const FeaturedNewsComponent = () => {
+const FeaturedNewsComponent = ({
+  data,
+  onLoadMore,
+  isFetchingNextPage,
+}: {
+  data: TNews[];
+  onLoadMore: () => void;
+  isFetchingNextPage: boolean;
+}) => {
+  const router = useCustomRouter();
+  const handleRedirect = (id: number) => {
+    router.push(`${ROUTE.NEWS}/${id}`);
+  };
   return (
     <div className="w-full mt-8 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -214,53 +227,65 @@ const FeaturedNewsComponent = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        {newsData.map((newsItem) => (
-          <CommonCard
-            key={newsItem.id}
-            size="medium"
-            className="h-[220px] w-full flex items-center justify-center"
-          >
-            <div className="flex-1 flex flex-col gap-2 p-6">
-              <div className="flex gap-2">
-                {newsItem.tags.split(",").map((tag, index) => (
-                  <CommonTag key={index}>{tag.trim()}</CommonTag>
-                ))}
+        {data &&
+          data.map((newsItem) => (
+            <CommonCard
+              key={newsItem.id}
+              size="medium"
+              className="h-[220px] w-full flex items-center justify-center"
+              onClick={() => handleRedirect(newsItem.id)}
+            >
+              <div className="flex-1 flex flex-col gap-2 p-6">
+                <div className="flex gap-2">
+                  {newsItem.tags?.split(",").map((tag, index) => (
+                    <CommonTag key={index}>{tag.trim()}</CommonTag>
+                  ))}
+                </div>
+
+                <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
+                  {newsItem.title}
+                </div>
+
+                <div className="text-BodyMd text-gray-95 max-h-12 overflow-hidden">
+                  {newsItem.content}
+                </div>
+
+                <time className="text-BodySm text-gray-70">
+                  {newsItem.startTime}
+                </time>
               </div>
 
-              <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
-                {newsItem.title}
-              </div>
-
-              <div className="text-BodyMd text-gray-95 max-h-12 overflow-hidden">
-                {newsItem.content}
-              </div>
-
-              <time className="text-BodySm text-gray-70">
-                {newsItem.startTime}
-              </time>
-            </div>
-
-            <Image
-              src={newsItem.thumbnail}
-              alt=""
-              width={220}
-              height={220}
-              className="h-[220px] object-cover rounded-r-2xl"
-            />
-          </CommonCard>
-        ))}
+              <Image
+                src={newsItem.thumbnail}
+                alt=""
+                width={220}
+                height={220}
+                className="h-[220px] object-cover rounded-r-2xl"
+              />
+            </CommonCard>
+          ))}
       </div>
-      <CommonCard
-        size="medium"
-        className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
-      >
-        Xem thêm
-      </CommonCard>
+
+      {isFetchingNextPage ? (
+        <div className="text-center">Loading . . .</div>
+      ) : (
+        <CommonCard
+          size="medium"
+          className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
+          onClick={onLoadMore}
+        >
+          Xem thêm
+        </CommonCard>
+      )}
     </div>
   );
 };
 
 const SuggestComponent = ({ data }: { data: TNews[] }) => {
+  const router = useCustomRouter();
+  const handleRedirect = (id: number) => {
+    router.push(`${ROUTE.NEWS}/${id}`);
+  };
   return (
     <div className="flex flex-col gap-2">
       {data.map((newsItem) => (
@@ -268,6 +293,7 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
           key={newsItem.id}
           size="medium"
           className="h-[124px] w-full flex items-center justify-center"
+          onClick={() => handleRedirect(newsItem.id)}
         >
           <Image
             src={newsItem.thumbnail}
@@ -293,12 +319,64 @@ export default function News() {
   //use state
   const [randomCarouselItems, setRandomCarouselItems] =
     useState<TNews[]>(newsData);
+
+  const handleLoadMoreContentt = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  // use query
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      refetchOnWindowFocus: false,
+      queryKey: ["news"],
+      queryFn: async ({ pageParam = 1 }) => {
+        try {
+          const queryString = qs.stringify({
+            pagination: {
+              page: pageParam,
+              pageSize: 4,
+            },
+            filters: {
+              type: "news",
+            },
+            populate: "*",
+          });
+          return await ReqGetAllNews(queryString);
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.meta?.pagination.pageCount
+          ? allPages.length + 1
+          : undefined;
+      },
+    });
+
+  const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
+    queryKey: ["news/random"],
+    queryFn: async () => {
+      try {
+        return await ReqGetRamdomNews("news");
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+  });
+
   return (
     <>
       <div className="w-full min-h-[100vh] mt-16 grid grid-cols-3 gap-4 p-2">
         <div className="lg:col-span-2 col-span-3">
-          <ShowCarouselItemsComponent data={randomCarouselItems} />
-          <FeaturedNewsComponent />
+          <ShowCarouselItemsComponent data={randomNews?.data || []} />
+          <FeaturedNewsComponent
+            data={data?.pages.flatMap((page) => page.data) || []}
+            onLoadMore={handleLoadMoreContentt}
+            isFetchingNextPage={isFetchingNextPage}
+          />
         </div>
         <div className="col-span-1 flex-col gap-8 lg:flex hidden">
           <Input
@@ -306,7 +384,7 @@ export default function News() {
             placeholder="Tìm kiếm article theo từ khoá"
             isSearch={true}
           />
-          <SuggestComponent data={randomCarouselItems} />
+          <SuggestComponent data={randomNews?.data || []} />
           <Image
             src="/image/home/banner-layout.png"
             alt="Default"

@@ -3,14 +3,32 @@
 import { TNews } from "@/types/common-types";
 import { CommonCard } from "../common/CommonCard";
 import Image from "next/image";
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
 
 export const RelatedInfo = ({
+  type,
   data,
   title,
 }: {
+  type: "news" | "hiring" | "event";
   data: TNews[];
   title: string;
 }) => {
+  const router = useCustomRouter();
+  const handleRedirectToNewsDetail = (id: string) => {
+    switch (type) {
+      case "news":
+        router.push(`${ROUTE.NEWS}/${id}`);
+        break;
+      case "hiring":
+        router.push(`${ROUTE.HIRING}/${id}`);
+        break;
+      case "event":
+        router.push(`${ROUTE.EVENTS}/${id}`);
+        break;
+    }
+  };
   return (
     <div className="w-full flex items-start flex-col gap-4 border-t border-gray-20 py-12">
       <div className="text-HeadingSm text-[#320130]">{title}</div>
@@ -21,6 +39,7 @@ export const RelatedInfo = ({
               key={index}
               size="medium"
               className="h-[124px] w-full flex items-center justify-center"
+              onClick={() => handleRedirectToNewsDetail(item.id.toString())}
             >
               <Image
                 src={item.thumbnail}
