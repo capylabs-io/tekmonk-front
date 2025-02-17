@@ -7,19 +7,10 @@ import { RelatedInfo } from "@/components/new/RelatedInfo";
 import { LandingFooter } from "@/components/new/NewsFooter";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ReqGetAllNews,
-  ReqGetNewsById,
-  ReqGetRamdomNews,
-} from "@/requests/news";
-import qs from "qs";
+import { ReqGetNewsById, ReqGetRamdomNews } from "@/requests/news";
 import Loading from "@/app/loading";
 import { get } from "lodash";
-import { useEffect } from "react";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ROUTE } from "@/contants/router";
 export default function Page() {
-  const router = useCustomRouter();
   //get id from url
   const { id } = useParams();
   const { data, isLoading } = useQuery({
