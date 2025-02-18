@@ -115,7 +115,7 @@ export default function StudentTablePagination({
   return (
     <div
       className={cn(
-        "flex flex-col xl:flex-row gap-3 items-center xl:justify-between justify-center py-4 w-full",
+        "flex flex-col xl:flex-row gap-3 items-center !xl:justify-between justify-center py-4 w-full",
         className
       )}
     >
@@ -147,7 +147,7 @@ export default function StudentTablePagination({
         </Select>
         <span className="text-BodySm text-gray-95">{`${startItem}-${endItem} trong số ${totalItems} kết quả`}</span>
       </div>
-      <Pagination className="w-full xl:w-auto">
+      <Pagination className="!max-w-[200px]  ">
         <PaginationContent className="flex justify-center xl:justify-end">
           <PaginationItem>
             <PaginationPrevious
@@ -181,11 +181,6 @@ export default function StudentTablePagination({
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-      <style jsx global>{`
-        .pagination-link[aria-current="page"] {
-          background-color: #fae8ff !important;
-        }
-      `}</style>
     </div>
   );
 }

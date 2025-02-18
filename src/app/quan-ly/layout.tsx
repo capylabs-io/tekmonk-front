@@ -55,7 +55,8 @@ export default function Layout({
             alt="app logo"
             width={159}
             height={32}
-            className="ml-1.5 xl:block hidden"
+            className="ml-1.5 xl:block hidden cursor-pointer"
+            onClick={handleRidirectHomePage}
           />
         </div>
         <div className="flex flex-col mt-4">
