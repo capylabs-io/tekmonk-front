@@ -5,6 +5,7 @@ import { CommonCard } from "../common/CommonCard";
 import Image from "next/image";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { get } from "lodash";
 
 export const RelatedInfo = ({
   type,
@@ -31,7 +32,16 @@ export const RelatedInfo = ({
   };
   return (
     <div className="w-full flex items-start flex-col gap-4 border-t border-gray-20 py-12">
-      <div className="text-HeadingSm text-[#320130]">{title}</div>
+      <div
+        className="text-HeadingSm text-[#320130]"
+        dangerouslySetInnerHTML={{
+          __html: title
+            .replace(/<[^>]+>/g, "")
+            .trim()
+            .slice(0, 50)
+            .concat(title.length > 50 ? "..." : ""),
+        }}
+      ></div>
       <div className="flex items-center gap-4 lg:flex-row flex-col w-full">
         {data.map((item, index) => {
           return (
@@ -52,9 +62,16 @@ export const RelatedInfo = ({
                 <time className="text-BodySm text-gray-70">
                   {item.startTime}
                 </time>
-                <div className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden">
-                  {item.title}
-                </div>
+                <div
+                  className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+                  dangerouslySetInnerHTML={{
+                    __html: (get(item, "title", "") || "")
+                      .replace(/<[^>]+>/g, "")
+                      .trim()
+                      .slice(0, 40)
+                      .concat(get(item, "title", "").length > 40 ? "..." : ""),
+                  }}
+                ></div>
               </div>
             </CommonCard>
           );

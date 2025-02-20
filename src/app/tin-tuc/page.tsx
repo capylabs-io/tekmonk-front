@@ -17,8 +17,10 @@ import { ROUTE } from "@/contants/router";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
+import { get } from "lodash";
 
 const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
+  console.log(data);
   const router = useCustomRouter();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
@@ -65,7 +67,7 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
                 >
                   <Image
                     alt=""
-                    src={item.thumbnail}
+                    src={item.thumbnail ? item.thumbnail : ""}
                     width={100}
                     height={360}
                     layout="responsive"
@@ -173,20 +175,35 @@ const FeaturedNewsComponent = ({
               className="h-[220px] w-full flex items-center justify-center"
               onClick={() => handleRedirect(newsItem.id)}
             >
-              <div className="flex-1 flex flex-col gap-2 p-6">
+              <div className="flex-1 flex flex-col gap-2 p-6 overflow-hidden">
                 <div className="flex gap-2">
                   {newsItem.tags?.split(",").map((tag, index) => (
                     <CommonTag key={index}>{tag.trim()}</CommonTag>
                   ))}
                 </div>
 
-                <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
-                  {newsItem.title}
-                </div>
+                <div
+                  className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                  dangerouslySetInnerHTML={{
+                    __html: (get(newsItem, "title", "") || "")
+                      .replace(/<[^>]+>/g, "")
+                      .trim()
+                      .slice(0, 80)
+                      .concat(
+                        get(newsItem, "title", "").length > 80 ? "..." : ""
+                      ),
+                  }}
+                ></div>
 
-                <div className="text-BodyMd text-gray-95 max-h-12 overflow-hidden">
-                  {newsItem.content}
-                </div>
+                <div
+                  className="text-BodyMd text-gray-95 max-h-12 overflow-hidden"
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      get(newsItem, "content", "")
+                        .replace(/<[^>]+>/g, "")
+                        .substring(0, 100) + "...",
+                  }}
+                ></div>
 
                 <time className="text-BodySm text-gray-70">
                   {newsItem.startTime}
@@ -194,7 +211,7 @@ const FeaturedNewsComponent = ({
               </div>
 
               <Image
-                src={newsItem.thumbnail}
+                src={newsItem.thumbnail ? newsItem.thumbnail : ""}
                 alt=""
                 width={220}
                 height={220}
@@ -234,7 +251,7 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
           onClick={() => handleRedirect(newsItem.id)}
         >
           <Image
-            src={newsItem.thumbnail}
+            src={newsItem.thumbnail ? newsItem.thumbnail : ""}
             alt=""
             width={108}
             height={220}
@@ -244,9 +261,16 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
             <time className="text-BodySm text-gray-70">
               {newsItem.startTime}
             </time>
-            <div className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden">
-              {newsItem.title}
-            </div>
+            <div
+              className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+              dangerouslySetInnerHTML={{
+                __html: (get(newsItem, "title", "") || "")
+                  .replace(/<[^>]+>/g, "")
+                  .trim()
+                  .slice(0, 50)
+                  .concat(get(newsItem, "title", "").length > 50 ? "..." : ""),
+              }}
+            ></div>
           </div>
         </CommonCard>
       ))}
@@ -303,13 +327,15 @@ export default function News() {
     },
   });
 
+  randomNews && console.log("randomNews data: ", randomNews.data);
+
   return (
     <>
       <div className="w-full min-h-[100vh] mt-16 grid grid-cols-3 gap-4 p-2">
         <div className="lg:col-span-2 col-span-3">
           <ShowCarouselItemsComponent data={randomNews?.data || []} />
           <FeaturedNewsComponent
-            data={data?.pages.flatMap((page) => page.data) || []}
+            data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
             onLoadMore={handleLoadMoreContentt}
             isFetchingNextPage={isFetchingNextPage}
           />

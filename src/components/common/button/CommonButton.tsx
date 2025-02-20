@@ -20,7 +20,7 @@ export const CommonButton = ({
     <button
       className={cn(
         "w-full h text-lg font-medium rounded-lg duration-200",
-        "text-center flex items-center justify-center",
+        "text-center flex items-center justify-center cursor-pointer",
         {
           " border-[1px] bg-[#BC4CAC] hover:bg-primary-70 text-white border-primary-70 shadow-custom-primary":
             variant === "primary",
@@ -33,10 +33,15 @@ export const CommonButton = ({
       {...props}
     >
       <div
-        className={cn(childrenClassName, localKanitFont.className, {
-          "text-white": variant === "primary",
-          "text-primary-95": variant === "secondary",
-        })}
+        className={cn(
+          childrenClassName,
+          localKanitFont.className,
+          {
+            "text-white": variant === "primary",
+            "text-primary-95": variant === "secondary",
+          },
+          "!cursor-pointer w-full h-full flex items-center justify-center"
+        )}
       >
         {children}
       </div>

@@ -30,3 +30,52 @@ export const ReqGetNewsById = async (id: string) => {
     return Promise.reject(error);
   }
 };
+
+//POST METHODS
+export const ReqCreateNews = async (data: any) => {
+  try {
+    const res = await tekdojoAxios.post("/news", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data as StrapiResponse<TNews>;
+  } catch (error) {
+    console.log("Error creating news: ", error);
+    return Promise.reject(error);
+  }
+};
+
+//PUT METHODS
+export const ReqUpdateNews = async (id: string, data: any) => {
+  console.log("data", data);
+  try {
+    const res = await tekdojoAxios.put(
+      `/news/${id}`,
+      { data: data },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data as StrapiResponse<TNews>;
+  } catch (error) {
+    console.log("Error updating news: ", error);
+    return Promise.reject(error);
+  }
+};
+
+export const ReqUpdateImage = async (id: string, data: any) => {
+  try {
+    const res = await tekdojoAxios.put(`/news/update-image-url/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return res.data as any;
+  } catch (error) {
+    console.error("Error updating image:", error);
+    return Promise.reject(error);
+  }
+};
