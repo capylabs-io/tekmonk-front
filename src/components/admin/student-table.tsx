@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,133 +8,371 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import StudentTablePagination from "./student-table-pagination";
-import Image from "next/image";
-import { CommonButton } from "../common/button/CommonButton";
+import { Pencil, Trash2 } from "lucide-react";
+import { EditUserDialog } from "./dialogs/edit-user-dialog";
+import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
+import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
-interface Student {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  status: string;
-}
+import {
+  EditingUserData,
+  Tab,
+  TableHeader as TableHeaderType,
+  User,
+} from "./types";
 
-const mockData: Student[] = Array.from({ length: 100 }, (_, i) => ({
-  id: i + 1,
-  name: "Võ Minh Khôi",
-  username: "minhkhoi.vo",
-  email: "minhkhoi.ba@gmail.com",
-  status: "Đang hoạt động",
-}));
-// const mockData: Student[] = [];
+const generateMockUsers = (): User[] => {
+  const firstNames = ["Nguyen", "Tran", "Le", "Pham", "Hoang"];
+  const middleNames = ["Van", "Thi", "Duc", "Minh", "Hoang"];
+  const lastNames = ["A", "B", "C", "D"];
+  const statuses = ["Active", "Inactive"];
+  const users: User[] = [];
 
-export default function StudentTable() {
+  for (let i = 1; i <= 1000; i++) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const middleName =
+      middleNames[Math.floor(Math.random() * middleNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const fullName = `${firstName} ${middleName} ${lastName}`;
+    const username = `${firstName.toLowerCase()}${middleName.toLowerCase()}${lastName.toLowerCase()}${i}`;
+    const email = `${username}@example.com`;
+
+    // Distribute roles: 70% students, 15% teachers, 10% managers, 5% admins
+    let role;
+    const random = Math.random() * 100;
+    if (random < 70) role = "student";
+    else if (random < 85) role = "teacher";
+    else if (random < 95) role = "manager";
+    else role = "admin";
+
+    users.push({
+      id: i,
+      name: fullName,
+      username,
+      email,
+      status: statuses[Math.floor(Math.random() * statuses.length)],
+      role,
+    });
+  }
+
+  return users;
+};
+
+export const StudentTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [activeTab, setActiveTab] = useState("student");
+  const [sortedUsers, setSortedUsers] = useState<User[]>([]);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [mockUsers, setMockUsers] = useState<User[]>([]);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<EditingUserData | null>(null);
+  const [deactivateDialogOpen, setDeactivateDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentData = mockData.slice(startIndex, endIndex);
-  // const currentData: Student[] = [].slice(startIndex, endIndex);
+  const handleDelete = (user: User) => {
+    setUserToDelete(user);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (userToDelete) {
+      const updatedUsers = mockUsers.filter(
+        (user) => user.id !== userToDelete.id
+      );
+      setMockUsers(updatedUsers);
+      setDeleteDialogOpen(false);
+      setUserToDelete(null);
+    }
+  };
+
+  useEffect(() => {
+    setMockUsers(generateMockUsers());
+  }, []);
+
+  useEffect(() => {
+    if (mockUsers.length > 0) {
+      const filtered = mockUsers.filter((user) => user.role === activeTab);
+      setSortedUsers(filtered);
+    }
+  }, [activeTab, mockUsers]);
+
+  const tabs = [
+    { id: "student", label: "Học viên" },
+    { id: "teacher", label: "Giảng viên" },
+    { id: "manager", label: "Quản lý lớp" },
+    { id: "admin", label: "Quản trị viên" },
+  ];
+
+  const filteredUsers = sortedUsers.filter((user) => user.role === activeTab);
+  const totalItems = filteredUsers.length;
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
+
+  const handleEdit = (user: User) => {
+    setEditingUser({ ...user });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = () => {
+    if (!editingUser) return;
+
+    const updatedUsers = mockUsers.map((user) =>
+      user.id === editingUser.id ? editingUser : user
+    );
+
+    setMockUsers(updatedUsers);
+    setEditDialogOpen(false);
+    setEditingUser(null);
+  };
+
+  const handleDeleteById = (userId: number) => {
+    console.log(`Delete user with ID: ${userId}`);
+  };
+
+  const handleSort = () => {
+    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(newSortOrder);
+
+    const sorted = [...sortedUsers].sort((a, b) => {
+      if (newSortOrder === "asc") {
+        return a.id - b.id;
+      } else {
+        return b.id - a.id;
+      }
+    });
+
+    setSortedUsers(sorted);
+  };
+
+  const EmptyState = () => (
+    <div className="flex flex-col items-center justify-center py-12">
+      <div
+        className="w-[300px] h-[200px] bg-contain bg-no-repeat bg-center"
+        style={{ backgroundImage: "url('/admin/empty-data.png')" }}
+      />
+      <p className="text-gray-500 mt-4">Không có dữ liệu</p>
+      <p className="text-gray-500">Tạo tài khoản mới cho học viên để bắt đầu</p>
+      <button className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700">
+        Tạo tài khoản
+      </button>
+    </div>
+  );
+
+  const getTableHeaders = () => {
+    switch (activeTab) {
+      case "student":
+        return [
+          { label: "STT", sortable: true },
+          { label: "Tên học viên" },
+          { label: "Tên tài khoản" },
+          { label: "Email" },
+          { label: "Trạng thái" },
+          { label: "Thao tác", align: "right" },
+        ];
+      case "teacher":
+        return [
+          { label: "STT", sortable: true },
+          { label: "Tên giảng viên" },
+          { label: "Tên tài khoản" },
+          { label: "Email" },
+          { label: "Trạng thái" },
+          { label: "Thao tác", align: "right" },
+        ];
+      case "manager":
+        return [
+          { label: "STT", sortable: true },
+          { label: "Tên người dùng" },
+          { label: "Tên tài khoản" },
+          { label: "Email" },
+          { label: "Loại" },
+          { label: "Thao tác", align: "right" },
+        ];
+      default:
+        return [
+          { label: "STT", sortable: true },
+          { label: "Tên người dùng" },
+          { label: "Tên tài khoản" },
+          { label: "Email" },
+          { label: "Trạng thái" },
+          { label: "Thao tác", align: "right" },
+        ];
+    }
+  };
 
   return (
-    <div className="w-full">
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-16">STT</TableHead>
-              <TableHead>Tên học viên</TableHead>
-              <TableHead>Tên tài khoản</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Trạng thái</TableHead>
-              <TableHead className="w-24"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentData.length ? (
-              currentData.map((student) => (
-                <TableRow key={student.id}>
-                  <TableCell>{student.id}</TableCell>
-                  <TableCell>{student.name}</TableCell>
-                  <TableCell>{student.username}</TableCell>
-                  <TableCell>{student.email}</TableCell>
-                  <TableCell>
-                    <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-green-50 text-green-700">
-                      {student.status}
-                    </span>
-                  </TableCell>
-                  <TableCell>
+    <div className="w-full overflow-x-auto">
+      <div className="flex flex-wrap border-b border-gray-200 mb-4 gap-2">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex-1 min-w-[120px] max-w-[144px] py-2 px-4 text-center text-sm font-medium ${
+              activeTab === tab.id
+                ? "text-primary-600 border-b-2 border-primary-600"
+                : "text-gray-500 hover:text-gray-700 hover:border-gray-300"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredUsers.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <div className="rounded-md border min-w-[800px]">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {getTableHeaders().map((header, index) => (
+                  <TableHead
+                    key={index}
+                    className={`${header.sortable ? "cursor-pointer" : ""} ${
+                      header.align === "right" ? "text-right" : ""
+                    } ${index === 0 ? "w-[100px]" : ""}`}
+                    onClick={header.sortable ? handleSort : undefined}
+                  >
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-square-pen"
-                        >
-                          <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                          <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                        </svg>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-red-500"
+                      {header.label}
+                      {header.sortable && (
+                        <span className="inline-block">
+                          {sortOrder === "asc" ? (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="m18 15-6-6-6 6" />
+                            </svg>
+                          ) : (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="m6 9 6 6 6-6" />
+                            </svg>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredUsers
+                .slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="text-right">{user.id}</TableCell>
+                    <TableCell>
+                      <div className="max-w-[200px] truncate" title={user.name}>
+                        {user.name}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div
+                        className="max-w-[150px] truncate"
+                        title={user.username}
+                      >
+                        {user.username}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div
+                        className="max-w-[200px] truncate"
+                        title={user.email}
+                      >
+                        {user.email}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div
+                        className="max-w-[100px] truncate"
+                        title={user.status}
+                      >
+                        {user.status}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right space-x-2">
+                      <button
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                        onClick={() => handleEdit(user)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </button>
+                      <button
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                        onClick={() => handleDelete(user)}
                       >
                         <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={6} className="!p-0">
-                  <div className="w-full h-[440px] flex flex-col items-center justify-center gap-4">
-                    <Image
-                      alt="empty-state"
-                      src="/admin/empty-data.png"
-                      width={300}
-                      height={200}
-                    />
-                    <div className="flex flex-col items-center">
-                      <div className="text-SubheadLg text-gray-70">
-                        Không có dữ liệu
-                      </div>
-                      <div className="text-BodyMd text-gray-50">
-                        Tạo tài khoản mới cho học viên để bắt đầu
-                      </div>
-                    </div>
-                    <CommonButton className="h-9 w-[120px]  ">
-                      <span className="text-SubheadSm text-gray-00">
-                        Tạo tài khoản
-                      </span>
-                    </CommonButton>
-                  </div>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <StudentTablePagination
-        totalItems={mockData.length}
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        onPageChange={setCurrentPage}
-        onItemsPerPageChange={setItemsPerPage}
-        showEllipsisThreshold={5}
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
+
+      {filteredUsers.length > 0 && (
+        <StudentTablePagination
+          totalItems={totalItems}
+          currentPage={currentPage}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          onItemsPerPageChange={handleItemsPerPageChange}
+        />
+      )}
+
+      <EditUserDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        user={editingUser}
+        onUserChange={setEditingUser}
+        onSubmit={handleEditSubmit}
+        onDeactivate={() => setDeactivateDialogOpen(true)}
+      />
+
+      <DeactivateUserDialog
+        open={deactivateDialogOpen}
+        onOpenChange={setDeactivateDialogOpen}
+        onConfirm={() => {
+          setDeactivateDialogOpen(false);
+          setEditDialogOpen(false);
+        }}
+      />
+
+      <DeleteUserDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        user={userToDelete}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   );
-}
+};
+
+export default StudentTable;

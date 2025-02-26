@@ -1,9 +1,23 @@
 "use client";
 
+import { AccountTypeDialog } from "@/components/account/AccountTypeDialog";
 import StudentTable from "@/components/admin/student-table";
 import { CommonButton } from "@/components/common/button/CommonButton";
+import { useState } from "react";
 
 export default function Admin() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleAccountTypeSelect = (type: string) => {
+    console.log("Selected account type:", type);
+    // Here you can add logic to handle the selected account type
+    setIsDialogOpen(false);
+  };
+
   return (
     <>
       <div className="w-full h-full border-r border-gray-20 overflow-y-auto">
@@ -14,6 +28,7 @@ export default function Admin() {
           <CommonButton
             className="h-9 w-full sm:w-[120px] text-gray-00"
             variant="primary"
+            onClick={handleOpenDialog}
           >
             <div className="text-SubheadSm">Tạo tài khoản</div>
           </CommonButton>
@@ -22,6 +37,11 @@ export default function Admin() {
           <StudentTable />
         </div>
       </div>
+      <AccountTypeDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onSelect={handleAccountTypeSelect}
+      />
     </>
   );
 }
