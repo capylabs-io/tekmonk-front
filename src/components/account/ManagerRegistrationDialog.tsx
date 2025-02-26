@@ -1,13 +1,13 @@
 "use client";
 
+import { CommonButton } from "../common/button/CommonButton";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/common/Input";
 
 interface ManagerRegistrationDialogProps {
   open: boolean;
@@ -43,71 +43,79 @@ export function ManagerRegistrationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-center mb-4">
-            Tạo tài khoản quản lý lớp
+      <DialogContent className="w-[680px] bg-white">
+        <DialogHeader className="px-4">
+          <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
+            Đăng ký tài khoản học viên
           </DialogTitle>
-          <div className="text-gray-600 text-center mb-4">
-            Vui lòng điền đầy đủ thông tin
+          <div className="text-BodyMd text-gray-60 mb-4">
+            Mật khẩu mặc định là 1 cho đến khi người dùng tự thay đổi
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="username">Tên đăng nhập</Label>
+        <div onSubmit={handleSubmit} className="space-y-4 p-4 ">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Tên tài khoản</div>
               <Input
-                id="username"
+                type="text"
                 name="username"
-                placeholder="Nhập tên đăng nhập"
-                required
+                placeholder="Nhập thông tin"
+                customClassNames="flex-1"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Email</div>
               <Input
-                id="email"
                 name="email"
                 type="email"
-                placeholder="Nhập địa chỉ email"
-                required
+                placeholder="Nhập thông tin"
+                customClassNames="flex-1"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="managerName">Họ và tên quản lý</Label>
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Tên giảng viên</div>
               <Input
-                id="managerName"
-                name="managerName"
-                placeholder="Nhập họ và tên quản lý"
-                required
+                type="text"
+                name="studentName"
+                placeholder="Nhập thông tin"
+                customClassNames="flex-1"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Ngày sinh</Label>
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">
+                Ngày tháng năm sinh
+              </div>
               <Input
-                id="dateOfBirth"
                 name="dateOfBirth"
                 type="date"
-                required
+                placeholder="DD/MM/YYYY"
+                customClassNames="flex-1"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Số điện thoại</Label>
+
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">
+                Số điện thoại{" "}
+                <span className="text-BodyMd text-gray-60">
+                  (Không bắt buộc)
+                </span>
+              </div>
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
-                type="tel"
-                placeholder="Nhập số điện thoại"
-                required
+                type="text"
+                placeholder="Nhập thông tin"
+                customClassNames="flex-1"
               />
             </div>
           </div>
 
           <div className="flex justify-between items-center mt-6 border-t pt-4">
-            <button
+            <CommonButton
               type="button"
-              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              className="w-[83px] h-11"
+              variant="secondary"
               onClick={() => {
                 const form = document.querySelector("form") as HTMLFormElement;
                 if (form) form.reset();
@@ -115,15 +123,12 @@ export function ManagerRegistrationDialog({
               }}
             >
               Quay lại
-            </button>
-            <button
-              type="submit"
-              className="px-6 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors"
-            >
+            </CommonButton>
+            <CommonButton type="submit" className="h-11 w-[139px]">
               Đăng ký
-            </button>
+            </CommonButton>
           </div>
-        </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

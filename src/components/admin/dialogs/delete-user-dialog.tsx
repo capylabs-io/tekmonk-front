@@ -1,8 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { User } from "../types";
+import { CommonButton } from "@/components/common/button/CommonButton";
 
 interface DeleteUserDialogProps {
   open: boolean;
@@ -19,30 +26,33 @@ export const DeleteUserDialog = ({
 }: DeleteUserDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-white max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="text-primary-900 text-center">
+      <DialogContent className="bg-white max-w-[368px]">
+        <DialogHeader className="p-0">
+          <DialogTitle className="text-HeadingSm text-gray-95 p-0">
             Xóa tài khoản
           </DialogTitle>
         </DialogHeader>
-        <div className="text-center py-4">
-          <p>Bạn có chắc chắn muốn xóa tài khoản này không?</p>
-          <p className="font-medium mt-2">{user?.name}</p>
+        <div className="text-BodyMd text-gray-95 mt-4">
+          Tài khoản sau khi bị xoá sẽ không còn tồn tại trên hệ thống. Bạn có
+          muốn xoá tài khoản này không?
         </div>
-        <DialogFooter className="flex justify-center gap-2 mt-6">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="w-[156px] border-gray-300"
-          >
-            Quay lại
-          </Button>
-          <Button
-            onClick={onConfirm}
-            className="w-[156px] bg-red-600 text-white hover:bg-red-700"
-          >
-            Xác nhận
-          </Button>
+        <DialogFooter className=" items-center gap-2 mt-2">
+          <div className="flex justify-between w-full">
+            <CommonButton
+              variant="secondary"
+              onClick={() => onOpenChange(false)}
+              className="w-[91px] h-12"
+            >
+              Quay lại
+            </CommonButton>
+            <CommonButton
+              variant="primary"
+              onClick={onConfirm}
+              className="w-[149px] h-12"
+            >
+              Xác nhận
+            </CommonButton>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

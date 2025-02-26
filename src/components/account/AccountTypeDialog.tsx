@@ -7,18 +7,39 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { GraduationCap, Users, UserCog, Settings } from "lucide-react";
+import {
+  GraduationCap,
+  Users,
+  UserCog,
+  Settings,
+  ArrowRight,
+} from "lucide-react";
 import { useState } from "react";
 import { StudentRegistrationDialog } from "./StudentRegistrationDialog";
 import { TeacherRegistrationDialog } from "./TeacherRegistrationDialog";
 import { ManagerRegistrationDialog } from "./ManagerRegistrationDialog";
 import { AdminRegistrationDialog } from "./AdminRegistrationDialog";
-
+import Image from "next/image";
+import { CommonButton } from "../common/button/CommonButton";
 type AccountType = {
   id: string;
   title: string;
   description: string;
   icon: React.ReactNode;
+  iconSelected: React.ReactNode;
+};
+
+const listImagesAccount = {
+  student: "/admin/account/student.png",
+  studentSelected: "/admin/account/student-selected.png",
+  teacher: "/admin/account/teacher.png",
+  teacherSelected: "/admin/account/teacher-selected.png",
+  manager: "/admin/account/manager.png",
+  managerSelected: "/admin/account/manager-selected.png",
+};
+
+const CustomImageCreateAccount = ({ src }: { src: string }) => {
+  return <Image src={src} alt="" width={128} height={128} />;
 };
 
 const accountTypes: AccountType[] = [
@@ -26,25 +47,37 @@ const accountTypes: AccountType[] = [
     id: "student",
     title: "HỌC VIÊN",
     description: "Tài khoản cho học sinh",
-    icon: <GraduationCap className="h-12 w-12 text-primary-600" />,
+    icon: <CustomImageCreateAccount src={listImagesAccount.student} />,
+    iconSelected: (
+      <CustomImageCreateAccount src={listImagesAccount.studentSelected} />
+    ),
   },
   {
     id: "teacher",
     title: "GIẢNG VIÊN",
     description: "Tài khoản dành cho giảng viên và trợ giảng",
-    icon: <Users className="h-12 w-12 text-primary-600" />,
+    icon: <CustomImageCreateAccount src={listImagesAccount.teacher} />,
+    iconSelected: (
+      <CustomImageCreateAccount src={listImagesAccount.teacherSelected} />
+    ),
   },
   {
     id: "manager",
     title: "QUẢN LÝ LỚP",
     description: "Tài khoản dành cho nhân viên quản lý lớp học",
-    icon: <UserCog className="h-12 w-12 text-primary-600" />,
+    icon: <CustomImageCreateAccount src={listImagesAccount.manager} />,
+    iconSelected: (
+      <CustomImageCreateAccount src={listImagesAccount.managerSelected} />
+    ),
   },
   {
     id: "admin",
     title: "QUẢN TRỊ VIÊN",
     description: "Tài khoản quản lý hệ thống, duyệt và phê duyệt",
-    icon: <Settings className="h-12 w-12 text-primary-600" />,
+    icon: <CustomImageCreateAccount src={listImagesAccount.teacher} />,
+    iconSelected: (
+      <CustomImageCreateAccount src={listImagesAccount.teacherSelected} />
+    ),
   },
 ];
 
@@ -100,7 +133,7 @@ export function AccountTypeDialog({
             setShowManagerForm(false);
             setSelectedType(null);
           }
-          onOpenChange(isOpen);
+          onOpenChange(true);
         }}
         onSubmit={handleManagerFormSubmit}
       />
@@ -116,7 +149,7 @@ export function AccountTypeDialog({
             setShowAdminForm(false);
             setSelectedType(null);
           }
-          onOpenChange(isOpen);
+          onOpenChange(true);
         }}
         onSubmit={handleAdminFormSubmit}
       />
@@ -137,7 +170,7 @@ export function AccountTypeDialog({
             setShowTeacherForm(false);
             setSelectedType(null);
           }
-          onOpenChange(isOpen);
+          onOpenChange(true);
         }}
         onSubmit={handleTeacherFormSubmit}
       />
@@ -153,7 +186,7 @@ export function AccountTypeDialog({
             setShowStudentForm(false);
             setSelectedType(null);
           }
-          onOpenChange(isOpen);
+          onOpenChange(true);
         }}
         onSubmit={(data: any) => {
           onSelect("student");
@@ -166,11 +199,11 @@ export function AccountTypeDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[896px] bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-center mb-4">
+        <DialogHeader className="px-4">
+          <DialogTitle className="text-HeadingSm text-gray-95">
             Tạo tài khoản mới
           </DialogTitle>
-          <div className="text-gray-600 text-center mb-4">
+          <div className="text-gray-60 mb-4 text-BodyMd">
             Lựa chọn loại tài khoản
           </div>
         </DialogHeader>
@@ -180,50 +213,49 @@ export function AccountTypeDialog({
             <div
               key={type.id}
               className={cn(
-                "flex flex-col items-center justify-center p-6 rounded-xl border-2",
+                "flex flex-col items-center justify-center h-[220px] rounded-xl border-2",
                 selectedType === type.id
-                  ? "border-primary-600 bg-primary-50"
-                  : "border-gray-200",
-                "hover:border-primary-600 hover:bg-primary-50 cursor-pointer transition-all",
-                "focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2"
+                  ? "border-primary-60 bg-gray-00 border-4"
+                  : "border-gray-20",
+                "hover:border-primary-25  hover:bg-primary-25 cursor-pointer transition-all"
               )}
               onClick={() => handleTypeSelect(type.id)}
               role="button"
               tabIndex={0}
             >
-              {type.icon}
-              <h3 className="mt-4 text-lg font-semibold text-gray-900">
-                {type.title}
-              </h3>
-              <p className="mt-2 text-sm text-gray-600 text-center">
-                {type.description}
-              </p>
+              <div className="w-full h-4/6 flex items-center justify-center">
+                {selectedType === type.id ? type.iconSelected : type.icon}
+              </div>
+              <div className="flex flex-col items-center w-full h-2/6">
+                <h3 className="text-SubheadMd text-gray-95">{type.title}</h3>
+                <p className="text-BodyXs text-gray-600 text-center">
+                  {type.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="flex justify-between items-center mt-6 border-t pt-4">
-          <button
-            className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+        <div className="flex justify-between items-center mt-6 border-t pt-4 px-4">
+          <CommonButton
+            className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors h-[44px] w-[83px]"
+            variant="secondary"
             onClick={() => {
               setSelectedType(null);
               onOpenChange(false);
             }}
           >
             Thoát
-          </button>
-          <button
+          </CommonButton>
+          <CommonButton
             className={cn(
-              "px-6 py-2 rounded-full transition-colors",
-              selectedType
-                ? "bg-primary-600 text-white hover:bg-primary-700"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              "h-11 w-[122px] flex items-center justify-center gap-2"
             )}
             onClick={handleContinue}
             disabled={!selectedType}
           >
-            Tiếp tục
-          </button>
+            <div>Tiếp tục</div> <ArrowRight className="mt-1" />
+          </CommonButton>
         </div>
       </DialogContent>
     </Dialog>

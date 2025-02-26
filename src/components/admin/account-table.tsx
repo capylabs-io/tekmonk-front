@@ -15,12 +15,7 @@ import { EditUserDialog } from "./dialogs/edit-user-dialog";
 import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
 import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
-import {
-  EditingUserData,
-  Tab,
-  TableHeader as TableHeaderType,
-  User,
-} from "./types";
+import { EditingUserData, User } from "./types";
 
 const generateMockUsers = (): User[] => {
   const firstNames = ["Nguyen", "Tran", "Le", "Pham", "Hoang"];
@@ -59,7 +54,7 @@ const generateMockUsers = (): User[] => {
   return users;
 };
 
-export const StudentTable = () => {
+export const AccountTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("student");
@@ -284,54 +279,73 @@ export const StudentTable = () => {
                   (currentPage - 1) * itemsPerPage,
                   currentPage * itemsPerPage
                 )
-                .map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="text-right">{user.id}</TableCell>
-                    <TableCell>
-                      <div className="max-w-[200px] truncate" title={user.name}>
-                        {user.name}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div
-                        className="max-w-[150px] truncate"
-                        title={user.username}
-                      >
-                        {user.username}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div
-                        className="max-w-[200px] truncate"
-                        title={user.email}
-                      >
-                        {user.email}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div
-                        className="max-w-[100px] truncate"
-                        title={user.status}
-                      >
-                        {user.status}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right space-x-2">
-                      <button
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleEdit(user)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </button>
-                      <button
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                        onClick={() => handleDelete(user)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                .map((user) => {
+                  return (
+                    <TableRow key={user.id}>
+                      <TableCell className="text-right">{user.id}</TableCell>
+                      <TableCell>
+                        <div
+                          className="max-w-[200px] truncate"
+                          title={user.name}
+                        >
+                          {user.name}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div
+                          className="max-w-[150px] truncate"
+                          title={user.username}
+                        >
+                          {user.username}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div
+                          className="max-w-[200px] truncate"
+                          title={user.email}
+                        >
+                          {user.email}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div
+                          className="max-w-[100px] truncate"
+                          title={user.status}
+                        >
+                          {user.status}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right space-x-2">
+                        <button
+                          className="p-2 hover:bg-gray-100 rounded-full"
+                          onClick={() => handleEdit(user)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            className="lucide lucide-square-pen"
+                          >
+                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                          </svg>
+                        </button>
+                        <button
+                          className="p-2 hover:bg-gray-100 rounded-full"
+                          onClick={() => handleDelete(user)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </div>
@@ -375,4 +389,4 @@ export const StudentTable = () => {
   );
 };
 
-export default StudentTable;
+export default AccountTable;
