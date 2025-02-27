@@ -108,7 +108,7 @@ export const Navbar = () => {
             >
               Liên hệ
             </Link>
-            <CommonButton className="h-10 w-[111px] text-white md:block hidden">
+            <CommonButton className="h-10 text-white md:block hidden">
               <Link href={ROUTE.LOGIN} className="text-SubheadMd">
                 Đăng nhập
               </Link>

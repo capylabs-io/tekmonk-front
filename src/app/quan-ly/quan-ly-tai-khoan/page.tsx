@@ -26,11 +26,11 @@ export default function Admin() {
             Học viên
           </div>
           <CommonButton
-            className="h-9 w-full sm:w-[120px] text-gray-00"
+            className="h-9"
             variant="primary"
             onClick={handleOpenDialog}
           >
-            <div className="text-SubheadSm">Tạo tài khoản</div>
+            Tạo tài khoản
           </CommonButton>
         </div>
         <div className="p-4 flex-1">

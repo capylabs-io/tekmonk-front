@@ -26,7 +26,6 @@ type UserProfile = {
 };
 
 export type User = {
-  specialName: string;
   imageURL: string;
   id: string;
   username: string;

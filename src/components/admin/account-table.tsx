@@ -17,7 +17,25 @@ import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
 import { EditingUserData, User } from "./types";
 
-const generateMockUsers = (): User[] => {
+class SeededRandom {
+  private seed: number;
+
+  constructor(seed: number) {
+    this.seed = seed;
+  }
+
+  next(): number {
+    this.seed = (this.seed * 16807) % 2147483647;
+    return this.seed / 2147483647;
+  }
+
+  nextInt(max: number): number {
+    return Math.floor(this.next() * max);
+  }
+}
+
+export const generateMockUsers = (): User[] => {
+  const random = new SeededRandom(12345); // Fixed seed for consistent results
   const firstNames = ["Nguyen", "Tran", "Le", "Pham", "Hoang"];
   const middleNames = ["Van", "Thi", "Duc", "Minh", "Hoang"];
   const lastNames = ["A", "B", "C", "D"];
@@ -25,20 +43,19 @@ const generateMockUsers = (): User[] => {
   const users: User[] = [];
 
   for (let i = 1; i <= 1000; i++) {
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const middleName =
-      middleNames[Math.floor(Math.random() * middleNames.length)];
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const firstName = firstNames[random.nextInt(firstNames.length)];
+    const middleName = middleNames[random.nextInt(middleNames.length)];
+    const lastName = lastNames[random.nextInt(lastNames.length)];
     const fullName = `${firstName} ${middleName} ${lastName}`;
     const username = `${firstName.toLowerCase()}${middleName.toLowerCase()}${lastName.toLowerCase()}${i}`;
     const email = `${username}@example.com`;
 
-    // Distribute roles: 70% students, 15% teachers, 10% managers, 5% admins
+    // Distribute roles using seeded random
     let role;
-    const random = Math.random() * 100;
-    if (random < 70) role = "student";
-    else if (random < 85) role = "teacher";
-    else if (random < 95) role = "manager";
+    const randomValue = random.next() * 100;
+    if (randomValue < 70) role = "student";
+    else if (randomValue < 85) role = "teacher";
+    else if (randomValue < 95) role = "manager";
     else role = "admin";
 
     users.push({
@@ -46,7 +63,7 @@ const generateMockUsers = (): User[] => {
       name: fullName,
       username,
       email,
-      status: statuses[Math.floor(Math.random() * statuses.length)],
+      status: statuses[random.nextInt(statuses.length)],
       role,
     });
   }
