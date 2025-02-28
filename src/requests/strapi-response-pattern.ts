@@ -10,6 +10,6 @@ type StrapiMeta = {
 };
 
 export type StrapiResponse<T> = {
-  data: T;
-  meta?: StrapiMeta;
+  data: T[];
+  meta: StrapiMeta;
 };

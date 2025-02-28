@@ -1,13 +1,10 @@
 "use client";
 
-import { AccountTypeDialog } from "@/components/account/AccountTypeDialog";
-import AccountTable, {
-  generateMockUsers,
-} from "@/components/admin/account-table";
+import { generateMockUsers } from "@/components/admin/account-table";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ArrowLeft, PanelLeft, Trash2 } from "lucide-react";
+import { PanelLeft, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { CreateClassDialog } from "@/components/admin/CreateClassDialog";
 import {
@@ -35,11 +32,13 @@ const EmptyState = () => (
 );
 
 export default function Admin() {
+  const router = useCustomRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const router = useCustomRouter();
+
+ 
 
   const handleOpenDialog = () => {
     setIsDialogOpen(true);

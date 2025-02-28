@@ -6,7 +6,7 @@ import { StrapiResponse } from "./strapi-response-pattern";
 export const ReqGetAllNews = async (query: string) => {
   try {
     const res = await tekdojoAxios.get(`/news?${query}`);
-    return res.data as StrapiResponse<TNews[]>;
+    return res.data as StrapiResponse<TNews>;
   } catch (error) {
     console.log("Error: ", error);
     return Promise.reject(error);
@@ -16,7 +16,7 @@ export const ReqGetAllNews = async (query: string) => {
 export const ReqGetRamdomNews = async (type: string) => {
   try {
     const res = await tekdojoAxios.get(`/news/random-news?type=${type}`);
-    return res.data as StrapiResponse<TNews[]>;
+    return res.data as StrapiResponse<TNews>;
   } catch (error) {
     return Promise.reject(error);
   }

@@ -16,6 +16,9 @@ import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
 import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
 import { EditingUserData, User } from "./types";
+import { useQuery } from "@tanstack/react-query";
+import { ReqGetUsers } from "@/requests/user";
+import qs from "qs";
 
 class SeededRandom {
   private seed: number;
@@ -71,10 +74,24 @@ export const generateMockUsers = (): User[] => {
   return users;
 };
 
+const EmptyState = () => (
+  <div className="flex flex-col items-center justify-center py-12">
+    <div
+      className="w-[300px] h-[200px] bg-contain bg-no-repeat bg-center"
+      style={{ backgroundImage: "url('/admin/empty-data.png')" }}
+    />
+    <p className="text-gray-500 mt-4">Không có dữ liệu</p>
+    <p className="text-gray-500">Tạo tài khoản mới cho học viên để bắt đầu</p>
+    <button className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700">
+      Tạo tài khoản
+    </button>
+  </div>
+);
+
 export const AccountTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [activeTab, setActiveTab] = useState("student");
+  const [activeTab, setActiveTab] = useState("STUDENT");
   const [sortedUsers, setSortedUsers] = useState<User[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [mockUsers, setMockUsers] = useState<User[]>([]);
@@ -84,6 +101,36 @@ export const AccountTable = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
+  /**
+   * Put all handle useQuery here
+   */
+  const { data } = useQuery({
+    queryKey: ["users", activeTab],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            user_role: {
+              code: {
+                $eq: activeTab.toUpperCase(),
+              },
+            },
+          },
+          populate: "user_role",
+          page: currentPage,
+          pageSize: itemsPerPage,
+        });
+        return await ReqGetUsers(queryString);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  /**
+   * Function handler
+   */
   const handleDelete = (user: User) => {
     setUserToDelete(user);
     setDeleteDialogOpen(true);
@@ -100,22 +147,11 @@ export const AccountTable = () => {
     }
   };
 
-  useEffect(() => {
-    setMockUsers(generateMockUsers());
-  }, []);
-
-  useEffect(() => {
-    if (mockUsers.length > 0) {
-      const filtered = mockUsers.filter((user) => user.role === activeTab);
-      setSortedUsers(filtered);
-    }
-  }, [activeTab, mockUsers]);
-
   const tabs = [
-    { id: "student", label: "Học viên" },
-    { id: "teacher", label: "Giảng viên" },
-    { id: "manager", label: "Quản lý lớp" },
-    { id: "admin", label: "Quản trị viên" },
+    { id: "STUDENT", label: "Học viên" },
+    { id: "TEACHER", label: "Giảng viên" },
+    { id: "MANAGER", label: "Quản lý lớp" },
+    { id: "ADMIN", label: "Quản trị viên" },
   ];
 
   const filteredUsers = sortedUsers.filter((user) => user.role === activeTab);
@@ -143,10 +179,6 @@ export const AccountTable = () => {
     setEditingUser(null);
   };
 
-  const handleDeleteById = (userId: number) => {
-    console.log(`Delete user with ID: ${userId}`);
-  };
-
   const handleSort = () => {
     const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newSortOrder);
@@ -162,23 +194,9 @@ export const AccountTable = () => {
     setSortedUsers(sorted);
   };
 
-  const EmptyState = () => (
-    <div className="flex flex-col items-center justify-center py-12">
-      <div
-        className="w-[300px] h-[200px] bg-contain bg-no-repeat bg-center"
-        style={{ backgroundImage: "url('/admin/empty-data.png')" }}
-      />
-      <p className="text-gray-500 mt-4">Không có dữ liệu</p>
-      <p className="text-gray-500">Tạo tài khoản mới cho học viên để bắt đầu</p>
-      <button className="mt-4 px-4 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700">
-        Tạo tài khoản
-      </button>
-    </div>
-  );
-
   const getTableHeaders = () => {
     switch (activeTab) {
-      case "student":
+      case "STUDENT":
         return [
           { label: "STT", sortable: true },
           { label: "Tên học viên" },
@@ -187,7 +205,7 @@ export const AccountTable = () => {
           { label: "Trạng thái" },
           { label: "Thao tác", align: "right" },
         ];
-      case "teacher":
+      case "TEACHER":
         return [
           { label: "STT", sortable: true },
           { label: "Tên giảng viên" },
@@ -196,7 +214,7 @@ export const AccountTable = () => {
           { label: "Trạng thái" },
           { label: "Thao tác", align: "right" },
         ];
-      case "manager":
+      case "MANAGER":
         return [
           { label: "STT", sortable: true },
           { label: "Tên người dùng" },
@@ -217,6 +235,20 @@ export const AccountTable = () => {
     }
   };
 
+  /**
+   * UseEffect
+   */
+  useEffect(() => {
+    setMockUsers(generateMockUsers());
+  }, []);
+
+  useEffect(() => {
+    if (mockUsers.length > 0) {
+      const filtered = mockUsers.filter((user) => user.role === activeTab);
+      setSortedUsers(filtered);
+    }
+  }, [activeTab, mockUsers]);
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex flex-wrap border-b border-gray-200 mb-4 gap-2">
@@ -235,7 +267,7 @@ export const AccountTable = () => {
         ))}
       </div>
 
-      {filteredUsers.length === 0 ? (
+      {data && data.meta?.pagination.total === 0 ? (
         <EmptyState />
       ) : (
         <div className="rounded-md border min-w-[800px]">
@@ -291,26 +323,26 @@ export const AccountTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers
-                .slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
-                )
-                .map((user) => {
+              {data &&
+                data.data.map((user) => {
                   return (
                     <TableRow key={user.id}>
-                      <TableCell className="text-right">{user.id}</TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[200px] truncate"
-                          title={user.name}
-                        >
-                          {user.name}
+                      <TableCell className="text-right text-BodySm text-gray-95">
+                        <div className="text-BodySm text-gray-95">
+                          {user.id}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div
-                          className="max-w-[150px] truncate"
+                          className="max-w-[200px] truncate text-BodySm text-gray-95"
+                          title={user.fullName || ""}
+                        >
+                          {user.fullName}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div
+                          className="max-w-[150px] truncate text-BodySm text-gray-95"
                           title={user.username}
                         >
                           {user.username}
@@ -318,7 +350,7 @@ export const AccountTable = () => {
                       </TableCell>
                       <TableCell>
                         <div
-                          className="max-w-[200px] truncate"
+                          className="max-w-[200px] truncate text-BodySm text-gray-95"
                           title={user.email}
                         >
                           {user.email}
@@ -326,16 +358,27 @@ export const AccountTable = () => {
                       </TableCell>
                       <TableCell>
                         <div
-                          className="max-w-[100px] truncate"
-                          title={user.status}
+                          className="max-w-[100px] truncate text-BodySm text-gray-95"
+                          title={user.blocked ? "Đã khóa" : "Hoạt động"}
                         >
-                          {user.status}
+                          {user.blocked ? "Đã khóa" : "Hoạt động"}
                         </div>
                       </TableCell>
                       <TableCell className="text-right space-x-2">
                         <button
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={() => handleEdit(user)}
+                          className="p-2 hover:bg-gray-100 rounded-full text-BodySm text-gray-95"
+                          onClick={() =>
+                            handleEdit({
+                              id: user.id,
+                              name: user.username, // Using username as name since it's required
+                              username: user.username,
+                              email: user.email,
+                              status: "Active", // Setting default status
+                              role:
+                                user.user_role?.code?.toLowerCase() ||
+                                "student", // Converting role code to expected format
+                            })
+                          }
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -355,7 +398,18 @@ export const AccountTable = () => {
                         </button>
                         <button
                           className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={() => handleDelete(user)}
+                          onClick={() =>
+                            handleDelete({
+                              id: user.id,
+                              name: user.username, // Using username as name since it's required
+                              username: user.username,
+                              email: user.email,
+                              status: "Active", // Setting default status
+                              role:
+                                user.user_role?.code?.toLowerCase() ||
+                                "student", // Converting role code to expected format
+                            })
+                          }
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -368,9 +422,9 @@ export const AccountTable = () => {
         </div>
       )}
 
-      {filteredUsers.length > 0 && (
+      {data && data.meta.pagination.total > 0 && (
         <StudentTablePagination
-          totalItems={totalItems}
+          totalItems={data.meta.pagination.total}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
           onPageChange={setCurrentPage}

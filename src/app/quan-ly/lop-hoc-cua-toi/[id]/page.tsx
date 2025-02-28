@@ -1,15 +1,19 @@
 "use client";
-import { ArrowLeft, PanelLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import StudentList from "@/components/admin/student-list";
+import { TeacherList } from "@/components/admin/teacher-list";
 import { CommonButton } from "@/components/common/button/CommonButton";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ROUTE } from "@/contants/router";
 import { CommonCard } from "@/components/common/CommonCard";
 import { CommonRadioCheck } from "@/components/common/CommonRadioCheck";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
 import { cn } from "@/lib/utils";
-import { TeacherList } from "@/components/admin/teacher-list";
+import { ReqGetClassSessions } from "@/requests/class-session";
+import { ReqGetEnrollments } from "@/requests/enrollment";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowLeft, PanelLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import qs from "qs";
+import { useState } from "react";
 
 export default function ClassDetailPage({
   params,
@@ -18,6 +22,55 @@ export default function ClassDetailPage({
 }) {
   const router = useCustomRouter();
   const [activeTab, setActiveTab] = useState("progress");
+
+  const [currentPageStudent, setCurrentPageStudent] = useState(1);
+
+  /**
+   * UseQuery
+   */
+  const { data: classSession } = useQuery({
+    queryKey: ["class-session", params.id],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            class: {
+              id: {
+                $eq: params.id,
+              },
+            },
+          },
+          populate: "*",
+        });
+        return await ReqGetClassSessions(queryString);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: StudentData } = useQuery({
+    queryKey: ["student-list", params.id],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            class: {
+              id: {
+                $eq: params.id,
+              },
+            },
+          },
+          populate: "*",
+        });
+        return await ReqGetEnrollments(queryString);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
 
   // Mock data for sessions
   const sessions = Array.from({ length: 12 }, (_, index) => ({
@@ -81,35 +134,39 @@ export default function ClassDetailPage({
       {activeTab === "progress" && (
         <div className="space-y-6 p-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {sessions.map((session) => (
-              <CommonCard
-                key={session.id}
-                className={`w-[200px] h-20 p-4`}
-                onClick={() => handleSessionClick(session.id)}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-SubheadMd text-gray-95">
-                    Buổi {session.id}
-                  </span>
-                  <CommonRadioCheck
-                    onChecked={session.status === "completed"}
-                  />
-                </div>
-                <div className="text-BodySm">
-                  Trạng thái:{" "}
-                  {session.status === "completed"
-                    ? "Đã hoàn thành"
-                    : "Chưa diễn ra"}
-                </div>
-              </CommonCard>
-            ))}
+            {classSession &&
+              classSession.data.map((session) => (
+                <CommonCard
+                  key={session.id}
+                  className={`w-[200px] h-20 p-4`}
+                  onClick={() => handleSessionClick(session.id)}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-SubheadMd text-gray-95">
+                      Buổi {session.id}
+                    </span>
+                    <CommonRadioCheck onChecked={session.status === "done"} />
+                  </div>
+                  <div className="text-BodySm">
+                    Trạng thái:{" "}
+                    {session.status === "completed"
+                      ? "Đã hoàn thành"
+                      : "Chưa diễn ra"}
+                  </div>
+                </CommonCard>
+              ))}
           </div>
         </div>
       )}
 
       {/* Students List Section */}
-      {activeTab === "students" && <StudentList />}
-
+      {activeTab === "students" && StudentData && (
+        <StudentList
+          data={StudentData}
+          currentPage={currentPageStudent}
+          onPageChange={(page) => setCurrentPageStudent(page)}
+        />
+      )}
 
       {/* Teacher List Section */}
       {activeTab === "teacher" && <TeacherList />}

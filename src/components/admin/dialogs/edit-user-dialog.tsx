@@ -137,8 +137,7 @@ export const EditUserDialog = ({
 
           <div className="flex justify-between items-center mt-6 border-t pt-4">
             <CommonButton
-              type="button"
-              className="w-[83px] h-11"
+              className=" h-11"
               variant="secondary"
               onClick={() => onOpenChange(false)}
             >
@@ -155,7 +154,7 @@ export const EditUserDialog = ({
               <CommonButton
                 variant="secondary"
                 onClick={() => console.log("Reset password")}
-                className="h-11 w-[139px]"
+                className="h-11"
               >
                 Đặt lại mật khẩu
               </CommonButton>

@@ -3,10 +3,36 @@ import { useState } from "react";
 import { BookOpen } from "lucide-react";
 import { CommonCard } from "@/components/common/CommonCard";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { ReqGetClasses } from "@/requests/class";
 
 export default function Page() {
   const router = useCustomRouter();
   const [activeTab, setActiveTab] = useState("teaching");
+
+  /**
+   * UseQuery
+   */
+  const { data } = useQuery({
+    queryKey: ["class", activeTab],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            status: {
+              $eq: activeTab,
+            },
+          },
+          populate: "*",
+        });
+        return await ReqGetClasses(queryString);
+      } catch (error) {
+        console.log("failed to fetch class", error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
 
   const teachingClassData = [
     {
@@ -81,11 +107,11 @@ export default function Page() {
         </button>
         <button
           className={`pb-4 px-2 ${
-            activeTab === "completed"
+            activeTab === "ended"
               ? "text-primary-70 border-b-4 border-primary-70 font-medium"
               : "text-gray-70"
           }`}
-          onClick={() => setActiveTab("completed")}
+          onClick={() => setActiveTab("ended")}
         >
           Đã kết thúc
         </button>
@@ -93,26 +119,25 @@ export default function Page() {
 
       {/* Class Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {displayedClasses.map((classItem) => (
-          <CommonCard
-            key={classItem.id}
-            onClick={() =>
-              router.push(`/quan-ly/lop-hoc-cua-toi/${classItem.id}`)
-            }
-            className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[152px] flex flex-col items-start"
-          >
-            <div className="text-gray-95 font-medium mb-2 h-[48px] w-full overflow-hidden">
-              {classItem.title}
-            </div>
-            <div className="text-gray-95 text-sm space-y-1 h-[48px] text-BodySm flex-1">
-              <p>Mã lớp: {classItem.code}</p>
-              <p>Số buổi: {classItem.sessions} buổi</p>
-              <p>
-                Sĩ số: {classItem.students}/{classItem.maxStudents}
-              </p>
-            </div>
-          </CommonCard>
-        ))}
+        {data &&
+          data.data.map((classItem) => (
+            <CommonCard
+              key={classItem.id}
+              onClick={() =>
+                router.push(`/quan-ly/lop-hoc-cua-toi/${classItem.id}`)
+              }
+              className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-[152px] flex flex-col items-start"
+            >
+              <div className="text-gray-95 font-medium mb-2 h-[48px] w-full overflow-hidden">
+                {classItem.name}
+              </div>
+              <div className="text-gray-95 text-sm space-y-1 h-[48px] text-BodySm flex-1">
+                <p>Mã lớp: {classItem.code}</p>
+                <p>Số buổi: {classItem.classSessionCount} buổi</p>
+                <p>Sĩ số: {classItem.enrollmentCount}</p>
+              </div>
+            </CommonCard>
+          ))}
       </div>
     </div>
   );

@@ -42,8 +42,7 @@ export default function Layout({
   const handleRidirectHomePage = () => {
     router.push(ROUTE.HOME);
   };
-  const events = useEvents().slice(1, 4);
-  const projects = useProjects().slice(1, 5);
+
 
   return (
     <section className="w-full flex min-h-screen container mx-auto">
@@ -114,6 +113,12 @@ export default function Layout({
               active={usePathname() === "/home/profile"}
               iconElement={<User size={20} />}
               url="/home/profile"
+            />
+            <MenuCard
+              title="ADMIN"
+              active={usePathname() === "/home/profile"}
+              iconElement={<User size={20} />}
+              url={ROUTE.ADMIN + "/admin"}
             />
           </div>
           <div className="grow-0 px-3 w-full">

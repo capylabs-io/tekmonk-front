@@ -2,6 +2,8 @@ import { useState } from "react";
 import StudentTablePagination from "./student-table-pagination";
 import { Input } from "../common/Input";
 import { ChevronRight } from "lucide-react";
+import { StrapiResponse } from "@/requests/strapi-response-pattern";
+import { EnRollment } from "@/types/common-types";
 
 interface Student {
   id: number;
@@ -9,26 +11,19 @@ interface Student {
   username: string;
 }
 
-const mockStudents: Student[] = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  name: `Võ Minh Khôi`,
-  username: `minhkhoi.vo`,
-}));
-
-export default function StudentList() {
-  const [currentPage, setCurrentPage] = useState(1);
+export default function StudentList({
+  data,
+  currentPage,
+  onPageChange,
+}: {
+  data: StrapiResponse<EnRollment>;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}) {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredStudents = mockStudents.filter(
-    (student) =>
-      student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const displayedStudents = filteredStudents.slice(startIndex, endIndex);
 
   return (
     <div className="w-full px-4">
@@ -60,16 +55,16 @@ export default function StudentList() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {displayedStudents.map((student, index) => (
+            {data.data.map((student, index) => (
               <tr key={student.id} className="">
                 <td className="px-6 py-4 whitespace-nowrap text-BodySm text-gray-95">
                   {startIndex + index + 1}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-BodySm text-gray-95">
-                  {student.name}
+                  {student.student?.fullName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-BodySm text-gray-95">
-                  {student.username}
+                  {student.student?.username}
                 </td>
                 <td className="flex items-center h-full justify-end whitespace-nowrap text-BodySm text-gray-95">
                   <ChevronRight
@@ -83,10 +78,11 @@ export default function StudentList() {
         </table>
 
         <StudentTablePagination
-          totalItems={filteredStudents.length}
+          showDetails={false}
+          totalItems={data.meta.pagination.total}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
+          onPageChange={(page) => onPageChange(page)}
           onItemsPerPageChange={setItemsPerPage}
           showEllipsisThreshold={7}
         />

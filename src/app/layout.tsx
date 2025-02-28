@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Dela_Gothic_One, Inter, Nunito_Sans } from "next/font/google";
+import { Inter, Nunito_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Loading } from "@/components/common/Loading";
@@ -11,11 +11,6 @@ import {
   SHARE_TEXT,
   SHARE_TITLE,
 } from "@/contants/contest/tekmonk";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
 
 import TopLoader from "nextjs-toploader";
 import Providers from "./providers";

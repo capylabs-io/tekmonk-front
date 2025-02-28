@@ -26,30 +26,31 @@ type UserProfile = {
 };
 
 export type User = {
-  imageURL: string;
-  id: string;
+  id: number;
   username: string;
   email: string;
-  provider?: string;
-  confirmed?: string;
-  blocked?: string;
-  metadata?: string;
-  skills?: string[];
-  currentTitle?: string;
-  description?: string;
-  role: {
-    name: string;
-  };
-  userProfiles?: UserProfile[] | UserProfile | any;
-  phoneNumber?: string;
-  parentName?: string;
-  parentPhoneNumber?: string;
-  fullName?: string;
-  user_role?: UserRole[] | UserRole | any;
-  data?: {
-    contestId?: string;
-    isAccountForFinalRound?: boolean;
-  };
+  provider: string;
+  password?: string;
+  resetPasswordToken: string | null;
+  confirmationToken: string | null;
+  confirmed: boolean;
+  blocked: boolean;
+  metadata: any | null;
+  skills: any | null;
+  currentTitle: string | null;
+  dateOfBirth: string | null;
+  phoneNumber: string | null;
+  parentName: string | null;
+  parentPhoneNumber: string | null;
+  fullName: string | null;
+  studentAddress: string | null;
+  className: string | null;
+  parentEmail: string | null;
+  resetPasswordExpires: string | null;
+  createdAt: string;
+  updatedAt: string;
+  data: any | null;
+  user_role?: UserRole;
 };
 
 export type TListCourse = {
@@ -228,4 +229,38 @@ export type TNews = {
   priority: boolean;
   totalRead?: number;
   salary?: string;
+};
+
+export type Class = {
+  id: number;
+  name: string;
+  code: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  teacher?: User;
+  enrollmentCount?: number;
+  classSessionCount?: number;
+};
+
+export type ClassSession = {
+  id: number;
+  title: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  class?: Class;
+};
+
+export type EnRollment = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  student?: User;
+  class?: Class;
 };
