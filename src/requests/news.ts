@@ -79,3 +79,14 @@ export const ReqUpdateImage = async (id: string, data: any) => {
     return Promise.reject(error);
   }
 };
+
+//DELETE METHODS
+export const ReqDeleteNews = async (id: string) => {
+  try {
+    const res = await tekdojoAxios.delete(`/news/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log("Error deleting news: ", error);
+    return Promise.reject(error);
+  }
+};

@@ -86,7 +86,7 @@ export const Navbar = () => {
                 Tin tức
               </Link>
               <Link
-                href="/tuyen-dung"
+                href={ROUTE.HIRING}
                 className="text-sm font-medium text-gray-700 hover:text-gray-900"
               >
                 Tuyển Dụng

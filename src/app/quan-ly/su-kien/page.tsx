@@ -40,9 +40,12 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { TNews } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import dynamic from "next/dynamic";
 import qs from "qs";
 import { useMemo, useState } from "react";
+import "react-calendar/dist/Calendar.css";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
@@ -54,6 +57,8 @@ const newsSchema = z.object({
   tags: z.string().optional(),
   image: z.any(),
   content: z.string().min(1, "Mô tả không được để trống"),
+  startTime: z.date().optional(),
+  endTime: z.date().optional(),
 });
 
 const modules = {
@@ -93,6 +98,8 @@ export default function Page() {
       tags: "",
       image: null,
       content: "",
+      startTime: new Date(),
+      endTime: new Date(),
     },
   });
   const { control, getValues, setValue, reset } = methods;
@@ -102,7 +109,7 @@ export default function Page() {
   const [activeTab, setActiveTab] = useState("public");
 
   const tabs = [
-    { id: "public", label: "Tin tức" },
+    { id: "public", label: "Sự kiện" },
     { id: "draft", label: "Bản nháp" },
     { id: "trash", label: "Thùng rác" },
   ];
@@ -116,7 +123,7 @@ export default function Page() {
 
   const { data, isLoading, isError } = useQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["news", page, limit, activeTab],
+    queryKey: ["event", page, limit, activeTab],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -125,7 +132,7 @@ export default function Page() {
             pageSize: limit,
           },
           filters: {
-            type: "news",
+            type: "event",
             status: activeTab,
           },
           sort: ["id:asc"],
@@ -142,7 +149,7 @@ export default function Page() {
     if (file) setValue("image", file as any);
   };
 
-  const prepareFormData = (newsStatus: string) => {
+  const prepareFormData = (eventStatus: string) => {
     const formData = new FormData();
     const values = getValues();
 
@@ -150,21 +157,23 @@ export default function Page() {
       title: values.title,
       tags: values.tags,
       content: values.content,
-      type: "news",
-      status: newsStatus,
+      startTime: values.startTime?.toISOString() || "",
+      endTime: values.endTime?.toISOString() || "",
+      type: "event",
+      status: eventStatus,
     }).forEach(([key, value]) => formData.append(key, value));
 
     if (values.image) {
       formData.append("image", values.image);
     }
 
-    return { formData, values: { ...values, status: newsStatus } };
+    return { formData, values: { ...values, status: eventStatus } };
   };
 
-  const handleNewsSubmit = async (newsStatus: string) => {
+  const handleNewsSubmit = async (eventStatus: string) => {
     try {
       show();
-      const { formData, values } = prepareFormData(newsStatus);
+      const { formData, values } = prepareFormData(eventStatus);
 
       if (isEditing && currentNews) {
         await ReqUpdateNews(currentNews.id.toString(), values);
@@ -177,7 +186,7 @@ export default function Page() {
         success("Thành công", "Tạo bài viết thành công");
       }
 
-      queryClient.invalidateQueries({ queryKey: ["news"] });
+      queryClient.invalidateQueries({ queryKey: ["event"] });
     } catch (err) {
       console.error("Error submitting news:", err);
       error(
@@ -185,10 +194,10 @@ export default function Page() {
         isEditing ? "Cập nhật bài viết thất bại" : "Tạo bài viết thất bại"
       );
     } finally {
+      queryClient.invalidateQueries({ queryKey: ["event"] });
       hide();
       setToggleNewsDialog(false);
       setIsEditing(false);
-      setCurrentNews(null);
       reset();
     }
   };
@@ -208,7 +217,7 @@ export default function Page() {
         };
         await ReqUpdateNews(currentNews.id.toString(), dataUpdate);
         success("Thành công", "Đã chuyển bài viết vào thùng rác");
-        queryClient.invalidateQueries({ queryKey: ["news"] });
+        queryClient.invalidateQueries({ queryKey: ["event"] });
       }
     } catch (err) {
       console.log("Error moving to trash:", err);
@@ -229,13 +238,14 @@ export default function Page() {
     }
   };
 
-  const handleEditNews = (item: TNews) => {
+  const handleEditNews = (item: any) => {
     setIsEditing(true);
-    setCurrentNews(item);
     reset({
       title: item.title,
       tags: item.tags,
       content: item.content,
+      startTime: item.startTime ? new Date(item.startTime) : new Date(),
+      endTime: item.endTime ? new Date(item.endTime) : new Date(),
     });
     setToggleNewsDialog(true);
   };
@@ -260,17 +270,17 @@ export default function Page() {
           >
             <PanelLeft width={17} height={17} />
           </CommonCard>
-          Tin tức
+          Sự kiện
         </div>
         <CommonButton
-          className="h-9 w-full sm:w-[120px] text-gray-00"
+          className="h-9 text-gray-00"
           variant="primary"
           onClick={() => {
             reset();
             setToggleNewsDialog(true);
           }}
         >
-          <div className="text-SubheadSm">Tạo bài viết</div>
+          Tạo sự kiện
         </CommonButton>
       </div>
       <div className="w-full flex flex-col border-y border-gray-20 py-2">
@@ -301,15 +311,17 @@ export default function Page() {
                   <TableRow>
                     <TableHead className="w-[80px]">STT</TableHead>
                     <TableHead className="w-[120px]">Ảnh bìa</TableHead>
-                    <TableHead>Tên bài viết</TableHead>
-                    <TableHead className="w-[200px]">Chủ đề</TableHead>
-                    <TableHead className="w-[180px]">Ngày đăng</TableHead>
+                    <TableHead>Tên sự kiện</TableHead>
+                    <TableHead className="w-[200px]">
+                      Thời gian diễn ra
+                    </TableHead>
+                    <TableHead className="w-[180px]">Trạng thái</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody className="text-BodySm">
                   {data &&
-                    data.data.map((item) => (
+                    data.data.map((item, index) => (
                       <TableRow key={item.id}>
                         <TableCell className="text-center">{item.id}</TableCell>
                         <TableCell>
@@ -327,18 +339,14 @@ export default function Page() {
                         </TableCell>
                         <TableCell className="">{item.title}</TableCell>
                         <TableCell>
-                          <div className="flex gap-1 flex-wrap">
-                            {item.tags && (
-                              <div className="rounded-[4px] bg-gray-20 text-gray-95 text-BodyXs flex items-center h-6 px-2">
-                                {item.tags}
-                              </div>
-                            )}
-                          </div>
+                          <TimeConvert
+                            time={item.startTime ? item.startTime : ""}
+                          />
                         </TableCell>
                         <TableCell>
-                          <TimeConvert
-                            time={item.createdAt ? item.createdAt : ""}
-                          />
+                          {new Date(item.endTime) > new Date()
+                            ? "Đang diễn ra"
+                            : "Đã kết thúc"}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -348,7 +356,14 @@ export default function Page() {
                               className="h-8 w-8"
                               onClick={() => handleEditNews(item)}
                             >
-                              <Edit className="h-4 w-4" color="#7C6C80" />
+                              <Edit
+                                className="h-4 w-4"
+                                onClick={() => {
+                                  setCurrentNews(item);
+                                  setIsEditing(true);
+                                }}
+                                color="#7C6C80"
+                              />
                             </Button>
                             <Button
                               variant="ghost"
@@ -393,6 +408,8 @@ export default function Page() {
                   tags: "",
                   image: null,
                   content: "",
+                  startTime: new Date(),
+                  endTime: new Date(),
                 });
                 setToggleNewsDialog(false);
               }
@@ -401,7 +418,7 @@ export default function Page() {
             <DialogContent className="sm:max-w-[800px] max-h-full bg-gray-00 overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-xl">
-                  {isEditing ? "Chỉnh sửa bài viết" : "Tạo bài viết mới"}
+                  {isEditing ? "Chỉnh sửa sự kiện" : "Tạo bài sự kiện mới"}
                 </DialogTitle>
               </DialogHeader>
               <Controller
@@ -440,7 +457,28 @@ export default function Page() {
                   />
                 )}
               />
-
+              <div className="flex items-center w-full">
+                <div className="w-1/5">Thời gian diễn ra</div>
+                <Controller
+                  control={control}
+                  name="startTime"
+                  render={({ field }) => (
+                    <DateRangePicker
+                      onChange={(value) => {
+                        if (Array.isArray(value)) {
+                          setValue("startTime", value[0] || new Date());
+                          setValue("endTime", value[1] || new Date());
+                        }
+                      }}
+                      value={[
+                        getValues("startTime") || new Date(),
+                        getValues("endTime") || new Date(),
+                      ]}
+                      className="flex-1 !outline-none !border-none h-12"
+                    />
+                  )}
+                />
+              </div>
               <Controller
                 control={control}
                 name="content"

@@ -98,7 +98,7 @@ export const InputTags = ({
                 {tags.map((tag, index) => (
                   <div
                     key={index}
-                    className="inline-flex items-center bg-primary-40 text-gray-00 rounded-md text-sm"
+                    className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
                   >
                     <span className="px-2 py-1">{tag}</span>
                     <button

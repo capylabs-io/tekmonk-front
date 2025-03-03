@@ -137,7 +137,6 @@ export function CreateClassDialog({
         },
       };
 
-      console.log("classData", classData);
       const newClass = await ReqCreateClass(classData);
 
       //create enrollment

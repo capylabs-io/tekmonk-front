@@ -229,6 +229,7 @@ export type TNews = {
   priority: boolean;
   totalRead?: number;
   salary?: string;
+  status: string;
 };
 
 export type Class = {

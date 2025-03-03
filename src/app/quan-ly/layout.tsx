@@ -43,7 +43,6 @@ export default function Layout({
     router.push(ROUTE.HOME);
   };
 
-
   return (
     <section className="w-full flex min-h-screen container mx-auto">
       {/* Include shared UI here e.g. a header or sidebar */}
@@ -100,13 +99,13 @@ export default function Layout({
               title="Tuyển dụng"
               active={usePathname() === "/home/profile"}
               iconElement={<User size={20} />}
-              url="/home/profile"
+              url={ROUTE.ADMIN + ROUTE.HIRING}
             />
             <MenuCard
               title="Sự kiện"
               active={usePathname() === "/home/profile"}
               iconElement={<User size={20} />}
-              url="/home/profile"
+              url={ROUTE.ADMIN + ROUTE.EVENTS}
             />
             <MenuCard
               title="Thông báo"

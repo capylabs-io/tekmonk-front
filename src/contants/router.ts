@@ -7,7 +7,7 @@ export const ROUTE = {
   EVENTS: "/su-kien",
   HIRING: "/tuyen-dung",
 
-  //SUb Route admin
+  //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",
   ACCOUNT: "/quan-ly-tai-khoan",
 };

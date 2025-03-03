@@ -19,6 +19,7 @@ import { InputField } from "@/components/contest/InputField";
 import { InputImgUploadContest } from "@/components/contest/InputImgUploadContest";
 import { InputTags } from "@/components/contest/InputTags";
 import { Button } from "@/components/ui/button";
+import { SplitRenderItem } from "@/components/common/SplitRenderItem";
 import {
   Table,
   TableBody,
@@ -27,33 +28,38 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import {
   ReqCreateNews,
-  ReqDeleteNews,
   ReqGetAllNews,
   ReqUpdateImage,
   ReqUpdateNews,
+  ReqDeleteNews,
 } from "@/requests/news";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { TNews } from "@/types/common-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import dynamic from "next/dynamic";
 import qs from "qs";
 import { useMemo, useState } from "react";
+import "react-calendar/dist/Calendar.css";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 
-const newsSchema = z.object({
+const hiringSchema = z.object({
   title: z
     .string({ required_error: "Tên bài viết không được để trống" })
     .min(1, "Tên bài viết phải có ít nhất 1 ký tự"),
   tags: z.string().optional(),
+  salary: z.string().min(1, "Mức lương không được để trống"),
   image: z.any(),
   content: z.string().min(1, "Mô tả không được để trống"),
+  startTime: z.date().optional(),
+  endTime: z.date().optional(),
 });
 
 const modules = {
@@ -77,35 +83,31 @@ const formats = [
   "image",
 ];
 
-export default function Page() {
+export default function HiringPage() {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
   );
-  const [toggleNewsDialog, setToggleNewsDialog] = useState(false);
+  const [toggleHiringDialog, setToggleHiringDialog] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentNews, setCurrentNews] = useState<TNews | null>(null);
+  const [currentHiring, setCurrentHiring] = useState<TNews | null>(null);
 
   const methods = useForm({
-    resolver: zodResolver(newsSchema),
+    resolver: zodResolver(hiringSchema),
     defaultValues: {
       title: "",
       tags: "",
       image: null,
+      salary: "",
       content: "",
+      startTime: new Date(),
+      endTime: new Date(),
     },
   });
   const { control, getValues, setValue, reset } = methods;
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const [activeTab, setActiveTab] = useState("public");
-
-  const tabs = [
-    { id: "public", label: "Tin tức" },
-    { id: "draft", label: "Bản nháp" },
-    { id: "trash", label: "Thùng rác" },
-  ];
 
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
   const [success, error] = useSnackbarStore((state) => [
@@ -116,7 +118,7 @@ export default function Page() {
 
   const { data, isLoading, isError } = useQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["news", page, limit, activeTab],
+    queryKey: ["hiring", page, limit],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -125,8 +127,7 @@ export default function Page() {
             pageSize: limit,
           },
           filters: {
-            type: "news",
-            status: activeTab,
+            type: "hiring",
           },
           sort: ["id:asc"],
           populate: "*",
@@ -142,7 +143,7 @@ export default function Page() {
     if (file) setValue("image", file as any);
   };
 
-  const prepareFormData = (newsStatus: string) => {
+  const prepareFormData = (hiringStatus: string) => {
     const formData = new FormData();
     const values = getValues();
 
@@ -150,45 +151,50 @@ export default function Page() {
       title: values.title,
       tags: values.tags,
       content: values.content,
-      type: "news",
-      status: newsStatus,
+      salary: values.salary,
+      startTime: values.startTime?.toISOString() || "",
+      endTime: values.endTime?.toISOString() || "",
+      type: "hiring",
+      status: hiringStatus,
     }).forEach(([key, value]) => formData.append(key, value));
 
     if (values.image) {
       formData.append("image", values.image);
     }
 
-    return { formData, values: { ...values, status: newsStatus } };
+    return { formData, values: { ...values, status: hiringStatus } };
   };
 
-  const handleNewsSubmit = async (newsStatus: string) => {
+  const handleHiringSubmit = async (hiringStatus: string) => {
     try {
       show();
-      const { formData, values } = prepareFormData(newsStatus);
+      const { formData, values } = prepareFormData(hiringStatus);
 
-      if (isEditing && currentNews) {
-        await ReqUpdateNews(currentNews.id.toString(), values);
+      if (isEditing && currentHiring) {
+        await ReqUpdateNews(currentHiring.id.toString(), values);
         if (values.image) {
-          await ReqUpdateImage(currentNews.id.toString(), formData);
+          await ReqUpdateImage(currentHiring.id.toString(), formData);
         }
-        success("Thành công", "Cập nhật bài viết thành công");
+        success("Thành công", "Cập nhật tin tuyển dụng thành công");
       } else {
         await ReqCreateNews(formData);
-        success("Thành công", "Tạo bài viết thành công");
+        success("Thành công", "Tạo tin tuyển dụng thành công");
       }
 
-      queryClient.invalidateQueries({ queryKey: ["news"] });
+      queryClient.invalidateQueries({ queryKey: ["hiring"] });
     } catch (err) {
-      console.error("Error submitting news:", err);
+      console.error("Error submitting hiring:", err);
       error(
         "Không thành công",
-        isEditing ? "Cập nhật bài viết thất bại" : "Tạo bài viết thất bại"
+        isEditing
+          ? "Cập nhật tin tuyển dụng thất bại"
+          : "Tạo tin tuyển dụng thất bại"
       );
     } finally {
       hide();
-      setToggleNewsDialog(false);
+      setToggleHiringDialog(false);
       setIsEditing(false);
-      setCurrentNews(null);
+      setCurrentHiring(null);
       reset();
     }
   };
@@ -197,47 +203,33 @@ export default function Page() {
     try {
       show();
       if (data != null) {
-        setCurrentNews(data);
+        setCurrentHiring(data);
       }
-      if (!currentNews) return;
-      if (currentNews.status === "trash") {
-        await ReqDeleteNews(currentNews.id.toString());
-      } else {
-        const dataUpdate = {
-          status: "trash",
-        };
-        await ReqUpdateNews(currentNews.id.toString(), dataUpdate);
-        success("Thành công", "Đã chuyển bài viết vào thùng rác");
-        queryClient.invalidateQueries({ queryKey: ["news"] });
-      }
+      if (!currentHiring) return;
+      await ReqDeleteNews(currentHiring.id.toString());
+      success("Thành công", "Đã xóa tin tuyển dụng");
     } catch (err) {
       console.log("Error moving to trash:", err);
-      error("Không thành công", "Không tìm thấy bài viết");
+      error("Không thành công", "Không tìm thấy tin tuyển dụng");
     } finally {
       hide();
-      setToggleNewsDialog(false);
+      setToggleHiringDialog(false);
       setIsEditing(false);
-      {
-        currentNews &&
-          success(
-            "Thành công",
-            currentNews.status === "trash"
-              ? "Đã xóa bài viết"
-              : "Đã chuyển bài viết vào thùng rác"
-          );
-      }
+      queryClient.invalidateQueries({ queryKey: ["hiring"] });
     }
   };
 
-  const handleEditNews = (item: TNews) => {
+  const handleEditHiring = (item: TNews) => {
     setIsEditing(true);
-    setCurrentNews(item);
+    setCurrentHiring(item);
     reset({
       title: item.title,
       tags: item.tags,
       content: item.content,
+      startTime: item.startTime ? new Date(item.startTime) : new Date(),
+      endTime: item.endTime ? new Date(item.endTime) : new Date(),
     });
-    setToggleNewsDialog(true);
+    setToggleHiringDialog(true);
   };
 
   if (isLoading) return <Loading />;
@@ -260,39 +252,20 @@ export default function Page() {
           >
             <PanelLeft width={17} height={17} />
           </CommonCard>
-          Tin tức
+          Tuyển dụng
         </div>
         <CommonButton
-          className="h-9 w-full sm:w-[120px] text-gray-00"
+          className="h-9 text-gray-00"
           variant="primary"
           onClick={() => {
             reset();
-            setToggleNewsDialog(true);
+            setToggleHiringDialog(true);
           }}
         >
-          <div className="text-SubheadSm">Tạo bài viết</div>
+          Tạo tin
         </CommonButton>
       </div>
       <div className="w-full flex flex-col border-y border-gray-20 py-2">
-        <div className="h-9 w-[265px] border-t border-x border-gray-20 rounded-t-lg flex items-center justify-center text-gray-95 gap-3">
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "w-full h-full flex items-center justify-center rounded-t-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 cursor-pointer",
-                activeTab === tab.id
-                  ? "bg-[#C840B8] text-white"
-                  : "text-gray-600 hover:text-gray-900"
-              )}
-              role="tab"
-              aria-selected={activeTab === tab.id}
-              aria-controls={`${tab.id}-panel`}
-            >
-              {tab.label}
-            </div>
-          ))}
-        </div>
         <div className=" flex-1 border-t border-gray-20">
           <div className="w-full overflow-auto">
             <div className="">
@@ -300,10 +273,12 @@ export default function Page() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[80px]">STT</TableHead>
-                    <TableHead className="w-[120px]">Ảnh bìa</TableHead>
-                    <TableHead>Tên bài viết</TableHead>
-                    <TableHead className="w-[200px]">Chủ đề</TableHead>
-                    <TableHead className="w-[180px]">Ngày đăng</TableHead>
+                    <TableHead className="w-[200px]">
+                      Tiêu đề tuyển dụng
+                    </TableHead>
+                    <TableHead>Mức lương</TableHead>
+                    <TableHead className="w-[180px]">Tag</TableHead>
+                    <TableHead className="w-[180px]">Trạng thái</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -312,33 +287,26 @@ export default function Page() {
                     data.data.map((item) => (
                       <TableRow key={item.id}>
                         <TableCell className="text-center">{item.id}</TableCell>
-                        <TableCell>
-                          <Image
-                            src={
-                              item.thumbnail
-                                ? item.thumbnail
-                                : "/placeholder.svg"
-                            }
-                            alt={item.title}
-                            width={100}
-                            height={60}
-                            className="rounded-md object-cover"
-                          />
+                        <TableCell>{item.title}</TableCell>
+                        <TableCell className="">
+                          {item.salary ? item.salary : "Chưa cập nhật"}
                         </TableCell>
-                        <TableCell className="">{item.title}</TableCell>
                         <TableCell>
                           <div className="flex gap-1 flex-wrap">
                             {item.tags && (
-                              <div className="rounded-[4px] bg-gray-20 text-gray-95 text-BodyXs flex items-center h-6 px-2">
-                                {item.tags}
-                              </div>
+                              <SplitRenderItem
+                                items={item.tags.split(",")}
+                                className="rounded-[4px] bg-gray-20 text-gray-95 text-BodyXs flex items-center h-6 px-2"
+                                remainingItemsClassName="rounded-[4px] bg-gray-20 text-gray-95 text-BodyXs flex items-center h-6 px-2"
+                                tooltipContentClassName="rounded-[4px] bg-gray-20 text-gray-95 text-BodyXs flex items-center h-6 px-2"
+                              />
                             )}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <TimeConvert
-                            time={item.createdAt ? item.createdAt : ""}
-                          />
+                          {item.status === "public"
+                            ? "Đang tuyển dụng"
+                            : "Hết hạn"}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -346,17 +314,15 @@ export default function Page() {
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => handleEditNews(item)}
+                              onClick={() => handleEditHiring(item)}
                             >
                               <Edit className="h-4 w-4" color="#7C6C80" />
                             </Button>
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-gray-60"
-                              onClick={async () => {
-                                await handleMoveToTrash(item);
-                              }}
+                              className="h-8 w-8 text-destructive"
+                              onClick={() => handleMoveToTrash(item)}
                             >
                               <Trash2 className="h-4 w-4" color="#7C6C80" />
                             </Button>
@@ -383,25 +349,27 @@ export default function Page() {
         </div>
         <FormProvider {...methods}>
           <Dialog
-            open={toggleNewsDialog}
+            open={toggleHiringDialog}
             onOpenChange={(open) => {
               if (!open) {
                 setIsEditing(false);
-                setCurrentNews(null);
+                setCurrentHiring(null);
                 reset({
                   title: "",
                   tags: "",
                   image: null,
                   content: "",
+                  startTime: new Date(),
+                  endTime: new Date(),
                 });
-                setToggleNewsDialog(false);
+                setToggleHiringDialog(false);
               }
             }}
           >
             <DialogContent className="sm:max-w-[800px] max-h-full bg-gray-00 overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-xl">
-                  {isEditing ? "Chỉnh sửa bài viết" : "Tạo bài viết mới"}
+                  {isEditing ? "Chỉnh sửa tin" : "Tạo bài tin mới"}
                 </DialogTitle>
               </DialogHeader>
               <Controller
@@ -443,6 +411,43 @@ export default function Page() {
 
               <Controller
                 control={control}
+                name="salary"
+                render={({ field: { value, onChange }, fieldState }) => (
+                  <InputField
+                    value={value}
+                    onChange={onChange}
+                    title="Mức lương"
+                    type="text"
+                    error={fieldState && fieldState.error?.message}
+                    placeholder="VD: 10 triệu, 10-15tr, Thương lượng"
+                  />
+                )}
+              />
+
+              <div className="flex items-center w-full">
+                <div className="w-1/5">Thời gian diễn ra</div>
+                <Controller
+                  control={control}
+                  name="startTime"
+                  render={({ field }) => (
+                    <DateRangePicker
+                      onChange={(value) => {
+                        if (Array.isArray(value)) {
+                          setValue("startTime", value[0] || new Date());
+                          setValue("endTime", value[1] || new Date());
+                        }
+                      }}
+                      value={[
+                        getValues("startTime") || new Date(),
+                        getValues("endTime") || new Date(),
+                      ]}
+                      className="flex-1 !outline-none !border-none h-12"
+                    />
+                  )}
+                />
+              </div>
+              <Controller
+                control={control}
                 name="content"
                 render={({ field: { value, onChange }, fieldState }) => (
                   <ReactQuill
@@ -464,7 +469,7 @@ export default function Page() {
                   className="h-[48px]"
                   childrenClassName="text-SubheadMd"
                   onClick={() => {
-                    setToggleNewsDialog(false);
+                    setToggleHiringDialog(false);
                     setIsEditing(false);
                     reset();
                   }}
@@ -485,7 +490,7 @@ export default function Page() {
                   <CommonButton
                     variant="secondary"
                     className="h-[48px]"
-                    onClick={() => handleNewsSubmit("draft")}
+                    onClick={() => handleHiringSubmit("draft")}
                   >
                     {isEditing ? "Đưa về bản nháp" : "Lưu bản nháp"}
                   </CommonButton>
@@ -493,7 +498,7 @@ export default function Page() {
                     className="text-white h-[48px] w-[133px]"
                     onClick={() => {
                       setIsEditing(false);
-                      handleNewsSubmit("public");
+                      handleHiringSubmit("public");
                     }}
                   >
                     {isEditing ? "Cập nhật" : "Đăng dự án"}
