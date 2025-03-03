@@ -243,8 +243,8 @@ export type Class = {
   updatedAt: string;
   status: string;
   teacher?: User;
+  course?: Course;
   enrollmentCount?: number;
-  classSessionCount?: number;
 };
 
 export type ClassSession = {
@@ -264,4 +264,10 @@ export type EnRollment = {
   updatedAt: string;
   student?: User;
   class?: Class;
+};
+
+export type Course = {
+  name: string;
+  numberSession: number;
+  description?: string;
 };

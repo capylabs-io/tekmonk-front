@@ -4,7 +4,7 @@ import { generateMockUsers } from "@/components/admin/account-table";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { PanelLeft, Trash2 } from "lucide-react";
+import { Edit, PanelLeft, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { CreateClassDialog } from "@/components/admin/CreateClassDialog";
 import {
@@ -16,6 +16,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import StudentTablePagination from "@/components/admin/student-table-pagination";
+import { useQuery } from "@tanstack/react-query";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import qs from "qs";
+import { ReqGetClasses } from "@/requests/class";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-12">
@@ -38,15 +42,26 @@ export default function Admin() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
- 
-
+  /** UseStore */
+  const [error] = useSnackbarStore((state) => [state.error]);
+  /**
+   * UseQuery
+   */
+  const { data: classes } = useQuery({
+    queryKey: ["class"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          populate: "*",
+        });
+        return await ReqGetClasses(queryString);
+      } catch (err) {
+        error("Lỗi", "Không thể lấy thông tin lớp học");
+      }
+    },
+  });
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
-  };
-
-  const handleAccountTypeSelect = (type: string) => {
-    console.log("Selected account type:", type);
-    setIsDialogOpen(false);
   };
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
@@ -87,7 +102,7 @@ export default function Admin() {
           </CommonButton>
         </div>
         <div className="p-4 flex-1">
-          {mockUsers.length === 0 ? (
+          {classes && classes.meta.pagination.total === 0 ? (
             <EmptyState />
           ) : (
             <div className="rounded-md border min-w-[800px]">
@@ -102,94 +117,83 @@ export default function Admin() {
                     <TableHead className="text-right">Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody>
-                  {sortedUsers.map((user) => (
-                    <TableRow
-                      key={user.id}
-                      className="cursor-pointer"
-                      onClick={() => router.push(`/quan-ly/admin/${user.id}`)}
-                    >
-                      <TableCell className="text-right">{user.id}</TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[200px] truncate"
-                          title={user.name}
-                        >
-                          {user.name}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[150px] truncate"
-                          title={user.username}
-                        >
-                          {user.username}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[200px] truncate"
-                          title={user.email}
-                        >
-                          {user.email}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[100px] truncate"
-                          title={user.status}
-                        >
-                          {user.status}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right space-x-2">
-                        <button
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Add edit handler here
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            className="lucide lucide-square-pen"
+                <TableBody className="text-BodySm">
+                  {classes &&
+                    classes.data.map((item) => (
+                      <TableRow
+                        key={item.id}
+                        className="cursor-pointer"
+                        onClick={() => router.push(`/quan-ly/admin/${item.id}`)}
+                      >
+                        <TableCell className="text-right">{item.id}</TableCell>
+                        <TableCell>
+                          <div
+                            className="max-w-[200px] truncate"
+                            title={item.code}
                           >
-                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                            <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                          </svg>
-                        </button>
-                        <button
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Add delete handler here
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                            {item.code}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div
+                            className="max-w-[150px] truncate"
+                            title={item.course?.name}
+                          >
+                            {item.course?.name}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div
+                            className="max-w-[200px] truncate"
+                            title={item.teacher?.username}
+                          >
+                            {item.teacher?.username}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div
+                            className="max-w-[100px] truncate"
+                            title={item.status}
+                          >
+                            {item.status}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right space-x-2">
+                          <button
+                            className="p-2 hover:bg-gray-100 rounded-full"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Add edit handler here
+                            }}
+                          >
+                            <Edit className="h-4 w-4" color="#7C6C80" />
+                          </button>
+                          <button
+                            className="p-2 hover:bg-gray-100 rounded-full"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Add delete handler here
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" color="#7C6C80" />
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </div>
           )}
         </div>
-        <StudentTablePagination
-          totalItems={mockUsers.length}
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={handleItemsPerPageChange}
-        />
+        {classes && (
+          <StudentTablePagination
+            totalItems={classes.meta.pagination.total}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
+        )}
       </div>
 
       <CreateClassDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />

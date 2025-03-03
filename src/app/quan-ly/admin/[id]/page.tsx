@@ -12,16 +12,13 @@ export default function ClassDetail() {
   const params = useParams();
   const classId = params.id;
   const [activeTab, setActiveTab] = useState("general");
-
-  // Mock data - replace with actual API call
-  const classData = {
-    id: classId,
+  const [formData, setFormData] = useState({
     name: "UI/UX Design",
     code: "UI/UX Design khóa 4",
     instructor: "Minh Khôi",
     status: "Đang hoạt động",
     duration: "11/03/2023 - 11/04/2024",
-  };
+  });
 
   const tabs = [
     { id: "general", label: "Thông tin chung" },
@@ -30,44 +27,91 @@ export default function ClassDetail() {
     { id: "progress", label: "Tiến trình" },
   ];
 
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdate = () => {
+    // Implement API call to update class data
+    console.log("Updating class data:", formData);
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "general":
         return (
-          <div className="grid grid-cols-2 gap-6 max-w-2xl">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-500">
-                Mã lớp
-              </label>
-              <div className="text-base">{classData.code}</div>
+          <div className="space-y-6 max-w-2xl">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-500 w-24">
+                  Khóa học
+                </label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  className="text-base flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-500 w-24">
+                  Tên lớp
+                </label>
+                <input
+                  type="text"
+                  value={formData.code}
+                  onChange={(e) => handleInputChange("code", e.target.value)}
+                  className="text-base flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-500 w-24">
+                  Duration
+                </label>
+                <input
+                  type="text"
+                  value={formData.duration}
+                  onChange={(e) =>
+                    handleInputChange("duration", e.target.value)
+                  }
+                  className="text-base flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-500 w-24">
+                  GV phụ trách
+                </label>
+                <input
+                  type="text"
+                  value={formData.instructor}
+                  onChange={(e) =>
+                    handleInputChange("instructor", e.target.value)
+                  }
+                  className="text-base flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-500 w-24">
+                  Trạng thái
+                </label>
+                <input
+                  type="text"
+                  value={formData.status}
+                  onChange={(e) => handleInputChange("status", e.target.value)}
+                  className="text-base flex-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-500">
-                Tên khóa
-              </label>
-              <div className="text-base">{classData.name}</div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-500">
-                Giảng viên
-              </label>
-              <div className="text-base">{classData.instructor}</div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-500">
-                Trạng thái
-              </label>
-              <div className="text-base">{classData.status}</div>
-            </div>
-
-            <div className="space-y-2 col-span-2">
-              <label className="text-sm font-medium text-gray-500">
-                Thời gian
-              </label>
-              <div className="text-base">{classData.duration}</div>
+            <div className="flex justify-end">
+              <CommonButton onClick={handleUpdate}>Cập nhật</CommonButton>
             </div>
           </div>
         );

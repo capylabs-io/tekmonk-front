@@ -14,14 +14,15 @@ export default function Page() {
   /**
    * UseQuery
    */
-  const { data } = useQuery({
+  const { data: classData } = useQuery({
     queryKey: ["class", activeTab],
     queryFn: async () => {
       try {
+        const now = new Date().toISOString();
         const queryString = qs.stringify({
           filters: {
-            status: {
-              $eq: activeTab,
+            endTime: {
+              [activeTab === "teaching" ? "$gt" : "$lte"]: now,
             },
           },
           populate: "*",
@@ -33,55 +34,6 @@ export default function Page() {
     },
     refetchOnWindowFocus: false,
   });
-
-  const teachingClassData = [
-    {
-      id: 1,
-      code: "1320-ADF",
-      title: "Khóa học dạy làm giàu cho trẻ nhỏ từ 7-17 tuổi",
-      students: 20,
-      maxStudents: 20,
-      sessions: 12,
-      startDate: "2024-01-15",
-      endDate: "2024-04-15",
-    },
-    {
-      id: 2,
-      code: "1321-ADF",
-      title: "Khóa học dạy AI cho trẻ nhỏ từ 7-17 tuổi",
-      students: 18,
-      maxStudents: 20,
-      sessions: 12,
-      startDate: "2024-02-01",
-      endDate: "2024-05-01",
-    },
-  ];
-
-  const completedClassData = [
-    {
-      id: 3,
-      code: "1319-ADF",
-      title: "Khóa học lập trình Python cơ bản",
-      students: 15,
-      maxStudents: 15,
-      sessions: 10,
-      startDate: "2023-10-01",
-      endDate: "2023-12-15",
-    },
-    {
-      id: 4,
-      code: "1318-ADF",
-      title: "Khóa học Scratch cho trẻ em",
-      students: 12,
-      maxStudents: 15,
-      sessions: 8,
-      startDate: "2023-11-01",
-      endDate: "2023-12-31",
-    },
-  ];
-
-  const displayedClasses =
-    activeTab === "teaching" ? teachingClassData : completedClassData;
 
   return (
     <div className="p-6 space-y-6">
@@ -119,8 +71,8 @@ export default function Page() {
 
       {/* Class Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data &&
-          data.data.map((classItem) => (
+        {classData &&
+          classData.data.map((classItem) => (
             <CommonCard
               key={classItem.id}
               onClick={() =>
@@ -133,7 +85,7 @@ export default function Page() {
               </div>
               <div className="text-gray-95 text-sm space-y-1 h-[48px] text-BodySm flex-1">
                 <p>Mã lớp: {classItem.code}</p>
-                <p>Số buổi: {classItem.classSessionCount} buổi</p>
+                <p>Số buổi: {classItem.course?.numberSession} buổi</p>
                 <p>Sĩ số: {classItem.enrollmentCount}</p>
               </div>
             </CommonCard>

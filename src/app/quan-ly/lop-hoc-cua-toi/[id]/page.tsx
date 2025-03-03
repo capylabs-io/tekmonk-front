@@ -72,12 +72,6 @@ export default function ClassDetailPage({
     refetchOnWindowFocus: false,
   });
 
-  // Mock data for sessions
-  const sessions = Array.from({ length: 12 }, (_, index) => ({
-    id: index + 1,
-    status: index < 4 ? "completed" : "upcoming",
-  }));
-
   const handleSessionClick = (sessionId: number) => {
     // Get current path and append session route
     const currentPath = window.location.pathname;
