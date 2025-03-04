@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { type ButtonHTMLAttributes, forwardRef } from "react";
 import { localKanitFont } from "@/fonts";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "primary" | "secondary";
   outlined?: boolean;
   childrenClassName?: string;
@@ -17,10 +17,10 @@ export const CommonButton = ({
   ...props
 }: ButtonProps) => {
   return (
-    <button
+    <div
       className={cn(
-        "w-full h text-lg font-medium rounded-lg duration-200",
-        "text-center flex items-center justify-center",
+        "px-4 py-2 rounded-lg duration-200 cursor-pointer text-SubheadSm",
+        "text-center flex items-center justify-center cursor-pointer",
         {
           " border-[1px] bg-[#BC4CAC] hover:bg-primary-70 text-white border-primary-70 shadow-custom-primary":
             variant === "primary",
@@ -29,17 +29,21 @@ export const CommonButton = ({
         },
         className
       )}
-      type="button"
       {...props}
     >
       <div
-        className={cn(childrenClassName, localKanitFont.className, {
-          "text-white": variant === "primary",
-          "text-primary-95": variant === "secondary",
-        })}
+        className={cn(
+          childrenClassName,
+          localKanitFont.className,
+          {
+            "text-white": variant === "primary",
+            "text-primary-95": variant === "secondary",
+          },
+          "!cursor-pointer w-full h-full flex items-center justify-center"
+        )}
       >
         {children}
       </div>
-    </button>
+    </div>
   );
 };

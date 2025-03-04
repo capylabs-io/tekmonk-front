@@ -22,6 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { ReqGetAllNews } from "@/requests/news";
 import Loading from "../loading";
+import { get } from "lodash";
 const PAGE_SIZE = 9;
 const EventContentComponent = () => {
   const router = useCustomRouter();
@@ -129,8 +130,12 @@ const EventContentComponent = () => {
                 onClick={() => handleRedirectDetail(item.id)}
               >
                 <Image
-                  alt=""
-                  src={item.thumbnail}
+                  alt={item.title || "event"}
+                  src={
+                    item.thumbnail
+                      ? item.thumbnail
+                      : "/image/event/event-pic-1.png"
+                  }
                   width={100}
                   height={220}
                   className="w-full h-[220px] object-cover rounded-t-[16px]"
@@ -145,9 +150,18 @@ const EventContentComponent = () => {
                       );
                     })}
                   </div>
-                  <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
-                    {item.title}
-                  </div>
+                  <div
+                    className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: (get(item, "title", "") || "")
+                        .replace(/<[^>]+>/g, "")
+                        .trim()
+                        .slice(0, 50)
+                        .concat(
+                          get(item, "title", "").length > 50 ? "..." : ""
+                        ),
+                    }}
+                  ></div>
                   <div className="text-BodySm text-gray-95">
                     {item.startTime}
                   </div>

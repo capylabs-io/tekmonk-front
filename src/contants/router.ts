@@ -6,4 +6,8 @@ export const ROUTE = {
   NEWS: "/tin-tuc",
   EVENTS: "/su-kien",
   HIRING: "/tuyen-dung",
+
+  //Sub Route admin
+  MY_CLASS: "/lop-hoc-cua-toi",
+  ACCOUNT: "/quan-ly-tai-khoan",
 };

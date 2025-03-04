@@ -23,6 +23,7 @@ import { useState } from "react";
 import { Banknote } from "lucide-react";
 import { ReqGetAllNews } from "@/requests/news";
 import Loading from "../loading";
+import { get } from "lodash";
 const PAGE_SIZE = 4;
 const HiringContentComponent = () => {
   const router = useCustomRouter();
@@ -130,7 +131,7 @@ const HiringContentComponent = () => {
               >
                 <Image
                   alt=""
-                  src={item.thumbnail}
+                  src={item.thumbnail ? item.thumbnail : ""}
                   width={100}
                   height={220}
                   className="w-full h-[220px] object-cover rounded-t-[16px]"
@@ -145,9 +146,18 @@ const HiringContentComponent = () => {
                       );
                     })}
                   </div>
-                  <div className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden">
-                    {item.title}
-                  </div>
+                  <div
+                    className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: (get(item, "title", "") || "")
+                        .replace(/<[^>]+>/g, "")
+                        .trim()
+                        .slice(0, 50)
+                        .concat(
+                          get(item, "title", "").length > 50 ? "..." : ""
+                        ),
+                    }}
+                  ></div>
                   <div className="text-BodySm text-gray-95 flex gap-2">
                     <Banknote className="text-gray-70" size={16} />
                     <div>Mức lương: {item.salary}</div>

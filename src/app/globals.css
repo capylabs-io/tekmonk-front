@@ -102,3 +102,40 @@
   font-style: italic; /* Tailwind italic equivalent */
   content: attr(placeholder); /* Ensure the placeholder text is displayed */
 }
+
+/* css react-date-picker */
+.react-daterange-picker__wrapper {
+  display: flex;
+  flex-grow: 0;
+  border: 1px solid red important;
+}
+
+.custom-scrollbar {
+  display: block;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(#bc4cac, #bc4cac);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+input[type="checkbox"] {
+  accent-color: #bc4cac; /* Change to any color */
+}

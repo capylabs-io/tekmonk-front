@@ -42,8 +42,6 @@ export default function Layout({
   const handleRidirectHomePage = () => {
     router.push(ROUTE.HOME);
   };
-  const events = useEvents().slice(1, 4);
-  const projects = useProjects().slice(1, 5);
 
   return (
     <section className="w-full flex min-h-screen container mx-auto">
@@ -62,31 +60,31 @@ export default function Layout({
         <div className="flex flex-col mt-4">
           <div>
             <MenuCard
-              title="Trang chủ"
+              title="Tài khoản"
               active={usePathname() === "/home"}
               iconElement={<Home size={20} />}
-              url={ROUTE.ADMIN}
+              url={ROUTE.ADMIN + ROUTE.ACCOUNT}
             />
             <MenuCard
               active={usePathname() === "/notification"}
-              title="Thông báo"
+              title="Lớp của tôi"
               iconElement={<Bell size={20} />}
-              url="/notification"
+              url={ROUTE.ADMIN + ROUTE.MY_CLASS}
             />
             <MenuCard
-              title="Nhiệm vụ"
+              title="Phê duyệt"
               active={usePathname().includes("/mission")}
               iconElement={<Goal size={20} />}
               url="/mission"
             />
             <MenuCard
-              title="Cửa hàng"
+              title="Quản lý lớp học"
               active={usePathname().includes("/shop")}
               url="/shop"
               iconElement={<ShoppingCart size={20} />}
             />
             <MenuCard
-              title="Bảng xếp hạng"
+              title="Quảng cáo"
               active={usePathname().includes("/leaderboard")}
               iconElement={<Zap size={20} />}
               url="/leaderboard"
@@ -98,10 +96,28 @@ export default function Layout({
               url={ROUTE.ADMIN + "/tin-tuc"}
             />
             <MenuCard
-              title="Hồ sơ"
+              title="Tuyển dụng"
+              active={usePathname() === "/home/profile"}
+              iconElement={<User size={20} />}
+              url={ROUTE.ADMIN + ROUTE.HIRING}
+            />
+            <MenuCard
+              title="Sự kiện"
+              active={usePathname() === "/home/profile"}
+              iconElement={<User size={20} />}
+              url={ROUTE.ADMIN + ROUTE.EVENTS}
+            />
+            <MenuCard
+              title="Thông báo"
               active={usePathname() === "/home/profile"}
               iconElement={<User size={20} />}
               url="/home/profile"
+            />
+            <MenuCard
+              title="ADMIN"
+              active={usePathname() === "/home/profile"}
+              iconElement={<User size={20} />}
+              url={ROUTE.ADMIN + "/admin"}
             />
           </div>
           <div className="grow-0 px-3 w-full">

@@ -86,7 +86,7 @@ export const Navbar = () => {
                 Tin tức
               </Link>
               <Link
-                href="/tuyen-dung"
+                href={ROUTE.HIRING}
                 className="text-sm font-medium text-gray-700 hover:text-gray-900"
               >
                 Tuyển Dụng
@@ -108,7 +108,7 @@ export const Navbar = () => {
             >
               Liên hệ
             </Link>
-            <CommonButton className="h-10 w-[111px] text-white md:block hidden">
+            <CommonButton className="h-10 text-white md:block hidden">
               <Link href={ROUTE.LOGIN} className="text-SubheadMd">
                 Đăng nhập
               </Link>

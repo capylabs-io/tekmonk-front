@@ -19,8 +19,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 const BASE_CLASS =
   "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] flex items-center justify-center";
-const BASE_INPUT_CLASS =
-  "mr-2 w-full text-lg font-normal outline-none bg-grey-50";
 export const Input = ({
   value,
   error,
@@ -53,12 +51,12 @@ export const Input = ({
           BASE_CLASS,
           error && "border-red-500 focus:border-red-500 text-sm focus:border-2",
           value &&
-          !error &&
-          "border-green-400 focus:border-green-400 focus:border-2",
-          customClassNames
+            !error &&
+            "border-green-400 focus:border-green-400 focus:border-2",
+          customClassNames // This affects the container div
         )}
       >
-        <div className="flex w-full items-center  text-base font-bold">
+        <div className="flex w-full items-center text-BodyMd">
           {isSearch && (
             <Image
               src="/image/contestentries/search-icon.png"
@@ -72,10 +70,13 @@ export const Input = ({
           <input
             type={showPassword ? "text" : type}
             lang="en-US"
+            style={{
+              outline: "none",
+              background: "transparent",
+            }}
             className={classNames(
-              BASE_INPUT_CLASS,
-              customInputClassNames,
-              "placeholder:text-BodyMd placeholder:text-gray-70"
+              "mr-2 w-full text-BodyMd bg-grey-50 placeholder:text-gray-70 placeholder:text-BodyMd",
+              customInputClassNames
             )}
             placeholder={placeholder || ""}
             value={value}

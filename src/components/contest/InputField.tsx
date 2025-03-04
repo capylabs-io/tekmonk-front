@@ -1,6 +1,5 @@
 import React, { forwardRef, useMemo } from "react";
 import { Controller } from "react-hook-form";
-import { Input } from "@/components/contest/Input";
 import "react-quill/dist/quill.snow.css";
 import dynamic from "next/dynamic";
 import { Info } from "lucide-react";
@@ -10,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { Input } from "../common/Input";
 
 type Props = {
   title: string;
@@ -83,7 +83,7 @@ export const InputField = forwardRef<
         >
           <label
             htmlFor={name}
-            className="text-SubheadSm text-primary-950 w-1/4 flex item-center gap-x-1"
+            className="text-SubheadSm text-gray-60 w-1/4 flex item-center gap-x-1"
           >
             {title}
             {isTooltip ? (
@@ -133,8 +133,8 @@ export const InputField = forwardRef<
                       type={type}
                       value={value}
                       placeholder={placeholder}
-                      customInputClassNames={`${customInputClassNames} placeholder:text-base text-[14px]`}
-                      customClassNames={`h-10 flex items-center !text-base ${customInputClassNames}`}
+                      customInputClassNames={`${customInputClassNames}`}
+                      customClassNames={`h-10 flex items-center ${customInputClassNames}`}
                     />
                   )
                 }

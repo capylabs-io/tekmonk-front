@@ -51,7 +51,7 @@ export default function Page() {
         />
         <div className="flex items-center justify-between w-full md:flex-row flex-col gap-2">
           <div className="flex items-start justify-center gap-2 ">
-            {data &&
+            {data?.tags &&
               data.tags
                 .split(",")
                 .map((tag, index) => (
@@ -99,9 +99,12 @@ export default function Page() {
               <div className="text-SubheadSm text-gray-95">Admin</div>
             </div>
           </div>
-          <div className="text-BodyMd text-gray-95">
-            <div>{data && data.content}</div>
-          </div>
+          <div
+            className="text-BodyMd text-gray-95"
+            dangerouslySetInnerHTML={{
+              __html: (data && data.content) || "",
+            }}
+          ></div>
         </div>
       </div>
       <RelatedInfo
