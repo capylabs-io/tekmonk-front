@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CommonButton } from "../common/button/CommonButton";
 import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
@@ -20,11 +20,22 @@ import { CommonTag } from "../common/CommonTag";
 import StudentTablePagination from "./student-table-pagination";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
-import tekdojoAxios from "@/requests/axios.config";
-import { BASE_URL } from "@/contants/api-url";
-import { ReqCreateEnrollment } from "@/requests/enrollment";
 import { ReqCreateClass } from "@/requests/class";
-import { ReqCreateClassSession } from "@/requests/class-session";
+import { ReqGetCourses } from "@/requests/course";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check } from "lucide-react";
 
 interface CreateClassDialogProps {
   open: boolean;
@@ -36,6 +47,13 @@ type Step = 1 | 2;
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+type Teacher = {
+  id: number;
+  username: string;
+  email: string;
+  fullName?: string;
+};
 
 export function CreateClassDialog({
   open,
@@ -51,6 +69,8 @@ export function CreateClassDialog({
   const [courseId, setCourseId] = useState("");
   const [teacherId, setTeacherId] = useState("");
   const [numberClassSession, setNumberClassSession] = useState(1);
+  const [teacherSearchQuery, setTeacherSearchQuery] = useState("");
+  const [isTeacherDropdownOpen, setIsTeacherDropdownOpen] = useState(false);
 
   //Use Store
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
@@ -84,6 +104,61 @@ export function CreateClassDialog({
     },
     refetchOnWindowFocus: false,
   });
+
+  const { data: courseList } = useQuery({
+    queryKey: ["courseList"],
+    queryFn: async () => {
+      try {
+        return await ReqGetCourses();
+      } catch (error) {
+        console.log("error when fetching course list", error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: teacherList } = useQuery({
+    queryKey: ["teacherList"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            user_role: {
+              code: {
+                $eq: "TEACHER",
+              },
+            },
+          },
+          populate: "user_role",
+          page: currentPage,
+          pageSize: itemsPerPage,
+        });
+        return await ReqGetUsers(queryString);
+      } catch (error) {
+        console.log("error when fetching teacher list", error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  // Add this useEffect to handle clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.getElementById("teacher-dropdown");
+      const input = document.getElementById("teacher-input");
+      if (
+        dropdown &&
+        input &&
+        !dropdown.contains(event.target as Node) &&
+        !input.contains(event.target as Node)
+      ) {
+        setIsTeacherDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   /**
    * Function fetching
@@ -214,7 +289,7 @@ export function CreateClassDialog({
         </DialogHeader>
 
         {step === 1 ? (
-          <div className="space-y-4 w-full">
+          <div className="space-y-4 w-full ">
             <div className="flex items-start justify-center">
               <div className="text-SubheadMd text-gray-60 w-[160px]">
                 Khóa học
@@ -225,9 +300,14 @@ export function CreateClassDialog({
                 onChange={(e) => setCourseId(e.target.value)}
               >
                 <option value="">Chọn khóa</option>
-                <option value="1">Khóa học lập trình Python</option>
-                <option value="2">Khóa học lập trình Web</option>
-                <option value="3">Khóa học lập trình Java</option>
+                {courseList?.data?.map((course) => (
+                  <option
+                    key={course.id.toString()}
+                    value={course.id.toString()}
+                  >
+                    {course.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -268,27 +348,104 @@ export function CreateClassDialog({
               />
             </div>
 
-            <div className="flex items-start justify-center ">
-              <div className="text-SubheadMd text-gray-60 w-[160px]">
+            <div className="flex items-start justify-center">
+              <div className="text-SubheadMd text-gray-60 w-[160px] cursor-pointer">
                 Giảng viên
               </div>
-              <Input
-                isSearch={true}
-                placeholder="Vũ Minh Khôi #439857"
-                type="text"
-                value={teacherId}
-                onChange={(e) => setTeacherId(e)}
-                customClassNames="flex-1 !w-[464px] border-gray-300 focus:ring-purple-500 focus:border-transparent"
-              />
-            </div>
-            <div className="max-h-[200px] overflow-auto custom-scrollbar p-2">
-              {Array.from({ length: 20 }).map((_, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <div className="w-[160px] text-SubheadMd text-gray-60">
-                    Học viên {index + 1}
+              {teacherId === "" ? (
+                <div className="flex-1 relative">
+                  <div
+                    id="teacher-input"
+                    onClick={() => setIsTeacherDropdownOpen(true)}
+                  >
+                    <Input
+                      isSearch={true}
+                      placeholder="Chọn giảng viên"
+                      type="text"
+                      value={teacherSearchQuery}
+                      onChange={(value) => {
+                        setTeacherSearchQuery(value);
+                        setIsTeacherDropdownOpen(true);
+                      }}
+                      customClassNames="flex-1 !w-[464px] border-gray-300 focus:ring-purple-500 focus:border-transparent cursor-pointer"
+                    />
                   </div>
+                  {isTeacherDropdownOpen && (
+                    <div
+                      id="teacher-dropdown"
+                      className="absolute z-50 w-[464px] bg-white shadow-lg rounded-md border mt-1"
+                    >
+                      <div className="w-full">
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {teacherList?.data?.filter((teacher) =>
+                            teacher.username
+                              .toLowerCase()
+                              .includes(teacherSearchQuery.toLowerCase())
+                          ).length === 0 ? (
+                            <div className="py-6 text-center text-sm text-gray-500">
+                              Không tìm thấy giảng viên
+                            </div>
+                          ) : (
+                            <div className="py-2">
+                              {teacherList?.data
+                                ?.filter((teacher) =>
+                                  teacher.username
+                                    .toLowerCase()
+                                    .includes(teacherSearchQuery.toLowerCase())
+                                )
+                                .map((teacher) => (
+                                  <div
+                                    key={teacher.id}
+                                    className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                    onClick={() => {
+                                      setTeacherId(teacher.id.toString());
+                                      setTeacherSearchQuery(teacher.username);
+                                      setIsTeacherDropdownOpen(false);
+                                    }}
+                                  >
+                                    <div className="flex-1">
+                                      <div className="font-medium">
+                                        {teacher.username}
+                                      </div>
+                                      <div className="text-sm text-gray-500">
+                                        {teacher.email}
+                                      </div>
+                                    </div>
+                                    {teacherId === teacher.id.toString() && (
+                                      <Check className="h-4 w-4 text-primary-600 ml-2 flex-shrink-0" />
+                                    )}
+                                  </div>
+                                ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {!teacherId && (
+                    <p className="text-sm text-red-500 mt-1">
+                      Vui lòng chọn giảng viên
+                    </p>
+                  )}
                 </div>
-              ))}
+              ) : (
+                <div className="flex items-center gap-2 w-[464px]">
+                  <div className="flex-1 p-2 bg-primary-60 rounded-md text-gray-00">
+                    {teacherList?.data?.find(
+                      (teacher) => teacher.id.toString() === teacherId
+                    )?.username || ""}
+                  </div>
+                  <button
+                    onClick={() => {
+                      setTeacherId("");
+                      setTeacherSearchQuery("");
+                    }}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    x
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -323,7 +480,7 @@ export function CreateClassDialog({
               type="text"
               placeholder="Tìm kiếm học viên"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e)}
+              onChange={(value) => setSearchQuery(value)}
               customClassNames="w-full"
               customInputClassNames="w-full"
             />

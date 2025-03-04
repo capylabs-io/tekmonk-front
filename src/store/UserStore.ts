@@ -1,5 +1,5 @@
 import tekdojoAxios from "@/requests/axios.config";
-import { postLogin, getMe, postRegister } from "@/requests/login";
+import { postLogin, getMe, ReqRegister } from "@/requests/login";
 import { Certificate, ContestGroupStage, User } from "@/types/common-types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -58,7 +58,7 @@ export const useUserStore = create<State & Actions>()(
         return response.user;
       },
       register: async (body) => {
-        const response = await postRegister(body);
+        const response = await ReqRegister(body);
         if (!response) {
           return;
         }
