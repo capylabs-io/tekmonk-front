@@ -241,7 +241,6 @@ export type Class = {
   location: string;
   createdAt: string;
   updatedAt: string;
-  status: string;
   teacher?: User;
   course?: Course;
   enrollmentCount?: number;
@@ -271,4 +270,16 @@ export type Course = {
   name: string;
   numberSession: number;
   description?: string;
+};
+
+export type ClassSessionDetail = {
+  id: number;
+  class_session?: ClassSession;
+  student?: User;
+  attendance: boolean;
+  discuss: boolean;
+  homeworkDone: boolean;
+  workSpeed: boolean;
+  createdAt: string;
+  updatedAt: string;
 };

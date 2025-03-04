@@ -1,17 +1,15 @@
 "use client";
 import StudentList from "@/components/admin/student-list";
 import { TeacherList } from "@/components/admin/teacher-list";
-import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
 import { CommonRadioCheck } from "@/components/common/CommonRadioCheck";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ROUTE } from "@/contants/router";
 import { cn } from "@/lib/utils";
+import { ReqGetClasses } from "@/requests/class";
 import { ReqGetClassSessions } from "@/requests/class-session";
 import { ReqGetEnrollments } from "@/requests/enrollment";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, PanelLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import qs from "qs";
 import { useState } from "react";
 
@@ -28,6 +26,26 @@ export default function ClassDetailPage({
   /**
    * UseQuery
    */
+  const { data: classData } = useQuery({
+    queryKey: ["class", params.id],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          filters: {
+            id: {
+              $eq: params.id,
+            },
+          },
+          populate: "*",
+        });
+        return await ReqGetClasses(queryString);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    refetchOnWindowFocus: false,
+  });
+
   const { data: classSession } = useQuery({
     queryKey: ["class-session", params.id],
     queryFn: async () => {
@@ -129,7 +147,7 @@ export default function ClassDetailPage({
         <div className="space-y-6 p-4">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {classSession &&
-              classSession.data.map((session) => (
+              classSession.data.map((session, index) => (
                 <CommonCard
                   key={session.id}
                   className={`w-[200px] h-20 p-4`}
@@ -137,13 +155,13 @@ export default function ClassDetailPage({
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-SubheadMd text-gray-95">
-                      Buổi {session.id}
+                      Buổi {index + 1}
                     </span>
                     <CommonRadioCheck onChecked={session.status === "done"} />
                   </div>
                   <div className="text-BodySm">
                     Trạng thái:{" "}
-                    {session.status === "completed"
+                    {session.status === "done"
                       ? "Đã hoàn thành"
                       : "Chưa diễn ra"}
                   </div>
@@ -163,7 +181,9 @@ export default function ClassDetailPage({
       )}
 
       {/* Teacher List Section */}
-      {activeTab === "teacher" && <TeacherList />}
+      {activeTab === "teacher" && classData && (
+        <TeacherList data={classData.data[0]} />
+      )}
     </div>
   );
 }

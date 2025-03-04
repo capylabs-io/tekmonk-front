@@ -22,20 +22,9 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { ReqCreateClass } from "@/requests/class";
 import { ReqGetCourses } from "@/requests/course";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Check } from "lucide-react";
+import { ReqCreateEnrollment } from "@/requests/enrollment";
+import { ReqCreateClassSession } from "@/requests/class-session";
 
 interface CreateClassDialogProps {
   open: boolean;
@@ -47,13 +36,6 @@ type Step = 1 | 2;
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
-
-type Teacher = {
-  id: number;
-  username: string;
-  email: string;
-  fullName?: string;
-};
 
 export function CreateClassDialog({
   open,
@@ -163,7 +145,6 @@ export function CreateClassDialog({
   /**
    * Function fetching
    */
-
   const handleCreateClass = async () => {
     if (step == 1) return;
     try {
@@ -205,10 +186,8 @@ export function CreateClassDialog({
           code: `CLASS-${Math.floor(Math.random() * 10000)}`,
           startTime,
           endTime,
-          status: "teaching",
-          // teacher: teacherId,
-          teacher: 1,
-          // course: courseId,
+          teacher: teacherId,
+          course: courseId,
         },
       };
 
@@ -217,15 +196,15 @@ export function CreateClassDialog({
       //create enrollment
       const enrollmentData = selectedStudents.map((studentId) => ({
         student: Number(studentId),
-        class: newClass.id,
+        class: newClass.data.id,
       }));
-      // await ReqCreateEnrollment(enrollmentData);
+      await ReqCreateEnrollment(enrollmentData);
 
-      // //create new Class session with numberClassSession
-      // await ReqCreateClassSession({
-      //   class: newClass.id,
-      //   numberClassSession: numberClassSession,
-      // });
+      //create new Class session with numberClassSession
+      await ReqCreateClassSession({
+        class: newClass.data.id,
+        numberClassSession: numberClassSession,
+      });
       success("Thành công", "Tạo mới lớp học thành công");
     } catch (err) {
       console.error("Error creating class:", err);
@@ -452,8 +431,8 @@ export function CreateClassDialog({
           /**
            * This is step 2 of create class and add student and teacher
            */
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2 rounded-md min-h-[48px]">
               {selectedStudents.map((selectedId) => {
                 const student = StudentList?.data?.find(
                   (s) => s.id.toString() === selectedId
@@ -461,60 +440,72 @@ export function CreateClassDialog({
                 return student ? (
                   <CommonTag
                     key={student.id}
-                    className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
+                    className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm flex items-center gap-1"
                   >
                     {student.username}
                     <button
                       onClick={() => handleStudentSelect(student.id.toString())}
-                      className="text-purple-700 hover:text-purple-900"
+                      className="text-gray-500 hover:text-gray-700 ml-1"
                     >
-                      x
+                      ×
                     </button>
                   </CommonTag>
                 ) : null;
               })}
             </div>
 
-            <Input
-              isSearch={true}
-              type="text"
-              placeholder="Tìm kiếm học viên"
-              value={searchQuery}
-              onChange={(value) => setSearchQuery(value)}
-              customClassNames="w-full"
-              customInputClassNames="w-full"
-            />
+            <div className="relative">
+              <Input
+                isSearch={true}
+                type="text"
+                placeholder="Tìm kiếm học viên"
+                value={searchQuery}
+                onChange={(value) => setSearchQuery(value)}
+                customClassNames="w-full"
+                customInputClassNames="w-full pl-8"
+              />
+            </div>
 
-            <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar px-2">
-              {filteredStudents.map((student) => (
-                <div
-                  key={student.id}
-                  className="flex items-center justify-between p-3 cursor-pointer rounded-md"
-                >
-                  <div>
-                    <div className="font-medium">{student.username}</div>
-                    <div className="text-sm text-gray-500">{student.email}</div>
+            <div className="border rounded-md overflow-hidden">
+              <div className="space-y-0 max-h-[300px] overflow-y-auto custom-scrollbar">
+                {filteredStudents.map((student) => (
+                  <div
+                    key={student.id}
+                    className="flex items-center justify-between p-3 hover:bg-primary-10 border-b last:border-b-0"
+                  >
+                    <div>
+                      <div className="font-medium text-sm text-gray-900">
+                        {student.username}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {student.email}
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={selectedStudents.includes(student.id.toString())}
+                      onChange={() =>
+                        handleStudentSelect(student.id.toString())
+                      }
+                      className="h-4 w-4 rounded cursor-pointer border-gray-300 text-purple-600 focus:ring-purple-500"
+                    />
                   </div>
-                  <input
-                    type="checkbox"
-                    checked={selectedStudents.includes(student.id.toString())}
-                    onChange={() => handleStudentSelect(student.id.toString())}
-                    className="h-5 w-5 rounded border-gray-30"
+                ))}
+              </div>
+              {StudentList && (
+                <div className="border-t bg-white">
+                  <StudentTablePagination
+                    showDetails={false}
+                    totalItems={StudentList.meta.pagination.total}
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={(page) => setCurrentPage(page)}
+                    onItemsPerPageChange={setItemPerPage}
+                    showEllipsisThreshold={7}
                   />
                 </div>
-              ))}
+              )}
             </div>
-            {StudentList && (
-              <StudentTablePagination
-                showDetails={false}
-                totalItems={StudentList.meta.pagination.total}
-                currentPage={currentPage}
-                itemsPerPage={itemsPerPage}
-                onPageChange={(page) => setCurrentPage(page)}
-                onItemsPerPageChange={setItemPerPage}
-                showEllipsisThreshold={7}
-              />
-            )}
           </div>
         )}
 

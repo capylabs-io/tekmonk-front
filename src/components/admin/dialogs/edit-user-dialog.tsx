@@ -9,14 +9,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/common/Input";
 import { Label } from "@/components/ui/label";
-import { EditingUserData } from "../types";
 import { CommonButton } from "@/components/common/button/CommonButton";
+import { User } from "@/types/common-types";
 
 interface EditUserDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  user: EditingUserData | null;
-  onUserChange: (user: EditingUserData | null) => void;
+  user: User | null;
+  onUserChange: (user: User | null) => void;
   onSubmit: () => void;
   onDeactivate: () => void;
 }
@@ -72,10 +72,10 @@ export const EditUserDialog = ({
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Tên học viên</div>
               <Input
-                id="name"
-                value={user?.name || ""}
+                id="fullName"
+                value={user?.fullName || ""}
                 onChange={(e) =>
-                  onUserChange(user ? { ...user, name: e } : null)
+                  onUserChange(user ? { ...user, fullName: e } : null)
                 }
                 type="text"
                 placeholder="Nhập thông tin"
@@ -87,11 +87,11 @@ export const EditUserDialog = ({
                 Ngày tháng năm sinh
               </div>
               <Input
-                id="dob"
+                id="dateOfBirth"
                 type="date"
-                value={user?.dob || ""}
+                value={user?.dateOfBirth || ""}
                 onChange={(e) =>
-                  onUserChange(user ? { ...user, dob: e } : null)
+                  onUserChange(user ? { ...user, dateOfBirth: e } : null)
                 }
                 placeholder="DD/MM/YYYY"
                 customClassNames="flex-1"
@@ -123,11 +123,11 @@ export const EditUserDialog = ({
                 </span>
               </div>
               <Input
-                id="parentPhone"
+                id="parentPhoneNumber"
                 type="tel"
-                value={user?.parentPhone || ""}
+                value={user?.parentPhoneNumber || ""}
                 onChange={(e) =>
-                  onUserChange(user ? { ...user, parentPhone: e } : null)
+                  onUserChange(user ? { ...user, parentPhoneNumber: e } : null)
                 }
                 placeholder="Nhập thông tin"
                 customClassNames="flex-1"

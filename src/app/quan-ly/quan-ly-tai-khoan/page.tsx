@@ -1,7 +1,7 @@
 "use client";
 
 import { AccountTypeDialog } from "@/components/account/AccountTypeDialog";
-import AccountTable from "@/components/admin/account-table";
+import { AccountTable } from "@/components/admin/account-table";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { useState } from "react";
 

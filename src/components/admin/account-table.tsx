@@ -15,64 +15,12 @@ import { EditUserDialog } from "./dialogs/edit-user-dialog";
 import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
 import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
-import { EditingUserData, User } from "./types";
 import { useQuery } from "@tanstack/react-query";
-import { ReqGetUsers } from "@/requests/user";
+import { ReqGetUsers, ReqUpdateUser } from "@/requests/user";
 import qs from "qs";
-
-class SeededRandom {
-  private seed: number;
-
-  constructor(seed: number) {
-    this.seed = seed;
-  }
-
-  next(): number {
-    this.seed = (this.seed * 16807) % 2147483647;
-    return this.seed / 2147483647;
-  }
-
-  nextInt(max: number): number {
-    return Math.floor(this.next() * max);
-  }
-}
-
-export const generateMockUsers = (): User[] => {
-  const random = new SeededRandom(12345); // Fixed seed for consistent results
-  const firstNames = ["Nguyen", "Tran", "Le", "Pham", "Hoang"];
-  const middleNames = ["Van", "Thi", "Duc", "Minh", "Hoang"];
-  const lastNames = ["A", "B", "C", "D"];
-  const statuses = ["Active", "Inactive"];
-  const users: User[] = [];
-
-  for (let i = 1; i <= 1000; i++) {
-    const firstName = firstNames[random.nextInt(firstNames.length)];
-    const middleName = middleNames[random.nextInt(middleNames.length)];
-    const lastName = lastNames[random.nextInt(lastNames.length)];
-    const fullName = `${firstName} ${middleName} ${lastName}`;
-    const username = `${firstName.toLowerCase()}${middleName.toLowerCase()}${lastName.toLowerCase()}${i}`;
-    const email = `${username}@example.com`;
-
-    // Distribute roles using seeded random
-    let role;
-    const randomValue = random.next() * 100;
-    if (randomValue < 70) role = "student";
-    else if (randomValue < 85) role = "teacher";
-    else if (randomValue < 95) role = "manager";
-    else role = "admin";
-
-    users.push({
-      id: i,
-      name: fullName,
-      username,
-      email,
-      status: statuses[random.nextInt(statuses.length)],
-      role,
-    });
-  }
-
-  return users;
-};
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { User } from "@/types/common-types";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-12">
@@ -92,20 +40,22 @@ export const AccountTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [activeTab, setActiveTab] = useState("STUDENT");
-  const [sortedUsers, setSortedUsers] = useState<User[]>([]);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [mockUsers, setMockUsers] = useState<User[]>([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<EditingUserData | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const [deactivateDialogOpen, setDeactivateDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-  /**
-   * Put all handle useQuery here
-   */
-  const { data } = useQuery({
-    queryKey: ["users", activeTab],
+  /** UseStore */
+  const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
+  const [success, error] = useSnackbarStore((state) => [
+    state.success,
+    state.error,
+  ]);
+  /** UseQuery */
+  const { data, refetch } = useQuery({
+    queryKey: ["users", activeTab, currentPage, itemsPerPage, sortOrder],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -119,6 +69,7 @@ export const AccountTable = () => {
           populate: "user_role",
           page: currentPage,
           pageSize: itemsPerPage,
+          sort: [`id:${sortOrder}`],
         });
         return await ReqGetUsers(queryString);
       } catch (error) {
@@ -136,14 +87,22 @@ export const AccountTable = () => {
     setDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (userToDelete) {
-      const updatedUsers = mockUsers.filter(
-        (user) => user.id !== userToDelete.id
-      );
-      setMockUsers(updatedUsers);
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+
+    try {
+      show();
+      // TODO: Implement delete API call here
+      // await ReqDeleteUser(userToDelete.id.toString());
+      await refetch();
+      success("Thành công", "Xóa người dùng thành công");
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      error("Lỗi", "Có lỗi xảy ra khi xóa người dùng");
+    } finally {
       setDeleteDialogOpen(false);
       setUserToDelete(null);
+      hide();
     }
   };
 
@@ -160,35 +119,74 @@ export const AccountTable = () => {
   };
 
   const handleEdit = (user: User) => {
-    setEditingUser({ ...user });
+    // Only pass the editable fields to the dialog
+    const editableUser = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      fullName: user.fullName,
+      dateOfBirth: user.dateOfBirth,
+      phoneNumber: user.phoneNumber,
+      parentName: user.parentName,
+      parentPhoneNumber: user.parentPhoneNumber,
+      studentAddress: user.studentAddress,
+      className: user.className,
+      parentEmail: user.parentEmail,
+      blocked: user.blocked,
+      user_role: user.user_role || {
+        code: activeTab,
+      },
+    };
+    setEditingUser(editableUser as User);
     setEditDialogOpen(true);
   };
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = async () => {
     if (!editingUser) return;
 
-    const updatedUsers = mockUsers.map((user) =>
-      user.id === editingUser.id ? editingUser : user
-    );
+    try {
+      show();
+      // Call the API to update the user
+      const {
+        id,
+        user_role,
+        provider,
+        password,
+        resetPasswordToken,
+        confirmationToken,
+        resetPasswordExpires,
+        createdAt,
+        updatedAt,
+        metadata,
+        skills,
+        data,
+        ...updateData
+      } = editingUser;
 
-    setMockUsers(updatedUsers);
-    setEditDialogOpen(false);
-    setEditingUser(null);
+      await ReqUpdateUser(id.toString(), {
+        data: {
+          ...updateData,
+          user_role: user_role?.code || activeTab,
+        },
+      });
+
+      // Refetch the data to get the updated list
+      await refetch();
+
+      success("Thành công", "Cập nhật thông tin người dùng thành công");
+    } catch (err) {
+      console.error("Error updating user:", err);
+      error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin người dùng");
+    } finally {
+      setEditDialogOpen(false);
+      setEditingUser(null);
+      hide();
+    }
   };
 
   const handleSort = () => {
     const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newSortOrder);
-
-    const sorted = [...sortedUsers].sort((a, b) => {
-      if (newSortOrder === "asc") {
-        return a.id - b.id;
-      } else {
-        return b.id - a.id;
-      }
-    });
-
-    setSortedUsers(sorted);
   };
 
   const getTableHeaders = () => {
@@ -231,20 +229,6 @@ export const AccountTable = () => {
         ];
     }
   };
-
-  /**
-   * UseEffect
-   */
-  useEffect(() => {
-    setMockUsers(generateMockUsers());
-  }, []);
-
-  useEffect(() => {
-    if (mockUsers.length > 0) {
-      const filtered = mockUsers.filter((user) => user.role === activeTab);
-      setSortedUsers(filtered);
-    }
-  }, [activeTab, mockUsers]);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -364,18 +348,7 @@ export const AccountTable = () => {
                       <TableCell className="text-right space-x-2">
                         <button
                           className="p-2 hover:bg-gray-100 rounded-full text-BodySm text-gray-95"
-                          onClick={() =>
-                            handleEdit({
-                              id: user.id,
-                              name: user.username, // Using username as name since it's required
-                              username: user.username,
-                              email: user.email,
-                              status: "Active", // Setting default status
-                              role:
-                                user.user_role?.code?.toLowerCase() ||
-                                "student", // Converting role code to expected format
-                            })
-                          }
+                          onClick={() => handleEdit(user)}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -395,18 +368,7 @@ export const AccountTable = () => {
                         </button>
                         <button
                           className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={() =>
-                            handleDelete({
-                              id: user.id,
-                              name: user.username, // Using username as name since it's required
-                              username: user.username,
-                              email: user.email,
-                              status: "Active", // Setting default status
-                              role:
-                                user.user_role?.code?.toLowerCase() ||
-                                "student", // Converting role code to expected format
-                            })
-                          }
+                          onClick={() => handleDelete(user)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -456,5 +418,3 @@ export const AccountTable = () => {
     </div>
   );
 };
-
-export default AccountTable;

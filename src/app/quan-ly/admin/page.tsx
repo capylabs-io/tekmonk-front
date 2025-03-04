@@ -1,6 +1,5 @@
 "use client";
 
-import { generateMockUsers } from "@/components/admin/account-table";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
@@ -38,15 +37,13 @@ const EmptyState = () => (
 export default function Admin() {
   const router = useCustomRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  /** UseStore */
+  /* UseStore */
   const [error] = useSnackbarStore((state) => [state.error]);
-  /**
-   * UseQuery
-   */
+
+  /* UseQuery */
   const { data: classes } = useQuery({
     queryKey: ["class"],
     queryFn: async () => {
@@ -59,6 +56,7 @@ export default function Admin() {
         error("Lỗi", "Không thể lấy thông tin lớp học");
       }
     },
+    refetchOnWindowFocus: false,
   });
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
@@ -68,21 +66,6 @@ export default function Admin() {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1); // Reset to first page when changing items per page
   };
-
-  const mockUsers = generateMockUsers();
-
-  // Calculate pagination indexes
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedUsers = mockUsers.slice(startIndex, endIndex);
-
-  // Sort users if needed
-  const sortedUsers = [...paginatedUsers].sort((a, b) => {
-    if (sortOrder === "asc") {
-      return a.id - b.id;
-    }
-    return b.id - a.id;
-  });
 
   return (
     <>
@@ -151,11 +134,10 @@ export default function Admin() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div
-                            className="max-w-[100px] truncate"
-                            title={item.status}
-                          >
-                            {item.status}
+                          <div className="max-w-[100px] truncate">
+                            {new Date(item.endTime) > new Date()
+                              ? "Đang diễn ra"
+                              : "Đã kết thúc"}
                           </div>
                         </TableCell>
                         <TableCell className="text-right space-x-2">

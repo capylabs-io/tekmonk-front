@@ -1,9 +1,8 @@
 "use client";
 
+import { Class } from "@/types/common-types";
 import Image from "next/image";
-export const TeacherList = () => {
-  //mock data with type User here
-
+export const TeacherList = ({ data }: { data: Class }) => {
   return (
     <div className="p-4">
       <div className="flex items-center gap-4">
@@ -15,10 +14,18 @@ export const TeacherList = () => {
           className=""
         />
         <div className="flex flex-col items-start justify-center">
-          <div className="text-SubheadLg text-gray-95">Hieu</div>
-          <div className="text-BodySm text-gray-95">D.O.B: Hieu@gmail.com</div>
-          <div className="text-BodySm text-gray-95">Mã số: 123123123</div>
-          <div className="text-BodySm text-gray-95">SĐT: 0912391231</div>
+          <div className="text-SubheadLg text-gray-95">
+            {data.teacher?.fullName}
+          </div>
+          <div className="text-BodySm text-gray-95">
+            D.O.B: {data.teacher?.email}
+          </div>
+          <div className="text-BodySm text-gray-95">
+            Mã số: {data.teacher?.id}
+          </div>
+          <div className="text-BodySm text-gray-95">
+            SĐT: {data.teacher?.phoneNumber}
+          </div>
         </div>
       </div>
     </div>
