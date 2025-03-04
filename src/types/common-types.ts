@@ -1,5 +1,3 @@
-import { BackgroundCard } from "@/components/shop/BackgroundCard";
-import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
 export type Event = {
   title: string;
   day: string;

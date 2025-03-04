@@ -26,7 +26,7 @@ const Mission: React.FC = () => {
           <TabsTrigger value="achievement">Thành tựu</TabsTrigger>
         </TabsList>
         <TabsContent value="mission" className="overflow-y-auto mt-0">
-          <div className="flex flex-wrap gap-x-14 px-8 items-start">
+          <div className="flex flex-wrap gap-6 px-[36px] py-6 items-start">
             <MissionCard
               imageUrl="/image/mission/achievement4.png"
               missionDescription="Hoàn thành 5 bài tập về nhà đúng hạn (1/5)"
@@ -59,4 +59,5 @@ const Mission: React.FC = () => {
   );
 };
 
-export default WithAuth(Mission);
+// export default WithAuth(Mission);
+export default Mission;

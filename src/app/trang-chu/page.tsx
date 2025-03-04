@@ -10,6 +10,7 @@ import { Post } from "@/components/home/Post";
 import WithAuth from "@/components/hoc/WithAuth";
 import { useRouter } from "next/navigation";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 
 const Home = () => {
   //set for contest page

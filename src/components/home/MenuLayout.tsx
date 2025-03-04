@@ -22,45 +22,45 @@ export const MenuLayout = ({ customClassName }: Props) => {
     <div className={classNames(BASE_CLASS, customClassName)}>
       <MenuCard
         title="Trang chủ"
-        active={usePathname() === "/home"}
+        active={usePathname() === "/trang-chu"}
         iconElement={<Home size={20} />}
-        url="/home"
+        url="/trang-chu"
       />
       <MenuCard
-        active={usePathname() === "/notification"}
+        active={usePathname() === "/thong-bao"}
         title="Thông báo"
         iconElement={<Bell size={20} />}
-        url="/notification"
+        url="/thong-bao"
       />
       <MenuCard
         title="Nhiệm vụ"
-        active={usePathname().includes("/mission")}
+        active={usePathname().includes("/nhiem-vu")}
         iconElement={<Goal size={20} />}
-        url="/mission"
+        url="/nhiem-vu"
       />
       <MenuCard
         title="Cửa hàng"
-        active={usePathname().includes("/shop")}
-        url="/shop"
+        active={usePathname().includes("/cua-hang")}
+        url="/cua-hang"
         iconElement={<ShoppingCart size={20} />}
       />
       <MenuCard
         title="Bảng xếp hạng"
-        active={usePathname().includes("/leaderboard")}
+        active={usePathname().includes("/bang-xep-hang")}
         iconElement={<Zap size={20} />}
-        url="/leaderboard"
+        url="/bang-xep-hang"
       />
-      <MenuCard
+      {/* <MenuCard
         title="Tin tức"
-        active={usePathname().includes("/news")}
+        active={usePathname().includes("/tin-tuc")}
         iconElement={<Newspaper size={20} />}
-        url="/news"
-      />
+        url="/tin-tuc"
+      /> */}
       <MenuCard
         title="Hồ sơ"
-        active={usePathname() === "/home/profile"}
+        active={usePathname() === "/trang-chu/ho-so"}
         iconElement={<User size={20} />}
-        url="/home/profile"
+        url="/trang-chu/ho-so"
       />
     </div>
   );
