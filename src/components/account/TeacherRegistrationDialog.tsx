@@ -1,130 +1,191 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { CommonButton } from "../common/button/CommonButton";
+import { Input } from "@/components/common/Input";
 
 interface TeacherRegistrationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: TeacherFormData) => void;
+  onRegister: (data: TeacherFormData) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
-interface TeacherFormData {
-  username: string;
-  email: string;
-  teacherName: string;
-  dateOfBirth: string;
-  phoneNumber: string;
-}
+const teacherFormSchema = z.object({
+  username: z.string().min(1, "Tên tài khoản là bắt buộc"),
+  password: z.string().optional(),
+  email: z.string().email("Email không hợp lệ").min(1, "Email là bắt buộc"),
+  fullName: z.string().min(1, "Tên giảng viên là bắt buộc"),
+  dateOfBirth: z.string().min(1, "Ngày sinh là bắt buộc"),
+  phoneNumber: z.string().optional(),
+  user_role: z.number().optional(),
+});
 
-export function TeacherRegistrationDialog({
+type TeacherFormData = z.infer<typeof teacherFormSchema>;
+
+const FormInput = ({ name, error, value, onChange, ...props }: any) => (
+  <div className="flex-1">
+    <Input
+      {...props}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      customClassNames={error ? "border-red-500" : props.customClassNames}
+    />
+    {error && <p className="text-red-500 text-sm">{error.message}</p>}
+  </div>
+);
+
+export const TeacherRegistrationDialog = ({
   open,
   onOpenChange,
-  onSubmit,
-}: TeacherRegistrationDialogProps) {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data: TeacherFormData = {
-      username: formData.get("username") as string,
-      email: formData.get("email") as string,
-      teacherName: formData.get("teacherName") as string,
-      dateOfBirth: formData.get("dateOfBirth") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
+  onRegister,
+  isSubmitting = false,
+}: TeacherRegistrationDialogProps) => {
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<TeacherFormData>({
+    resolver: zodResolver(teacherFormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      fullName: "",
+      dateOfBirth: "",
+      phoneNumber: "",
+      password: "123123", // default password
+      user_role: 2, // teacher role
+    },
+  });
+
+  const values = watch();
+
+  const handleInputChange =
+    (name: keyof TeacherFormData) => (value: string) => {
+      setValue(name, value, { shouldValidate: true });
     };
-    onSubmit(data);
+
+  const onSubmit = async (data: TeacherFormData) => {
+    await onRegister(data);
+  };
+
+  const handleClose = () => {
+    reset();
+    onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold text-center mb-4">
-            Tạo tài khoản giảng viên
+      <DialogContent className="w-[680px] bg-white">
+        <DialogHeader className="px-4">
+          <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
+            Tạo tài khoản quản trị viên
           </DialogTitle>
-          <div className="text-gray-600 text-center mb-4">
-            Vui lòng điền đầy đủ thông tin
+          <div className="text-BodyMd text-gray-60 mb-4">
+            Mật khẩu mặc định là 1 cho đến khi người dùng tự thay đổi
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 p-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="username">Tên đăng nhập</Label>
-              <Input
-                id="username"
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Tên tài khoản</div>
+              <FormInput
                 name="username"
-                placeholder="Nhập tên đăng nhập"
-                required
+                type="text"
+                placeholder="Nhập thông tin"
+                value={values.username}
+                onChange={handleInputChange("username")}
+                error={errors.username}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
+
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Email</div>
+              <FormInput
                 name="email"
                 type="email"
-                placeholder="Nhập địa chỉ email"
-                required
+                placeholder="Nhập thông tin"
+                value={values.email}
+                onChange={handleInputChange("email")}
+                error={errors.email}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="teacherName">Họ và tên giảng viên</Label>
-              <Input
-                id="teacherName"
-                name="teacherName"
-                placeholder="Nhập họ và tên giảng viên"
-                required
+
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">Tên giảng viên</div>
+              <FormInput
+                name="fullName"
+                type="text"
+                placeholder="Nhập thông tin"
+                value={values.fullName}
+                onChange={handleInputChange("fullName")}
+                error={errors.fullName}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">Ngày sinh</Label>
-              <Input
-                id="dateOfBirth"
+
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">
+                Ngày tháng năm sinh
+              </div>
+              <FormInput
                 name="dateOfBirth"
                 type="date"
-                required
+                placeholder="DD/MM/YYYY"
+                value={values.dateOfBirth}
+                onChange={handleInputChange("dateOfBirth")}
+                error={errors.dateOfBirth}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Số điện thoại</Label>
-              <Input
-                id="phoneNumber"
+
+            <div className="flex items-center gap-2">
+              <div className="w-[160px] text-SubheadMd">
+                Số điện thoại{" "}
+                <span className="text-BodyMd text-gray-60">
+                  (Không bắt buộc)
+                </span>
+              </div>
+              <FormInput
                 name="phoneNumber"
-                type="tel"
-                placeholder="Nhập số điện thoại"
-                required
+                type="text"
+                placeholder="Nhập thông tin"
+                value={values.phoneNumber}
+                onChange={handleInputChange("phoneNumber")}
+                error={errors.phoneNumber}
               />
             </div>
           </div>
 
           <div className="flex justify-between items-center mt-6 border-t pt-4">
-            <button
+            <CommonButton
               type="button"
-              className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
-              onClick={() => {
-                const form = document.querySelector("form") as HTMLFormElement;
-                if (form) form.reset();
-                onOpenChange(false);
-              }}
+              className="w-[83px] h-11"
+              variant="secondary"
+              onClick={handleClose}
             >
-              Quay lại
-            </button>
-            <button
+              Thoát
+            </CommonButton>
+            <CommonButton
               type="submit"
-              className="px-6 py-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors"
+              className="h-11 w-[139px]"
+              disabled={isSubmitting}
             >
-              Đăng ký
-            </button>
+              {isSubmitting ? "Đang xử lý..." : "Tạo tài khoản"}
+            </CommonButton>
           </div>
         </form>
       </DialogContent>
     </Dialog>
   );
-}
+};

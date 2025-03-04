@@ -150,12 +150,9 @@ export const AccountTable = () => {
   const tabs = [
     { id: "STUDENT", label: "Học viên" },
     { id: "TEACHER", label: "Giảng viên" },
-    { id: "MANAGER", label: "Quản lý lớp" },
-    { id: "ADMIN", label: "Quản trị viên" },
+    { id: "CLASSMANAGEMENT", label: "Quản lý lớp" },
+    { id: "MODERATOR", label: "Quản trị viên" },
   ];
-
-  const filteredUsers = sortedUsers.filter((user) => user.role === activeTab);
-  const totalItems = filteredUsers.length;
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
@@ -214,7 +211,7 @@ export const AccountTable = () => {
           { label: "Trạng thái" },
           { label: "Thao tác", align: "right" },
         ];
-      case "MANAGER":
+      case "CLASSMANAGEMENT":
         return [
           { label: "STT", sortable: true },
           { label: "Tên người dùng" },

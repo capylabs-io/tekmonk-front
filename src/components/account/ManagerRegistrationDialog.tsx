@@ -1,44 +1,94 @@
 "use client";
-
-import { CommonButton } from "../common/button/CommonButton";
+//it with user_role is 3
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { CommonButton } from "../common/button/CommonButton";
 import { Input } from "@/components/common/Input";
 
 interface ManagerRegistrationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: ManagerFormData) => void;
+  onRegister: (data: ManagerFormData) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
-interface ManagerFormData {
-  username: string;
-  email: string;
-  managerName: string;
-  dateOfBirth: string;
-  phoneNumber: string;
-}
+const managerFormSchema = z.object({
+  username: z.string().min(1, "Tên tài khoản là bắt buộc"),
+  password: z.string().optional(),
+  email: z.string().email("Email không hợp lệ").min(1, "Email là bắt buộc"),
+  fullName: z.string().min(1, "Tên quản lý là bắt buộc"),
+  dateOfBirth: z.string().min(1, "Ngày sinh là bắt buộc"),
+  phoneNumber: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[0-9]{10}$/.test(val),
+      "Số điện thoại phải có 10 chữ số"
+    ),
+  user_role: z.number().optional(),
+});
 
-export function ManagerRegistrationDialog({
+type ManagerFormData = z.infer<typeof managerFormSchema>;
+
+const FormInput = ({ name, error, value, onChange, ...props }: any) => (
+  <div className="flex-1">
+    <Input
+      {...props}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      customClassNames={error ? "border-red-500" : props.customClassNames}
+    />
+    {error && <p className="text-red-500 text-sm">{error.message}</p>}
+  </div>
+);
+
+export const ManagerRegistrationDialog = ({
   open,
   onOpenChange,
-  onSubmit,
-}: ManagerRegistrationDialogProps) {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data: ManagerFormData = {
-      username: formData.get("username") as string,
-      email: formData.get("email") as string,
-      managerName: formData.get("managerName") as string,
-      dateOfBirth: formData.get("dateOfBirth") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
+  onRegister,
+  isSubmitting = false,
+}: ManagerRegistrationDialogProps) => {
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<ManagerFormData>({
+    resolver: zodResolver(managerFormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      fullName: "",
+      dateOfBirth: "",
+      phoneNumber: "",
+      password: "123123", // default password
+      user_role: 3, // manager role
+    },
+  });
+
+  const values = watch();
+
+  const handleInputChange =
+    (name: keyof ManagerFormData) => (value: string) => {
+      setValue(name, value, { shouldValidate: true });
     };
-    onSubmit(data);
+
+  const onSubmit = async (data: ManagerFormData) => {
+    await onRegister(data);
+  };
+
+  const handleClose = () => {
+    reset();
+    onOpenChange(false);
   };
 
   return (
@@ -46,51 +96,62 @@ export function ManagerRegistrationDialog({
       <DialogContent className="w-[680px] bg-white">
         <DialogHeader className="px-4">
           <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
-            Đăng ký tài khoản học viên
+            Đăng ký tài khoản quản lý
           </DialogTitle>
           <div className="text-BodyMd text-gray-60 mb-4">
             Mật khẩu mặc định là 1 cho đến khi người dùng tự thay đổi
           </div>
         </DialogHeader>
 
-        <div onSubmit={handleSubmit} className="space-y-4 p-4 ">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Tên tài khoản</div>
-              <Input
-                type="text"
+              <FormInput
                 name="username"
+                type="text"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.username}
+                onChange={handleInputChange("username")}
+                error={errors.username}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Email</div>
-              <Input
+              <FormInput
                 name="email"
                 type="email"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.email}
+                onChange={handleInputChange("email")}
+                error={errors.email}
               />
             </div>
+
             <div className="flex items-center gap-2">
-              <div className="w-[160px] text-SubheadMd">Tên giảng viên</div>
-              <Input
+              <div className="w-[160px] text-SubheadMd">Tên quản lý</div>
+              <FormInput
+                name="fullName"
                 type="text"
-                name="studentName"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.fullName}
+                onChange={handleInputChange("fullName")}
+                error={errors.fullName}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">
                 Ngày tháng năm sinh
               </div>
-              <Input
+              <FormInput
                 name="dateOfBirth"
                 type="date"
                 placeholder="DD/MM/YYYY"
-                customClassNames="flex-1"
+                value={values.dateOfBirth}
+                onChange={handleInputChange("dateOfBirth")}
+                error={errors.dateOfBirth}
               />
             </div>
 
@@ -101,12 +162,13 @@ export function ManagerRegistrationDialog({
                   (Không bắt buộc)
                 </span>
               </div>
-              <Input
-                id="phoneNumber"
+              <FormInput
                 name="phoneNumber"
                 type="text"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.phoneNumber}
+                onChange={handleInputChange("phoneNumber")}
+                error={errors.phoneNumber}
               />
             </div>
           </div>
@@ -116,20 +178,20 @@ export function ManagerRegistrationDialog({
               type="button"
               className="w-[83px] h-11"
               variant="secondary"
-              onClick={() => {
-                const form = document.querySelector("form") as HTMLFormElement;
-                if (form) form.reset();
-                onOpenChange(false);
-              }}
+              onClick={handleClose}
             >
-              Quay lại
+              Thoát
             </CommonButton>
-            <CommonButton type="submit" className="h-11 w-[139px]">
-              Đăng ký
+            <CommonButton
+              type="submit"
+              className="h-11 w-[139px]"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Đang xử lý..." : "Đăng ký"}
             </CommonButton>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
-}
+};

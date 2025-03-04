@@ -16,6 +16,7 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
   onChange?: (value: any) => void;
   onBlur?: () => void;
   onSearch?: () => void;
+  readOnly?: boolean;
 }
 const BASE_CLASS =
   "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 outline-none min-h-[48px] flex items-center justify-center";
@@ -30,6 +31,7 @@ export const Input = ({
   isSearch = false,
   customInputClassNames,
   customClassNames,
+  readOnly = false,
   onSearch,
   ...props
 }: Props) => {
@@ -83,6 +85,7 @@ export const Input = ({
             name={name}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
+            readOnly={readOnly}
             {...props}
           />
           {type === "password" && (

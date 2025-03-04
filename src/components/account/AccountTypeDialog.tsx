@@ -8,11 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import {
-  GraduationCap,
-  Users,
-  UserCog,
-  Settings,
-  ArrowRight,
+  ArrowRight
 } from "lucide-react";
 import { useState } from "react";
 import { StudentRegistrationDialog } from "./StudentRegistrationDialog";
@@ -21,6 +17,11 @@ import { ManagerRegistrationDialog } from "./ManagerRegistrationDialog";
 import { AdminRegistrationDialog } from "./AdminRegistrationDialog";
 import Image from "next/image";
 import { CommonButton } from "../common/button/CommonButton";
+import { ReqRegister } from "@/requests/login";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { HandleReturnMessgaeErrorAxios } from "@/requests/return-message-error";
+
 type AccountType = {
   id: string;
   title: string;
@@ -87,16 +88,24 @@ interface AccountTypeDialogProps {
   onSelect: (accountType: string) => void;
 }
 
-export function AccountTypeDialog({
+export const AccountTypeDialog = ({
   open,
   onOpenChange,
   onSelect,
-}: AccountTypeDialogProps) {
+}: AccountTypeDialogProps) => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [showStudentForm, setShowStudentForm] = useState(false);
   const [showTeacherForm, setShowTeacherForm] = useState(false);
   const [showManagerForm, setShowManagerForm] = useState(false);
   const [showAdminForm, setShowAdminForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Store hooks
+  const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
+  const [success, error] = useSnackbarStore((state) => [
+    state.success,
+    state.error,
+  ]);
 
   const handleTypeSelect = (typeId: string) => {
     setSelectedType(typeId);
@@ -114,14 +123,33 @@ export function AccountTypeDialog({
     }
   };
 
-  const handleManagerFormSubmit = (data: any) => {
-    onSelect("manager");
-    onOpenChange(false);
-  };
-
-  const handleAdminFormSubmit = (data: any) => {
-    onSelect("admin");
-    onOpenChange(false);
+  const handleRegister = async (data: any) => {
+    try {
+      setIsSubmitting(true);
+      show();
+      await ReqRegister(data);
+      success(
+        "Thành công",
+        `Đăng ký tài khoản ${
+          data.user_role === 1
+            ? "học viên"
+            : data.user_role === 2
+            ? "giảng viên"
+            : data.user_role === 3
+            ? "quản lý"
+            : "quản trị viên"
+        } thành công`
+      );
+      onSelect(selectedType!);
+      onOpenChange(false);
+    } catch (err) {
+      console.error("Error submitting form:", err);
+      const message = await HandleReturnMessgaeErrorAxios(err);
+      error("Lỗi", message);
+    } finally {
+      setIsSubmitting(false);
+      hide();
+    }
   };
 
   if (showManagerForm) {
@@ -135,7 +163,8 @@ export function AccountTypeDialog({
           }
           onOpenChange(true);
         }}
-        onSubmit={handleManagerFormSubmit}
+        onRegister={handleRegister}
+        isSubmitting={isSubmitting}
       />
     );
   }
@@ -151,15 +180,11 @@ export function AccountTypeDialog({
           }
           onOpenChange(true);
         }}
-        onSubmit={handleAdminFormSubmit}
+        onRegister={handleRegister}
+        isSubmitting={isSubmitting}
       />
     );
   }
-
-  const handleTeacherFormSubmit = (data: any) => {
-    onSelect("teacher");
-    onOpenChange(false);
-  };
 
   if (showTeacherForm) {
     return (
@@ -172,7 +197,8 @@ export function AccountTypeDialog({
           }
           onOpenChange(true);
         }}
-        onSubmit={handleTeacherFormSubmit}
+        onRegister={handleRegister}
+        isSubmitting={isSubmitting}
       />
     );
   }
@@ -188,10 +214,8 @@ export function AccountTypeDialog({
           }
           onOpenChange(true);
         }}
-        onSubmit={(data: any) => {
-          onSelect("student");
-          onOpenChange(false);
-        }}
+        onRegister={handleRegister}
+        isSubmitting={isSubmitting}
       />
     );
   }

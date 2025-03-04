@@ -5,13 +5,13 @@ export const HandleReturnMessgaeErrorAxios = (error: any) => {
   if (error.response) {
     const { data } = error.response;
     if (data.error.message == "Username") {
-      return "username";
+      return "Tài khoản đã tồn tại trong hệ thống";
     }
     if (data.error.message == "Email") {
-      return "email";
+      return "Email đã tồn tại trong hệ thống";
     }
     if (data.error.message == "unknown") {
-      return "unknown";
+      return "Lỗi không xác định";
     }
     return "Tài khoản hoặc email đã tồn tại";
   } else if (error.request) {
@@ -34,4 +34,4 @@ export const HandleReturnMessgaeErrorLogin = (error: any) => {
   } else {
     return "Lỗi không xác định";
   }
-}
+};

@@ -8,24 +8,17 @@ type LoginBody = {
     name: string;
   };
 };
-const isFinalContest = process.env.NEXT_PUBLIC_IS_FINAL_CONTEST || "false";
 // set up axios interceptor
 export const postLogin = async (body: LoginBody) => {
-  if (isFinalContest == "true") {
-    const response = await tekdojoAxios.post(
-      `${BASE_URL}/custom-auth/login`,
-      body
-    );
-    return response.data;
-  } else {
-    const response = await tekdojoAxios.post(`${BASE_URL}/auth/local`, body);
-
-    return response.data;
-  }
-};
-export const postRegister = async (body: LoginBody) => {
   const response = await tekdojoAxios.post(
-    `${BASE_URL}/auth/local/register`,
+    `${BASE_URL}/custom-auth/login`,
+    body
+  );
+  return response.data;
+};
+export const ReqRegister = async (body: any) => {
+  const response = await tekdojoAxios.post(
+    `${BASE_URL}/custom-auth/register`,
     body
   );
   return response.data;

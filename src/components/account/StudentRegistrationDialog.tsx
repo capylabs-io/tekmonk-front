@@ -1,47 +1,96 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { CommonButton } from "../common/button/CommonButton";
 import { Input } from "@/components/common/Input";
 
 interface StudentRegistrationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: StudentFormData) => void;
+  onRegister: (data: StudentFormData) => Promise<void>;
+  isSubmitting?: boolean;
 }
 
-interface StudentFormData {
-  username: string;
-  email: string;
-  studentName: string;
-  dateOfBirth: string;
-  parentName: string;
-  phoneNumber: string;
-}
+const studentFormSchema = z.object({
+  username: z.string().min(1, "Tên tài khoản là bắt buộc"),
+  password: z.string().optional(),
+  email: z.string().email("Email không hợp lệ").min(1, "Email là bắt buộc"),
+  fullName: z.string().min(1, "Tên học viên là bắt buộc"),
+  dateOfBirth: z.string().min(1, "Ngày sinh là bắt buộc"),
+  parentName: z.string().optional(),
+  phoneNumber: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[0-9]{10}$/.test(val),
+      "Số điện thoại phải có 10 chữ số"
+    ),
+  user_role: z.number().optional(),
+});
 
-export function StudentRegistrationDialog({
+type StudentFormData = z.infer<typeof studentFormSchema>;
+
+const FormInput = ({ name, error, value, onChange, ...props }: any) => (
+  <div className="flex-1">
+    <Input
+      {...props}
+      name={name}
+      value={value || ""}
+      onChange={onChange}
+      customClassNames={error ? "border-red-500" : props.customClassNames}
+    />
+    {error && <p className="text-red-500 text-sm">{error.message}</p>}
+  </div>
+);
+
+export const StudentRegistrationDialog = ({
   open,
   onOpenChange,
-  onSubmit,
-}: StudentRegistrationDialogProps) {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data: StudentFormData = {
-      username: formData.get("username") as string,
-      email: formData.get("email") as string,
-      studentName: formData.get("studentName") as string,
-      dateOfBirth: formData.get("dateOfBirth") as string,
-      parentName: formData.get("parentName") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
+  onRegister,
+  isSubmitting = false,
+}: StudentRegistrationDialogProps) => {
+  const {
+    handleSubmit,
+    reset,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<StudentFormData>({
+    resolver: zodResolver(studentFormSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      fullName: "",
+      dateOfBirth: "",
+      parentName: "",
+      phoneNumber: "",
+      password: "123123", // default password
+      user_role: 1, // student role
+    },
+  });
+
+  const values = watch();
+
+  const handleInputChange =
+    (name: keyof StudentFormData) => (value: string) => {
+      setValue(name, value, { shouldValidate: true });
     };
-    onSubmit(data);
+
+  const onSubmit = async (data: StudentFormData) => {
+    await onRegister(data);
+  };
+
+  const handleClose = () => {
+    reset();
+    onOpenChange(false);
   };
 
   return (
@@ -56,46 +105,58 @@ export function StudentRegistrationDialog({
           </div>
         </DialogHeader>
 
-        <div onSubmit={handleSubmit} className="space-y-4 p-4 ">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 p-4">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Tên tài khoản</div>
-              <Input
-                type="text"
+              <FormInput
                 name="username"
+                type="text"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.username}
+                onChange={handleInputChange("username")}
+                error={errors.username}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Email</div>
-              <Input
+              <FormInput
                 name="email"
                 type="email"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.email}
+                onChange={handleInputChange("email")}
+                error={errors.email}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">Tên học viên</div>
-              <Input
+              <FormInput
+                name="fullName"
                 type="text"
-                name="studentName"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.fullName}
+                onChange={handleInputChange("fullName")}
+                error={errors.fullName}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">
                 Ngày tháng năm sinh
               </div>
-              <Input
+              <FormInput
                 name="dateOfBirth"
                 type="date"
                 placeholder="DD/MM/YYYY"
-                customClassNames="flex-1"
+                value={values.dateOfBirth}
+                onChange={handleInputChange("dateOfBirth")}
+                error={errors.dateOfBirth}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">
                 Tên phụ huynh đại diện{" "}
@@ -103,14 +164,16 @@ export function StudentRegistrationDialog({
                   (Không bắt buộc)
                 </span>
               </div>
-              <Input
-                type="text"
-                id="parentName"
+              <FormInput
                 name="parentName"
+                type="text"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.parentName}
+                onChange={handleInputChange("parentName")}
+                error={errors.parentName}
               />
             </div>
+
             <div className="flex items-center gap-2">
               <div className="w-[160px] text-SubheadMd">
                 Số điện thoại{" "}
@@ -118,12 +181,13 @@ export function StudentRegistrationDialog({
                   (Không bắt buộc)
                 </span>
               </div>
-              <Input
-                id="phoneNumber"
+              <FormInput
                 name="phoneNumber"
                 type="text"
                 placeholder="Nhập thông tin"
-                customClassNames="flex-1"
+                value={values.phoneNumber}
+                onChange={handleInputChange("phoneNumber")}
+                error={errors.phoneNumber}
               />
             </div>
           </div>
@@ -133,20 +197,20 @@ export function StudentRegistrationDialog({
               type="button"
               className="w-[83px] h-11"
               variant="secondary"
-              onClick={() => {
-                const form = document.querySelector("form") as HTMLFormElement;
-                if (form) form.reset();
-                onOpenChange(false);
-              }}
+              onClick={handleClose}
             >
-              Quay lại
+              Thoát
             </CommonButton>
-            <CommonButton type="submit" className="h-11 w-[139px]">
-              Đăng ký
+            <CommonButton
+              type="submit"
+              className="h-11 w-[139px]"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Đang xử lý..." : "Đăng ký"}
             </CommonButton>
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );
-}
+};

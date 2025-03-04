@@ -267,6 +267,7 @@ export type EnRollment = {
 };
 
 export type Course = {
+  id: number;
   name: string;
   numberSession: number;
   description?: string;
