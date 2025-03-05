@@ -111,15 +111,17 @@ export default function Admin() {
   return (
     <>
       <div className="w-full h-full border-r border-gray-20 overflow-y-auto">
-        <div className="flex items-center gap-4 p-4 border-b">
-          <CommonCard
-            size="small"
-            className="w-8 h-8 !rounded-[6px] flex items-center justify-center"
-          >
-            <PanelLeft width={17} height={17} />
-          </CommonCard>
-          <div className="flex items-center justify-center">
-            <div className="text-SubheadLg text-gray-95">Lớp học</div>
+        <div className="flex items-center justify-between gap-4 p-4 border-b">
+          <div className="flex items-center gap-2">
+            <CommonCard
+              size="small"
+              className="w-8 h-8 !rounded-[6px] flex items-center justify-center"
+            >
+              <PanelLeft width={17} height={17} />
+            </CommonCard>
+            <div className="flex items-center justify-center">
+              <div className="text-SubheadLg text-gray-95">Lớp học</div>
+            </div>
           </div>
           <CommonButton className="ml-auto h-9" onClick={handleOpenDialog}>
             Tạo lớp

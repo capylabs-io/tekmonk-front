@@ -20,3 +20,12 @@ export const ReqUpdateUser = async (id: string, data: any) => {
 export const ReqDeleteUser = async (id: string) => {
   return await tekdojoAxios.delete(`${BASE_URL}/users/${id}`);
 };
+
+export const ReqGetClassUserRemaining = async (
+  classId: string,
+  query: string = ""
+) => {
+  return (await tekdojoAxios.get(
+    `${BASE_URL}/custom-auth/remaining-users/${classId}?${query}`
+  )) as StrapiResponse<User[]>;
+};

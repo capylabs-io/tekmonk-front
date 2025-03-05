@@ -17,3 +17,8 @@ export const ReqCreateEnrollment = async (data: any) => {
   );
   return response.data;
 };
+
+export const ReqDeleteEnrollment = async (id: number) => {
+  const response = await tekdojoAxios.delete(`${BASE_URL}/enrollments/${id}`);
+  return response.data;
+};
