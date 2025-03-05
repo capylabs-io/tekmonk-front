@@ -3,7 +3,7 @@ import { type ButtonHTMLAttributes, forwardRef } from "react";
 import { localKanitFont } from "@/fonts";
 
 interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "destructive" | 'destructiveSecondary';
   outlined?: boolean;
   childrenClassName?: string;
   children: React.ReactNode;
@@ -26,6 +26,10 @@ export const CommonButton = ({
             variant === "primary",
           " border-[2px] bg-gray-00 hover:bg-gray-10 active:bg-gray-20 text-primary-95 border-gray-20 shadow-custom-gray":
             variant === "secondary",
+          " border-[2px] bg-gray-00 hover:bg-[#FDA29B]  text-[#B42419] border-[#FDA29B] shadow-custom-destructive":
+            variant === "destructive",
+          " border-[2px] bg-[#E5473C] hover:bg-[#AD3C34]  text-gray-00 border-[#AD3C34] shadow-custom-destructive-secondary":
+            variant === "destructiveSecondary",
         },
         className
       )}
@@ -37,7 +41,10 @@ export const CommonButton = ({
           localKanitFont.className,
           {
             "text-white": variant === "primary",
+            "text-gray-00": variant === "destructiveSecondary",
             "text-primary-95": variant === "secondary",
+            "text-[#B42419]": variant === "destructive",
+
           },
           "!cursor-pointer w-full h-full flex items-center justify-center"
         )}
