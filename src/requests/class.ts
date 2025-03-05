@@ -14,3 +14,7 @@ export const ReqCreateClass = async (data: any) => {
   const response = await tekdojoAxios.post(`${BASE_URL}/classes`, data);
   return response.data;
 };
+
+export const ReqDeleteClass = async (id: number) => {
+  return await tekdojoAxios.delete(`${BASE_URL}/classes/${id}`);
+};

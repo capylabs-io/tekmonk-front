@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import StudentTablePagination from "./student-table-pagination";
-import { Pencil, Trash2 } from "lucide-react";
+import { Edit, Pencil, Trash2 } from "lucide-react";
 import { EditUserDialog } from "./dialogs/edit-user-dialog";
 import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
 import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
-import { useQuery } from "@tanstack/react-query";
-import { ReqGetUsers, ReqUpdateUser } from "@/requests/user";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { ReqGetUsers, ReqUpdateUser, ReqDeleteUser } from "@/requests/user";
 import qs from "qs";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
@@ -80,6 +80,64 @@ export const AccountTable = () => {
   });
 
   /**
+   * React Query Mutations
+   */
+  const { mutate: updateUserMutation } = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      ReqUpdateUser(id, data),
+    onSuccess: () => {
+      success("Thành công", "Cập nhật thông tin người dùng thành công");
+      refetch();
+      setEditDialogOpen(false);
+      setEditingUser(null);
+    },
+    onError: (err) => {
+      console.error("Error updating user:", err);
+      error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin người dùng");
+    },
+    onSettled: () => {
+      hide();
+    },
+  });
+
+  const { mutate: deleteUserMutation } = useMutation({
+    mutationFn: (userId: string) => ReqDeleteUser(userId),
+    onSuccess: () => {
+      success("Thành công", "Xóa người dùng thành công");
+      refetch();
+      setDeleteDialogOpen(false);
+      setUserToDelete(null);
+    },
+    onError: (err) => {
+      console.error("Error deleting user:", err);
+      error("Lỗi", "Có lỗi xảy ra khi xóa người dùng");
+    },
+    onSettled: () => {
+      hide();
+    },
+  });
+
+  const { mutate: resetPasswordMutation } = useMutation({
+    mutationFn: (userId: string) =>
+      ReqUpdateUser(userId, {
+        data: {
+          password: "1",
+        },
+      }),
+    onSuccess: () => {
+      success("Thành công", "Đặt lại mật khẩu thành công");
+      refetch();
+    },
+    onError: (err) => {
+      console.error("Error resetting password:", err);
+      error("Lỗi", "Có lỗi xảy ra khi đặt lại mật khẩu");
+    },
+    onSettled: () => {
+      hide();
+    },
+  });
+
+  /**
    * Function handler
    */
   const handleDelete = (user: User) => {
@@ -92,16 +150,19 @@ export const AccountTable = () => {
 
     try {
       show();
-      // TODO: Implement delete API call here
-      // await ReqDeleteUser(userToDelete.id.toString());
-      await refetch();
-      success("Thành công", "Xóa người dùng thành công");
+      deleteUserMutation(userToDelete.id.toString());
     } catch (err) {
-      console.error("Error deleting user:", err);
-      error("Lỗi", "Có lỗi xảy ra khi xóa người dùng");
-    } finally {
-      setDeleteDialogOpen(false);
-      setUserToDelete(null);
+      console.error("Error initiating delete:", err);
+      hide();
+    }
+  };
+
+  const handleResetPassword = (userId: number) => {
+    try {
+      show();
+      resetPasswordMutation(userId.toString());
+    } catch (err) {
+      console.error("Error initiating password reset:", err);
       hide();
     }
   };
@@ -146,7 +207,7 @@ export const AccountTable = () => {
 
     try {
       show();
-      // Call the API to update the user
+      // Prepare data for API
       const {
         id,
         user_role,
@@ -163,23 +224,18 @@ export const AccountTable = () => {
         ...updateData
       } = editingUser;
 
-      await ReqUpdateUser(id.toString(), {
+      // Call mutation
+      updateUserMutation({
+        id: id.toString(),
         data: {
-          ...updateData,
-          user_role: user_role?.code || activeTab,
+          data: {
+            ...updateData,
+            user_role: user_role?.code || activeTab,
+          },
         },
       });
-
-      // Refetch the data to get the updated list
-      await refetch();
-
-      success("Thành công", "Cập nhật thông tin người dùng thành công");
     } catch (err) {
-      console.error("Error updating user:", err);
-      error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin người dùng");
-    } finally {
-      setEditDialogOpen(false);
-      setEditingUser(null);
+      console.error("Error initiating update:", err);
       hide();
     }
   };
@@ -305,77 +361,54 @@ export const AccountTable = () => {
             </TableHeader>
             <TableBody>
               {data &&
-                data.data.map((user) => {
-                  return (
-                    <TableRow key={user.id}>
-                      <TableCell className="text-right text-BodySm text-gray-95">
-                        <div className="text-BodySm text-gray-95">
-                          {user.id}
-                        </div>
-                      </TableCell>
-                      <TableCell>
+                data.data.map((user, index) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">
+                      {(currentPage - 1) * itemsPerPage + index + 1}
+                    </TableCell>
+                    <TableCell>{user.fullName || user.username}</TableCell>
+                    <TableCell>{user.username}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
                         <div
-                          className="max-w-[200px] truncate text-BodySm text-gray-95"
-                          title={user.fullName || ""}
+                          className={`w-2 h-2 rounded-full mr-2 ${
+                            user.blocked ? "bg-red-500" : "bg-green-500"
+                          }`}
+                        ></div>
+                        <div>{user.blocked ? "Inactive" : "Active"}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right space-x-2">
+                      <button
+                        className="p-2 hover:bg-gray-100 rounded-full text-BodySm text-gray-95"
+                        onClick={() => handleEdit(user)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="lucide lucide-square-pen"
                         >
-                          {user.fullName}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[150px] truncate text-BodySm text-gray-95"
-                          title={user.username}
-                        >
-                          {user.username}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[200px] truncate text-BodySm text-gray-95"
-                          title={user.email}
-                        >
-                          {user.email}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div
-                          className="max-w-[100px] truncate text-BodySm text-gray-95"
-                          title={user.blocked ? "Đã khóa" : "Hoạt động"}
-                        >
-                          {user.blocked ? "Đã khóa" : "Hoạt động"}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right space-x-2">
-                        <button
-                          className="p-2 hover:bg-gray-100 rounded-full text-BodySm text-gray-95"
-                          onClick={() => handleEdit(user)}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            className="lucide lucide-square-pen"
-                          >
-                            <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                            <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-                          </svg>
-                        </button>
-                        <button
-                          className="p-2 hover:bg-gray-100 rounded-full"
-                          onClick={() => handleDelete(user)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                          <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
+                        </svg>
+                      </button>
+                      <button
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                        onClick={() => handleDelete(user)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </div>
@@ -398,6 +431,7 @@ export const AccountTable = () => {
         onUserChange={setEditingUser}
         onSubmit={handleEditSubmit}
         onDeactivate={() => setDeactivateDialogOpen(true)}
+        onResetPassword={handleResetPassword}
       />
 
       <DeactivateUserDialog

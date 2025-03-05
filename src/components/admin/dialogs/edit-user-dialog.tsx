@@ -11,6 +11,7 @@ import { Input } from "@/components/common/Input";
 import { Label } from "@/components/ui/label";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { User } from "@/types/common-types";
+import { useState } from "react";
 
 interface EditUserDialogProps {
   open: boolean;
@@ -19,6 +20,7 @@ interface EditUserDialogProps {
   onUserChange: (user: User | null) => void;
   onSubmit: () => void;
   onDeactivate: () => void;
+  onResetPassword: (userId: number) => void;
 }
 
 export const EditUserDialog = ({
@@ -28,7 +30,22 @@ export const EditUserDialog = ({
   onUserChange,
   onSubmit,
   onDeactivate,
+  onResetPassword,
 }: EditUserDialogProps) => {
+  const [resetPasswordConfirmOpen, setResetPasswordConfirmOpen] =
+    useState(false);
+
+  const handleResetPasswordClick = () => {
+    setResetPasswordConfirmOpen(true);
+  };
+
+  const handleConfirmResetPassword = () => {
+    if (user) {
+      onResetPassword(user.id);
+      setResetPasswordConfirmOpen(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[680px] bg-white">
@@ -153,7 +170,7 @@ export const EditUserDialog = ({
               </CommonButton>
               <CommonButton
                 variant="secondary"
-                onClick={() => console.log("Reset password")}
+                onClick={handleResetPasswordClick}
                 className="h-11"
               >
                 Đặt lại mật khẩu
@@ -164,6 +181,39 @@ export const EditUserDialog = ({
             </div>
           </div>
         </div>
+
+        {resetPasswordConfirmOpen && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+              <h3 className="text-lg font-semibold mb-2">Đặt lại mật khẩu</h3>
+              <p className="mb-4">
+                Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản{" "}
+                <span className="font-semibold">
+                  {user?.fullName || user?.username}
+                </span>
+                ?
+              </p>
+              <p className="mb-6">
+                Mật khẩu mới sẽ được đặt thành{" "}
+                <span className="font-semibold">1</span>.
+              </p>
+              <div className="flex justify-end gap-2">
+                <CommonButton
+                  variant="secondary"
+                  onClick={() => setResetPasswordConfirmOpen(false)}
+                >
+                  Hủy
+                </CommonButton>
+                <CommonButton
+                  variant="primary"
+                  onClick={handleConfirmResetPassword}
+                >
+                  Xác nhận
+                </CommonButton>
+              </div>
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

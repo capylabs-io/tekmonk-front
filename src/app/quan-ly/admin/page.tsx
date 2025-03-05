@@ -1,11 +1,10 @@
 "use client";
 
+import { CreateClassDialog } from "@/components/admin/CreateClassDialog";
+import { DeleteClassDialog } from "@/components/admin/dialogs/delete-class-dialog";
+import StudentTablePagination from "@/components/admin/student-table-pagination";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { Edit, PanelLeft, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { CreateClassDialog } from "@/components/admin/CreateClassDialog";
 import {
   Table,
   TableBody,
@@ -14,11 +13,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import StudentTablePagination from "@/components/admin/student-table-pagination";
-import { useQuery } from "@tanstack/react-query";
+import { ReqDeleteClass, ReqGetClasses } from "@/requests/class";
+import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { Class } from "@/types/common-types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Edit, PanelLeft, Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import qs from "qs";
-import { ReqGetClasses } from "@/requests/class";
+import { useState } from "react";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-12">
@@ -35,16 +38,22 @@ const EmptyState = () => (
 );
 
 export default function Admin() {
-  const router = useCustomRouter();
+  const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [classToDelete, setClassToDelete] = useState<Class | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   /* UseStore */
-  const [error] = useSnackbarStore((state) => [state.error]);
+  const [error, success] = useSnackbarStore((state) => [
+    state.error,
+    state.success,
+  ]);
+  const { show, hide } = useLoadingStore();
 
   /* UseQuery */
-  const { data: classes } = useQuery({
+  const { data: classes, refetch } = useQuery({
     queryKey: ["class"],
     queryFn: async () => {
       try {
@@ -58,13 +67,45 @@ export default function Admin() {
     },
     refetchOnWindowFocus: false,
   });
+
+  const { mutate: deleteClassMutation, isPending: isDeleting } = useMutation({
+    mutationFn: (id: number) => {
+      return ReqDeleteClass(id);
+    },
+    onSuccess: () => {
+      success("Thành công", "Đã xóa lớp học thành công");
+      refetch();
+    },
+    onError: (err) => {
+      console.error("Error deleting class:", err);
+      error("Lỗi", "Có lỗi xảy ra khi xóa lớp học");
+    },
+    onSettled: () => {
+      hide();
+      setDeleteDialogOpen(false);
+      setClassToDelete(null);
+    },
+  });
+
   const handleOpenDialog = () => {
     setIsDialogOpen(true);
   };
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1); // Reset to first page when changing items per page
+    setCurrentPage(1);
+  };
+
+  const handleDeleteClass = (classData: Class) => {
+    setClassToDelete(classData);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!classToDelete) return;
+
+    show();
+    deleteClassMutation(classToDelete.id);
   };
 
   return (
@@ -103,11 +144,7 @@ export default function Admin() {
                 <TableBody className="text-BodySm">
                   {classes &&
                     classes.data.map((item) => (
-                      <TableRow
-                        key={item.id}
-                        className="cursor-pointer"
-                        onClick={() => router.push(`/quan-ly/admin/${item.id}`)}
-                      >
+                      <TableRow key={item.id} className="cursor-pointer">
                         <TableCell className="text-right">{item.id}</TableCell>
                         <TableCell>
                           <div
@@ -141,24 +178,22 @@ export default function Admin() {
                           </div>
                         </TableCell>
                         <TableCell className="text-right space-x-2">
-                          <button
-                            className="p-2 hover:bg-gray-100 rounded-full"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Add edit handler here
-                            }}
-                          >
-                            <Edit className="h-4 w-4" color="#7C6C80" />
-                          </button>
-                          <button
-                            className="p-2 hover:bg-gray-100 rounded-full"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Add delete handler here
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" color="#7C6C80" />
-                          </button>
+                          <div className="flex justify-end gap-2">
+                            <button
+                              className="p-2 hover:bg-gray-100 rounded-full"
+                              onClick={() =>
+                                router.push(`/quan-ly/admin/${item.id}`)
+                              }
+                            >
+                              <Edit className="h-4 w-4" />
+                            </button>
+                            <button
+                              className="p-2 hover:bg-gray-100 rounded-full"
+                              onClick={() => handleDeleteClass(item)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -179,6 +214,14 @@ export default function Admin() {
       </div>
 
       <CreateClassDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+
+      <DeleteClassDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        classData={classToDelete}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+      />
     </>
   );
 }

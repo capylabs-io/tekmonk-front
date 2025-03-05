@@ -16,3 +16,7 @@ export const ReqUpdateUser = async (id: string, data: any) => {
   const res = await tekdojoAxios.put(`${BASE_URL}/users/${id}`, data);
   return res.data;
 };
+
+export const ReqDeleteUser = async (id: string) => {
+  return await tekdojoAxios.delete(`${BASE_URL}/users/${id}`);
+};

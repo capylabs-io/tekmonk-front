@@ -41,11 +41,7 @@ export const DeactivateUserDialog = ({
             >
               Thoát
             </CommonButton>
-            <CommonButton
-              variant="secondary"
-              onClick={onConfirm}
-              className="w-[149px] h-12"
-            >
+            <CommonButton onClick={onConfirm} className="w-[149px] h-12">
               Vô hiệu hóa
             </CommonButton>
           </div>
