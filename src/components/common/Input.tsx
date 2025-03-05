@@ -88,11 +88,11 @@ export const Input = ({
             readOnly={readOnly}
             {...props}
           />
-          {type === "password" && (
+          {/* {type === "password" && (
             <button type="button" onClick={handleShowPassword}>
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          )}
+          )} */}
         </div>
       </div>
       {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}

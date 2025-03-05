@@ -12,7 +12,7 @@ type Props = {
   onBlur?: () => void;
 };
 const BASE_CLASS =
-  "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 min-h-[64px] flex flex-col items-center justify-center relative text-sm";
+  "w-full rounded-xl border border-grey-300 bg-grey-50 p-3 h-[140px] flex flex-col items-center justify-center relative text-sm";
 export const InputFileUpdload = ({
   value,
   error,
@@ -44,20 +44,15 @@ export const InputFileUpdload = ({
           customClassNames
         )}
       >
-        <div
-          className="rounded-full p-8 flex items-center justify-center relative bg-primary-50"
-          onClick={handleClick}
-        >
-          <ImagePlus size={24} className="absolute text-gray-500" />
-        </div>
+
         <div
           className={classNames(
             BASE_CLASS,
             error &&
-              "border-red-500 focus:border-red-500 text-sm focus:border-2",
+            "border-red-500 focus:border-red-500 text-sm focus:border-2",
             value &&
-              !error &&
-              "border-green-400 focus:border-green-400 focus:border-2"
+            !error &&
+            "border-green-400 focus:border-green-400 focus:border-2"
           )}
         >
           <input
@@ -74,12 +69,15 @@ export const InputFileUpdload = ({
             className="absolute text-gray-400 text-center font-normal"
             onClick={handleClick}
           >
-            <p>
-              {" "}
-              <span className="text-primary-700">Click to upload</span> or drag
-              and drop
-            </p>
-            <p>SVG, PNG, JPG or GIF (max 400x400px)</p>
+            <div
+              className="rounded-full p-5 w-max mx-auto flex items-center justify-center relative bg-gray-20"
+            >
+              <ImagePlus size={20} className="absolute text-gray-50" />
+            </div>
+            <div className="mt-2 text-gray-70 text-SubheadSm">
+              Tải lên ảnh/video
+            </div>
+            <p className="text-gray-70 !text-xs font-normal">Hoặc kéo và thả</p>
           </div>
         </div>
       </div>

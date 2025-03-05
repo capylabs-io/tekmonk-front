@@ -28,9 +28,9 @@ export const ProfileInfoBox = ({
 
       <div>
         <div className="truncate flex gap-x-2 items-center">
-          <span className="text-base font-bold">{userName}</span> {userRank}
+          <span className="text-base font-bold">{userName}</span>
         </div>
-        <div className="text-sm text-gray-500">{specialName}</div>
+        <div className="text-sm text-gray-500 inline-flex gap-1 items-center">{userRank} {specialName}</div>
       </div>
     </div>
   );

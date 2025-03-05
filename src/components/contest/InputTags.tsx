@@ -8,10 +8,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import classNames from "classnames";
 
 type Props = {
   customClassNames?: string;
-  error?: string;
+  customInputClassNames?: string;
+  error?: string; // Added error prop
   placeholder?: string;
   name?: string;
   isRequired?: boolean;
@@ -27,6 +29,7 @@ export const InputTags = ({
   isRequired,
   name = "",
   customClassNames,
+  customInputClassNames,
   isTooltip = false,
   tooltipContent,
   value,
@@ -67,9 +70,9 @@ export const InputTags = ({
   return (
     <TooltipProvider>
       <div className="space-y-1.5 w-full">
-        <div className="relative block sm:flex w-full items-start">
+        <div className="relative block sm:flex justify-between  w-full items-start">
           <div className="w-full sm:w-1/4 flex text-primary-950 text-SubheadSm items-center">
-            <div className="text-SubheadMd">Tags</div>
+            <div className="text-SubheadMd text-gray-60">Tags</div>
             {isTooltip ? (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -92,8 +95,8 @@ export const InputTags = ({
             )}
           </div>
 
-          <div className="w-full flex-wrap">
-            <div className="min-h-[3rem] w-full rounded-xl border border-input bg-gray-00 px-3 py-2 text-sm">
+          <div className="w-full flex flex-col items-end">
+            <div className={classNames("min-h-[3rem] w-full rounded-xl border border-input bg-gray-00 px-3 py-2 text-sm", customClassNames)}>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag, index) => (
                   <div
@@ -115,8 +118,8 @@ export const InputTags = ({
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent min-w-[120px] w-full text-base font-normal outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-base"
-                  placeholder={tags.length === 0 ? "Nhập tags ..." : ""}
+                  className={classNames("flex-1 bg-transparent min-w-[120px] w-full text-base font-normal outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-base", customInputClassNames)}
+                  placeholder={tags.length > 0 ? " " : placeholder ? placeholder : "Nhập tags ..."}
                 />
               </div>
             </div>

@@ -8,7 +8,7 @@ type Props = {
   customClassName?: string;
 };
 const BASE_CLASS =
-  "rounded-xl border border-gray-200 p-4 flex justify-between text-primary-900";
+  "rounded-xl border border-gray-200 p-4 flex justify-between text-primary-900 items-center";
 export const PointCard = ({ point, customClassName }: Props) => {
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>

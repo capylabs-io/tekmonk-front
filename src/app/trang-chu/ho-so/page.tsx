@@ -278,4 +278,5 @@ const Profile: React.FC = () => {
   );
 };
 
-export default WithAuth(Profile);
+// export default WithAuth(Profile);
+export default Profile;

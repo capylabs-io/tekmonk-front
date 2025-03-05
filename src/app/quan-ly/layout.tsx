@@ -73,9 +73,9 @@ export default function Layout({
             />
             <MenuCard
               title="Phê duyệt"
-              active={usePathname().includes("/mission")}
+              active={usePathname().includes("/quan-ly/phe-duyet")}
               iconElement={<Goal size={20} />}
-              url="/mission"
+              url="/quan-ly/phe-duyet"
             />
             <MenuCard
               title="Quản lý lớp học"

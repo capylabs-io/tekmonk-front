@@ -37,83 +37,85 @@ export default function Layout({
   const projects = useProjects().slice(1, 5);
 
   return (
-    <CommonLayout
-      leftSidebar={
-        <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-r col-span-2">
-          <div className="">
-            <Image
-              src="/image/app-logo.png"
-              alt="app logo"
-              width={159}
-              height={32}
-              className="ml-1.5 xl:block hidden"
-            />
-            <Image
-              src="/Logo.png"
-              alt="app logo"
-              width={34}
-              height={32}
-              className="ml-1.5 xl:hidden block"
-            />
-          </div>
-          <div className="flex flex-col mt-4 grow">
-            <MenuLayout customClassName="" />
-            <div className="grow-0 px-3 w-full md:block hidden">
-              <div className="flex flex-col gap-y-4 mt-4">
-                <CommonButton
-                  className="w-full !rounded-3xl h-12"
-                  variant="secondary"
-                  onClick={handleRidirectAdminPage}
-                >
-                  Quản lý
-                </CommonButton>
-                <CommonButton
-                  className="w-full !rounded-3xl h-12"
-                  onClick={handleOpenModal}
-                >
-                  Đăng tải
-                </CommonButton>
+    <>
+      <CommonLayout
+        leftSidebar={
+          <div className="h-full flex flex-col px-10 py-5 border-gray-200 border-r col-span-2">
+            <div className="">
+              <Image
+                src="/image/app-logo.png"
+                alt="app logo"
+                width={159}
+                height={32}
+                className="ml-1.5 xl:block hidden"
+              />
+              <Image
+                src="/Logo.png"
+                alt="app logo"
+                width={34}
+                height={32}
+                className="ml-1.5 xl:hidden block"
+              />
+            </div>
+            <div className="flex flex-col mt-4 grow">
+              <MenuLayout customClassName="" />
+              <div className="grow-0 px-3 w-full md:block hidden">
+                <div className="flex flex-col gap-y-4 mt-4">
+                  <CommonButton
+                    className="w-full !rounded-3xl h-12"
+                    variant="secondary"
+                    onClick={handleRidirectAdminPage}
+                  >
+                    Quản lý
+                  </CommonButton>
+                  <CommonButton
+                    className="w-full !rounded-3xl h-12"
+                    onClick={handleOpenModal}
+                  >
+                    Đăng tải
+                  </CommonButton>
+                </div>
+                <UserProfileLink userName={userName} userRank={userRank} />
               </div>
-              <UserProfileLink userName={userName} userRank={userRank} />
             </div>
           </div>
-        </div>
-      }
-      mainContent={
-        <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
-      }
-      rightSidebar={
-        <>
-          <div className="h-full flex flex-col gap-y-4 px-10 py-5 border-gray-200 border-l col-span-3">
-            {!usePathname().includes("/project") ? (
-              <>
-                <PointCard point="9999" />
-                <EventList listEvent={events} />
-                <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
-              </>
-            ) : (
-              <>
-                <AuthorCard
-                  imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
-                  userName={userName}
-                  specialName="Học Bá Thanh Xuân"
-                  userRank={
-                    <span
-                      className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                    >
-                      IV
-                    </span>
-                  }
-                  likedCount="134"
-                  projectCount="5"
-                />
-                <AuthorProjectsCard projects={projects} />
-              </>
-            )}
-          </div>
-          <CreateProfileModal />
-        </>
-      }
-    />
+        }
+        mainContent={
+          <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
+        }
+        rightSidebar={
+          <>
+            <div className="h-full flex flex-col gap-y-4 px-10 py-5 border-gray-200 border-l col-span-3">
+              {!usePathname().includes("/project") ? (
+                <>
+                  <PointCard point="9999" />
+                  <EventList listEvent={events} />
+                  <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
+                </>
+              ) : (
+                <>
+                  <AuthorCard
+                    imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
+                    userName={userName}
+                    specialName="Học Bá Thanh Xuân"
+                    userRank={
+                      <span
+                        className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                      >
+                        IV
+                      </span>
+                    }
+                    likedCount="134"
+                    projectCount="5"
+                  />
+                  <AuthorProjectsCard projects={projects} />
+                </>
+              )}
+            </div>
+          </>
+        }
+      />
+      <CreateProfileModal />
+    </>
   );
 }
