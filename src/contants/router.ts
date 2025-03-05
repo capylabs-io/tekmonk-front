@@ -10,4 +10,5 @@ export const ROUTE = {
   //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",
   ACCOUNT: "/quan-ly-tai-khoan",
+  COURSES: "/khoa-hoc",
 };

@@ -108,10 +108,10 @@ export default function Layout({
               url={ROUTE.ADMIN + ROUTE.EVENTS}
             />
             <MenuCard
-              title="Thông báo"
-              active={usePathname() === "/home/profile"}
+              title="Khóa học"
+              active={usePathname() === "/home/khoa-hoc"}
               iconElement={<User size={20} />}
-              url="/home/profile"
+              url={ROUTE.ADMIN + ROUTE.COURSES}
             />
             <MenuCard
               title="ADMIN"
