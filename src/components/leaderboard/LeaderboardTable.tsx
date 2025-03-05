@@ -18,9 +18,9 @@ type Props = {
   data: LeaderboardData[];
 };
 export const LeaderboardTable = ({ data }: Props) => {
-  const handleNextPage = () => { };
-  const handlePrevPage = () => { };
-  const handlePageClick = () => { };
+  const handleNextPage = () => {};
+  const handlePrevPage = () => {};
+  const handlePageClick = () => {};
   return (
     <>
       <Table>
@@ -67,7 +67,7 @@ export const LeaderboardTable = ({ data }: Props) => {
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
-                  {row?.user.specialName}
+                  {row?.user.username}
                 </TableCell>
                 <TableCell className="text-center">9500</TableCell>
                 <TableCell className="text-center">

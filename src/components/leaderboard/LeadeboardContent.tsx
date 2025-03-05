@@ -1,8 +1,5 @@
-import React from "react";
-import Image from "next/image";
 import { LeaderboardTopUserCard } from "./LeaderboardTopUserCard";
 import { LeaderboardTable } from "./LeaderboardTable";
-import { LeaderboardData } from "@/types/common-types";
 import { useLeaderboardDatas } from "@/lib/hooks/useLeaderboardData";
 import { get } from "lodash";
 
