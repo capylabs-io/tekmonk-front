@@ -92,11 +92,6 @@ export default function Page() {
   const [totalPage, setTotalPage] = useState(10);
   const [totalDocs, setTotalDocs] = useState(100);
 
-  const tabs = [
-    { id: "verified", label: "Phê duyệt" },
-    { id: "history", label: "Lịch sử phê duyệt" },
-  ];
-
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
   const [success, error] = useSnackbarStore((state) => [
     state.success,
