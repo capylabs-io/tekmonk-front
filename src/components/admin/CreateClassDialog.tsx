@@ -11,7 +11,6 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CommonButton } from "../common/button/CommonButton";
 import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 import "react-calendar/dist/Calendar.css";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import { Input } from "../common/Input";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
@@ -26,6 +25,8 @@ import { Check } from "lucide-react";
 import { ReqCreateEnrollment } from "@/requests/enrollment";
 import { ReqCreateClassSession } from "@/requests/class-session";
 import { AddStudentToClass } from "./add-student-to-class";
+import DateRangePicker from "@/components/common/date-picker/DatePicker";
+import { Course } from "@/types/common-types";
 
 interface CreateClassDialogProps {
   open: boolean;
@@ -54,6 +55,7 @@ export function CreateClassDialog({
   const [numberClassSession, setNumberClassSession] = useState(1);
   const [teacherSearchQuery, setTeacherSearchQuery] = useState("");
   const [isTeacherDropdownOpen, setIsTeacherDropdownOpen] = useState(false);
+  const [course, setCourse] = useState<Course | null>(null);
 
   //Use Store
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
@@ -61,33 +63,7 @@ export function CreateClassDialog({
     state.success,
     state.error,
   ]);
-  /**
-   * UseQuery
-   */
-  const { data: StudentList } = useQuery({
-    queryKey: ["studentList"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          filters: {
-            user_role: {
-              code: {
-                $eq: "STUDENT",
-              },
-            },
-          },
-          populate: "user_role",
-          page: currentPage,
-          pageSize: itemsPerPage,
-        });
-        return await ReqGetUsers(queryString);
-      } catch (error) {
-        console.log("error when fetching student list", error);
-      }
-    },
-    refetchOnWindowFocus: false,
-  });
-
+  /** UseQuery*/
   const { data: courseList } = useQuery({
     queryKey: ["courseList"],
     queryFn: async () => {
@@ -165,6 +141,10 @@ export function CreateClassDialog({
         error("Lỗi", "Vui lòng chọn khóa học");
         return;
       }
+      if (!course) {
+        error("Lỗi", "Khóa học không tồn tại");
+        return;
+      }
 
       if (!teacherId) {
         error("Lỗi", "Vui lòng chọn giảng viên");
@@ -237,19 +217,16 @@ export function CreateClassDialog({
     }
   };
 
-  const handleStudentSelect = (studentId: string) => {
-    setSelectedStudents((prev) =>
-      prev.includes(studentId)
-        ? prev.filter((id) => id !== studentId)
-        : [...prev, studentId]
-    );
-  };
-
-  const filteredStudents = StudentList?.data
-    ? StudentList.data.filter((student) =>
-        student.username.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
+  useEffect(() => {
+    if (courseId) {
+      const course = courseList?.data?.find(
+        (course) => course.id.toString() === courseId
+      );
+      if (course) {
+        setCourse(course);
+      }
+    }
+  }, [courseId]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -297,9 +274,9 @@ export function CreateClassDialog({
               </div>
               <div className="flex-1 items-center gap-2">
                 <DateRangePicker
-                  onChange={onChange}
-                  value={value}
-                  className="!outline-none !border-none w-full"
+                  onChange={(dateRange) => {
+                    onChange([dateRange.startDate, dateRange.endDate]);
+                  }}
                 />
               </div>
             </div>
@@ -310,8 +287,8 @@ export function CreateClassDialog({
               </div>
               <Input
                 type="number"
-                value={numberClassSession.toString()}
-                onChange={(e) => setNumberClassSession(e)}
+                value={course?.numberSession?.toString() || ""}
+                readOnly={true}
                 customClassNames="flex-1 border-gray-300 focus:ring-purple-500 focus:border-transparent"
               />
             </div>

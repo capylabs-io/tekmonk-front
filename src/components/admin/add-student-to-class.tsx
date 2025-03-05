@@ -31,10 +31,11 @@ export const AddStudentToClass = ({
       try {
         if (classId) {
           const queryString = qs.stringify({
+            classId: classId,
             page: currentPage,
-            pageSize: itemsPerPage,
+            limit: itemsPerPage,
           });
-          return await ReqGetClassUserRemaining(classId, queryString);
+          return await ReqGetClassUserRemaining(queryString);
         }
         const queryString = qs.stringify({
           filters: {
@@ -64,11 +65,12 @@ export const AddStudentToClass = ({
         : [...prev, studentId]
     );
   };
-  const filteredStudents = studentList?.data
-    ? studentList.data.filter((student) =>
+  const filteredStudents = studentList?.data?.length
+    ? studentList.data?.filter((student) =>
         student.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : [];
+    
   return (
     <div>
       <div className="space-y-2">
@@ -128,7 +130,7 @@ export const AddStudentToClass = ({
               </div>
             ))}
           </div>
-          {studentList && (
+          {studentList?.meta && (
             <div className="border-t bg-white">
               <StudentTablePagination
                 showDetails={false}

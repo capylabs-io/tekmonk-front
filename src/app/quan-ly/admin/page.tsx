@@ -54,11 +54,15 @@ export default function Admin() {
 
   /* UseQuery */
   const { data: classes, refetch } = useQuery({
-    queryKey: ["class"],
+    queryKey: ["class", currentPage, itemsPerPage],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
           populate: "*",
+          pagination: {
+            page: currentPage,
+            pageSize: itemsPerPage,
+          },
         });
         return await ReqGetClasses(queryString);
       } catch (err) {
