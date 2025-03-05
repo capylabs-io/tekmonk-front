@@ -68,7 +68,7 @@ export const LeaderboardTable = ({ data }: Props) => {
                 </div>
               </TableCell>
               <TableCell className="text-center">
-                {row?.user.specialName}
+                {row?.user.fullName}
               </TableCell>
               <TableCell className="text-center">9500</TableCell>
               <TableCell className="text-center">

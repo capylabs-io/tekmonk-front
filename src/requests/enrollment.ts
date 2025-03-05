@@ -7,7 +7,7 @@ import { EnRollment } from "@/types/common-types";
 
 export const ReqGetEnrollments = async (query: string = "") => {
   const response = await tekdojoAxios.get(`${BASE_URL}/enrollments?${query}`);
-  return response.data as StrapiResponse<EnRollment>;
+  return response.data as StrapiResponse<EnRollment[]>;
 };
 
 export const ReqCreateEnrollment = async (data: any) => {

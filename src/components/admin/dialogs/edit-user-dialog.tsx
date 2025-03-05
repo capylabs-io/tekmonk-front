@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { User } from "@/types/common-types";
 import { useState } from "react";
+import { ResetPasswordDialog } from "./reset-password-dialog";
 
 interface EditUserDialogProps {
   open: boolean;
@@ -54,7 +55,7 @@ export const EditUserDialog = ({
             Thay đổi tài khoản học viên
           </DialogTitle>
           <div className="text-BodyMd text-gray-60 mb-4">
-            Mật khẩu mặc định là 1
+            Mật khẩu mặc định là 123123
           </div>
         </DialogHeader>
 
@@ -166,7 +167,7 @@ export const EditUserDialog = ({
                 onClick={onDeactivate}
                 className="h-11 w-[139px]"
               >
-                Vô hiệu hóa
+                {user?.blocked ? "Kích hoạt" : "Vô hiệu hóa"}
               </CommonButton>
               <CommonButton
                 variant="secondary"
@@ -183,36 +184,12 @@ export const EditUserDialog = ({
         </div>
 
         {resetPasswordConfirmOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 max-w-md w-full">
-              <h3 className="text-lg font-semibold mb-2">Đặt lại mật khẩu</h3>
-              <p className="mb-4">
-                Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản{" "}
-                <span className="font-semibold">
-                  {user?.fullName || user?.username}
-                </span>
-                ?
-              </p>
-              <p className="mb-6">
-                Mật khẩu mới sẽ được đặt thành{" "}
-                <span className="font-semibold">1</span>.
-              </p>
-              <div className="flex justify-end gap-2">
-                <CommonButton
-                  variant="secondary"
-                  onClick={() => setResetPasswordConfirmOpen(false)}
-                >
-                  Hủy
-                </CommonButton>
-                <CommonButton
-                  variant="primary"
-                  onClick={handleConfirmResetPassword}
-                >
-                  Xác nhận
-                </CommonButton>
-              </div>
-            </div>
-          </div>
+          <ResetPasswordDialog
+            open={resetPasswordConfirmOpen}
+            onOpenChange={setResetPasswordConfirmOpen}
+            user={user}
+            onConfirm={handleConfirmResetPassword}
+          />
         )}
       </DialogContent>
     </Dialog>

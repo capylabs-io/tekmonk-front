@@ -10,7 +10,7 @@ export const ReqGetClassSessions = async (query: string = "") => {
   const response = await tekdojoAxios.get(
     `${BASE_URL}/class-sessions?${query}`
   );
-  return response.data as StrapiResponse<ClassSession>;
+  return response.data as StrapiResponse<ClassSession[]>;
 };
 
 //POST METHOD

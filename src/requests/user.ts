@@ -9,7 +9,7 @@ export const ReqGetUsers = async (query: string = "") => {
   const response = await tekdojoAxios.get(
     `${BASE_URL}/custom-auth/users?${query}`
   );
-  return response.data as StrapiResponse<User>;
+  return response.data as StrapiResponse<User[]>;
 };
 
 export const ReqUpdateUser = async (id: string, data: any) => {

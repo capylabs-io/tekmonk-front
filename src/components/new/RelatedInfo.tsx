@@ -13,7 +13,7 @@ export const RelatedInfo = ({
   title,
 }: {
   type: "news" | "hiring" | "event";
-  data: TNews[];
+  data?: TNews[];
   title: string;
 }) => {
   const router = useCustomRouter();
@@ -42,41 +42,51 @@ export const RelatedInfo = ({
             .concat(title.length > 50 ? "..." : ""),
         }}
       ></div>
-      <div className="flex items-center gap-4 lg:flex-row flex-col w-full">
-        {data.map((item, index) => {
-          return (
-            <CommonCard
-              key={index}
-              size="medium"
-              className="h-[124px] w-full flex items-center justify-center"
-              onClick={() => handleRedirectToNewsDetail(item.id.toString())}
-            >
-              <Image
-                src={item.thumbnail}
-                alt=""
-                width={108}
-                height={220}
-                className="h-full object-cover rounded-l-2xl"
-              />
-              <div className="flex-1 flex flex-col gap-2 p-4">
-                <time className="text-BodySm text-gray-70">
-                  {item.startTime}
-                </time>
-                <div
-                  className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
-                  dangerouslySetInnerHTML={{
-                    __html: (get(item, "title", "") || "")
-                      .replace(/<[^>]+>/g, "")
-                      .trim()
-                      .slice(0, 40)
-                      .concat(get(item, "title", "").length > 40 ? "..." : ""),
-                  }}
-                ></div>
-              </div>
-            </CommonCard>
-          );
-        })}
-      </div>
+      {data ? (
+        <div className="flex items-center gap-4 lg:flex-row flex-col w-full">
+          {data.map((item, index) => {
+            return (
+              <CommonCard
+                key={index}
+                size="medium"
+                className="h-[124px] w-full flex items-center justify-center"
+                onClick={() => handleRedirectToNewsDetail(item.id.toString())}
+              >
+                <Image
+                  src={
+                    get(item, "thumbnail", "") == null
+                      ? ""
+                      : get(item, "thumbnail", "")
+                  }
+                  alt=""
+                  width={108}
+                  height={220}
+                  className="h-full object-cover rounded-l-2xl"
+                />
+                <div className="flex-1 flex flex-col gap-2 p-4">
+                  <time className="text-BodySm text-gray-70">
+                    {item.startTime}
+                  </time>
+                  <div
+                    className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: (get(item, "title", "") || "")
+                        .replace(/<[^>]+>/g, "")
+                        .trim()
+                        .slice(0, 40)
+                        .concat(
+                          get(item, "title", "").length > 40 ? "..." : ""
+                        ),
+                    }}
+                  ></div>
+                </div>
+              </CommonCard>
+            );
+          })}
+        </div>
+      ) : (
+        <div>Khong co du lieu</div>
+      )}
     </div>
   );
 };

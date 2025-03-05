@@ -7,7 +7,7 @@ import { Class } from "@/types/common-types";
 
 export const ReqGetClasses = async (query: string = "") => {
   const response = await tekdojoAxios.get(`${BASE_URL}/classes?${query}`);
-  return response.data as StrapiResponse<Class>;
+  return response.data as StrapiResponse<Class[]>;
 };
 
 export const ReqCreateClass = async (data: any) => {

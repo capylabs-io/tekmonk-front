@@ -16,7 +16,7 @@ export default function StudentList({
   currentPage,
   onPageChange,
 }: {
-  data: StrapiResponse<EnRollment>;
+  data: StrapiResponse<EnRollment[]>;
   currentPage: number;
   onPageChange: (page: number) => void;
 }) {

@@ -98,7 +98,7 @@ export const AdminRegistrationDialog = ({
             Đăng ký tài khoản quản trị viên
           </DialogTitle>
           <div className="text-BodyMd text-gray-60 mb-4">
-            Mật khẩu mặc định là 1 cho đến khi người dùng tự thay đổi
+            Mật khẩu mặc định là 123123 cho đến khi người dùng tự thay đổi
           </div>
         </DialogHeader>
 

@@ -133,37 +133,15 @@ const RegisterContest = () => {
       setIsSubmitted(true);
     } catch (err) {
       const message = HandleReturnMessgaeErrorAxios(err);
-      if (message === "username") {
-        error("Lỗi", "Tên tài khoản đã tồn tại");
-        setIsInvalidCodeCombat((prev) => ({
-          ...initInvalidCodeCombat,
-          username: true,
-          reload: !prev.reload,
-        }));
-        setCurrentStep(1);
-        return;
-      }
-      if (message === "email") {
-        error("Lỗi", "Email đã tồn tại");
-        setIsInvalidCodeCombat((prev) => ({
-          ...initInvalidCodeCombat,
-          email: true,
-          reload: !prev.reload,
-        }));
-        setCurrentStep(1);
-        return;
-      }
-      if (message === "unknown") {
-        error("Lỗi", "Có lỗi xảy ra");
-        setIsInvalidCodeCombat((prev) => ({
-          ...initInvalidCodeCombat,
-          other: true,
-          reload: !prev.reload,
-        }));
-        setCurrentStep(1);
-        return;
-      }
+
       error("Lỗi", message);
+      setIsInvalidCodeCombat((prev) => ({
+        ...initInvalidCodeCombat,
+        username: true,
+        reload: !prev.reload,
+      }));
+      setCurrentStep(1);
+      return;
     } finally {
       hide();
     }

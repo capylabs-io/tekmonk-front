@@ -10,16 +10,18 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { ReqGetNewsById, ReqGetRamdomNews } from "@/requests/news";
 import Loading from "@/app/loading";
+import { get } from "lodash";
 export default function Page() {
   const { id } = useParams();
-  const { data, isLoading } = useQuery({
+  const { data: news, isLoading } = useQuery({
     queryKey: ["news", id],
     queryFn: async () => {
-      return await ReqGetNewsById(id as string);
+      const res = await ReqGetNewsById(id.toString());
+      return res.data;
     },
   });
 
-  const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
+  const { data: randomNews } = useQuery({
     queryKey: ["news/random"],
     queryFn: async () => {
       try {
@@ -52,10 +54,10 @@ export default function Page() {
         </div>
         <div className="flex items-center justify-between w-full md:flex-row flex-col gap-2">
           <div className="flex items-start justify-center gap-2 ">
-            {data &&
-              data.data?.tags
+            {news?.tags &&
+              news?.tags
                 ?.split(",")
-                .map((tag, index) => (
+                .map((tag: string, index: number) => (
                   <CommonTag key={index}>{tag.trim()}</CommonTag>
                 ))}
           </div>
@@ -90,36 +92,32 @@ export default function Page() {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <div className="flex items-center text-SubheadMd text-gray-95 gap-2">
             <Clock8 className="text-gray-70" size={16} />
-            <div>{data && data.data.startTime}</div>
+            <div>{news?.startTime}</div>
           </div>
           <div className="flex items-start text-BodyMd text-gray-95 gap-2">
             <MapPin className="text-gray-70 mt-1" size={16} />
-            <div>{data && data.data.location}</div>
+            <div>{news?.location}</div>
           </div>
         </div>
         <div className="flex flex-col items-center gap-2">
-          <div className="text-HeadingMd text-gray-95">
-            {data && data.data.title}
-          </div>
+          <div className="text-HeadingMd text-gray-95">{news?.title}</div>
           <div className="flex items-center justify-between w-full">
-            <div className="text-BodySm text-gray-70">
-              {data && data.data.createdAt}
-            </div>
+            <div className="text-BodySm text-gray-70">{news?.createdAt}</div>
             <div className="flex items-center justify-center gap-1">
               <div className="text-BodySm text-gray-70">Đăng tải bởi:</div>
               <div className="text-SubheadSm text-gray-95">Admin</div>
             </div>
           </div>
           <div className="text-BodyMd text-gray-95">
-            <div>{data && data.data.content}</div>
+            <div>{news?.content}</div>
           </div>
         </div>
       </div>
-      {randomNews && (
+      {randomNews?.data && (
         <RelatedInfo
-          data={randomNews?.data}
-          title="SỰ KIỆN GẦN ĐÂY"
           type="event"
+          data={get(randomNews, "data", [])}
+          title="SỰ KIỆN GẦN ĐÂY"
         />
       )}
       <LandingFooter />

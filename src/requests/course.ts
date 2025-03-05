@@ -7,5 +7,5 @@ import { Course } from "@/types/common-types";
 
 export const ReqGetCourses = async () => {
   const response = await tekdojoAxios.get(`${BASE_URL}/courses`);
-  return response.data as StrapiResponse<Course>;
+  return response.data as StrapiResponse<Course[]>;
 };

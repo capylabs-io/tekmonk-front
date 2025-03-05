@@ -26,7 +26,7 @@ export default function Page() {
     },
   });
 
-  const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
+  const { data: randomNews } = useQuery({
     queryKey: ["news/random"],
     queryFn: async () => {
       try {

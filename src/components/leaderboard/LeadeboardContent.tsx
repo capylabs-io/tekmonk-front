@@ -18,7 +18,7 @@ export const LeadeboardContent = () => {
           specialName={get(leaderboardDatas[1]?.user, "specialName", "")}
           score={leaderboardDatas[1]?.score ?? 0}
           imageUrl={
-            leaderboardDatas[1]?.user?.imageURL ??
+            // leaderboardDatas[1]?.user?.imageURL ??
             "bg-[url('/image/leaderboard/user1.png')]"
           }
         />
@@ -28,20 +28,20 @@ export const LeadeboardContent = () => {
             leaderboardDatas[0]?.user?.username &&
             leaderboardDatas[0]?.user?.username
           }
-          specialName={leaderboardDatas[0]?.user?.specialName}
+          specialName={leaderboardDatas[0]?.user?.fullName || ""}
           score={leaderboardDatas[0]?.score}
           imageUrl={
-            leaderboardDatas[0]?.user?.imageURL ??
+            // leaderboardDatas[0]?.user?.imageURL ??
             "bg-[url('/image/leaderboard/user3.png')]"
           }
         />
         <LeaderboardTopUserCard
           rank="third"
           name={leaderboardDatas[2]?.user?.username}
-          specialName={leaderboardDatas[1]?.user?.specialName}
+          specialName={leaderboardDatas[1]?.user?.fullName || ""}
           score={leaderboardDatas[2]?.score}
           imageUrl={
-            leaderboardDatas[2]?.user?.imageURL ??
+            // leaderboardDatas[2]?.user?.imageURL ??
             "bg-[url('/image/leaderboard/user2.png')]"
           }
         />

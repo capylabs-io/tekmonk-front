@@ -31,7 +31,7 @@ export const ResetPasswordDialog = ({
             Đặt lại mật khẩu
           </DialogTitle>
         </DialogHeader>
-        <div className="text-BodyMd text-gray-95 mt-4">
+        <div className="text-BodySm  mt-4">
           <p>
             Bạn có chắc chắn muốn đặt lại mật khẩu cho tài khoản{" "}
             <span className="font-semibold">
@@ -41,7 +41,7 @@ export const ResetPasswordDialog = ({
           </p>
           <p className="mt-2">
             Mật khẩu mới sẽ được đặt thành{" "}
-            <span className="font-semibold">1</span>.
+            <span className="font-semibold">123123</span>.
           </p>
         </div>
         <DialogFooter className="items-center gap-2 mt-2">

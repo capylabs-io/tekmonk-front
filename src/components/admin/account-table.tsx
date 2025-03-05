@@ -120,9 +120,7 @@ export const AccountTable = () => {
   const { mutate: resetPasswordMutation } = useMutation({
     mutationFn: (userId: string) =>
       ReqUpdateUser(userId, {
-        data: {
-          password: "1",
-        },
+        password: "123123",
       }),
     onSuccess: () => {
       success("Thành công", "Đặt lại mật khẩu thành công");
@@ -160,9 +158,28 @@ export const AccountTable = () => {
   const handleResetPassword = (userId: number) => {
     try {
       show();
-      resetPasswordMutation(userId.toString());
+      updateUserMutation({
+        id: userId.toString(),
+        data: { password: "123123" },
+      });
     } catch (err) {
       console.error("Error initiating password reset:", err);
+      hide();
+    }
+  };
+
+  const handleDeactivate = () => {
+    try {
+      show();
+      if (!editingUser) return;
+      updateUserMutation({
+        id: editingUser.id.toString(),
+        data: { blocked: !editingUser.blocked },
+      });
+    } catch (error) {
+    } finally {
+      setDeactivateDialogOpen(false);
+      setEditDialogOpen(false);
       hide();
     }
   };
@@ -228,10 +245,7 @@ export const AccountTable = () => {
       updateUserMutation({
         id: id.toString(),
         data: {
-          data: {
-            ...updateData,
-            user_role: user_role?.code || activeTab,
-          },
+          ...updateData,
         },
       });
     } catch (err) {
@@ -359,11 +373,11 @@ export const AccountTable = () => {
                 ))}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="text-BodySm">
               {data &&
                 data.data.map((user, index) => (
                   <TableRow key={user.id}>
-                    <TableCell className="font-medium">
+                    <TableCell className="">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </TableCell>
                     <TableCell>{user.fullName || user.username}</TableCell>
@@ -371,12 +385,7 @@ export const AccountTable = () => {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>
                       <div className="flex items-center">
-                        <div
-                          className={`w-2 h-2 rounded-full mr-2 ${
-                            user.blocked ? "bg-red-500" : "bg-green-500"
-                          }`}
-                        ></div>
-                        <div>{user.blocked ? "Inactive" : "Active"}</div>
+                        <div>{user.blocked ? "Đã khóa" : "Đang hoạt động"}</div>
                       </div>
                     </TableCell>
                     <TableCell className="text-right space-x-2">
@@ -400,6 +409,7 @@ export const AccountTable = () => {
                           <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                         </svg>
                       </button>
+
                       <button
                         className="p-2 hover:bg-gray-100 rounded-full"
                         onClick={() => handleDelete(user)}
@@ -437,10 +447,8 @@ export const AccountTable = () => {
       <DeactivateUserDialog
         open={deactivateDialogOpen}
         onOpenChange={setDeactivateDialogOpen}
-        onConfirm={() => {
-          setDeactivateDialogOpen(false);
-          setEditDialogOpen(false);
-        }}
+        onConfirm={handleDeactivate}
+        isBlocked={editingUser?.blocked}
       />
 
       <DeleteUserDialog
