@@ -2,29 +2,28 @@
 
 import { CreateClassDialog } from "@/components/admin/CreateClassDialog";
 import { DeleteClassDialog } from "@/components/admin/dialogs/delete-class-dialog";
-import StudentTablePagination from "@/components/admin/student-table-pagination";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { CommonCard } from "@/components/common/CommonCard";
+import { CommonTable } from "@/components/common/CommonTable";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ReqDeleteClass, ReqGetClasses } from "@/requests/class";
+import { ReqDeleteClass } from "@/requests/class";
 import { ReqGetCourses } from "@/requests/course";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Class } from "@/types/common-types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Edit, PanelLeft, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import qs from "qs";
 import { useState } from "react";
-
+import { ColumnDef } from "@tanstack/react-table";
+import { get } from "lodash";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-12">
     <div
@@ -44,9 +43,9 @@ export default function Courses() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [classToDelete, setClassToDelete] = useState<Class | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(10);
+  const [totalDocs, setTotalDocs] = useState(100);
   /* UseStore */
   const [error, success] = useSnackbarStore((state) => [
     state.error,
@@ -90,10 +89,10 @@ export default function Courses() {
     setIsDialogOpen(true);
   };
 
-  const handleItemsPerPageChange = (newItemsPerPage: number) => {
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-  };
+  // const handleItemsPerPageChange = (newItemsPerPage: number) => {
+  //   setItemsPerPage(newItemsPerPage);
+  //   setCurrentPage(1);
+  // };
 
   const handleDeleteClass = (classData: Class) => {
     setClassToDelete(classData);
@@ -106,11 +105,90 @@ export default function Courses() {
     show();
     deleteClassMutation(classToDelete.id);
   };
+  const mockData = [
+    {
+      id: 1,
+      name: 'Khoá học dạy làm giàu cho trẻ nhỏ từ 7- 17 tuổi',
+      numberSession: 1,
+      description: 'Code Scratch',
+      code: 'A1-23',
+    },
+    {
+      id: 2,
+      name: 'Khoá học dạy làm giàu cho trẻ nhỏ từ 7- 17 tuổi',
+      numberSession: 1,
+      description: 'Robotic',
+      code: 'A1-23',
+    },
+    {
+      id: 3,
+      name: 'Khoá học dạy làm giàu cho trẻ nhỏ từ 7- 17 tuổi',
+      numberSession: 1,
+      description: 'Code Unity',
+      code: 'A1-23',
+    },
 
+  ]
+  const columns: ColumnDef<any>[] =
+    [
+      {
+        header: 'STT',
+        cell: ({ row }) => <span>{row.index + 1}</span>,
+
+      },
+      {
+        header: 'Mã',
+        cell: ({ row }) => (
+          <div >
+            {row.original.code}
+          </div>
+        ),
+      },
+      {
+        header: 'Tên khoá',
+        cell: ({ row }) => <span>{row.original.code}</span>,
+      },
+      {
+        header: 'Loại',
+        cell: ({ row }) => (
+          <span>
+            {get(row, 'original.description', '')}
+          </span>
+        ),
+      },
+      {
+        id: 'action',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex gap-2">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDialogOpen(true)
+                // Add edit handler here
+              }}
+            >
+              <Edit className="h-4 w-4" color="#7C6C80" />
+            </button>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeleteDialogOpen(true)
+                // Add edit handler here
+              }}
+            >
+              <Trash2 className="h-4 w-4" color="#7C6C80" />
+            </button>
+          </div>
+        ),
+      },
+    ]
   return (
     <>
       <div className="w-full h-full border-r border-gray-20 overflow-y-auto">
-        <div className="flex items-center justify-between gap-4 p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b w-full">
           <div className="flex items-center gap-2">
             <CommonCard
               size="small"
@@ -122,96 +200,70 @@ export default function Courses() {
               <div className="text-SubheadLg text-gray-95">Khóa học</div>
             </div>
           </div>
-          <CommonButton className="ml-auto h-9" onClick={handleOpenDialog}>
+          <CommonButton variant="primary" className="h-9 !w-max px-6" onClick={handleOpenDialog}>
             Tạo khóa học
           </CommonButton>
         </div>
-        <div className="p-4 flex-1">
-          {classes && classes.meta.pagination.total === 0 ? (
-            <EmptyState />
-          ) : (
-            <div className="rounded-md border min-w-[800px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>STT</TableHead>
-                    <TableHead>Mã</TableHead>
-                    <TableHead>Tên khóa</TableHead>
-                    <TableHead>Loại</TableHead>
-                    <TableHead className="">Thao tác</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className="text-BodySm">
-                  {classes &&
-                    classes.data.map((item) => (
-                      <TableRow key={item.id} className="cursor-pointer">
-                        <TableCell className="text-right">{item.id}</TableCell>
-                        <TableCell>
-                          <div
-                            className="max-w-[200px] truncate"
-                            title={item.code}
-                          >
-                            {item.code}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div
-                            className="max-w-[150px] truncate"
-                            title={item.name}
-                          >
-                            {item.name}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div
-                            className="max-w-[200px] truncate"
-                            title={item.description}
-                          >
-                            {item.description}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-[100px] truncate">
-                            {item.numberSession}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right space-x-2">
-                          <div className="flex justify-end gap-2">
-                            <button className="p-2 hover:bg-gray-100 rounded-full">
-                              <Edit className="h-4 w-4" />
-                            </button>
-                            <button className="p-2 hover:bg-gray-100 rounded-full">
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </div>
-        {classes && (
-          <StudentTablePagination
-            totalItems={classes.meta.pagination.total}
-            currentPage={currentPage}
-            itemsPerPage={itemsPerPage}
-            onPageChange={setCurrentPage}
-            onItemsPerPageChange={handleItemsPerPageChange}
+        <div className="p-4">
+          <CommonTable
+            data={mockData}
+            isLoading={false}
+            columns={columns}
+            page={page}
+            totalPage={totalPage}
+            totalDocs={totalDocs}
+            onPageChange={setPage}
           />
-        )}
+        </div>
       </div>
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeleteDialogOpen(false);
+          }
+        }}
+      >
+        <DialogContent className="max-w-[500px] max-h-full bg-gray-00 overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl">
+              Xoá khoá học
+            </DialogTitle>
+            <DialogDescription>
+              <div className="text-gray-95 text-BodySm">
+                Khoá học sau khi bị xoá sẽ không còn tồn tại trên hệ thống. Bạn có
+                muốn xoá khoá học này không?
+              </div>
+            </DialogDescription>
+          </DialogHeader>
 
+          <DialogFooter className="flex items-center justify-between sm:justify-between">
+            <CommonButton
+              variant="secondary"
+              className="h-[48px]"
+              childrenClassName="text-SubheadMd"
+              onClick={() => {
+                setDeleteDialogOpen(false);
+              }}
+            >
+              Thoát
+            </CommonButton>
+            <CommonButton
+              variant="primary"
+              className="h-[48px]"
+              childrenClassName="text-SubheadMd"
+              onClick={() => {
+                setDeleteDialogOpen(false);
+              }}
+            >
+              Từ chối
+            </CommonButton>
+
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <CreateClassDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
 
-      <DeleteClassDialog
-        open={deleteDialogOpen}
-        onOpenChange={setDeleteDialogOpen}
-        classData={classToDelete}
-        onConfirm={handleConfirmDelete}
-        isLoading={isDeleting}
-      />
     </>
   );
 }
