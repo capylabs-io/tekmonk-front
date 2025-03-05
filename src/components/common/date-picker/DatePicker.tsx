@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { Calendar } from "lucide-react"
-import type React from "react"
-import { useEffect, useRef, useState } from "react"
-import ReactDatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-import "./date-range-picker.css"
+import { Calendar } from "lucide-react";
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./DatePicker.css";
 
 type DateRange = {
-  startDate: Date | null
-  endDate: Date | null
-}
+  startDate: Date | null;
+  endDate: Date | null;
+};
 
 type DateRangePickerProps = {
-  onChange?: (dateRange: DateRange) => void
-  initialDateRange?: DateRange
-  initialDate?: Date
-  placeholder?: string
-  mode?: "single" | "range"
-}
+  onChange?: (dateRange: DateRange) => void;
+  initialDateRange?: DateRange;
+  initialDate?: Date;
+  placeholder?: string;
+  mode?: "single" | "range";
+};
 
 const DateRangePicker = ({
   onChange,
@@ -30,167 +30,184 @@ const DateRangePicker = ({
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: initialDate || initialDateRange?.startDate || null,
     endDate: initialDateRange?.endDate || null,
-  })
-  const [inputValue, setInputValue] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
-  const datePickerRef = useRef<ReactDatePicker>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
+  });
+  const [inputValue, setInputValue] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const datePickerRef = useRef<ReactDatePicker>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Initialize input value based on initial date range or date
   useEffect(() => {
-    if (initialDate || initialDateRange?.startDate || initialDateRange?.endDate) {
-      setInputValue(formatDateDisplay())
+    if (
+      initialDate ||
+      initialDateRange?.startDate ||
+      initialDateRange?.endDate
+    ) {
+      setInputValue(formatDateDisplay());
     } else {
-      setInputValue("")
+      setInputValue("");
     }
-  }, [initialDate, initialDateRange?.startDate, initialDateRange?.endDate])
+  }, [initialDate, initialDateRange?.startDate, initialDateRange?.endDate]);
 
   // Update input value when date range changes from calendar selection
   useEffect(() => {
     if (dateRange.startDate || dateRange.endDate) {
-      setInputValue(formatDateDisplay())
+      setInputValue(formatDateDisplay());
     }
-  }, [dateRange.startDate, dateRange.endDate])
+  }, [dateRange.startDate, dateRange.endDate]);
 
-  const handleDateChange = (dates: Date | [Date | null, Date | null] | null) => {
+  const handleDateChange = (
+    dates: Date | [Date | null, Date | null] | null
+  ) => {
     if (mode === "single" && (dates === null || !Array.isArray(dates))) {
       // Single date mode
       const newDateRange = {
         startDate: dates as Date | null,
         endDate: null,
-      }
-      setDateRange(newDateRange)
+      };
+      setDateRange(newDateRange);
 
       if (onChange) {
-        onChange(newDateRange)
+        onChange(newDateRange);
       }
     } else if (mode === "range" && Array.isArray(dates)) {
       // Range mode
-      const [start, end] = dates
-      const newDateRange = { startDate: start, endDate: end }
-      setDateRange(newDateRange)
+      const [start, end] = dates;
+      const newDateRange = { startDate: start, endDate: end };
+      setDateRange(newDateRange);
 
       if (onChange) {
-        onChange(newDateRange)
+        onChange(newDateRange);
       }
     }
-  }
+  };
 
   const formatDateDisplay = () => {
     if (mode === "single") {
       if (dateRange.startDate) {
-        return formatDate(dateRange.startDate)
+        return formatDate(dateRange.startDate);
       }
-      return ""
+      return "";
     } else {
       // Range mode
       if (dateRange.startDate || dateRange.endDate) {
-        const startFormatted = dateRange.startDate ? formatDate(dateRange.startDate) : "DD / MM / YYYY"
+        const startFormatted = dateRange.startDate
+          ? formatDate(dateRange.startDate)
+          : "DD / MM / YYYY";
 
-        const endFormatted = dateRange.endDate ? formatDate(dateRange.endDate) : "DD / MM / YYYY"
+        const endFormatted = dateRange.endDate
+          ? formatDate(dateRange.endDate)
+          : "DD / MM / YYYY";
 
-        return `${startFormatted} - ${endFormatted}`
+        return `${startFormatted} - ${endFormatted}`;
       }
     }
 
-    return ""
-  }
+    return "";
+  };
 
   const formatDate = (date: Date) => {
-    const day = date.getDate().toString().padStart(2, "0")
-    const month = (date.getMonth() + 1).toString().padStart(2, "0")
-    const year = date.getFullYear()
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
 
-    return `${day} / ${month} / ${year}`
-  }
+    return `${day} / ${month} / ${year}`;
+  };
 
   const parseDate = (dateStr: string) => {
     // Parse date in DD / MM / YYYY format
-    const parts = dateStr.split("/")
+    const parts = dateStr.split("/");
     if (parts.length === 3) {
-      const day = Number.parseInt(parts[0].trim(), 10)
-      const month = Number.parseInt(parts[1].trim(), 10) - 1 // Month is 0-indexed
-      const year = Number.parseInt(parts[2].trim(), 10)
+      const day = Number.parseInt(parts[0].trim(), 10);
+      const month = Number.parseInt(parts[1].trim(), 10) - 1; // Month is 0-indexed
+      const year = Number.parseInt(parts[2].trim(), 10);
 
       if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-        const date = new Date(year, month, day)
+        const date = new Date(year, month, day);
         // Validate the date is real (e.g., not Feb 31)
-        if (date.getDate() === day && date.getMonth() === month && date.getFullYear() === year) {
-          return date
+        if (
+          date.getDate() === day &&
+          date.getMonth() === month &&
+          date.getFullYear() === year
+        ) {
+          return date;
         }
       }
     }
-    return null
-  }
+    return null;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setInputValue(value)
+    const value = e.target.value;
+    setInputValue(value);
 
     if (mode === "single") {
       // Try to parse as a single date
-      const date = parseDate(value)
+      const date = parseDate(value);
       if (date) {
-        const newDateRange = { startDate: date, endDate: null }
-        setDateRange(newDateRange)
+        const newDateRange = { startDate: date, endDate: null };
+        setDateRange(newDateRange);
 
         if (onChange) {
-          onChange(newDateRange)
+          onChange(newDateRange);
         }
       }
     } else {
       // Try to parse the input value as a date range
-      const rangeParts = value.split("-")
+      const rangeParts = value.split("-");
       if (rangeParts.length === 2) {
-        const startDate = parseDate(rangeParts[0])
-        const endDate = parseDate(rangeParts[1])
+        const startDate = parseDate(rangeParts[0]);
+        const endDate = parseDate(rangeParts[1]);
 
         const newDateRange = {
           startDate,
           endDate,
-        }
+        };
 
         // Only update if we have valid dates
         if (startDate || endDate) {
-          setDateRange(newDateRange)
+          setDateRange(newDateRange);
 
           if (onChange) {
-            onChange(newDateRange)
+            onChange(newDateRange);
           }
         }
       }
     }
-  }
+  };
 
   const handleInputFocus = () => {
-    setIsOpen(true)
+    setIsOpen(true);
     if (datePickerRef.current) {
-      datePickerRef.current.setOpen(true)
+      datePickerRef.current.setOpen(true);
     }
-  }
+  };
 
   const toggleDatePicker = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
     if (!isOpen && datePickerRef.current) {
-      datePickerRef.current.setOpen(true)
+      datePickerRef.current.setOpen(true);
     }
-  }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
       }
-    }
+    };
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // Determine placeholder based on mode
-  const displayPlaceholder = mode === "single" ? "DD / MM / YYYY" : placeholder
+  const displayPlaceholder = mode === "single" ? "DD / MM / YYYY" : placeholder;
 
   return (
     <div className="date-range-picker-container" ref={containerRef}>
@@ -203,7 +220,10 @@ const DateRangePicker = ({
           onFocus={handleInputFocus}
           placeholder={displayPlaceholder}
         />
-        <Calendar className="date-range-calendar-icon" onClick={toggleDatePicker} />
+        <Calendar
+          className="date-range-calendar-icon"
+          onClick={toggleDatePicker}
+        />
       </div>
       {mode === "single" ? (
         <ReactDatePicker
@@ -236,8 +256,7 @@ const DateRangePicker = ({
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default DateRangePicker
-
+export default DateRangePicker;

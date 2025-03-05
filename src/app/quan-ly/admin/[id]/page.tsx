@@ -26,9 +26,6 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { Input } from "@/components/common/Input";
 import { ReqGetCourses } from "@/requests/course";
-import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
-import "react-calendar/dist/Calendar.css";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import { format } from "date-fns";
 import { ReqGetClassSessions } from "@/requests/class-session";
 import { CommonRadioCheck } from "@/components/common/CommonRadioCheck";
@@ -41,6 +38,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CommonButton } from "@/components/common/button/CommonButton";
+import DateRangePicker from "@/components/common/date-picker/DatePicker";
 
 // Define the DateRange type
 type ValuePiece = Date | null;
@@ -384,12 +382,17 @@ export default function ClassDetail() {
                     Duration
                   </div>
                   <div className="flex-1">
-                    <DateRangePicker
+                    {/* <DateRangePicker
                       value={dateValue}
                       onChange={setDateValue}
                       className="w-full"
                       format="dd/MM/yyyy"
                       clearIcon={null}
+                    /> */}
+                    <DateRangePicker
+                      onChange={(dateRange) => {
+                        setDateValue([dateRange.startDate, dateRange.endDate]);
+                      }}
                     />
                   </div>
                 </div>
