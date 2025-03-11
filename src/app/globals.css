@@ -83,7 +83,7 @@
 
 .ql-container {
   border: none !important;
-  min-height: 150px !important;
+  height: calc(100% - 40px) !important;
 }
 
 .ql-editor ul {

@@ -10,9 +10,10 @@ import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 import { Input } from "@/components/common/Input";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { siginChema } from "@/validation/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { sigUpChema } from "@/validation/auth";
+import { ReqRegister } from "@/requests/login";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -31,55 +32,27 @@ export default function Login() {
     state.error,
     state.success,
   ]);
-  const signInForrm = useForm({
-    resolver: zodResolver(siginChema),
+  const signUpForm = useForm({
+    resolver: zodResolver(sigUpChema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
-  const { getValues, reset, setValue } = signInForrm
+  const { getValues, reset, setValue } = signUpForm
   const router = useCustomRouter();
-  const handleChangeUsername = (identifier: string) => {
-    setUser((prevState) => ({
-      ...prevState,
-      identifier,
-    }));
-  };
 
-  const handChangePassword = (password: string) => {
-    setUser((prevState) => ({
-      ...prevState,
-      password,
-    }));
-  };
-
-  const handleForgotPassword = () => {
-    router.push("/doi-mat-khau-moi");
-  };
-
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     show();
 
     try {
       const data = getValues()
-      const resUserInfo = await login({
-        identifier: data.email,
-        password: data.password
-      });
-      console.log('resUserInfo', resUserInfo);
-      const roleName = get(resUserInfo, "user_role.name", "").toLowerCase();
-
-      if (roleName === Role.STUDENT.toLowerCase()) {
-        success("Xong!", "Chúc mừng bạn đã đăng nhập thành công");
-        router.push("/");
-      } else {
-        useUserStore.getState().clear();
-        setUser({
-          identifier: "",
-          password: "",
-        });
-        error("Lỗi", "Đăng nhập thất bại, vui lòng thử lại sau");
+      const res = await ReqRegister(data);
+      if (res) {
+        success("Xong!", "Chúc mừng bạn đã đăng ký thành công");
+        router.push("/dang-nhap");
       }
     } catch (err) {
       const message = HandleReturnMessgaeErrorLogin(err);
@@ -98,19 +71,39 @@ export default function Login() {
         }}
       >
         <div className="w-full">
-          <div className="text-HeadingSm text-gray-95">Đăng nhập</div>
+          <div className="text-HeadingSm text-gray-95">Đăng ký</div>
           <div className="text-BodySm text-gray-60">
             Tham gia ngay vào cộng đồng Tekmonk
           </div>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 overflow-y-auto">
           <div className="w-full flex flex-col gap-2">
             <div className="text-SubheadSm text-gray-60">
-              Tên tài khoản hoặc email
+              Tên tài khoản
+            </div>
+            <Controller
+              name="username"
+              control={signUpForm.control}
+              render={({ field, formState }) => (
+                <Input
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={formState.errors.username?.message}
+                  type="text"
+                  customClassNames="h-[48px]"
+                  placeholder="Tên tài khoản hoặc email"
+                />
+              )}
+            />
+
+          </div>
+          <div className="w-full flex flex-col gap-2">
+            <div className="text-SubheadSm text-gray-60">
+              Email
             </div>
             <Controller
               name="email"
-              control={signInForrm.control}
+              control={signUpForm.control}
               render={({ field, formState }) => (
                 <Input
                   onChange={field.onChange}
@@ -128,7 +121,7 @@ export default function Login() {
             <div className="text-SubheadSm text-gray-60">Mật khẩu</div>
             <Controller
               name="password"
-              control={signInForrm.control}
+              control={signUpForm.control}
               render={({ field, formState }) => (
                 <Input
                   onChange={field.onChange}
@@ -140,31 +133,29 @@ export default function Login() {
                 />
               )}
             />
-            <div className="hover:underline text-primary-80 cursor-pointer self-end text-sm" onClick={() => router.push('/dang-ky')}>Tạo mới tài khoản?</div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="w-[20px] h-[20px] text-red-500 accent-primary-80 
-             appearance-none bg-white border border-gray-20 rounded-[4px] outline-none 
-             focus:ring-0 focus:outline-none checked:appearance-auto"
+          <div className="w-full flex flex-col gap-2">
+            <div className="text-SubheadSm text-gray-60">Xác nhận lại mật khẩu</div>
+            <Controller
+              name="confirmPassword"
+              control={signUpForm.control}
+              render={({ field, formState }) => (
+                <Input
+                  onChange={field.onChange}
+                  value={field.value}
+                  error={formState.errors.confirmPassword?.message}
+                  type="password"
+                  customClassNames="h-[48px]"
+                  placeholder="Mật khẩu"
+                />
+              )}
             />
-
-            <div>Lưu trạng thái đăng nhập</div>
           </div>
         </div>
 
         <div className="flex flex-col gap-2">
-          <CommonButton className="h-12" onClick={handleLogin}>
-            Đăng Nhập
-          </CommonButton>
-          <CommonButton
-            className="h-12"
-            variant="secondary"
-            onClick={handleForgotPassword}
-          >
-            Quên mật khẩu
+          <CommonButton className="h-12" onClick={handleSignUp}>
+            Đăng Ký
           </CommonButton>
         </div>
       </div>

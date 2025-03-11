@@ -442,7 +442,7 @@ export const CommonTable = ({
         </ReactTableScroll>
         {isLoading != undefined && !isLoading && isEmpty && (
           <div className="my-12 flex items-center justify-center">
-            <span className="text-lg text-gray-500">No Data Available</span>
+            <span className="text-lg text-gray-500">Không có dữ liệu</span>
           </div>
         )}
       </div>
