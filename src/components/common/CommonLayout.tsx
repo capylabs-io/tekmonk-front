@@ -23,7 +23,7 @@ export default function CommonLayout({
 }: LayoutProps) {
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto flex">  
+      <div className="container mx-auto flex">
         {/* Left Sidebar */}
         <div className="md:block sticky top-0 hidden h-screen">
           {leftSidebar}
@@ -31,11 +31,11 @@ export default function CommonLayout({
 
         {/* Main Content */}
         <main className="flex-1 border-x">
-          <div className="mx-auto max-w-3xl overflow-y-auto">{mainContent}</div>˜
+          <div className="mx-auto max-w-3xl overflow-y-auto">{mainContent}</div>
         </main>
 
         {/* Right Sidebar */}
-        <div className="sticky top-0 hidden h-screen w-[350px] border-l p-4 xl:block">
+        <div className="sticky top-0 hidden h-screen w-[420px] border-l p-4 xl:block">
           {rightSidebar}
         </div>
 

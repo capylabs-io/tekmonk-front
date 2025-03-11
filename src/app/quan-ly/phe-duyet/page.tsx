@@ -16,15 +16,8 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { CommonCard } from "@/components/common/CommonCard";
-import {
-  ReqGetAllNews,
-} from "@/requests/news";
-import { useLoadingStore } from "@/store/LoadingStore";
-import { useSnackbarStore } from "@/store/SnackbarStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import qs from "qs";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
@@ -32,11 +25,13 @@ import { z } from "zod";
 import { CommonTable } from "@/components/common/CommonTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { get } from "lodash";
-import { PostType, PostVerificationType } from "@/types";
+import { PostType } from "@/types";
 import { Post } from "@/components/home/Post";
 import { ConvertoStatusPostToText } from "@/lib/utils";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import Image from "next/image";
+import { useVerifiedPost } from "@/hooks/useVerifiedPost";
+import moment from "moment";
 
 const newsSchema = z.object({
   title: z
@@ -69,13 +64,19 @@ const formats = [
 ];
 
 export default function Page() {
-  const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
-    []
-  );
-  const [togglePostDialog, setTogglePostDialog] = useState(false);
-  const [toggleConfirmDialog, setToggleConfirmDialog] = useState(false);
-  const [currentPost, setCurrentPost] = useState<PostType | null>(null);
+  const {
+    togglePostDialog,
+    toggleConfirmDialog,
+    listPost,
+    currentPost,
+    setCurrentPost,
+    setTogglePostDialog,
+    handleTabChange,
+    setToggleConfirmDialog,
+    handleVerifiedPost,
+    handleVerified
+  } = useVerifiedPost()
+
   const methods = useForm({
     resolver: zodResolver(newsSchema),
     defaultValues: {
@@ -92,101 +93,7 @@ export default function Page() {
   const [totalPage, setTotalPage] = useState(10);
   const [totalDocs, setTotalDocs] = useState(100);
 
-  const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
-  const [success, error] = useSnackbarStore((state) => [
-    state.success,
-    state.error,
-  ]);
-  // const queryClient = useQueryClient();
 
-  // const { data, isLoading, isError } = useQuery({
-  //   refetchOnWindowFocus: false,
-  //   queryKey: ["news", page, limit, activeTab],
-  //   queryFn: async () => {
-  //     try {
-  //       const queryString = qs.stringify({
-  //         pagination: {
-  //           page: page,
-  //           pageSize: limit,
-  //         },
-  //         filters: {
-  //           type: "news",
-  //           status: activeTab,
-  //         },
-  //         sort: ["id:asc"],
-  //         populate: "*",
-  //       });
-  //       return await ReqGetAllNews(queryString);
-  //     } catch (error) {
-  //       return Promise.reject(error);
-  //     }
-  //   },
-  // });
-
-  const handleImageUpload = (file: File | null) => {
-    if (file) setValue("image", file as any);
-  };
-
-  const prepareFormData = (newsStatus: string) => {
-    const formData = new FormData();
-    const values = getValues();
-
-    Object.entries({
-      title: values.title,
-      tags: values.tags,
-      content: values.content,
-      type: "news",
-      status: newsStatus,
-    }).forEach(([key, value]) => formData.append(key, value));
-
-    if (values.image) {
-      formData.append("image", values.image);
-    }
-
-    return { formData, values: { ...values, status: newsStatus } };
-  };
-
-  const handleVerifiedPost = (status: PostVerificationType) => {
-    if (status === PostVerificationType.DENIED) {
-      setToggleConfirmDialog(true)
-    }
-  }
-
-  const mockData = [
-    {
-      id: 1,
-      media: '/image/new/new-pic.png',
-      content: 'Into the Breach',
-      description: '',
-      name: 'test',
-      url: '',
-      postedBy: 'long',
-      type: 'long',
-      isVerified: PostVerificationType.PENDING
-    },
-    {
-      id: 2,
-      media: '/image/new/new-pic-2.png',
-      content: 'Into the Breach',
-      description: '',
-      name: 'test',
-      url: '',
-      postedBy: 'long',
-      type: 'long',
-      isVerified: PostVerificationType.PENDING
-    },
-    {
-      id: 3,
-      media: '/image/new/new-pic.png',
-      content: 'Into the Breach',
-      description: '',
-      name: 'test',
-      url: '',
-      postedBy: 'long',
-      type: 'long',
-      isVerified: PostVerificationType.PENDING
-    },
-  ]
   const columns: ColumnDef<PostType>[] =
     [
       {
@@ -199,7 +106,7 @@ export default function Page() {
         cell: ({ row }) => (
           <div className="flex items-center">
             <Image
-              src={row.original?.media || ''}
+              src={row.original?.thumbnail || ''}
               alt="thumbnail"
               height={64}
               width={130}
@@ -210,19 +117,27 @@ export default function Page() {
       },
       {
         header: 'Tiêu đề dự án',
-        cell: ({ row }) => <span>{row.original.content}</span>,
+        cell: ({ row }) => <span>{row.original.name}</span>,
       },
       {
         header: 'Trạng thái',
         cell: ({ row }) => <span>{ConvertoStatusPostToText(row.original.isVerified || '')}</span>,
       },
       {
-        header: 'Ghi chú',
-        cell: ({ row }) => (
-          <span>
-            {get(row, 'original.description', '')}
-          </span>
-        ),
+        header: 'Tags',
+        cell: ({ row }) => <div className="flex flex-wrap gap-2">
+
+          {row.original.tags.split(",")
+            .map((tag) => tag.trim())
+            .filter((tag) => tag !== "").map((tag, index) => (
+              <div
+                key={index}
+                className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
+              >
+                <span className="px-2 py-1">{tag}</span>
+              </div>
+            ))}
+        </div>,
       },
       {
         id: 'action',
@@ -232,8 +147,8 @@ export default function Page() {
             className="p-2 hover:bg-gray-100 rounded-full"
             onClick={(e) => {
               e.stopPropagation();
-              // Add edit handler here
               setTogglePostDialog(true)
+              setCurrentPost(row.original)
             }}
           >
             <Eye className="h-4 w-4" color="#7C6C80" />
@@ -242,15 +157,6 @@ export default function Page() {
       },
     ]
 
-  // if (isLoading) return <Loading />;
-
-  // if (isError)
-  //   return (
-  //     <div>
-  //       Có lỗi xảy ra, vui lòng thử lại sau hoặc liên hệ admin để biết thêm chi
-  //       tiết
-  //     </div>
-  //   );
 
   return (
     <div className="w-full h-screen border-r border-gray-20">
@@ -267,73 +173,50 @@ export default function Page() {
       </div>
       {/* <div className="w-full flex flex-col py-2">
         <div className="h-9 w-[265px] flex items-center justify-center text-gray-95 gap-3"> */}
-      <Tabs defaultValue="verified" className="w-full !h-[calc(100%-68px-2px)] overflow-y-auto">
+      <Tabs defaultValue="verified" className="w-full !h-[calc(100%-68px-2px)] overflow-y-auto" onValueChange={handleTabChange}>
         <TabsList className="w-full border-b border-gray-200 !justify-start">
           <TabsTrigger value="verified">Phê duyệt</TabsTrigger>
           <TabsTrigger value="history">Lịch sử phê duyệt</TabsTrigger>
         </TabsList>
-        <TabsContent value="verified" className="p-4 overflow-y-auto">
-          <div className="border rounded-2xl w-[720px] mx-auto ">
-            <Post
-              showButton
-              onVerifiedPost={handleVerifiedPost}
-              imageUrl="bg-[url('/image/home/profile-pic.png')]"
-              thumbnailUrl="/image/new/new-pic.png"
-              userName="Andy Lou"
-              specialName="Bá Vương Học Đường"
-              userRank={
-                <span
-                  className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                >
-                  IV
-                </span>
-              }
-              createdAt="23s"
-              likedCount="6.2"
-              commentCount="61"
-            />
-            <hr className="border-t border-gray-200 my-4" />
-            <Post
-              showButton
-              imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
-              thumbnailUrl="/image/new/new-pic-2.png"
-              userName="Lauren Linh"
-              specialName="Học Bá Thanh Xuân"
-              userRank={
-                <span
-                  className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                >
-                  IV
-                </span>
-              }
-              createdAt="23s"
-              likedCount="6.2"
-              commentCount="61"
-            />
-            <hr className="border-t border-gray-200 my-4" />
-            <Post
-              showButton
-              imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
-              thumbnailUrl="/image/new/new-pic-2.png"
-              userName="Lauren Linh"
-              specialName="Học Bá Thanh Xuân"
-              userRank={
-                <span
-                  className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                >
-                  V
-                </span>
-              }
-              createdAt="23s"
-              likedCount="6.2"
-              commentCount="61"
-            />
-
-          </div>
+        <TabsContent value="verified" className="overflow-y-auto">
+          {
+            listPost.length > 0 &&
+            <div className="border rounded-2xl w-[720px] mx-auto py-8">
+              {listPost.map((item, index) => (
+                <>
+                  <Post
+                    showButton
+                    data={item}
+                    onVerifiedPost={handleVerifiedPost}
+                    imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                    thumbnailUrl={get(item, 'thumbnail') || ''}
+                    userName="Andy Lou"
+                    specialName={get(item, 'postedBy.skills', '')}
+                    userRank={
+                      <span
+                        className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                      >
+                        IV
+                      </span>
+                    }
+                    postContent={get(item, 'content', '')}
+                    postName={get(item, 'name', '')}
+                    createdAt={moment(get(item, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
+                    likedCount="6.2"
+                    commentCount="61"
+                  />
+                  {
+                    index !== listPost.length - 1 &&
+                    <hr className="border-t border-gray-200 my-4" />
+                  }
+                </>
+              ))}
+            </div>
+          }
         </TabsContent>
         <TabsContent value="history" className="overflow-y-auto p-4">
           <CommonTable
-            data={mockData}
+            data={listPost && listPost || [] as any[]}
             isLoading={false}
             columns={columns}
             page={page}
@@ -380,6 +263,7 @@ export default function Page() {
               childrenClassName="text-SubheadMd"
               onClick={() => {
                 setToggleConfirmDialog(false);
+                handleVerified(currentPost)
               }}
             >
               Từ chối
@@ -397,36 +281,51 @@ export default function Page() {
           }
         }}
       >
-        <DialogContent className="max-w-[500px] bg-gray-00 overflow-y-auto">
+        <DialogContent className="max-w-[500px] h-[600px] bg-gray-00 overflow-y-auto">
           <Tabs defaultValue="verified" className="w-full overflow-y-auto">
             <TabsList className="w-full border-b border-gray-200 !justify-start">
               <TabsTrigger value="post">Bài viết</TabsTrigger>
               <TabsTrigger value="note">Ghi chú</TabsTrigger>
             </TabsList>
             <TabsContent value="post" className="overflow-y-auto">
-              <Post
-                isVerified
-                hideSocial
-                customClassname="!p-0"
-                imageUrl="bg-[url('/image/user/profile-pic-2.png')]"
-                thumbnailUrl="/image/new/new-pic-2.png"
-                userName="Lauren Linh"
-                specialName="Học Bá Thanh Xuân"
-                userRank={
-                  <span
-                    className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                  >
-                    V
-                  </span>
-                }
-                createdAt="23s"
-                likedCount="6.2"
-                commentCount="61"
-              />
+              <div className="relative">
+                <div
+                  className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
+                >
+                  <span className="px-2 py-1">{get(currentPost, 'isVerified')}</span>
+                </div>
+                <Post
+                  isVerified
+                  hideSocial
+                  data={currentPost}
+                  onVerifiedPost={handleVerifiedPost}
+                  imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                  thumbnailUrl={get(currentPost, 'thumbnail') || ''}
+                  userName="Andy Lou"
+                  specialName={get(currentPost, 'postedBy.skills', '')}
+                  userRank={
+                    <span
+                      className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                    >
+                      IV
+                    </span>
+                  }
+                  postContent={get(currentPost, 'content', '')}
+                  postName={get(currentPost, 'name', '')}
+                  createdAt={moment(get(currentPost, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
+                  likedCount="6.2"
+                  commentCount="61"
+                />
+              </div>
             </TabsContent>
             <TabsContent value="note" className="overflow-y-auto p-4">
-              <div className="text-SubheadLg text-gray-95">Lý do từ chối</div>
-              <div className="text-gray-60 text-BodyMd">Nội dung bài viết không phù hợp, bài viết này sẽ không được đănng tải</div>
+              {/* {
+                currentPost?.isVerified === PostVerificationType.DENIED &&
+                <>
+                  <div className="text-SubheadLg text-gray-95">Lý do từ chối</div>
+                  <div className="text-gray-60 text-BodyMd">Nội dung bài viết không phù hợp, bài viết này sẽ không được đănng tải</div>
+                </>
+              } */}
             </TabsContent>
           </Tabs>
 
@@ -470,6 +369,6 @@ export default function Page() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 }

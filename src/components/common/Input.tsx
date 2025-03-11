@@ -53,8 +53,8 @@ export const Input = ({
           BASE_CLASS,
           error && "border-red-500 focus:border-red-500 text-sm focus:border-2",
           value &&
-            !error &&
-            "border-green-400 focus:border-green-400 focus:border-2",
+          !error &&
+          "border-green-400 focus:border-green-400 focus:border-2",
           customClassNames // This affects the container div
         )}
       >
@@ -88,11 +88,11 @@ export const Input = ({
             readOnly={readOnly}
             {...props}
           />
-          {/* {type === "password" && (
+          {type === "password" && (
             <button type="button" onClick={handleShowPassword}>
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          )} */}
+          )}
         </div>
       </div>
       {error && <p className="mt-2 self-start text-sm text-red-600">{error}</p>}

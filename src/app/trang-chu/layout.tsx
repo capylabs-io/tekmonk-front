@@ -90,7 +90,7 @@ export default function Layout({
                 <>
                   <PointCard point="9999" />
                   <EventList listEvent={events} />
-                  <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
+                  <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover bg-center h-full" />
                 </>
               ) : (
                 <>
