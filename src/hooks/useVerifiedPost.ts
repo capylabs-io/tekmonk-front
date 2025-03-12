@@ -18,11 +18,15 @@ export const useVerifiedPost = () => {
   ]);
   const [activeTab, setActiveTab] = useState("");
   const [currentPost, setCurrentPost] = useState<PostType | null>(null);
-
-  const [limit, setLimit] = useState(10);
+  const [totalPage, setTotalPage] = useState(10);
+  const [totalDocs, setTotalDocs] = useState(100);
+  const [limit, setLimit] = useState(2);
   const [page, setPage] = useState(1);
   const [togglePostDialog, setTogglePostDialog] = useState(false);
   const [toggleConfirmDialog, setToggleConfirmDialog] = useState(false);
+  const [selectedType, setSelectedType] = useState("")
+
+
   const { data, isLoading, isError, refetch } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: ["posts", page, limit, activeTab],
@@ -33,17 +37,19 @@ export const useVerifiedPost = () => {
             page: page,
             pageSize: limit,
           },
-          // filters: {
-          //   isVerified: {
-          //     $in: activeTab !== 'history' ? [PostVerificationType.PENDING] : [PostVerificationType.DENIED, PostVerificationType.ACCEPTED],
-          //   },
-          // },
           sort: ["id:asc"],
           populate: "*",
         },
           { encodeValuesOnly: true }
         );
-        return await getListPost(queryString);
+        const res = await getListPost(queryString)
+        if (res) {
+          setPage(get(res, 'meta.pagination.page', 1))
+          setTotalPage(get(res, 'meta.pagination.pageCount', 1))
+          setTotalDocs(get(res, 'meta.pagination.total', 0))
+          setLimit(get(res, 'meta.pagination.pageSize', 10))
+        }
+        return res;
       } catch (error) {
         return Promise.reject(error);
       }
@@ -52,6 +58,9 @@ export const useVerifiedPost = () => {
   const listPost = useMemo(() => {
     return data ? data.data?.filter((item) => activeTab === 'history' ? item.isVerified !== PostVerificationType.PENDING : item.isVerified === PostVerificationType.PENDING) : []
   }, [data, activeTab])
+  const handleSelectChange = (value: string) => {
+    setSelectedType(value)
+  }
   const handleVerified = async (data: PostType | null) => {
     try {
       showLoading()
@@ -83,10 +92,18 @@ export const useVerifiedPost = () => {
     setActiveTab(value)
   }
   return {
+    page,
+    limit,
+    totalPage,
+    totalDocs,
     togglePostDialog,
     toggleConfirmDialog,
     listPost,
     currentPost,
+    selectedType,
+    setLimit,
+    handleSelectChange,
+    setPage,
     setCurrentPost,
     setTogglePostDialog,
     handleTabChange,

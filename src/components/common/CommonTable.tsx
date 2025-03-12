@@ -104,7 +104,7 @@ export const CommonTable = ({
 }: Props) => {
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
-    pageSize: docsPerPage,
+    pageSize: 10,
   });
   const [rowSelection, setRowSelection] = useState({});
   const isEmpty = !data || data.length === 0;
@@ -240,7 +240,7 @@ export const CommonTable = ({
           onValueChange={(value) => onPageSizeChange?.(Number(value))}
         >
           <SelectTrigger className="w-20">
-            <SelectValue />
+            {pagination.pageSize}
           </SelectTrigger>
           <SelectContent className="bg-gray-00">
             {[10, 20, 50].map((value) => (
@@ -258,14 +258,14 @@ export const CommonTable = ({
       </div>
       <Pagination className="bg-transparent !text-base !mx-0 !justify-end">
         <PaginationContent>
-          <PaginationItem className='inline-flex items-center gap-1 cursor-pointer' onClick={handlePrevPage}>
+          <PaginationItem className='inline-flex items-center gap-1 cursor-pointer !mr-4' onClick={handlePrevPage}>
             <ChevronLeft
               size={20}
             ></ChevronLeft>
             <span className='text-BodySm'>Trước</span>
           </PaginationItem>
           {page > 1 && (
-            <PaginationItem className='!ml-4'>
+            <PaginationItem>
               <PaginationLink
                 href="#"
                 onClick={(e) => {
@@ -302,7 +302,7 @@ export const CommonTable = ({
               href="#"
               isActive
               onClick={(e) => e.preventDefault()}
-              className={classNames('bg-primary-10 border-none text-primary-70', page === 1 && '!ml-4')}
+              className={classNames('bg-primary-10 border-none text-primary-70')}
             >
               {page}
             </PaginationLink>
@@ -327,7 +327,7 @@ export const CommonTable = ({
             </PaginationItem>
           )}
           {page !== totalPage && (
-            <PaginationItem className='!mr-4'>
+            <PaginationItem >
               <PaginationLink
                 href="#"
                 onClick={(e) => {
@@ -341,7 +341,7 @@ export const CommonTable = ({
             </PaginationItem>
           )}
 
-          <PaginationItem className='inline-flex items-center gap-1 cursor-pointer' onClick={handleNextPage}>
+          <PaginationItem className='inline-flex items-center gap-1 cursor-pointer !ml-4' onClick={handleNextPage}>
             <span className='text-BodySm'>Sau</span>
             <ChevronRight
               size={20}

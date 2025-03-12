@@ -15,11 +15,13 @@ import { PostType, PostVerificationType } from "@/types";
 import moment from "moment";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { useUserStore } from "@/store/UserStore";
 
 const Home = () => {
   //set for contest page
   const router = useCustomRouter();
   const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   const { data, refetch: refetchListPostCustom } = useQuery({
     refetchOnWindowFocus: false,
@@ -77,7 +79,7 @@ const Home = () => {
                   data={item}
                   imageUrl="bg-[url('/image/home/profile-pic.png')]"
                   thumbnailUrl={get(item, 'thumbnail') || ''}
-                  userName="Andy Lou"
+                  userName={userInfo?.username || 'User'}
                   specialName={get(item, 'postedBy.skills', '')}
                   userRank={
                     <span

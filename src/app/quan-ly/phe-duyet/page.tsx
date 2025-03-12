@@ -16,22 +16,20 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { CommonCard } from "@/components/common/CommonCard";
-import { zodResolver } from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import { CommonTable } from "@/components/common/CommonTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { get } from "lodash";
-import { PostType } from "@/types";
+import { PostType, PostVerificationType } from "@/types";
 import { Post } from "@/components/home/Post";
 import { ConvertoStatusPostToText } from "@/lib/utils";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { useVerifiedPost } from "@/hooks/useVerifiedPost";
 import moment from "moment";
+import { CommonSelect } from "@/components/common/CommonSelect";
+import { useUserStore } from "@/store/UserStore";
 
 const newsSchema = z.object({
   title: z
@@ -42,33 +40,20 @@ const newsSchema = z.object({
   content: z.string().min(1, "Mô tả không được để trống"),
 });
 
-const modules = {
-  toolbar: [
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["bold", "italic", "underline"],
-    [{ header: [1, 2, 3, false] }],
-    ["link", "image"],
-  ],
-};
-
-const formats = [
-  "list",
-  "bullet",
-  "ordered",
-  "bold",
-  "italic",
-  "underline",
-  "header",
-  "link",
-  "image",
-];
-
 export default function Page() {
   const {
+    page,
+    totalPage,
+    totalDocs,
     togglePostDialog,
     toggleConfirmDialog,
     listPost,
     currentPost,
+    selectedType,
+    limit,
+    setLimit,
+    handleSelectChange,
+    setPage,
     setCurrentPost,
     setTogglePostDialog,
     handleTabChange,
@@ -76,23 +61,18 @@ export default function Page() {
     handleVerifiedPost,
     handleVerified
   } = useVerifiedPost()
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
-  const methods = useForm({
-    resolver: zodResolver(newsSchema),
-    defaultValues: {
-      title: "",
-      tags: "",
-      image: null,
-      content: "",
-    },
-  });
-  const { control, getValues, setValue, reset } = methods;
-
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(10);
-  const [totalDocs, setTotalDocs] = useState(100);
-
+  // const methods = useForm({
+  //   resolver: zodResolver(newsSchema),
+  //   defaultValues: {
+  //     title: "",
+  //     tags: "",
+  //     image: null,
+  //     content: "",
+  //   },
+  // });
+  // const { control, getValues, setValue, reset } = methods;
 
   const columns: ColumnDef<PostType>[] =
     [
@@ -157,6 +137,16 @@ export default function Page() {
       },
     ]
 
+  const optionSelect = [
+    {
+      value: PostVerificationType.ACCEPTED,
+      label: "Đã chấp nhận"
+    },
+    {
+      value: PostVerificationType.DENIED,
+      label: "Từ chối"
+    }
+  ]
 
   return (
     <div className="w-full h-screen border-r border-gray-20">
@@ -190,7 +180,7 @@ export default function Page() {
                     onVerifiedPost={handleVerifiedPost}
                     imageUrl="bg-[url('/image/home/profile-pic.png')]"
                     thumbnailUrl={get(item, 'thumbnail') || ''}
-                    userName="Andy Lou"
+                    userName={userInfo?.username || 'User'}
                     specialName={get(item, 'postedBy.skills', '')}
                     userRank={
                       <span
@@ -215,14 +205,19 @@ export default function Page() {
           }
         </TabsContent>
         <TabsContent value="history" className="overflow-y-auto p-4">
+          <div className="mb-3">
+            <CommonSelect options={optionSelect} value={selectedType} onChange={handleSelectChange} />
+          </div>
           <CommonTable
-            data={listPost && listPost || [] as any[]}
+            data={listPost && selectedType !== '' ? listPost.filter((item) => item.isVerified === selectedType) : listPost || [] as any[]}
             isLoading={false}
             columns={columns}
             page={page}
             totalPage={totalPage}
             totalDocs={totalDocs}
             onPageChange={setPage}
+            docsPerPage={limit}
+            onPageSizeChange={setLimit}
           />
         </TabsContent>
       </Tabs>
@@ -329,7 +324,7 @@ export default function Page() {
               childrenClassName="text-SubheadMd"
               onClick={() => {
                 setTogglePostDialog(false);
-                reset();
+                // reset();
               }}
             >
               Thoát
@@ -341,7 +336,7 @@ export default function Page() {
                 childrenClassName="text-SubheadMd"
                 onClick={() => {
                   setTogglePostDialog(false);
-                  reset();
+                  // reset();
                 }}
               >
                 Xoá
@@ -352,7 +347,7 @@ export default function Page() {
                 childrenClassName="text-SubheadMd"
                 onClick={() => {
                   setTogglePostDialog(false);
-                  reset();
+                  // reset();
                 }}
               >
                 Khôi phục
