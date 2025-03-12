@@ -169,7 +169,6 @@ export const TeacherRegistrationDialog = ({
 
           <div className="flex justify-between items-center mt-6 border-t pt-4">
             <CommonButton
-              type="button"
               className="w-[83px] h-11"
               variant="secondary"
               onClick={handleClose}
@@ -177,9 +176,9 @@ export const TeacherRegistrationDialog = ({
               Thoát
             </CommonButton>
             <CommonButton
-              type="submit"
               className="h-11 w-[139px]"
               disabled={isSubmitting}
+              onClick={handleSubmit(onSubmit)}
             >
               {isSubmitting ? "Đang xử lý..." : "Tạo tài khoản"}
             </CommonButton>

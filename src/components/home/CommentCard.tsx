@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Bookmark,
   Dot,
@@ -7,9 +7,9 @@ import {
   MessageCircle,
   Repeat2,
   Upload,
-} from 'lucide-react';
-import { get } from 'lodash';
-import { timeAgo } from '@/lib/utils';
+} from "lucide-react";
+import { get } from "lodash";
+import { timeAgo } from "@/lib/utils";
 
 type Props = {
   isVerified?: boolean;
@@ -36,7 +36,6 @@ export const CommentCard = ({
   time,
   interact,
 }: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
@@ -55,13 +54,11 @@ export const CommentCard = ({
       ></div>
       <div className="w-full flex-1 space-y-0.5">
         <div className="text-black flex items-center gap-1 text-base font-medium">
-          <div>
-            {name}
-          </div>
+          <div>{name}</div>
           <div className="inline-flex items-center gap-1 text-sm text-grey-500">
             @{username}
             <Dot size={20} />
-            {time ? timeAgo(Number(time)) : 'Invalid time'}
+            {time ? timeAgo(Number(time)) : "Invalid time"}
           </div>
         </div>
         <p className="text-sm md:text-base">{content}</p>
@@ -69,7 +66,7 @@ export const CommentCard = ({
           <div className="flex gap-x-4 lg:gap-[35.5px]">
             <div className="inline-flex items-center gap-1 md:gap-2">
               <MessageCircle size={16} />
-              {get(interact, 'numberOfMessage', '')}
+              {get(interact, "numberOfMessage", "")}
             </div>
             {/* <div className="inline-flex items-center gap-1 md:gap-2">
               <Repeat2 size={16} />
@@ -77,7 +74,7 @@ export const CommentCard = ({
             </div> */}
             <div className="inline-flex items-center gap-1 md:gap-2">
               <Heart size={16} />
-              {get(interact, 'numberOflike', '')}
+              {get(interact, "numberOflike", "")}
             </div>
           </div>
         </div>
