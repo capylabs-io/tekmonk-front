@@ -45,7 +45,7 @@ export const BackgroundCard = ({
             alt="avatar pic"
             width={170}
             height={100}
-            className="rounded-xl"
+            className="rounded-xl max-h-[100px] max-w-[170px] object-cover"
           />
           <div className="w-full mt-2 text-sm text-black truncate text-left">
             {title}

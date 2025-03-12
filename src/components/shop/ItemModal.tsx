@@ -8,6 +8,7 @@ import { Button } from "../common/button/Button";
 import { InputFileUpdload } from "../common/InputFileUpload";
 import { InputTags } from "../contest/InputTags";
 import { ShopItem } from "@/types/common-types";
+import { CommonButton } from "../common/button/CommonButton";
 type Props = {
   itemData: ShopItem;
   isShowing: boolean;
@@ -43,24 +44,12 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
           </div>
 
           <div className="flex justify-between w-ful">
-            <Button
-              className=" !bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]"
-              style={{
-                boxShadow: "0px 4px 0px #ebe4ec",
-              }}
-              onClick={close}
-            >
+            <CommonButton variant="secondary" onClick={close}>
               <div className="!text-sm !font-normal"> Thoát</div>
-            </Button>
-            <Button
-              className="w-[150px] !font-medium border border-primary-70"
-              style={{
-                boxShadow: "0px 4px 0px #9a1595",
-              }}
-              onClick={onBuy}
-            >
+            </CommonButton>
+            <CommonButton onClick={onBuy}>
               <div className="!text-sm !font-normal"> Mua vật phẩm</div>
-            </Button>
+            </CommonButton>
           </div>
         </div>
       </div>
