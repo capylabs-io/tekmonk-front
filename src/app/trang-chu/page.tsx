@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   Tabs,
   TabsContent,
@@ -7,55 +7,31 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { Post } from "@/components/home/Post";
-import WithAuth from "@/components/hoc/WithAuth";
-import { useRouter } from "next/navigation";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import qs from "qs";
 import { useQuery } from "@tanstack/react-query";
-import { getListPost, getListPostCustom } from "@/requests/post";
-import { PostVerificationType } from "@/types";
+import { getListPostCustom, likePost } from "@/requests/post";
+import { PostType, PostVerificationType } from "@/types";
 import moment from "moment";
 import { get } from "lodash";
+import { useLoadingStore } from "@/store/LoadingStore";
 
 const Home = () => {
   //set for contest page
   const router = useCustomRouter();
-  const { data, isLoading, isError, refetch } = useQuery({
-    refetchOnWindowFocus: false,
-    queryKey: ["posts"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          pagination: {
-            page: 1,
-            pageSize: 100,
-          },
-          // filters: {
-          //   isVerified: {
-          //     $in: activeTab !== 'history' ? [PostVerificationType.PENDING] : [PostVerificationType.DENIED, PostVerificationType.ACCEPTED],
-          //   },
-          // },
-          sort: ["id:asc"],
-          populate: "*",
-        },
-          { encodeValuesOnly: true }
-        );
-        return await getListPost(queryString);
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    },
-  });
-  const { data: listPostCustom, refetch: refetchListPostCustom } = useQuery({
+  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+
+  const { data, refetch: refetchListPostCustom } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: ["custom-posts"],
     queryFn: async () => {
       try {
-        const queryString = qs.stringify({
-          page: 1,
-          limit: 100,
-        },
+        const queryString = qs.stringify(
+          {
+            page: 1,
+            limit: 100,
+            sort: ["id:asc"],
+          },
           { encodeValuesOnly: true }
         );
         return await getListPostCustom(queryString);
@@ -64,9 +40,26 @@ const Home = () => {
       }
     },
   });
+  const handleLikedPostClick = async (data: PostType) => {
+    try {
+      showLoading()
+      await likePost({
+        postId: get(data, 'id')
+      })
+      refetchListPostCustom()
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      hideLoading()
+    }
+  }
   const listPost = useMemo(() => {
-    return data ? data.data?.filter((item) => item.isVerified === PostVerificationType.ACCEPTED) : []
-  }, [data])
+    return data
+      ? data.filter(
+        (item: PostType) => item.isVerified === PostVerificationType.ACCEPTED
+      )
+      : [];
+  }, [data]);
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>
@@ -76,7 +69,7 @@ const Home = () => {
           <TabsTrigger value="play">Sân chơi</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="overflow-y-auto">
-          {listPost.map((item, index) => (
+          {listPost.map((item: PostType, index: number) => (
             <>
               <div className="px-8">
                 <Post
@@ -98,6 +91,7 @@ const Home = () => {
                   createdAt={moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}
                   likedCount={get(item, 'likeCount', 0).toString() || '0'}
                   commentCount={get(item, 'commentCount', 0).toString() || '0'}
+                  onLikedPostClick={handleLikedPostClick}
                 />
               </div>
               {

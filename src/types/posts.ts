@@ -12,6 +12,7 @@ export type PostType = {
   likeCount?: number
   commentCount?: number
   isVerified?: PostVerificationType;
+  isLiked?: boolean
   createdAt?: string
 };
 

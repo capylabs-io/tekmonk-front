@@ -38,7 +38,7 @@ export default function Login() {
       password: "",
     },
   });
-  const { getValues, reset, setValue } = signInForrm
+  const { getValues, reset, setValue } = signInForrm;
   const router = useCustomRouter();
   const handleChangeUsername = (identifier: string) => {
     setUser((prevState) => ({
@@ -62,17 +62,17 @@ export default function Login() {
     show();
 
     try {
-      const data = getValues()
+      const data = getValues();
       const resUserInfo = await login({
         identifier: data.email,
-        password: data.password
+        password: data.password,
       });
-      console.log('resUserInfo', resUserInfo);
+      console.log("resUserInfo", resUserInfo);
       const roleName = get(resUserInfo, "user_role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT.toLowerCase()) {
         success("Xong!", "Chúc mừng bạn đã đăng nhập thành công");
-        router.push("/");
+        router.push("/trang-chu");
       } else {
         useUserStore.getState().clear();
         setUser({
@@ -122,7 +122,6 @@ export default function Login() {
                 />
               )}
             />
-
           </div>
           <div className="w-full flex flex-col gap-2">
             <div className="text-SubheadSm text-gray-60">Mật khẩu</div>
@@ -140,7 +139,12 @@ export default function Login() {
                 />
               )}
             />
-            <div className="hover:underline text-primary-80 cursor-pointer self-end text-sm" onClick={() => router.push('/dang-ky')}>Tạo mới tài khoản?</div>
+            <div
+              className="hover:underline text-primary-80 cursor-pointer self-end text-sm"
+              onClick={() => router.push("/dang-ky")}
+            >
+              Tạo mới tài khoản?
+            </div>
           </div>
 
           <div className="flex items-center gap-2">

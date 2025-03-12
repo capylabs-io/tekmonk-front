@@ -8,7 +8,7 @@ export default function Admin() {
   const router = useCustomRouter();
 
   useEffect(() => {
-    router.push(ROUTE.ADMIN + ROUTE.ACCOUNT);
+    router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
   }, [router]);
   return <>This page will redirect to manage account page</>;
 }
