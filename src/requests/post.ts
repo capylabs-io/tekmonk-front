@@ -52,6 +52,10 @@ export const uploadPost = async (data: any) => {
   return response.data;
 };
 
+export const findPost = async (id: number) => {
+  const response = await tekdojoAxios.get(`${BASE_URL}/posts/${id}`);
+  return response.data;
+};
 export const updatePost = async (id: number, data: any) => {
   const response = await tekdojoAxios.put(`${BASE_URL}/posts/${id}`, { data });
   return response.data;

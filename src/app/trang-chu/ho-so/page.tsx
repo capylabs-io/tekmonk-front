@@ -28,6 +28,7 @@ import { Achievement, Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
 import { get } from "lodash";
 import localFont from "next/font/local";
+import { useUserAvatarStore } from "@/store/UserAvatarStore";
 
 const delaGothicOne = localFont({
   src: "../../.././assets/fonts/DelaGothicOne-Regular.ttf",
@@ -41,7 +42,7 @@ const Profile: React.FC = () => {
     state.userInfo,
     state.userCertificate,
   ]);
-
+  const [showAvatarModal] = useUserAvatarStore((state) => [state.show])
   const getMe = useUserStore((state) => state.getMe);
 
   useEffect(() => {
@@ -114,10 +115,10 @@ const Profile: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-x-2">
-          <Button outlined className="text-primary-900 text-sm">
-            Hồ sơ nghiêm túc
+          <Button outlined className="text-primary-900 text-sm border">
+            Hồ sơ
           </Button>
-          <Button outlined>
+          <Button outlined className="border border-primary-60 !bg-primary-10 rounded-lg !p-3" onClick={showAvatarModal}>
             <Settings size={24} className="text-primary-600" />
           </Button>
         </div>

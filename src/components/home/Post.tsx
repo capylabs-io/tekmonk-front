@@ -9,6 +9,9 @@ import { CommonButton } from "../common/button/CommonButton";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { likePost, updatePost } from "@/requests/post";
 import { get } from "lodash";
+import { PostCommentContent } from "./PostCommentContent";
+import { useRouter } from "next/navigation";
+import { ConvertoStatusPostToText } from "@/lib/utils";
 
 type Props = {
   data?: PostType | null;
@@ -24,6 +27,7 @@ type Props = {
   postContent?: string;
   customClassname?: string;
   isVerified?: boolean,
+  isAllowClickDetail?: boolean,
   showButton?: boolean,
   hideSocial?: boolean,
   onVerifiedPost?: (data: PostType) => void
@@ -45,13 +49,20 @@ export const Post = ({
   postName,
   postContent,
   data,
+  isAllowClickDetail,
   onVerifiedPost,
 }: Props) => {
+  const router = useRouter()
   const [liked, setLiked] = useState(false);
   const handleOnClick = (value: any) => {
     onVerifiedPost?.(value)
-  } 
+  }
   const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+  const handleClickPostCard = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    router.push(`/bai-viet/${data?.id}`)
+  }
   const handleLikedPostClick = async () => {
     setLiked((prev) => !prev)
     try {
@@ -73,27 +84,35 @@ export const Post = ({
     }
   }
   return (
-    <div className={classNames("px-8 relative", customClassname)}>
+    <div className={classNames("relative", customClassname)} onDoubleClick={(e) => { isAllowClickDetail && handleClickPostCard(e) }}>
       {
         showButton &&
         <div className="flex gap-2 absolute top-0 right-8">
-          <CommonButton variant="primary" onClick={() => handleOnClick(
-            {
-              ...data,
-              isVerified: PostVerificationType.ACCEPTED
-            }
-          )}>
+          <CommonButton variant="primary" onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleOnClick(
+              {
+                ...data,
+                isVerified: PostVerificationType.ACCEPTED
+              }
+            )
+          }}>
             Chấp thuận
           </CommonButton>
-          <CommonButton variant="secondary" onClick={() => handleOnClick({
-            ...data,
-            isVerified: PostVerificationType.DENIED
-          })}>
+          <CommonButton variant="secondary" onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handleOnClick({
+              ...data,
+              isVerified: PostVerificationType.DENIED
+            })
+          }}>
             Từ chối
           </CommonButton>
         </div>
       }
-      <div className="flex items-start mt-8 w-full justify-between">
+      <div className="flex items-center mt-8 w-full justify-between">
         <ProfileInfoBox
           imageUrl={imageUrl}
           userName={userName}
@@ -102,8 +121,10 @@ export const Post = ({
         />
         {
           isVerified ?
-            <div>
-
+            <div
+              className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
+            >
+              <span className="px-2 py-1">{ConvertoStatusPostToText(get(data, 'isVerified', ''))}</span>
             </div>
             : <div>
               <span className="text-sm text-gray-500">{createdAt}</span>
@@ -112,14 +133,19 @@ export const Post = ({
 
       </div>
       <div className="pl-10 mt-3">
-        <Image
-          src={thumbnailUrl}
-          alt="thumbnail"
-          height={340}
-          width={604}
-          className="rounded-xl w-full"
-        />
-        {/* <div className="bg-[url('/image/new/new-pic.png')] bg-no-repeat bg-cover h-[340px] rounded-xl" /> */}
+        {
+          !isVerified &&
+          < div className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat`}
+            style={
+              {
+                backgroundImage: `url(${thumbnailUrl})`
+              }
+            }
+          >
+
+          </div>
+        }
+
         <div className="mt-3">
           <p className="text-xl font-bold text-gray-800">{postName}</p>
           <div
@@ -129,6 +155,19 @@ export const Post = ({
             }}
           ></div>
         </div>
+        {
+          isVerified &&
+          <div className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3`}
+            style={
+              {
+                backgroundImage: `url(${thumbnailUrl})`
+              }
+            }
+          >
+
+          </div>
+        }
+
         {
           !hideSocial &&
           <div className="mt-3 flex gap-x-10">
@@ -153,6 +192,6 @@ export const Post = ({
           </div>
         }
       </div>
-    </div>
+    </div >
   );
 };

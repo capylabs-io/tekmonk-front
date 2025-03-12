@@ -281,42 +281,35 @@ export default function Page() {
           }
         }}
       >
-        <DialogContent className="max-w-[500px] h-[600px] bg-gray-00 overflow-y-auto">
-          <Tabs defaultValue="verified" className="w-full overflow-y-auto">
+        <DialogContent className="max-w-[500px] bg-gray-00">
+          <Tabs defaultValue="verified" className="w-full overflow-y-auto mt-2">
             <TabsList className="w-full border-b border-gray-200 !justify-start">
               <TabsTrigger value="post">Bài viết</TabsTrigger>
               <TabsTrigger value="note">Ghi chú</TabsTrigger>
             </TabsList>
-            <TabsContent value="post" className="overflow-y-auto">
-              <div className="relative">
-                <div
-                  className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
-                >
-                  <span className="px-2 py-1">{get(currentPost, 'isVerified')}</span>
-                </div>
-                <Post
-                  isVerified
-                  hideSocial
-                  data={currentPost}
-                  onVerifiedPost={handleVerifiedPost}
-                  imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                  thumbnailUrl={get(currentPost, 'thumbnail') || ''}
-                  userName="Andy Lou"
-                  specialName={get(currentPost, 'postedBy.skills', '')}
-                  userRank={
-                    <span
-                      className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                    >
-                      IV
-                    </span>
-                  }
-                  postContent={get(currentPost, 'content', '')}
-                  postName={get(currentPost, 'name', '')}
-                  createdAt={moment(get(currentPost, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
-                  likedCount="6.2"
-                  commentCount="61"
-                />
-              </div>
+            <TabsContent value="post" className="!h-[calc(100%-40px)] overflow-y-auto">
+              <Post
+                isVerified
+                hideSocial
+                data={currentPost}
+                onVerifiedPost={handleVerifiedPost}
+                imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                thumbnailUrl={get(currentPost, 'thumbnail') || ''}
+                userName="Andy Lou"
+                specialName={get(currentPost, 'postedBy.skills', '')}
+                userRank={
+                  <span
+                    className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                  >
+                    IV
+                  </span>
+                }
+                postContent={get(currentPost, 'content', '')}
+                postName={get(currentPost, 'name', '')}
+                createdAt={moment(get(currentPost, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
+                likedCount="6.2"
+                commentCount="61"
+              />
             </TabsContent>
             <TabsContent value="note" className="overflow-y-auto p-4">
               {/* {

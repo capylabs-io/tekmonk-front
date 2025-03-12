@@ -78,25 +78,28 @@ const Home = () => {
         <TabsContent value="all" className="overflow-y-auto">
           {listPost.map((item, index) => (
             <>
-              <Post
-                data={item}
-                imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                thumbnailUrl={get(item, 'thumbnail') || ''}
-                userName="Andy Lou"
-                specialName={get(item, 'postedBy.skills', '')}
-                userRank={
-                  <span
-                    className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                  >
-                    IV
-                  </span>
-                }
-                postContent={get(item, 'content', '')}
-                postName={get(item, 'name', '')}
-                createdAt={moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}
-                likedCount={get(item, 'likeCount', 0).toString() || '0'}
-                commentCount={get(item, 'commentCount', 0).toString() || '0'}
-              />
+              <div className="px-8">
+                <Post
+                  isAllowClickDetail
+                  data={item}
+                  imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                  thumbnailUrl={get(item, 'thumbnail') || ''}
+                  userName="Andy Lou"
+                  specialName={get(item, 'postedBy.skills', '')}
+                  userRank={
+                    <span
+                      className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                    >
+                      IV
+                    </span>
+                  }
+                  postContent={get(item, 'content', '')}
+                  postName={get(item, 'name', '')}
+                  createdAt={moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}
+                  likedCount={get(item, 'likeCount', 0).toString() || '0'}
+                  commentCount={get(item, 'commentCount', 0).toString() || '0'}
+                />
+              </div>
               {
                 index !== listPost.length - 1 &&
                 <hr className="border-t border-gray-200 my-4" />

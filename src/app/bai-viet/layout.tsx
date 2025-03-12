@@ -17,7 +17,6 @@ import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
-import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -117,7 +116,6 @@ export default function Layout({
         }
       />
       <CreateProfileModal />
-      <AvatarConfigModal />
     </>
   );
 }
