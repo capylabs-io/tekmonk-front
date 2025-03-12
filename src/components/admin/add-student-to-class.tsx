@@ -46,8 +46,10 @@ export const AddStudentToClass = ({
             },
           },
           populate: "user_role",
-          page: currentPage,
-          pageSize: itemsPerPage,
+          pagination: {
+            page: currentPage,
+            pageSize: itemsPerPage,
+          },
         });
         return await ReqGetUsers(queryString);
       } catch (error) {
@@ -70,7 +72,7 @@ export const AddStudentToClass = ({
         student.username.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : [];
-    
+
   return (
     <div>
       <div className="space-y-2">

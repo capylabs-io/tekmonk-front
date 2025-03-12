@@ -31,7 +31,7 @@ export default function Layout({
     show();
   };
   const handleRidirectAdminPage = () => {
-    router.push(ROUTE.ADMIN);
+    router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
   };
   const events = useEvents().slice(1, 4);
   const projects = useProjects().slice(1, 5);

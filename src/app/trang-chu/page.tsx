@@ -26,19 +26,20 @@ const Home = () => {
     queryKey: ["posts"],
     queryFn: async () => {
       try {
-        const queryString = qs.stringify({
-          pagination: {
-            page: 1,
-            pageSize: 100,
+        const queryString = qs.stringify(
+          {
+            pagination: {
+              page: 1,
+              pageSize: 100,
+            },
+            // filters: {
+            //   isVerified: {
+            //     $in: activeTab !== 'history' ? [PostVerificationType.PENDING] : [PostVerificationType.DENIED, PostVerificationType.ACCEPTED],
+            //   },
+            // },
+            sort: ["id:asc"],
+            populate: "*",
           },
-          // filters: {
-          //   isVerified: {
-          //     $in: activeTab !== 'history' ? [PostVerificationType.PENDING] : [PostVerificationType.DENIED, PostVerificationType.ACCEPTED],
-          //   },
-          // },
-          sort: ["id:asc"],
-          populate: "*",
-        },
           { encodeValuesOnly: true }
         );
         return await getListPost(queryString);
@@ -52,10 +53,11 @@ const Home = () => {
     queryKey: ["custom-posts"],
     queryFn: async () => {
       try {
-        const queryString = qs.stringify({
-          page: 1,
-          limit: 100,
-        },
+        const queryString = qs.stringify(
+          {
+            page: 1,
+            limit: 100,
+          },
           { encodeValuesOnly: true }
         );
         return await getListPostCustom(queryString);
@@ -65,8 +67,12 @@ const Home = () => {
     },
   });
   const listPost = useMemo(() => {
-    return data ? data.data?.filter((item) => item.isVerified === PostVerificationType.ACCEPTED) : []
-  }, [data])
+    return data
+      ? data.data?.filter(
+          (item) => item.isVerified === PostVerificationType.ACCEPTED
+        )
+      : [];
+  }, [data]);
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Trang chủ</div>
@@ -81,9 +87,9 @@ const Home = () => {
               <Post
                 data={item}
                 imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                thumbnailUrl={get(item, 'thumbnail') || ''}
+                thumbnailUrl={get(item, "thumbnail") || ""}
                 userName="Andy Lou"
-                specialName={get(item, 'postedBy.skills', '')}
+                specialName={get(item, "postedBy.skills", "")}
                 userRank={
                   <span
                     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
@@ -91,16 +97,17 @@ const Home = () => {
                     IV
                   </span>
                 }
-                postContent={get(item, 'content', '')}
-                postName={get(item, 'name', '')}
-                createdAt={moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}
-                likedCount={get(item, 'likeCount', 0).toString() || '0'}
-                commentCount={get(item, 'commentCount', 0).toString() || '0'}
+                postContent={get(item, "content", "")}
+                postName={get(item, "name", "")}
+                createdAt={moment(get(item, "createdAt", ""))
+                  .format("DD/MM/YYYY")
+                  .toString()}
+                likedCount={get(item, "likeCount", 0).toString() || "0"}
+                commentCount={get(item, "commentCount", 0).toString() || "0"}
               />
-              {
-                index !== listPost.length - 1 &&
+              {index !== listPost.length - 1 && (
                 <hr className="border-t border-gray-200 my-4" />
-              }
+              )}
             </>
           ))}
         </TabsContent>

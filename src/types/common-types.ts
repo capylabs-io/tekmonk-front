@@ -48,6 +48,7 @@ export type User = {
   createdAt: string;
   updatedAt: string;
   data: any | null;
+  balance: number;
   user_role?: UserRole;
 };
 
@@ -279,6 +280,35 @@ export type ClassSessionDetail = {
   discuss: boolean;
   homeworkDone: boolean;
   workSpeed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ShopItem = {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
+  image: string;
+  category?: Category;
+};
+
+export enum CategoryCode {
+  AVATAR = "AVATAR",
+  BACKGROUND = "BACKGROUND",
+}
+
+export type Category = {
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+};
+
+export type ShopItemUser = {
+  id: string;
+  user: User;
+  shop_item: ShopItem;
   createdAt: string;
   updatedAt: string;
 };

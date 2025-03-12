@@ -1,22 +1,12 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { Dela_Gothic_One } from "next/font/google";
 import { ArrowLeft } from "lucide-react";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
 import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
-import WithAuth from "@/components/hoc/WithAuth";
-import localFont from "next/font/local";
 
-const delaGothicOne = localFont({
-  src: "../../../assets/fonts/DelaGothicOne-Regular.ttf",
-  weight: "400",
-  style: "normal",
-  variable: "--font-dela",
-});
-
-const BackgroundShop: React.FC = () => {
+export default function AvatarShop() {
   const router = useRouter();
   const backgroundShops = useBackgroundShops();
 
@@ -32,9 +22,7 @@ const BackgroundShop: React.FC = () => {
       </div>
       <div className="w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-5 max-sm:px-12 sm:px-12 max-lg:px-0">
         <div className="text-white">
-          <div
-            className={`${delaGothicOne.className} text-[28px] leading-[44px]`}
-          >
+          <div className=" text-[28px] leading-[44px]">
             LÀM NHIỆM VỤ THU THẬP ĐIỂM
           </div>
           <div className="text-bodyMd mt-5">
@@ -63,6 +51,4 @@ const BackgroundShop: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default WithAuth(BackgroundShop);
+}

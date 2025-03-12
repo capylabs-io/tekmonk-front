@@ -6,9 +6,13 @@ export const ROUTE = {
   NEWS: "/tin-tuc",
   EVENTS: "/su-kien",
   HIRING: "/tuyen-dung",
+  MODERATOR: "/phe-duyet",
+  SHOP: "/cua-hang",
 
   //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",
   ACCOUNT: "/quan-ly-tai-khoan",
   COURSES: "/khoa-hoc",
+  AVATAR_SHOP: "/anh-dai-dien",
+  BACKGROUND_SHOP: "/hinh-nen",
 };
