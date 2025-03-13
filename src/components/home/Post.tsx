@@ -26,12 +26,12 @@ type Props = {
   postName?: string;
   postContent?: string;
   customClassname?: string;
-  isVerified?: boolean,
-  isAllowClickDetail?: boolean,
-  showButton?: boolean,
-  hideSocial?: boolean,
-  onVerifiedPost?: (data: PostType) => void
-  onLikedPostClick?: (data: PostType) => void
+  isVerified?: boolean;
+  isAllowClickDetail?: boolean;
+  showButton?: boolean;
+  hideSocial?: boolean;
+  onVerifiedPost?: (data: PostType) => void;
+  onLikedPostClick?: (data: PostType) => void;
 };
 
 export const Post = ({
@@ -52,47 +52,57 @@ export const Post = ({
   data,
   isAllowClickDetail,
   onVerifiedPost,
-  onLikedPostClick
+  onLikedPostClick,
 }: Props) => {
-  const router = useRouter()
+  const router = useRouter();
   const handleOnClick = (value: any) => {
-    onVerifiedPost?.(value)
-  }
-  const handleClickPostCard = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    router.push(`/bai-viet/${data?.id}`)
-  }
+    onVerifiedPost?.(value);
+  };
+  const handleClickPostCard = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/bai-viet/${data?.id}`);
+  };
 
   return (
-    <div className={classNames("relative", customClassname)} onDoubleClick={(e) => { isAllowClickDetail && handleClickPostCard(e) }}>
-      {
-        showButton &&
+    <div
+      className={classNames("relative", customClassname)}
+      onDoubleClick={(e) => {
+        isAllowClickDetail && handleClickPostCard(e);
+      }}
+    >
+      {showButton && (
         <div className="flex gap-2 absolute top-0 right-8">
-          <CommonButton variant="primary" onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleOnClick(
-              {
+          <CommonButton
+            variant="primary"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleOnClick({
                 ...data,
-                isVerified: PostVerificationType.ACCEPTED
-              }
-            )
-          }}>
+                isVerified: PostVerificationType.ACCEPTED,
+              });
+            }}
+          >
             Chấp thuận
           </CommonButton>
-          <CommonButton variant="secondary" onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            handleOnClick({
-              ...data,
-              isVerified: PostVerificationType.DENIED
-            })
-          }}>
+          <CommonButton
+            variant="secondary"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleOnClick({
+                ...data,
+                isVerified: PostVerificationType.DENIED,
+              });
+            }}
+          >
             Từ chối
           </CommonButton>
         </div>
-      }
+      )}
       <div className="flex items-center mt-8 w-full justify-between">
         <ProfileInfoBox
           imageUrl={imageUrl}
@@ -100,66 +110,71 @@ export const Post = ({
           userRank={userRank}
           specialName={specialName}
         />
-        {
-          isVerified ?
-            <div
-              className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
-            >
-              <span className="px-2 py-1">{ConvertoStatusPostToText(get(data, 'isVerified', ''))}</span>
-            </div>
-            : <div>
-              <span className="text-sm text-gray-500">{createdAt}</span>
-            </div>
-        }
-
+        {isVerified ? (
+          <div className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs">
+            <span className="px-2 py-1">
+              {ConvertoStatusPostToText(get(data, "isVerified", ""))}
+            </span>
+          </div>
+        ) : (
+          <div>
+            {/* <span className="text-sm text-gray-500">{createdAt}</span> */}
+          </div>
+        )}
       </div>
       <div className="pl-10 mt-3">
-        {
-          !isVerified &&
-          < div className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat`}
-            style={
-              {
-                backgroundImage: `url(${thumbnailUrl})`
-              }
-            }
-          >
-
-          </div>
-        }
+        {!isVerified && (
+          <div
+            className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat`}
+            style={{
+              backgroundImage: `url(${thumbnailUrl})`,
+            }}
+          ></div>
+        )}
 
         <div className="mt-3">
           <p className="text-xl font-bold text-gray-800">{postName}</p>
           <div
             className="text-base text-gray-800"
             dangerouslySetInnerHTML={{
-              __html: postContent || ''
+              __html: postContent || "",
             }}
           ></div>
         </div>
-        {
-          isVerified &&
-          <div className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3`}
-            style={
-              {
-                backgroundImage: `url(${thumbnailUrl})`
-              }
-            }
-          >
+        {isVerified && (
+          <div
+            className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3`}
+            style={{
+              backgroundImage: `url(${thumbnailUrl})`,
+            }}
+          ></div>
+        )}
 
-          </div>
-        }
-
-        {
-          !hideSocial &&
+        {!hideSocial && (
           <div className="mt-3 flex gap-x-10">
-            <div
-              className={classNames(
-                "flex items-center gap-x-1 font-bold "
-              )}
-            >
-              <button onClick={() => { data && onLikedPostClick?.(data) }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={data?.isLiked ? '#ef4444' : "none"} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  className={classNames('cursor-pointer', data?.isLiked ? "text-red-500" : "")}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>
+            <div className={classNames("flex items-center gap-x-1 font-bold ")}>
+              <button
+                onClick={() => {
+                  data && onLikedPostClick?.(data);
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill={data?.isLiked ? "#ef4444" : "none"}
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  className={classNames(
+                    "cursor-pointer",
+                    data?.isLiked ? "text-red-500" : ""
+                  )}
+                >
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                </svg>
               </button>
               {/* <Heart size={24} /> */}
               <span>{likedCount}</span>
@@ -171,8 +186,8 @@ export const Post = ({
               <span>{commentCount}</span>
             </div>
           </div>
-        }
+        )}
       </div>
-    </div >
+    </div>
   );
 };

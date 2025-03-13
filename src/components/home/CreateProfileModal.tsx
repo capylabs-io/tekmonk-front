@@ -128,7 +128,7 @@ export const CreateProfileModal = () => {
               (<>
                 <Input
                   value={value}
-                  onChange={onChange}
+                  onChange={(e) => onChange(e)}
                   type="text"
                   placeholder="Nhập thông tin"
                   customClassNames="max-w-[424px]"

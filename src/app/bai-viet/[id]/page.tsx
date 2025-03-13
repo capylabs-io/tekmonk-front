@@ -10,12 +10,14 @@ import moment from "moment";
 import { findPost } from "@/requests/post";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useRouter();
   const [currentPost, setCurrentPost] = useState<PostType>();
   const [hideLoading, showLoading] = useLoadingStore((state) => [state.hide, state.show])
   const [showError] = useSnackbarStore((state) => [state.error])
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   const fetchPost = async (id: number) => {
     try {
@@ -54,7 +56,7 @@ export default function Page({ params }: { params: { id: number } }) {
           data={currentPost}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"
           thumbnailUrl={get(currentPost, 'thumbnail') || ''}
-          userName="Andy Lou"
+          userName={userInfo?.username || 'User'}
           specialName={get(currentPost, 'postedBy.skills', '')}
           userRank={
             <span

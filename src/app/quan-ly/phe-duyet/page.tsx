@@ -16,22 +16,20 @@ import {
   TabsTrigger,
 } from "@/components/common/Tabs";
 import { CommonCard } from "@/components/common/CommonCard";
-import { zodResolver } from "@hookform/resolvers/zod";
-import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import "react-quill/dist/quill.snow.css";
 import { z } from "zod";
 import { CommonTable } from "@/components/common/CommonTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { get } from "lodash";
-import { PostType } from "@/types";
+import { PostType, PostVerificationType } from "@/types";
 import { Post } from "@/components/home/Post";
 import { ConvertoStatusPostToText } from "@/lib/utils";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { useVerifiedPost } from "@/hooks/useVerifiedPost";
 import moment from "moment";
+import { CommonSelect } from "@/components/common/CommonSelect";
+import { useUserStore } from "@/store/UserStore";
 
 const newsSchema = z.object({
   title: z
@@ -42,94 +40,78 @@ const newsSchema = z.object({
   content: z.string().min(1, "Mô tả không được để trống"),
 });
 
-const modules = {
-  toolbar: [
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["bold", "italic", "underline"],
-    [{ header: [1, 2, 3, false] }],
-    ["link", "image"],
-  ],
-};
-
-const formats = [
-  "list",
-  "bullet",
-  "ordered",
-  "bold",
-  "italic",
-  "underline",
-  "header",
-  "link",
-  "image",
-];
-
 export default function Page() {
   const {
+    page,
+    totalPage,
+    totalDocs,
     togglePostDialog,
     toggleConfirmDialog,
     listPost,
     currentPost,
+    selectedType,
+    limit,
+    setLimit,
+    handleSelectChange,
+    setPage,
     setCurrentPost,
     setTogglePostDialog,
     handleTabChange,
     setToggleConfirmDialog,
     handleVerifiedPost,
-    handleVerified
-  } = useVerifiedPost()
+    handleVerified,
+  } = useVerifiedPost();
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
-  const methods = useForm({
-    resolver: zodResolver(newsSchema),
-    defaultValues: {
-      title: "",
-      tags: "",
-      image: null,
-      content: "",
+  // const methods = useForm({
+  //   resolver: zodResolver(newsSchema),
+  //   defaultValues: {
+  //     title: "",
+  //     tags: "",
+  //     image: null,
+  //     content: "",
+  //   },
+  // });
+  // const { control, getValues, setValue, reset } = methods;
+
+  const columns: ColumnDef<PostType>[] = [
+    {
+      header: "STT",
+      cell: ({ row }) => <span>{row.index + 1}</span>,
     },
-  });
-  const { control, getValues, setValue, reset } = methods;
-
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(10);
-  const [totalDocs, setTotalDocs] = useState(100);
-
-
-  const columns: ColumnDef<PostType>[] =
-    [
-      {
-        header: 'STT',
-        cell: ({ row }) => <span>{row.index + 1}</span>,
-
-      },
-      {
-        header: 'Ảnh bìa',
-        cell: ({ row }) => (
-          <div className="flex items-center">
-            <Image
-              src={row.original?.thumbnail || ''}
-              alt="thumbnail"
-              height={64}
-              width={130}
-              className="rounded-xl w-full"
-            />
-          </div>
-        ),
-      },
-      {
-        header: 'Tiêu đề dự án',
-        cell: ({ row }) => <span>{row.original.name}</span>,
-      },
-      {
-        header: 'Trạng thái',
-        cell: ({ row }) => <span>{ConvertoStatusPostToText(row.original.isVerified || '')}</span>,
-      },
-      {
-        header: 'Tags',
-        cell: ({ row }) => <div className="flex flex-wrap gap-2">
-
-          {row.original.tags.split(",")
+    {
+      header: "Ảnh bìa",
+      cell: ({ row }) => (
+        <div className="flex items-center">
+          <Image
+            src={row.original?.thumbnail || ""}
+            alt="thumbnail"
+            height={64}
+            width={130}
+            className="rounded-xl w-full"
+          />
+        </div>
+      ),
+    },
+    {
+      header: "Tiêu đề dự án",
+      cell: ({ row }) => <span>{row.original.name}</span>,
+    },
+    {
+      header: "Trạng thái",
+      cell: ({ row }) => (
+        <span>{ConvertoStatusPostToText(row.original.isVerified || "")}</span>
+      ),
+    },
+    {
+      header: "Tags",
+      cell: ({ row }) => (
+        <div className="flex flex-wrap gap-2">
+          {row.original.tags
+            .split(",")
             .map((tag) => tag.trim())
-            .filter((tag) => tag !== "").map((tag, index) => (
+            .filter((tag) => tag !== "")
+            .map((tag, index) => (
               <div
                 key={index}
                 className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
@@ -137,26 +119,37 @@ export default function Page() {
                 <span className="px-2 py-1">{tag}</span>
               </div>
             ))}
-        </div>,
-      },
-      {
-        id: 'action',
-        header: '',
-        cell: ({ row }) => (
-          <button
-            className="p-2 hover:bg-gray-100 rounded-full"
-            onClick={(e) => {
-              e.stopPropagation();
-              setTogglePostDialog(true)
-              setCurrentPost(row.original)
-            }}
-          >
-            <Eye className="h-4 w-4" color="#7C6C80" />
-          </button>
-        ),
-      },
-    ]
+        </div>
+      ),
+    },
+    {
+      id: "action",
+      header: "",
+      cell: ({ row }) => (
+        <button
+          className="p-2 hover:bg-gray-100 rounded-full"
+          onClick={(e) => {
+            e.stopPropagation();
+            setTogglePostDialog(true);
+            setCurrentPost(row.original);
+          }}
+        >
+          <Eye className="h-4 w-4" color="#7C6C80" />
+        </button>
+      ),
+    },
+  ];
 
+  const optionSelect = [
+    {
+      value: PostVerificationType.ACCEPTED,
+      label: "Đã chấp nhận",
+    },
+    {
+      value: PostVerificationType.DENIED,
+      label: "Từ chối",
+    },
+  ];
 
   return (
     <div className="w-full h-screen border-r border-gray-20">
@@ -173,14 +166,17 @@ export default function Page() {
       </div>
       {/* <div className="w-full flex flex-col py-2">
         <div className="h-9 w-[265px] flex items-center justify-center text-gray-95 gap-3"> */}
-      <Tabs defaultValue="verified" className="w-full !h-[calc(100%-68px-2px)] overflow-y-auto" onValueChange={handleTabChange}>
+      <Tabs
+        defaultValue="verified"
+        className="w-full !h-[calc(100%-68px-2px)] overflow-y-auto"
+        onValueChange={handleTabChange}
+      >
         <TabsList className="w-full border-b border-gray-200 !justify-start">
           <TabsTrigger value="verified">Phê duyệt</TabsTrigger>
           <TabsTrigger value="history">Lịch sử phê duyệt</TabsTrigger>
         </TabsList>
         <TabsContent value="verified" className="overflow-y-auto">
-          {
-            listPost.length > 0 &&
+          {listPost.length > 0 && (
             <div className="border rounded-2xl w-[720px] mx-auto py-8">
               {listPost.map((item, index) => (
                 <>
@@ -189,9 +185,9 @@ export default function Page() {
                     data={item}
                     onVerifiedPost={handleVerifiedPost}
                     imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                    thumbnailUrl={get(item, 'thumbnail') || ''}
-                    userName="Andy Lou"
-                    specialName={get(item, 'postedBy.skills', '')}
+                    thumbnailUrl={get(item, "thumbnail") || ""}
+                    userName={userInfo?.username || "User"}
+                    specialName={get(item, "postedBy.skills", "")}
                     userRank={
                       <span
                         className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
@@ -199,30 +195,48 @@ export default function Page() {
                         IV
                       </span>
                     }
-                    postContent={get(item, 'content', '')}
-                    postName={get(item, 'name', '')}
-                    createdAt={moment(get(item, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
-                    likedCount="6.2"
-                    commentCount="61"
+                    postContent={get(item, "content", "")}
+                    postName={get(item, "name", "")}
+                    createdAt={moment(
+                      get(item, "createdAt", ""),
+                      "dd/mm/yyyy hh:mm:ss"
+                    ).toString()}
+                    hideSocial
+                    likedCount={get(item, "likeCount", 0).toString() || "0"}
+                    commentCount={
+                      get(item, "commentCount", 0).toString() || "0"
+                    }
                   />
-                  {
-                    index !== listPost.length - 1 &&
+                  {index !== listPost?.length - 1 && (
                     <hr className="border-t border-gray-200 my-4" />
-                  }
+                  )}
                 </>
               ))}
             </div>
-          }
+          )}
         </TabsContent>
         <TabsContent value="history" className="overflow-y-auto p-4">
+          <div className="mb-3">
+            <CommonSelect
+              options={optionSelect}
+              value={selectedType}
+              onChange={handleSelectChange}
+            />
+          </div>
           <CommonTable
-            data={listPost && listPost || [] as any[]}
+            data={
+              listPost && selectedType !== ""
+                ? listPost.filter((item) => item.isVerified === selectedType)
+                : listPost || ([] as any[])
+            }
             isLoading={false}
             columns={columns}
             page={page}
             totalPage={totalPage}
             totalDocs={totalDocs}
             onPageChange={setPage}
+            docsPerPage={limit}
+            onPageSizeChange={setLimit}
           />
         </TabsContent>
       </Tabs>
@@ -236,12 +250,15 @@ export default function Page() {
       >
         <DialogContent className="max-w-[500px] max-h-full bg-gray-00 overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl">
-              Từ chối bài đăng
-            </DialogTitle>
+            <DialogTitle className="text-xl">Từ chối bài đăng</DialogTitle>
             <DialogDescription>
               <div className="text-gray-60 text-BodySm">
-                Yêu cầu reset mật khẩu của tài khoản <span className="text-gray-95 font-bold">kh*********@gmail.com</span> đã được gửi đến hệ thống. Hãy chờ email phản hồi và làm theo hướng dẫn.
+                Yêu cầu reset mật khẩu của tài khoản{" "}
+                <span className="text-gray-95 font-bold">
+                  kh*********@gmail.com
+                </span>{" "}
+                đã được gửi đến hệ thống. Hãy chờ email phản hồi và làm theo
+                hướng dẫn.
               </div>
             </DialogDescription>
           </DialogHeader>
@@ -263,12 +280,11 @@ export default function Page() {
               childrenClassName="text-SubheadMd"
               onClick={() => {
                 setToggleConfirmDialog(false);
-                handleVerified(currentPost)
+                handleVerified(currentPost);
               }}
             >
               Từ chối
             </CommonButton>
-
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -287,16 +303,19 @@ export default function Page() {
               <TabsTrigger value="post">Bài viết</TabsTrigger>
               <TabsTrigger value="note">Ghi chú</TabsTrigger>
             </TabsList>
-            <TabsContent value="post" className="!h-[calc(100%-40px)] overflow-y-auto">
+            <TabsContent
+              value="post"
+              className="!h-[calc(100%-40px)] overflow-y-auto"
+            >
               <Post
                 isVerified
                 hideSocial
                 data={currentPost}
                 onVerifiedPost={handleVerifiedPost}
                 imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                thumbnailUrl={get(currentPost, 'thumbnail') || ''}
+                thumbnailUrl={get(currentPost, "thumbnail") || ""}
                 userName="Andy Lou"
-                specialName={get(currentPost, 'postedBy.skills', '')}
+                specialName={get(currentPost, "postedBy.skills", "")}
                 userRank={
                   <span
                     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
@@ -304,9 +323,12 @@ export default function Page() {
                     IV
                   </span>
                 }
-                postContent={get(currentPost, 'content', '')}
-                postName={get(currentPost, 'name', '')}
-                createdAt={moment(get(currentPost, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
+                postContent={get(currentPost, "content", "")}
+                postName={get(currentPost, "name", "")}
+                createdAt={moment(
+                  get(currentPost, "createdAt", ""),
+                  "dd/mm/yyyy hh:mm:ss"
+                ).toString()}
                 likedCount="6.2"
                 commentCount="61"
               />
@@ -329,7 +351,7 @@ export default function Page() {
               childrenClassName="text-SubheadMd"
               onClick={() => {
                 setTogglePostDialog(false);
-                reset();
+                // reset();
               }}
             >
               Thoát
@@ -341,7 +363,7 @@ export default function Page() {
                 childrenClassName="text-SubheadMd"
                 onClick={() => {
                   setTogglePostDialog(false);
-                  reset();
+                  // reset();
                 }}
               >
                 Xoá
@@ -352,16 +374,15 @@ export default function Page() {
                 childrenClassName="text-SubheadMd"
                 onClick={() => {
                   setTogglePostDialog(false);
-                  reset();
+                  // reset();
                 }}
               >
                 Khôi phục
               </CommonButton>
             </div>
-
           </div>
         </DialogContent>
       </Dialog>
-    </div >
+    </div>
   );
 }
