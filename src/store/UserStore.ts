@@ -1,6 +1,5 @@
-import tekdojoAxios from "@/requests/axios.config";
 import { postLogin, getMe, ReqRegister } from "@/requests/login";
-import { Certificate, ContestGroupStage, User } from "@/types/common-types";
+import { Certificate, User } from "@/types/common-types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

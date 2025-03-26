@@ -49,6 +49,7 @@ export type User = {
   updatedAt: string;
   data: any | null;
   balance: number;
+  point: number;
   user_role?: UserRole;
 };
 
@@ -118,8 +119,22 @@ export type EventDetail = {
 };
 
 export type Achievement = {
-  name: string;
-  imageUrl: string;
+  id: number;
+  historyId?: number;
+  isClaim?: boolean;
+  imageUrl?: string;
+  description: string | null;
+  metadata?: any | null;
+  createdAt?: string;
+  updatedAt?: string;
+  title: string;
+  module?: string;
+  type: string;
+  reward: number;
+  requiredQuantity: number;
+  points: number;
+  actionType: string;
+  currentProgress?: number;
 };
 
 export type Notification = {
@@ -311,4 +326,23 @@ export type ShopItemUser = {
   shop_item: ShopItem;
   createdAt: string;
   updatedAt: string;
+};
+
+export type Mission = {
+  id: number;
+  historyId?: number;
+  isClaim?: boolean;
+  imageUrl?: string;
+  title: string;
+  description: string;
+  type: string;
+  actionType: string;
+  module?: string;
+  reward: number;
+  requiredQuantity: number;
+  points: number;
+  metadata?: any | null;
+  createdAt?: string;
+  updatedAt?: string;
+  currentProgress?: number;
 };

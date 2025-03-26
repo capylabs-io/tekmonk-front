@@ -42,7 +42,7 @@ const Profile: React.FC = () => {
     state.userInfo,
     state.userCertificate,
   ]);
-  const [showAvatarModal] = useUserAvatarStore((state) => [state.show])
+  const [showAvatarModal] = useUserAvatarStore((state) => [state.show]);
   const getMe = useUserStore((state) => state.getMe);
 
   useEffect(() => {
@@ -118,7 +118,11 @@ const Profile: React.FC = () => {
           <Button outlined className="text-primary-900 text-sm border">
             Hồ sơ
           </Button>
-          <Button outlined className="border border-primary-60 !bg-primary-10 rounded-lg !p-3" onClick={showAvatarModal}>
+          <Button
+            outlined
+            className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+            onClick={showAvatarModal}
+          >
             <Settings size={24} className="text-primary-600" />
           </Button>
         </div>
@@ -220,7 +224,7 @@ const Profile: React.FC = () => {
                       height={120}
                       className="mt-5"
                     />
-                    <span className="text-sm mt-2">{achievement.name}</span>
+                    <span className="text-sm mt-2">{achievement.title}</span>
                   </div>
                 );
               })}
