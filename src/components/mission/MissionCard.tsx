@@ -54,28 +54,28 @@ export const MissionCard = ({ data, onClick }: Props) => {
         return (
           <Button
             urlIcon="/image/home/coin.png"
-            className="mt-2 text-SubheadXs !py-[6px] !px-[12px] !font-normal !border !border-gray-30 !bg-white !text-primary-900 cursor-default"
+            className="flex flex-row items-center justify-center py-[6px] px-[12px] gap-1 h-7 !bg-white !border-2 !border-gray-30 !text-primary-900 cursor-default rounded-md"
           >
-            {data.reward}
+            <span className="text-SubheadXs font-medium">{data.reward}</span>
           </Button>
         );
       case CardState.COMPLETED:
         return (
           <Button
             urlIcon="/image/home/coin.png"
-            style={{
-              boxShadow: "0px 2px 0px #9a1595",
-            }}
+            className="flex flex-row items-center justify-center py-[6px] px-[12px] gap-1 h-7 !bg-primary-60 !border-2 !border-primary-70 shadow-[0px_2px_0px_#9A1571] rounded-md"
             onClick={handleMissionOnClick}
-            className="mt-2 text-SubheadXs border-2 border-primary-70 !py-[6px] !px-[12px] !font-normal"
           >
-            {data.reward}
+            <span className="text-SubheadXs font-medium text-white">
+              {data.reward}
+            </span>
           </Button>
         );
       case CardState.CLAIMED:
         return (
-          <Button className="!bg-green-50 !text-green-400 mt-2 !text-SubheadXs !font-normal !py-[6px] !px-[12px] cursor-default">
-            <Check size={18} className="mr-2" fontWeight={800} /> Đã nhận
+          <Button className="flex flex-row items-center justify-center py-[6px] px-[12px] gap-1 h-7 !bg-green-50 !text-green-400 cursor-default rounded-md">
+            <Check size={16} className="mr-1" />{" "}
+            <span className="text-SubheadXs font-medium">Đã nhận</span>
           </Button>
         );
     }
@@ -96,33 +96,60 @@ export const MissionCard = ({ data, onClick }: Props) => {
     return null;
   };
 
+  const TextWithEllipsis = ({
+    text,
+    maxLines,
+  }: {
+    text: string;
+    maxLines: number;
+  }) => {
+    return (
+      <div
+        className={`overflow-hidden text-ellipsis whitespace-pre-line ${
+          maxLines ? `line-clamp-${maxLines}` : ""
+        }`}
+      >
+        {text}
+      </div>
+    );
+  };
+
   return (
     <CommonCard
       isActive={cardState !== CardState.CLAIMED}
       className={cn(
-        "flex flex-col items-center justify-center w-[200px] text-center p-4 !bg-white border-2",
+        "flex flex-col items-center justify-center w-[200px] h-[250px] p-4 gap-2 !bg-white border-2",
         cardState === CardState.CLAIMED
           ? "border-green-100"
           : cardState === CardState.COMPLETED
-          ? "border-primary-200"
-          : "border-gray-30",
-        "place-self-stretch !cursor-default"
+          ? "shadow-[0px_4px_0px_#9A1595]"
+          : "shadow-[0px_4px_0px_#DDD0DD] ",
+        "place-self-stretch !cursor-default rounded-2xl"
       )}
     >
       <Image
         src={data.imageUrl || ""}
         alt={data.title || "mission"}
-        width={120}
-        height={120}
+        width={100}
+        height={100}
+        className={cn(
+          "object-contain h-1/2",
+          cardState === CardState.IN_PROGRESS && "opacity-50 brightness-50"
+        )}
       />
 
-      <span className="text-SubheadSm mt-2 text-gray-95">{data.title}</span>
-      <span className="text-BodyXs text-gray-70">
-        {data.description}
-        {renderProgressIndicator()}
-      </span>
+      <div className="flex flex-col items-center p-0 w-full  gap-0 flex-none self-stretch">
+        <h3 className="text-SubheadSm font-medium text-center text-gray-95 w-full h-5 overflow-hidden text-ellipsis whitespace-nowrap">
+          {data.title}
+        </h3>
 
-      {renderActionButton()}
+        <div className="text-BodyXs font-light text-gray-70 w-full h-8 text-center mt-1">
+          <TextWithEllipsis text={data.description || ""} maxLines={2} />
+        </div>
+
+        {renderProgressIndicator()}
+      </div>
+      <div className="mt-2">{renderActionButton()}</div>
     </CommonCard>
   );
 };
