@@ -116,15 +116,12 @@ export const MissionCard = ({ data, onClick }: Props) => {
 
   return (
     <CommonCard
-      isActive={cardState !== CardState.CLAIMED}
+      isActive={
+        cardState === CardState.IN_PROGRESS || cardState === CardState.CLAIMED
+      }
       className={cn(
-        "flex flex-col items-center justify-center w-[200px] h-[250px] p-4 gap-2 !bg-white border-2",
-        cardState === CardState.CLAIMED
-          ? "border-green-100"
-          : cardState === CardState.COMPLETED
-          ? "shadow-[0px_4px_0px_#9A1595]"
-          : "shadow-[0px_4px_0px_#DDD0DD] ",
-        "place-self-stretch !cursor-default rounded-2xl"
+        "flex flex-col items-center justify-center w-[200px] h-[250px] p-4 gap-2 !bg-white border-2 border-gray-20",
+        " !cursor-default rounded-2xl"
       )}
     >
       <Image
