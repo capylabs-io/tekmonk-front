@@ -25,8 +25,11 @@ export const CreateProfileModal = () => {
     state.isShowing,
     state.hide,
   ]);
-  const [userInfo] = useUserStore((state) => [state.userInfo])
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const [showSuccess, showError] = useSnackbarStore((state) => [
     state.success,
     state.error,
@@ -39,7 +42,7 @@ export const CreateProfileModal = () => {
       url: "",
       image: null,
       tags: "",
-      content: ""
+      content: "",
     },
   });
   const modules = {
@@ -65,9 +68,18 @@ export const CreateProfileModal = () => {
   const { control, getValues, setValue, reset } = method;
   const appendFormData = (formData: FormData, data: any, parentKey = "") => {
     Object.entries(data).forEach(([key, value]) => {
-      if (value === null || value === undefined || value === "" || value instanceof File) return; // Skip empty values
+      if (
+        value === null ||
+        value === undefined ||
+        value === "" ||
+        value instanceof File
+      )
+        return; // Skip empty values
       const newKey = parentKey ? `${parentKey}[${key}]` : key;
-      if (typeof value === "object" && !(value instanceof File || value instanceof Blob)) {
+      if (
+        typeof value === "object" &&
+        !(value instanceof File || value instanceof Blob)
+      ) {
         appendFormData(formData, value, newKey); // Recursively append nested objects
       } else {
         formData.append(newKey, String(value));
@@ -76,27 +88,27 @@ export const CreateProfileModal = () => {
   };
   const handleCreatePost = async () => {
     try {
-      showLoading()
+      showLoading();
       const formData = new FormData();
-      const data = getValues()
+      const data = getValues();
       appendFormData(formData, data);
-      formData.append('isVerified', PostVerificationType.PENDING)
+      formData.append("isVerified", PostVerificationType.PENDING);
       if (data.image) {
-        formData.append('image', data.image)
+        formData.append("image", data.image);
       }
-      const res = await uploadPost(formData)
+      const res = await uploadPost(formData);
       if (res) {
         showSuccess("Thành công", "Tạo bài viết thành công");
         reset();
-        hide()
+        hide();
       }
     } catch (error) {
-      console.log('error', error)
+      console.log("error", error);
       showError("Thất bại", "Tạo bài viết Thất bại");
     } finally {
-      hideLoading()
+      hideLoading();
     }
-  }
+  };
   const handleImageUpload = (file: File | null) => {
     if (file) setValue("image", file as any);
   };
@@ -124,20 +136,19 @@ export const CreateProfileModal = () => {
             <Controller
               control={control}
               name="name"
-              render={({ field: { value, onChange } }) =>
-              (<>
-                <Input
-                  value={value}
-                  onChange={(e) => onChange(e)}
-                  type="text"
-                  placeholder="Nhập thông tin"
-                  customClassNames="max-w-[424px]"
-                  customInputClassNames="text-sm"
-                />
-              </>)
-              }
+              render={({ field: { value, onChange } }) => (
+                <>
+                  <Input
+                    value={value}
+                    onChange={(e) => onChange(e)}
+                    type="text"
+                    placeholder="Nhập thông tin"
+                    customClassNames="max-w-[424px]"
+                    customInputClassNames="text-sm"
+                  />
+                </>
+              )}
             />
-
           </div>
           <div className="flex justify-between">
             <span className="text-gray-60">
@@ -149,18 +160,18 @@ export const CreateProfileModal = () => {
             <Controller
               control={control}
               name="url"
-              render={({ field: { value, onChange } }) =>
-              (<>
-                <Input
-                  value={value}
-                  onChange={onChange}
-                  type="text"
-                  placeholder="Nhập thông tin"
-                  customClassNames="max-w-[424px]"
-                  customInputClassNames="text-sm"
-                />
-              </>)
-              }
+              render={({ field: { value, onChange } }) => (
+                <>
+                  <Input
+                    value={value}
+                    onChange={onChange}
+                    type="text"
+                    placeholder="Nhập thông tin"
+                    customClassNames="max-w-[424px]"
+                    customInputClassNames="text-sm"
+                  />
+                </>
+              )}
             />
           </div>
           <div className="flex justify-between text-sm">
@@ -216,18 +227,22 @@ export const CreateProfileModal = () => {
 
         <hr className="border-t border-gray-200" />
         <div className="flex justify-between w-ful p-6">
-          <Button className=" !bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]"
+          <Button
+            className=" !bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]"
             style={{
-              boxShadow:
-                "0px 4px 0px #ebe4ec"
+              boxShadow: "0px 4px 0px #ebe4ec",
             }}
-            onClick={hide}>
+            onClick={hide}
+          >
             <div className="!text-sm !font-normal"> Thoát</div>
           </Button>
-          <Button className="w-[150px] !font-medium border border-primary-70" style={{
-            boxShadow:
-              "0px 4px 0px #9a1595"
-          }} onClick={handleCreatePost}>
+          <Button
+            className="w-[150px] !font-medium border border-primary-70"
+            style={{
+              boxShadow: "0px 4px 0px #9a1595",
+            }}
+            onClick={handleCreatePost}
+          >
             <div className="!text-sm !font-normal"> Đăng dự án</div>
           </Button>
         </div>
