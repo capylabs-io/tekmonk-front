@@ -98,25 +98,6 @@ export default function Shop() {
   });
 
   // Query for user's inventory items
-  const { data: myItems } = useQuery({
-    queryKey: ["my-items"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          populate: "*",
-          // Add appropriate filters for user's items
-          pagination: {
-            page: 1,
-            pageSize: 20,
-          },
-        });
-        return await ReqGetUserShopItems(queryString);
-      } catch (error) {
-        console.log("Error: ", error);
-        return { data: [] };
-      }
-    },
-  });
 
   /** Handle Buy item here */
   const buyItemMutation = useMutation({
@@ -198,7 +179,7 @@ export default function Shop() {
             handleAvatarClick={handleAvatarClick}
           />
         ) : (
-          <InventoryContent items={myItems?.data || []} />
+          <InventoryContent />
         )}
       </div>
 

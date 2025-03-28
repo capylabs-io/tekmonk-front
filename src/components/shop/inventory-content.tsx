@@ -1,12 +1,41 @@
 import Image from "next/image";
 import { ShopItemCarousel } from "@/components/shop/shop-item-carousel";
 import { ShopItem, ShopItemUser } from "@/types/common-types";
+import { ReqGetUserShopItems } from "@/requests/shop-item-user";
+import { useQuery } from "@tanstack/react-query";
+import { userInfo } from "os";
+import qs from "qs";
+import { useUserStore } from "@/store/UserStore";
 
 interface InventoryContentProps {
   items: ShopItemUser[];
 }
 
-export const InventoryContent = ({ items }: InventoryContentProps) => {
+export const InventoryContent = () => {
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const { data: myItems } = useQuery({
+    queryKey: ["my-items"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          populate: "*",
+          filters: {
+            user: {
+              id: userInfo?.id,
+            },
+          },
+          pagination: {
+            page: 1,
+            pageSize: 20,
+          },
+        });
+        return await ReqGetUserShopItems(queryString);
+      } catch (error) {
+        console.log("Error: ", error);
+        return { data: [] };
+      }
+    },
+  });
   return (
     <>
       <div className="w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
@@ -29,13 +58,13 @@ export const InventoryContent = ({ items }: InventoryContentProps) => {
 
       {/* Items Grid Section */}
       <div className="mt-6">
-        {items && items.length > 0 && (
+        {myItems && myItems.data.length > 0 && (
           <h2 className="text-xl font-bold mb-4">VẬT PHẨM CỦA TÔI</h2>
         )}
 
-        {items && items.length > 0 ? (
+        {myItems && myItems.data.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {items.map((item, index) => (
+            {myItems.data.map((item, index) => (
               <div
                 key={index}
                 className="bg-white rounded-lg overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200"
