@@ -1,17 +1,15 @@
 "use client";
-import { useState } from "react";
+import { CommonButton } from "@/components/common/button/CommonButton";
+import { TabItem, TabNavigation } from "@/components/common/TabNavigation";
 import { MissionCard } from "@/components/mission/MissionCard";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import qs from "qs";
-import { ReqClaimMission, ReqGetMissionInfo } from "@/requests/mission";
 import {
-  ReqClaimAchievement,
-  ReqGetAllAchievementsInfo,
-} from "@/requests/achievement";
-import { useSnackbarStore } from "@/store/SnackbarStore";
-import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
-import { Achievement } from "@/types/common-types";
-import { useLoadingStore } from "@/store/LoadingStore";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -19,9 +17,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Filter } from "lucide-react";
 import { StatusFilter } from "@/contants/misison/status-filter";
+import {
+  ReqClaimAchievement,
+  ReqGetAllAchievementsInfo,
+} from "@/requests/achievement";
+import { ReqClaimMission, ReqGetMissionInfo } from "@/requests/mission";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
+import { Achievement, Mission } from "@/types/common-types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Filter } from "lucide-react";
+import qs from "qs";
+import { useState } from "react";
 
 // Tab options
 enum TabOptions {
@@ -95,7 +104,10 @@ export default function MissionPage() {
   const [pageSize] = useState(30);
   const [activeTab, setActiveTab] = useState<string>(TabOptions.MISSION);
   const [filterValue, setFilterValue] = useState<string>(StatusFilter.ALL);
-
+  const [claimDialog, setClaimDialog] = useState<boolean>(false);
+  const [claimData, setClaimData] = useState<Mission | Achievement | null>(
+    null
+  );
   /** UseStore */
   const [error, success] = useSnackbarStore((state) => [
     state.error,
@@ -141,8 +153,7 @@ export default function MissionPage() {
         } else {
           await ReqClaimAchievement(id);
         }
-        await getMe();
-        success("Xong", "Nhận thành công");
+        setClaimDialog(true);
       } catch (err) {
         console.log("mission page => ", err);
         error("Lỗi", "Lỗi khi cập nhật nhiệm vụ");
@@ -157,6 +168,7 @@ export default function MissionPage() {
             filterValue,
           ],
         });
+        await getMe();
       }
     },
   });
@@ -183,7 +195,14 @@ export default function MissionPage() {
         ) : data?.data && data.data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {data.data.map((mission, index: number) => (
-              <MissionCard key={index} data={mission} onClick={updateMission} />
+              <MissionCard
+                key={index}
+                data={mission}
+                onClick={() => {
+                  updateMission(mission.historyId ?? 0); // Add null check with default value
+                  setClaimData(mission);
+                }}
+              />
             ))}
           </div>
         ) : (
@@ -209,7 +228,10 @@ export default function MissionPage() {
               <MissionCard
                 key={index}
                 data={achievement}
-                onClick={updateMission}
+                onClick={() => {
+                  updateMission(achievement.historyId ?? 0);
+                  setClaimData(achievement);
+                }}
               />
             ))}
           </div>
@@ -259,6 +281,39 @@ export default function MissionPage() {
           ? renderMissionContent()
           : renderAchievementContent()}
       </div>
+
+      {/* Show Dialog when user click to claim here */}
+      <Dialog open={claimDialog} onOpenChange={setClaimDialog}>
+        <DialogContent className="max-w-[500px] bg-white">
+          <DialogHeader>
+            <DialogTitle>
+              <div className="text-primary-900 text-SubheadLg font-medium">
+                <span>Chúc mừng</span>
+              </div>
+            </DialogTitle>
+            <DialogDescription>
+              <div className="text-BodyMd text-gray-70">
+                Bạn đã nhận được{" "}
+                <span className="text-gray-70">
+                  điểm và{" "}
+                  <span className="text-primary-900">{claimData?.reward}</span>{" "}
+                  <span className="text-gray-70">đồng</span>
+                </span>
+              </div>
+            </DialogDescription>
+            <DialogFooter>
+              <CommonButton
+                className="w-full"
+                onClick={() => {
+                  setClaimDialog(false);
+                }}
+              >
+                <span>Đồng ý</span>
+              </CommonButton>
+            </DialogFooter>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
