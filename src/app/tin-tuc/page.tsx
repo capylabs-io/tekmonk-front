@@ -300,6 +300,7 @@ export default function News() {
             },
             filters: {
               type: "news",
+              status: "public",
             },
             populate: "*",
           });
