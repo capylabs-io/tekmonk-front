@@ -61,7 +61,9 @@ export const MissionCardContent = ({
     ) {
       return (
         <div className="text-BodyXs text-gray-70">
-          ({data.currentProgress}/{data.requiredQuantity})
+          {data.type === "Manual"
+            ? "0/1"
+            : `${data.currentProgress}/${data.requiredQuantity}`}
         </div>
       );
     }
