@@ -8,7 +8,7 @@ export const ROUTE = {
   HIRING: "/tuyen-dung",
   MODERATOR: "/phe-duyet",
   SHOP: "/cua-hang",
-
+  MISSION: "/nhiem-vu",
   //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",
   ACCOUNT: "/quan-ly-tai-khoan",

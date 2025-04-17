@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/button/Button";
-import { FileEdit, Pencil, Settings } from "lucide-react";
+import { Pencil, Settings } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -17,18 +17,20 @@ import {
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
-  PolarRadiusAxis,
   ResponsiveContainer,
 } from "recharts";
 import { Post } from "@/components/home/Post";
-import { Dela_Gothic_One } from "next/font/google";
-import WithAuth from "@/components/hoc/WithAuth";
-import { useAchievements } from "@/hooks/useAchievement";
-import { Achievement, Certificate } from "@/types/common-types";
+import { Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
 import { get } from "lodash";
 import localFont from "next/font/local";
 import { useUserAvatarStore } from "@/store/UserAvatarStore";
+import { useAchievementQuery } from "@/hooks/achievement-query";
+import { MissionProgress } from "@/components/profile/mission-progress";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
+import { useQuery } from "@tanstack/react-query";
+import { ReqGetMissionInfo } from "@/requests/mission";
 
 const delaGothicOne = localFont({
   src: "../../.././assets/fonts/DelaGothicOne-Regular.ttf",
@@ -38,6 +40,7 @@ const delaGothicOne = localFont({
 });
 
 const Profile: React.FC = () => {
+  const router = useCustomRouter();
   const [userInfo, userCertificate] = useUserStore((state) => [
     state.userInfo,
     state.userCertificate,
@@ -48,7 +51,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userData = await getMe();
+        await getMe();
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -56,7 +59,7 @@ const Profile: React.FC = () => {
     fetchData();
   }, []);
 
-  const achievements: Achievement[] = useAchievements();
+  const { data: achievements } = useAchievementQuery();
   const certificates: Certificate[] = useCertificates();
 
   const data = [
@@ -134,46 +137,24 @@ const Profile: React.FC = () => {
         </TabsList>
         <TabsContent value="personal" className="overflow-y-auto">
           <div className="px-6 mt-3">
-            <div className="text-primary-900">TIẾN TRÌNH</div>
-            {userCertificate &&
-              userCertificate.map((certificate, index) => {
-                return (
-                  <div className="flex gap-x-2 items-center" key={index}>
-                    <Image
-                      src={certificate.imageUrl || ""}
-                      alt="certificate"
-                      width={120}
-                      height={120}
-                      className="mt-5"
-                    />
-                    <div className="flex flex-col w-full">
-                      <span className="text-primary-950 text-xl">
-                        {certificate.name}
-                      </span>
-                      <div className="flex w-full justify-between items-center mt-1">
-                        <div className="text-base text-gray-600">
-                          {certificate.type}
-                        </div>
-                        <div className="text-sm">
-                          <span className="text-primary-950 font-bold">
-                            1/{certificate.mission} nhiệm vụ
-                          </span>
-                          <span className="text-gray-600">
-                            {" "}
-                            ({certificate.progress})
-                          </span>
-                        </div>
-                      </div>
-                      <Progress value={10} className="mt-3 h-3" />
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="text-primary-900">THÔNG SỐ CHUNG</div>
+            <UserStat />
           </div>
           <hr className="border-t border-gray-200 my-4" />
           <div className="px-6 mt-3">
-            <div className="text-primary-900">THÔNG SỐ CHUNG</div>
-            <UserStat />
+            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+              <div
+                className="text-gray-95 text-SubheadLg"
+                onClick={() => router.push(ROUTE.MISSION)}
+              >
+                Nhiệm vụ
+              </div>
+              <div className="cursor-pointer">Xem thêm</div>
+            </div>
+            {/* TODO: Replace static progress props with real values from userCertificate when available */}
+            <div className="flex flex-col gap-4 mt-4">
+              <MissionProgress />
+            </div>
           </div>
           <hr className="border-t border-gray-200 my-4" />
           <div className="px-6 mt-3">
@@ -211,7 +192,7 @@ const Profile: React.FC = () => {
               <Pencil size={20} />
             </div>
             <div className="py-4 flex flex-wrap justify-center gap-x-12 items-center">
-              {achievements.map((achievement, index) => {
+              {achievements?.data?.map((achievement, index) => {
                 return (
                   <div
                     className="flex flex-col items-center justify-center w-[120px] text-center"

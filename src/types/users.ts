@@ -7,3 +7,12 @@ export interface User {
   imageURL?: string;
   twitterName?: string;
 }
+
+export type UserStatProps = {
+  missions: number,
+  points: number,
+  achievements: number,
+  isVerifiedPost: number,
+  certificates: number,
+  items: number
+}

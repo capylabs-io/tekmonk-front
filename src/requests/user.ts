@@ -4,6 +4,7 @@ import { BASE_URL } from "@/contants/api-url";
 import tekdojoAxios from "./axios.config";
 import { StrapiResponse } from "./strapi-response-pattern";
 import { User } from "@/types/common-types";
+import { UserStatProps } from "@/types/users";
 
 export const ReqGetUsers = async (query: string = "") => {
   const response = await tekdojoAxios.get(
@@ -25,4 +26,9 @@ export const ReqGetClassUserRemaining = async (query: string = "") => {
   return (await tekdojoAxios.get(
     `${BASE_URL}/custom-auth/remaining-users?${query}`
   )) as StrapiResponse<User[]>;
+};
+
+export const ReqGetUserAnalytic = async () => {
+  const response = await tekdojoAxios.get(`/custom-user/analytics`);
+  return response.data as UserStatProps;
 };
