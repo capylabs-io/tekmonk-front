@@ -47,6 +47,23 @@
   background-color: #f1f1f1; /* Light color track */
 }
 
+/* custom scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 5px;
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #b1b6c6bf;
+  border-radius: 5px;
+}
 /* quill editor */
 .ql-editor {
   @apply text-BodyMd font-normal not-italic;

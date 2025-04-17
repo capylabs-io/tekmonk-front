@@ -1,4 +1,4 @@
-import { getListPost, updatePost } from '@/requests/post'
+import { getListPost, getListPostCustom, updatePost } from '@/requests/post'
 import { useLoadingStore } from '@/store/LoadingStore'
 import { useSnackbarStore } from '@/store/SnackbarStore'
 import { useUserStore } from '@/store/UserStore'
@@ -10,17 +10,15 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 export const useVerifiedPost = () => {
   // const [listPost, setListPost] = useState<PostType[]>()
-  const [userInfo] = useUserStore((state) => [state.userInfo])
   const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
   const [showSuccess, showError] = useSnackbarStore((state) => [
     state.success,
     state.error,
   ]);
-  const [activeTab, setActiveTab] = useState("");
   const [currentPost, setCurrentPost] = useState<PostType | null>(null);
   const [totalPage, setTotalPage] = useState(10);
   const [totalDocs, setTotalDocs] = useState(100);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [togglePostDialog, setTogglePostDialog] = useState(false);
   const [toggleConfirmDialog, setToggleConfirmDialog] = useState(false);
@@ -29,7 +27,25 @@ export const useVerifiedPost = () => {
 
   const { data, isLoading, isError, refetch } = useQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["posts", page, limit, activeTab],
+    queryKey: ["posts"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          sort: ["id:asc"],
+          populate: "*",
+        },
+          { encodeValuesOnly: true }
+        );
+        const res = await getListPostCustom(queryString)
+        return res;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+  });
+  const { data: listPostHistory } = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["historyPosts", page, limit],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -56,8 +72,9 @@ export const useVerifiedPost = () => {
     },
   });
   const listPost = useMemo(() => {
-    return data ? data.data?.filter((item) => activeTab === 'history' ? item.isVerified !== PostVerificationType.PENDING : item.isVerified === PostVerificationType.PENDING) : []
-  }, [data, activeTab])
+    return data ? data?.filter((item: PostType) => item.isVerified === PostVerificationType.PENDING) : []
+  }, [data])
+
   const handleSelectChange = (value: string) => {
     setSelectedType(value)
   }
@@ -88,9 +105,7 @@ export const useVerifiedPost = () => {
     }
 
   }
-  const handleTabChange = (value: string) => {
-    setActiveTab(value)
-  }
+
   return {
     page,
     limit,
@@ -101,12 +116,12 @@ export const useVerifiedPost = () => {
     listPost,
     currentPost,
     selectedType,
+    listPostHistory,
     setLimit,
     handleSelectChange,
     setPage,
     setCurrentPost,
     setTogglePostDialog,
-    handleTabChange,
     setToggleConfirmDialog,
     handleVerifiedPost,
     handleVerified

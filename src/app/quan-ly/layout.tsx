@@ -45,12 +45,30 @@ export default function Layout({
               onClick={handleRidirectHomePage}
             />
           </div>
-          <div>
+          <div className="space-y-2">
             <MenuCard
               title="Phê duyệt"
               active={usePathname().includes("/quan-ly/phe-duyet")}
               iconElement={<Goal size={20} />}
               url="/quan-ly/phe-duyet"
+            />
+            <MenuCard
+              title="Thành tích"
+              active={usePathname().includes("/quan-ly/thanh-tich")}
+              iconElement={<Goal size={20} />}
+              url="/quan-ly/thanh-tich"
+            />
+            <MenuCard
+              title="Nhiệm vụ"
+              active={usePathname().includes("/quan-ly/nhiem-vu")}
+              iconElement={<Goal size={20} />}
+              url="/quan-ly/nhiem-vu"
+            />
+            <MenuCard
+              title="Chứng chỉ"
+              active={usePathname().includes("/quan-ly/chung-chi")}
+              iconElement={<Goal size={20} />}
+              url="/quan-ly/chung-chi"
             />
           </div>
         </div>
@@ -68,7 +86,7 @@ export default function Layout({
           </div>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto border-gray-200 border">
+      <div className="flex-1 overflow-hidden border-gray-200 border">
         {children}
       </div>
     </section>

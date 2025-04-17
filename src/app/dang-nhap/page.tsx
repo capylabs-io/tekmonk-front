@@ -33,6 +33,7 @@ export default function Login() {
   ]);
   const signInForrm = useForm({
     resolver: zodResolver(siginChema),
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
@@ -40,20 +41,6 @@ export default function Login() {
   });
   const { getValues, reset, setValue } = signInForrm;
   const router = useCustomRouter();
-  const handleChangeUsername = (identifier: string) => {
-    setUser((prevState) => ({
-      ...prevState,
-      identifier,
-    }));
-  };
-
-  const handChangePassword = (password: string) => {
-    setUser((prevState) => ({
-      ...prevState,
-      password,
-    }));
-  };
-
   const handleForgotPassword = () => {
     router.push("/doi-mat-khau-moi");
   };
@@ -92,7 +79,7 @@ export default function Login() {
   return (
     <div className="mx-auto min-h-[calc(100vh-64px)] flex justify-center items-center p-2">
       <div
-        className="w-[368px] h-[468px] mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl"
+        className="w-[368px] h-max mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl"
         style={{
           boxShadow: "0px 4px 0px #DDD0DD",
         }}

@@ -2,9 +2,8 @@ import { z } from "zod";
 
 export const siginChema = z.object({
   email: z
-    .string({ required_error: "Email là bắt buộc" })
-    .email("Email không hợp lệ")
-    .min(1, "Email là bắt buộc"),
+    .string({ required_error: "Tên tài khoản là bắt buộc" })
+    .min(1, "Tên tài khoản là bắt buộc"),
   password: z
     .string({ required_error: "Mật khẩu là bắt buộc" })
     .min(5, "Mật khẩu tối thiểu 5 ký tự"),

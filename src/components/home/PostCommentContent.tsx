@@ -2,55 +2,107 @@ import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import { CommentCard } from './CommentCard';
 import { Button } from '../common/button/Button';
+import { addCommentPost, getListCommentPost } from '@/requests/post';
+import { useLoadingStore } from '@/store/LoadingStore';
+import { useSnackbarStore } from '@/store/SnackbarStore';
+import { useQuery } from '@tanstack/react-query';
+import qs from 'qs';
+import { PostComment } from '@/types/common-types';
+import { StrapiResponse } from '@/types/strapi-types';
 
 type Props = {
   imageUrl?: string;
+  postId?: number;
+  onUpdateComment?: () => void;
 };
 
-const mockMessages = [
-  {
-    name: 'Long',
-    username: 'Bá Vưong Học Đưòng',
-    time: Date.now(),
-    content: 'quá hay!!!',
-    interact: {
-      numberOflike: 23,
-      numberOfMessage: 10,
-      numberOfShare: 124,
-      numberOfView: 123,
-    },
-  },
-  {
-    name: 'Hải',
-    username: 'Bá Vưong Học Đưòng',
-    time: Date.now(),
-    content: 'Hay!!!!',
-    interact: {
-      numberOflike: 23,
-      numberOfMessage: 10,
-      numberOfShare: 124,
-      numberOfView: 123,
-    },
-  },
-];
+// const mockMessages = [
+//   {
+//     name: 'Long',
+//     username: 'Bá Vưong Học Đưòng',
+//     time: Date.now(),
+//     content: 'quá hay!!!',
+//     interact: {
+//       numberOflike: 23,
+//       numberOfMessage: 10,
+//       numberOfShare: 124,
+//       numberOfView: 123,
+//     },
+//   },
+//   {
+//     name: 'Hải',
+//     username: 'Bá Vưong Học Đưòng',
+//     time: Date.now(),
+//     content: 'Hay!!!!',
+//     interact: {
+//       numberOflike: 23,
+//       numberOfMessage: 10,
+//       numberOfShare: 124,
+//       numberOfView: 123,
+//     },
+//   },
+// ];
 
-export const PostCommentContent = ({ imageUrl }: Props) => {
+export const PostCommentContent = ({ imageUrl, postId, onUpdateComment }: Props) => {
   const [text, setText] = useState('');
-
-  const handleSend = () => {
-    mockMessages.push({
-      name: 'Tôi',
-      username: 'Bá Vưong Học Đưòng',
-      time: Date.now(),
-      content: text,
-      interact: {
-        numberOflike: 0,
-        numberOfMessage: 0,
-        numberOfShare: 0,
-        numberOfView: 0,
-      },
-    });
-    setText('');
+  const { success, error } = useSnackbarStore();
+  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
+  const { data: listComment, refetch: refetchListPostComment } = useQuery<StrapiResponse<PostComment[]>>({
+    refetchOnWindowFocus: false,
+    queryKey: ["post-comment"],
+    queryFn: async () => {
+      try {
+        if (!postId || isNaN(Number(postId)) || Number(postId) <= 0) {
+          return { data: [] };
+        }
+        const queryString = qs.stringify(
+          {
+            populate: {
+              commentedBy: {
+                fields: ['username', 'id']
+              },
+              post: {
+                fields: ['id']
+              }
+            },
+            filters: {
+              post: {
+                id: Number(postId)
+              }
+            },
+            sort: ['createdAt:desc'],
+            pagination: {
+              page: 1,
+              pageSize: 100,
+            },
+          },
+          { encodeValuesOnly: true }
+        );
+        return await getListCommentPost(queryString);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+  });
+  const handleSend = async () => {
+    try {
+      showLoading();
+      const res = await addCommentPost({
+        content: text,
+        postId: Number(postId),
+      });
+      if (res) {
+        success('Thành công', 'Đã thêm bình luận');
+        setText('');
+      }
+    } catch (err) {
+      console.log("error", err);
+      error('Lỗi', 'Đã xảy ra lỗi khi thêm bình luận');
+    } finally {
+      hideLoading();
+      refetchListPostComment();
+      onUpdateComment?.();
+    }
   };
 
   return (
@@ -81,8 +133,21 @@ export const PostCommentContent = ({ imageUrl }: Props) => {
         </div>
       </div>
       <div className="space-y-5">
-        {mockMessages.map((item, index) => (
-          <CommentCard key={index} {...item} />
+        {listComment?.data?.map((item: PostComment, index: number) => (
+          <CommentCard key={index}
+            comment={item}
+            name={item.commentedBy?.username}
+            username={item.commentedBy?.username}
+            time={item.createdAt}
+            content={item.content}
+            interact={{
+              numberOflike: 0,
+              numberOfMessage: 0,
+              numberOfShare: 0,
+              numberOfView: 0,
+            }}
+            onUpdateComment={refetchListPostComment}
+          />
         ))}
       </div>
     </div>

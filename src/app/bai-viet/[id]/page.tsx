@@ -72,7 +72,7 @@ export default function Page({ params }: { params: { id: number } }) {
           commentCount={get(currentPost, 'commentCount', 0).toString() || '0'}
         />
         <div className="mt-3">
-          <PostCommentContent />
+          <PostCommentContent postId={params.id} onUpdateComment={() => fetchPost(params.id)} />
         </div>
       </div>
     </>

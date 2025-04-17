@@ -49,7 +49,7 @@ export default function Layout({
       <div className="col-span-6 py-5 overflow-y-auto">{children}</div>
       <div className="h-full flex flex-col gap-y-4 px-10 py-5 border-gray-200 border-l col-span-3">
         <PointCard point="9999" />
-        <EventList listEvent={events} />
+        {/* <EventList listEvent={events} /> */}
         <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
       </div>
       <CreateProfileModal />

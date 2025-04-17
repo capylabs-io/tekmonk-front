@@ -1,6 +1,7 @@
 "use client"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import classNames from "classnames"
 
 export type SelectOption = {
   value: string
@@ -13,6 +14,7 @@ export interface SelectProps {
   options?: SelectOption[]
   placeholder?: string
   className?: string
+  selectClassName?: string
   disabled?: boolean
 }
 
@@ -20,6 +22,7 @@ export const CommonSelect = ({
   value,
   onChange,
   options,
+  selectClassName,
   placeholder = "Chọn loại bài viết",
   className = "w-full max-w-sm",
   disabled = false,
@@ -27,7 +30,7 @@ export const CommonSelect = ({
   return (
     <div className={className}>
       <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className={classNames("w-full", selectClassName)}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

@@ -1,3 +1,5 @@
+import { PostType } from "./posts";
+
 export type Event = {
   title: string;
   day: string;
@@ -306,9 +308,18 @@ export type Category = {
 };
 
 export type ShopItemUser = {
-  id: string;
+  id: number;
   user: User;
   shop_item: ShopItem;
   createdAt: string;
   updatedAt: string;
 };
+
+export type PostComment = {
+  id: number
+  content: string;
+  post: PostType;
+  commentedBy: User;
+  createdAt: string;
+  updatedAt: string;
+}

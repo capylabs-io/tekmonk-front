@@ -1,11 +1,11 @@
 "use client";
 import classNames from "classnames";
-import { Eye, EyeOff, ImagePlus } from "lucide-react";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { ImgSubmitPreview } from "@/components/contest/ImgSubmitPreview";
 
 type Props = {
   value: File | null;
+  contentImageUpload: ReactNode
   customInputClassNames?: string;
   customClassNames?: string;
   error?: string;
@@ -21,6 +21,7 @@ export const InputFileUpdload = ({
   onChange,
   onBlur,
   customInputClassNames,
+  contentImageUpload,
   customClassNames,
 }: Props) => {
   const hiddenFileInput = React.useRef<HTMLInputElement>(null);
@@ -74,6 +75,7 @@ export const InputFileUpdload = ({
         <div
           className={classNames(
             BASE_CLASS,
+            customInputClassNames
             // error &&
             // "border-red-500 focus:border-red-500 text-sm focus:border-2",
             // value &&
@@ -104,15 +106,9 @@ export const InputFileUpdload = ({
                 className="absolute text-gray-400 text-center font-normal"
                 onClick={handleClick}
               >
-                <div
-                  className="rounded-full p-5 w-max mx-auto flex items-center justify-center relative bg-gray-20"
-                >
-                  <ImagePlus size={20} className="absolute text-gray-50" />
-                </div>
-                <div className="mt-2 text-gray-70 text-SubheadSm">
-                  Tải lên ảnh/video
-                </div>
-                <p className="text-gray-70 !text-xs font-normal">Hoặc kéo và thả</p>
+                {
+                  contentImageUpload
+                }
               </div>
             </>
           }

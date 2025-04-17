@@ -51,12 +51,12 @@ export default function Page() {
     currentPost,
     selectedType,
     limit,
+    listPostHistory,
     setLimit,
     handleSelectChange,
     setPage,
     setCurrentPost,
     setTogglePostDialog,
-    handleTabChange,
     setToggleConfirmDialog,
     handleVerifiedPost,
     handleVerified
@@ -84,14 +84,11 @@ export default function Page() {
       {
         header: 'Ảnh bìa',
         cell: ({ row }) => (
-          <div className="flex items-center">
-            <Image
-              src={row.original?.thumbnail || ''}
-              alt="thumbnail"
-              height={64}
-              width={130}
-              className="rounded-xl w-full"
-            />
+          <div className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
+            style={{
+              backgroundImage: `url(${row.original?.thumbnail})`
+            }}>
+
           </div>
         ),
       },
@@ -139,12 +136,20 @@ export default function Page() {
 
   const optionSelect = [
     {
+      value: 'all',
+      label: "Tất cả"
+    },
+    {
       value: PostVerificationType.ACCEPTED,
       label: "Đã chấp nhận"
     },
     {
       value: PostVerificationType.DENIED,
       label: "Từ chối"
+    },
+    {
+      value: PostVerificationType.PENDING,
+      label: "Chờ duyệt"
     }
   ]
 
@@ -163,17 +168,17 @@ export default function Page() {
       </div>
       {/* <div className="w-full flex flex-col py-2">
         <div className="h-9 w-[265px] flex items-center justify-center text-gray-95 gap-3"> */}
-      <Tabs defaultValue="verified" className="w-full !h-[calc(100%-68px-2px)] overflow-y-auto" onValueChange={handleTabChange}>
+      <Tabs defaultValue="verified" className="w-full !h-[calc(100vh-68px)]" >
         <TabsList className="w-full border-b border-gray-200 !justify-start">
           <TabsTrigger value="verified">Phê duyệt</TabsTrigger>
           <TabsTrigger value="history">Lịch sử phê duyệt</TabsTrigger>
         </TabsList>
-        <TabsContent value="verified" className="overflow-y-auto">
+        <TabsContent value="verified" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
           {
             listPost.length > 0 &&
-            <div className="border rounded-2xl w-[720px] mx-auto py-8">
-              {listPost.map((item, index) => (
-                <>
+            <div className="border rounded-2xl w-[720px] mx-auto pb-5">
+              {listPost.map((item: PostType, index: number) => (
+                <div className="px-8">
                   <Post
                     showButton
                     data={item}
@@ -189,6 +194,7 @@ export default function Page() {
                         IV
                       </span>
                     }
+                    hideSocial
                     postContent={get(item, 'content', '')}
                     postName={get(item, 'name', '')}
                     createdAt={moment(get(item, 'createdAt', ''), 'dd/mm/yyyy hh:mm:ss').toString()}
@@ -199,26 +205,28 @@ export default function Page() {
                     index !== listPost.length - 1 &&
                     <hr className="border-t border-gray-200 my-4" />
                   }
-                </>
+                </div>
               ))}
             </div>
           }
         </TabsContent>
-        <TabsContent value="history" className="overflow-y-auto p-4">
-          <div className="mb-3">
+        <TabsContent value="history" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
+          <div>
             <CommonSelect options={optionSelect} value={selectedType} onChange={handleSelectChange} />
           </div>
-          <CommonTable
-            data={listPost && selectedType !== '' ? listPost.filter((item) => item.isVerified === selectedType) : listPost || [] as any[]}
-            isLoading={false}
-            columns={columns}
-            page={page}
-            totalPage={totalPage}
-            totalDocs={totalDocs}
-            onPageChange={setPage}
-            docsPerPage={limit}
-            onPageSizeChange={setLimit}
-          />
+          <div className="w-full h-[calc(100%-40px-12px)] overflow-y-auto mt-3">
+            <CommonTable
+              data={listPostHistory && selectedType !== 'all' ? listPostHistory?.data.filter((item) => item.isVerified === selectedType) : listPostHistory?.data || [] as any[]}
+              isLoading={false}
+              columns={columns}
+              page={page}
+              totalPage={totalPage}
+              totalDocs={totalDocs}
+              onPageChange={setPage}
+              docsPerPage={limit}
+              onPageSizeChange={setLimit}
+            />
+          </div>
         </TabsContent>
       </Tabs>
       <Dialog

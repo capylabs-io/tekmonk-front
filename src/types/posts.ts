@@ -14,6 +14,7 @@ export type PostType = {
   isVerified?: PostVerificationType;
   isLiked?: boolean
   createdAt?: string
+  tagged_users?: User[]
 };
 
 export enum PostVerificationType {

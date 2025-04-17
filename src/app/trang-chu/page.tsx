@@ -73,7 +73,8 @@ const Home = () => {
         <TabsContent value="all" className="overflow-y-auto">
           {listPost.map((item: PostType, index: number) => (
             <>
-              <div className="px-8">
+              <div className="px-8 relative">
+                <div className="text-sm text-gray-500 absolute top-2 right-8">{moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}</div>
                 <Post
                   isAllowClickDetail
                   data={item}
@@ -94,6 +95,7 @@ const Home = () => {
                   likedCount={get(item, 'likeCount', 0).toString() || '0'}
                   commentCount={get(item, 'commentCount', 0).toString() || '0'}
                   onLikedPostClick={handleLikedPostClick}
+                  onUpdatePost={refetchListPostCustom}
                 />
               </div>
               {

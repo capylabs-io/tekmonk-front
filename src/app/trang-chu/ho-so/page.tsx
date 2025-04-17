@@ -23,7 +23,7 @@ import {
 import { Post } from "@/components/home/Post";
 import { Dela_Gothic_One } from "next/font/google";
 import WithAuth from "@/components/hoc/WithAuth";
-import { useAchievements } from "@/lib/hooks/useAchievement";
+import { useAchievements } from "@/hooks/useAchievement";
 import { Achievement, Certificate } from "@/types/common-types";
 import { useCertificates } from "@/lib/hooks/useCertificate";
 import { get } from "lodash";
