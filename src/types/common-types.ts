@@ -84,6 +84,7 @@ export interface Certificate {
   author: string;
   createdAt: string;
 }
+
 export type Project = {
   name: string;
   author: User;
@@ -137,6 +138,13 @@ export type Achievement = {
   points: number;
   actionType: string;
   currentProgress?: number;
+};
+
+export type AchievementHistory = {
+  id: number;
+  achievement?: Achievement;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Notification = {
@@ -331,13 +339,13 @@ export type ShopItemUser = {
 };
 
 export type PostComment = {
-  id: number
+  id: number;
   content: string;
   post: PostType;
   commentedBy: User;
   createdAt: string;
   updatedAt: string;
-}
+};
 export type Mission = {
   id: number;
   historyId?: number;

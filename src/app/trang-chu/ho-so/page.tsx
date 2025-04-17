@@ -1,50 +1,28 @@
 "use client";
 import React, { useEffect } from "react";
-import Image from "next/image";
 import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/button/Button";
-import { Pencil, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { Progress } from "@/components/common/Progress";
 import { UserStat } from "@/components/profile/UserStat";
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  ResponsiveContainer,
-} from "recharts";
 import { Post } from "@/components/home/Post";
-import { Certificate } from "@/types/common-types";
-import { useCertificates } from "@/lib/hooks/useCertificate";
 import { get } from "lodash";
-import localFont from "next/font/local";
 import { useUserAvatarStore } from "@/store/UserAvatarStore";
-import { useAchievementQuery } from "@/hooks/achievement-query";
 import { MissionProgress } from "@/components/profile/mission-progress";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { AchievementProfile } from "@/components/profile/achievement-profile";
+import { CertificateProfile } from "@/components/profile/certificate-proifile";
 import { useQuery } from "@tanstack/react-query";
-import { ReqGetMissionInfo } from "@/requests/mission";
-
-const delaGothicOne = localFont({
-  src: "../../.././assets/fonts/DelaGothicOne-Regular.ttf",
-  weight: "400",
-  style: "normal",
-  variable: "--font-dela",
-});
 
 const Profile: React.FC = () => {
   const router = useCustomRouter();
-  const [userInfo, userCertificate] = useUserStore((state) => [
-    state.userInfo,
-    state.userCertificate,
-  ]);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [showAvatarModal] = useUserAvatarStore((state) => [state.show]);
   const getMe = useUserStore((state) => state.getMe);
 
@@ -58,42 +36,6 @@ const Profile: React.FC = () => {
     };
     fetchData();
   }, []);
-
-  const { data: achievements } = useAchievementQuery();
-  const certificates: Certificate[] = useCertificates();
-
-  const data = [
-    {
-      subject: "PHẢN BIỆN",
-      A: 55,
-      fullMark: 100,
-    },
-    {
-      subject: "SÁNG TẠO",
-      A: 80,
-      fullMark: 100,
-    },
-    {
-      subject: "LÀM VIỆC NHÓM",
-      A: 52,
-      fullMark: 100,
-    },
-    {
-      subject: "XỬ LÝ TÌNH HUỐNG",
-      A: 44,
-      fullMark: 100,
-    },
-    {
-      subject: "LẬP TRÌNH",
-      A: 86,
-      fullMark: 100,
-    },
-    {
-      subject: "TỰ NGHIÊN CỨU",
-      A: 83,
-      fullMark: 100,
-    },
-  ];
 
   return (
     <>
@@ -143,80 +85,45 @@ const Profile: React.FC = () => {
           <hr className="border-t border-gray-200 my-4" />
           <div className="px-6 mt-3">
             <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+              <div className="text-gray-95 text-SubheadLg">Nhiệm vụ</div>
               <div
-                className="text-gray-95 text-SubheadLg"
+                className="cursor-pointer"
                 onClick={() => router.push(ROUTE.MISSION)}
               >
-                Nhiệm vụ
+                Xem thêm
               </div>
-              <div className="cursor-pointer">Xem thêm</div>
             </div>
-            {/* TODO: Replace static progress props with real values from userCertificate when available */}
             <div className="flex flex-col gap-4 mt-4">
               <MissionProgress />
             </div>
           </div>
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3">
-            <div className="w-full flex justify-between items-center">
-              <span className="text-primary-900">CHỨNG CHỈ</span>
-              <Pencil size={20} />
+          <div className="px-6 mt-3 mb-8">
+            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+              <div className="text-gray-95 text-SubheadLg">Thành tựu</div>
+              <div
+                className="cursor-pointer"
+                onClick={() => router.push(ROUTE.MISSION)}
+              >
+                Xem thêm
+              </div>
             </div>
-            <div className="py-4 flex flex-wrap justify-center gap-x-12">
-              {certificates.map((certificate, index) => {
-                return (
-                  <div
-                    className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={index}
-                  >
-                    <Image
-                      src={certificate.imageUrl || ""}
-                      alt="certificate"
-                      width={120}
-                      height={120}
-                      className="mt-5"
-                    />
-                    <span className="text-sm mt-2">{certificate.name}</span>
-                  </div>
-                );
-              })}
+            <div className="flex flex-col gap-4 mt-4">
+              <AchievementProfile />
             </div>
-            <Button outlined className="text-xs text-gray-900 mt-4 mx-auto">
-              Xem tất cả
-            </Button>
           </div>
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3">
-            <div className="w-full flex justify-between items-center">
-              <span className="text-primary-900">THÀNH TỰU</span>
-              <Pencil size={20} />
+          {/* TODO:  */}
+          <div className="px-6 mt-4 mb-8">
+            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+              <div className="text-gray-95 text-SubheadLg">Chứng chỉ</div>
+              {/* <div className="cursor-pointer">Xem thêm</div> */}
             </div>
-            <div className="py-4 flex flex-wrap justify-center gap-x-12 items-center">
-              {achievements?.data?.map((achievement, index) => {
-                return (
-                  <div
-                    className="flex flex-col items-center justify-center w-[120px] text-center"
-                    key={index}
-                  >
-                    <Image
-                      src={achievement.imageUrl || ""}
-                      alt="certificate"
-                      width={120}
-                      height={120}
-                      className="mt-5"
-                    />
-                    <span className="text-sm mt-2">{achievement.title}</span>
-                  </div>
-                );
-              })}
+            <div className="flex flex-col gap-4 mt-4">
+              <CertificateProfile />
             </div>
-            <Button outlined className="text-xs text-gray-900 mt-4 mx-auto">
-              Xem tất cả
-            </Button>
           </div>
-          <hr className="border-t border-gray-200 my-4" />
-
-          <div className="px-6 mt-3">
+          {/* <div className="px-6 mt-3">
             <div className="text-primary-900">KĨ NĂNG</div>
             <div className="mt-7 leading-1">
               <p className="text-gray-700 text-xs">LỰC CHIẾN</p>
@@ -239,7 +146,7 @@ const Profile: React.FC = () => {
                 />
               </RadarChart>
             </ResponsiveContainer>
-          </div>
+          </div> */}
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
           <Post
