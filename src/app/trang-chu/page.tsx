@@ -20,7 +20,10 @@ import { useUserStore } from "@/store/UserStore";
 const Home = () => {
   //set for contest page
   const router = useCustomRouter();
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   const { data, refetch: refetchListPostCustom } = useQuery({
@@ -32,7 +35,7 @@ const Home = () => {
           {
             page: 1,
             limit: 100,
-            sort: ["id:asc"],
+            sort: "desc",
           },
           { encodeValuesOnly: true }
         );
@@ -44,22 +47,22 @@ const Home = () => {
   });
   const handleLikedPostClick = async (data: PostType) => {
     try {
-      showLoading()
+      showLoading();
       await likePost({
-        postId: get(data, 'id')
-      })
-      refetchListPostCustom()
+        postId: get(data, "id"),
+      });
+      refetchListPostCustom();
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
     } finally {
-      hideLoading()
+      hideLoading();
     }
-  }
+  };
   const listPost = useMemo(() => {
     return data
       ? data.filter(
-        (item: PostType) => item.isVerified === PostVerificationType.ACCEPTED
-      )
+          (item: PostType) => item.isVerified === PostVerificationType.ACCEPTED
+        )
       : [];
   }, [data]);
   return (
@@ -79,9 +82,9 @@ const Home = () => {
                   isAllowClickDetail
                   data={item}
                   imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                  thumbnailUrl={get(item, 'thumbnail') || ''}
-                  userName={userInfo?.username || 'User'}
-                  specialName={get(item, 'postedBy.skills', '')}
+                  thumbnailUrl={get(item, "thumbnail") || ""}
+                  userName={userInfo?.username || "User"}
+                  specialName={get(item, "postedBy.skills", "")}
                   userRank={
                     <span
                       className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
@@ -89,19 +92,20 @@ const Home = () => {
                       IV
                     </span>
                   }
-                  postContent={get(item, 'content', '')}
-                  postName={get(item, 'name', '')}
-                  createdAt={moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}
-                  likedCount={get(item, 'likeCount', 0).toString() || '0'}
-                  commentCount={get(item, 'commentCount', 0).toString() || '0'}
+                  postContent={get(item, "content", "")}
+                  postName={get(item, "name", "")}
+                  createdAt={moment(get(item, "createdAt", ""))
+                    .format("DD/MM/YYYY")
+                    .toString()}
+                  likedCount={get(item, "likeCount", 0).toString() || "0"}
+                  commentCount={get(item, "commentCount", 0).toString() || "0"}
                   onLikedPostClick={handleLikedPostClick}
                   onUpdatePost={refetchListPostCustom}
                 />
               </div>
-              {
-                index !== listPost.length - 1 &&
+              {index !== listPost.length - 1 && (
                 <hr className="border-t border-gray-200 my-4" />
-              }
+              )}
             </>
           ))}
         </TabsContent>

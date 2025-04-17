@@ -5,10 +5,36 @@ import { ArrowLeft } from "lucide-react";
 import { BackgroundCard } from "@/components/shop/BackgroundCard";
 import { useRouter } from "next/navigation";
 import { useBackgroundShops } from "@/lib/hooks/useBackgroundShop";
+import { useQuery } from "@tanstack/react-query";
+import { CategoryCode } from "@/types/common-types";
+import qs from "qs";
+import { ReqGetShopItems } from "@/requests/shopItem";
 
 export default function AvatarShop() {
   const router = useRouter();
   const backgroundShops = useBackgroundShops();
+  const { data: avatarShopItem } = useQuery({
+    queryKey: ["background-shop-item"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify({
+          populate: "*",
+          filters: {
+            category: {
+              code: CategoryCode.AVATAR,
+            },
+          },
+          pagination: {
+            page: 1,
+            pageSize: 100,
+          },
+        });
+        return await ReqGetShopItems(queryString);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    },
+  });
 
   return (
     <div>
@@ -38,16 +64,17 @@ export default function AvatarShop() {
         />
       </div>
       <div className="mt-5 flex flex-wrap gap-4 overflow-hidden px-4">
-        {backgroundShops.map((background, index) => {
-          return (
-            <BackgroundCard
-              imageUrl={background.image}
-              title={background.title}
-              price={background.price}
-              key={background.title}
-            />
-          );
-        })}
+        {avatarShopItem &&
+          avatarShopItem?.data.map((background, index) => {
+            return (
+              <BackgroundCard
+                imageUrl={background.image}
+                title={background.name}
+                price={background.price.toString()}
+                key={index}
+              />
+            );
+          })}
       </div>
     </div>
   );

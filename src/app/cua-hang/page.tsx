@@ -14,6 +14,7 @@ import { useUserStore } from "@/store/UserStore";
 import { toast } from "react-toastify";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 
 // Tab options
 enum TabOptions {
@@ -38,7 +39,10 @@ export default function Shop() {
     image: "",
   });
   /** UseStore */
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
   const [success, error] = useSnackbarStore((state) => [
     state.success,
     state.error,
@@ -94,25 +98,6 @@ export default function Shop() {
   });
 
   // Query for user's inventory items
-  const { data: myItems } = useQuery({
-    queryKey: ["my-items"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          populate: "*",
-          // Add appropriate filters for user's items
-          pagination: {
-            page: 1,
-            pageSize: 20,
-          },
-        });
-        return await ReqGetUserShopItems();
-      } catch (error) {
-        console.log("Error: ", error);
-        return { data: [] };
-      }
-    },
-  });
 
   /** Handle Buy item here */
   const buyItemMutation = useMutation({
@@ -137,11 +122,13 @@ export default function Shop() {
       queryClient.invalidateQueries({ queryKey: ["user-points"] }); // If you have a query for user points
     },
     onError: (err) => {
+      const message = HandleReturnMessgaeErrorLogin(err);
       // Show error message
-      error("Lỗi", "Có lỗi xảy ra vui lòng thử lại sau");
+      error("Lỗi", message);
     },
     onSettled: () => {
       setOpenModal(false);
+      getMe();
       hide();
     },
   });
@@ -192,7 +179,7 @@ export default function Shop() {
             handleAvatarClick={handleAvatarClick}
           />
         ) : (
-          <InventoryContent items={myItems?.data || []} />
+          <InventoryContent />
         )}
       </div>
 

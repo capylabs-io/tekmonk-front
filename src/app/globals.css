@@ -7,6 +7,30 @@
   --font-kanit: "Kanit", sans-serif;
 }
 
+/* Mission description styles */
+.mission-description-container {
+  overflow: hidden;
+}
+
+.mission-description * {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: 1.2;
+}
+
+.mission-description p {
+  margin: 0;
+  padding: 0;
+}
+
+.mission-description img {
+  max-width: 100%;
+  height: auto;
+}
+
 /*for override date picker*/
 .react-date-picker__wrapper {
   border: none !important;

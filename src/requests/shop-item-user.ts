@@ -13,6 +13,8 @@ export const ReqGetUserShopItems = async (query: string = "") => {
 };
 
 export const ReqBuyShopItem = async (data: any) => {
-  const response = await tekdojoAxios.post(`${BASE_URL}/shop-item-users`, data);
+  const response = await tekdojoAxios.post(`${BASE_URL}/shop-item-users`, {
+    data: data,
+  });
   return response.data;
 };

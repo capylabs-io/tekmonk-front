@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   Bookmark,
   Dot,
@@ -91,7 +91,7 @@ export const CommentCard = ({
           <div className="inline-flex items-center gap-1 text-sm text-grey-500">
             @{comment?.commentedBy?.username || username}
             <Dot size={20} />
-            {time ? timeAgo(Number(time)) : 'Invalid time'}
+            {time ? timeAgo(Number(time)) : "Invalid time"}
           </div>
           {comment?.commentedBy?.id && (
             <Button
@@ -139,7 +139,7 @@ export const CommentCard = ({
           <div className="flex gap-x-4 lg:gap-[35.5px]">
             <div className="inline-flex items-center gap-1 md:gap-2">
               <MessageCircle size={16} />
-              {get(interact, 'numberOfMessage', '')}
+              {get(interact, "numberOfMessage", "")}
             </div>
             {/* <div className="inline-flex items-center gap-1 md:gap-2">
               <Repeat2 size={16} />
@@ -147,7 +147,7 @@ export const CommentCard = ({
             </div> */}
             <div className="inline-flex items-center gap-1 md:gap-2">
               <Heart size={16} />
-              {get(interact, 'numberOflike', '')}
+              {get(interact, "numberOflike", "")}
             </div>
           </div>
         </div>

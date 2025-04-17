@@ -50,6 +50,7 @@ const EventContentComponent = () => {
           },
           filters: {
             type: "event",
+            status: "public",
             ...(searchQuery && {
               title: {
                 $contains: searchQuery, // filter by textSearch if it exists

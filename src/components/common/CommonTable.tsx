@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { DEFAULT_DOCS_PER_PAGE } from '@/contants/defaults';
+import { DEFAULT_DOCS_PER_PAGE } from "@/contants/defaults";
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-} from '@tanstack/react-table';
-import classNames from 'classnames';
-import { cloneDeep } from 'lodash';
-import { CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
-import { HTMLProps, useEffect, useMemo, useRef, useState } from 'react';
-import { ReactTableScroll } from 'react-table-scroll';
+} from "@tanstack/react-table";
+import classNames from "classnames";
+import { cloneDeep } from "lodash";
+import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { HTMLProps, useEffect, useMemo, useRef, useState } from "react";
+import { ReactTableScroll } from "react-table-scroll";
 // import { NoData } from './NoData';
 import {
   Select,
@@ -25,7 +24,7 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 // import { LoadingSpinner } from '@/components/common/Loading';
 type Props = {
   data: any[];
@@ -53,13 +52,13 @@ type Props = {
 
 export function IndeterminateCheckbox({
   indeterminate,
-  className = '',
+  className = "",
   ...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
-    if (typeof indeterminate === 'boolean') {
+    if (typeof indeterminate === "boolean") {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
   }, [ref, indeterminate, rest.checked]);
@@ -69,9 +68,9 @@ export function IndeterminateCheckbox({
       type="checkbox"
       ref={ref}
       className={classNames(
-        'cursor-pointer',
+        "cursor-pointer",
         className,
-        rest.checked && '!accent-blue-50'
+        rest.checked && "!accent-blue-50"
       )}
       {...rest}
     />
@@ -111,7 +110,7 @@ export const CommonTable = ({
   const startItem = (page - 1) * pagination.pageSize + 1;
   const endItem = Math.min(page * pagination.pageSize, totalDocs || 0);
   const rowSelectionColumn = {
-    id: 'select',
+    id: "select",
     header: ({ table }: any) => (
       <IndeterminateCheckbox
         {...{
@@ -135,7 +134,7 @@ export const CommonTable = ({
   };
 
   const indexColumn = {
-    header: 'STT',
+    header: "STT",
     cell: ({ row }: any) => <span>{row.index + 1}</span>,
   };
 
@@ -183,21 +182,18 @@ export const CommonTable = ({
     return manualPagination ? page === totalPage : !table.getCanNextPage();
   }, [manualPagination, page, table, totalPage, pagination]);
 
-
   const headerCount = table
     .getHeaderGroups()
     .reduce((count, group) => count + group.headers.length, 0);
 
   const handleNextPage = () => {
     if (!isLastPage) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       manualPagination ? onPageChange!(page! + 1) : table.nextPage();
     }
   };
 
   const handlePrevPage = () => {
     if (!isFirstPage) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       manualPagination ? onPageChange!(page! - 1) : table.previousPage();
     }
   };
@@ -207,7 +203,6 @@ export const CommonTable = ({
 
   const handleRowClick = (row: any) => {
     onRowClick?.(row);
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     onSelect && onSelect?.(row.original);
   };
 
@@ -223,17 +218,12 @@ export const CommonTable = ({
   // }, [manualPagination, table, totalPage, pagination]);˜
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     selectedRow && setRowSelection(selectedRow ?? {});
   }, [selectedRow]);
 
   const tableFooter = (
     <div className="mt-4 flex w-full justify-between text-sm font-normal text-gray-95">
-      <div
-        className={classNames(
-          "flex items-center gap-2 w-full "
-        )}
-      >
+      <div className={classNames("flex items-center gap-2 w-full ")}>
         <span className="text-sm">Hiển thị</span>
         <Select
           value={pagination.pageSize.toString()}
@@ -272,7 +262,7 @@ export const CommonTable = ({
                   e.preventDefault();
                   handlePageChange(1);
                 }}
-                className='hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg'
+                className="hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg"
               >
                 1
               </PaginationLink>
@@ -284,20 +274,20 @@ export const CommonTable = ({
             </PaginationItem>
           )}
           {page > 2 && (
-            <PaginationItem className=''>
+            <PaginationItem className="">
               <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   handlePageChange(page - 1);
                 }}
-                className='hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg'
+                className="hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg"
               >
                 {page - 1}
               </PaginationLink>
             </PaginationItem>
           )}
-          <PaginationItem >
+          <PaginationItem>
             <PaginationLink
               href="#"
               isActive
@@ -308,21 +298,21 @@ export const CommonTable = ({
             </PaginationLink>
           </PaginationItem>
           {page < totalPage - 1 && (
-            <PaginationItem >
+            <PaginationItem>
               <PaginationLink
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
                   handlePageChange(page + 1);
                 }}
-                className='hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg'
+                className="hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg"
               >
                 {page + 1}
               </PaginationLink>
             </PaginationItem>
           )}
           {page < totalPage - 2 && (
-            <PaginationItem >
+            <PaginationItem>
               <PaginationEllipsis />
             </PaginationItem>
           )}
@@ -334,7 +324,7 @@ export const CommonTable = ({
                   e.preventDefault();
                   handlePageChange(totalPage);
                 }}
-                className='hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg'
+                className="hover:bg-purple-100 border border-gray-20 shadow-custom-gray rounded-lg"
               >
                 {totalPage}
               </PaginationLink>
@@ -356,8 +346,8 @@ export const CommonTable = ({
     <>
       <div
         className={classNames(
-          !disableBorder && 'rounded-lg',
-          'w-full overflow-x-auto rounded-2xl border',
+          !disableBorder && "rounded-lg",
+          "w-full overflow-x-auto rounded-2xl border",
           customTableClassname
         )}
       >
@@ -369,45 +359,45 @@ export const CommonTable = ({
                 headerGroup.headers.every(
                   (header) =>
                     !header.column.columnDef.header ||
-                    header.column.columnDef.header === ''
+                    header.column.columnDef.header === ""
                 )
               ) && (
-                <>
-                  <thead className="bg-card border-b">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <tr
-                        key={headerGroup.id}
-                        className="!rounded-lg text-sm text-gray-95"
-                      >
-                        {headerGroup.headers.map((header) => (
-                          <th
-                            className="px-4 py-3 text-start text-sm font-medium text-gray-95"
-                            key={header.id}
-                            style={{
-                              width:
-                                header.getSize() !== 150
-                                  ? header.getSize()
-                                  : 'auto',
-                            }}
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
-                  </thead>
-                </>
-              )}
+              <>
+                <thead className="bg-card border-b">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr
+                      key={headerGroup.id}
+                      className="!rounded-lg text-sm text-gray-95"
+                    >
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          className="px-4 py-3 text-start text-sm font-medium text-gray-95"
+                          key={header.id}
+                          style={{
+                            width:
+                              header.getSize() !== 150
+                                ? header.getSize()
+                                : "auto",
+                          }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+              </>
+            )}
             {isLoading != undefined && !isLoading && !isEmpty && (
               <tbody className="w-full text-gray-95">
                 {table.getRowModel().rows.map((row) => (
                   <>
                     <tr
                       className={classNames(
-                        'hover:bg-blue-5 cursor-pointer !rounded-lg bg-card'
+                        "hover:bg-blue-5 cursor-pointer !rounded-lg bg-card"
                         // row.index === table.getRowCount() - 1 && 'border-b-0',
                         // row.original.isError && 'bg-red-100 py-2 box-content',
                       )}

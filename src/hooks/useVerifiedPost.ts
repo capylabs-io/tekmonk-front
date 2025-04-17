@@ -22,8 +22,7 @@ export const useVerifiedPost = () => {
   const [page, setPage] = useState(1);
   const [togglePostDialog, setTogglePostDialog] = useState(false);
   const [toggleConfirmDialog, setToggleConfirmDialog] = useState(false);
-  const [selectedType, setSelectedType] = useState("")
-
+  const [selectedType, setSelectedType] = useState("");
 
   const { data, isLoading, isError, refetch } = useQuery({
     refetchOnWindowFocus: false,
@@ -48,22 +47,23 @@ export const useVerifiedPost = () => {
     queryKey: ["historyPosts", page, limit],
     queryFn: async () => {
       try {
-        const queryString = qs.stringify({
-          pagination: {
-            page: page,
-            pageSize: limit,
+        const queryString = qs.stringify(
+          {
+            pagination: {
+              page: page,
+              pageSize: limit,
+            },
+            sort: ["id:asc"],
+            populate: "*",
           },
-          sort: ["id:asc"],
-          populate: "*",
-        },
           { encodeValuesOnly: true }
         );
-        const res = await getListPost(queryString)
+        const res = await getListPostCustom(queryString);
         if (res) {
-          setPage(get(res, 'meta.pagination.page', 1))
-          setTotalPage(get(res, 'meta.pagination.pageCount', 1))
-          setTotalDocs(get(res, 'meta.pagination.total', 0))
-          setLimit(get(res, 'meta.pagination.pageSize', 10))
+          setPage(get(res, "meta.pagination.page", 1));
+          setTotalPage(get(res, "meta.pagination.pageCount", 1));
+          setTotalDocs(get(res, "meta.pagination.total", 0));
+          setLimit(get(res, "meta.pagination.pageSize", 10));
         }
         return res;
       } catch (error) {
@@ -76,32 +76,32 @@ export const useVerifiedPost = () => {
   }, [data])
 
   const handleSelectChange = (value: string) => {
-    setSelectedType(value)
-  }
+    setSelectedType(value);
+  };
   const handleVerified = async (data: PostType | null) => {
     try {
-      showLoading()
-      if (!data) return
-      const { id, ...form } = data
-      if (!id) return
-      const res = await updatePost(id, form)
+      showLoading();
+      if (!data) return;
+      const { id, ...form } = data;
+      if (!id) return;
+      const res = await updatePost(id, form);
       if (res) {
-        showSuccess('Thành công', 'Phê duyệt bài viết thành công!')
+        showSuccess("Thành công", "Phê duyệt bài viết thành công!");
       }
     } catch (error) {
-      console.log('error', error);
-      showError('Thất bại', 'Phê duyệt bài viết thất bại!')
+      console.log("error", error);
+      showError("Thất bại", "Phê duyệt bài viết thất bại!");
     } finally {
-      hideLoading()
-      refetch()
+      hideLoading();
+      refetch();
     }
-  }
+  };
   const handleVerifiedPost = async (data: PostType) => {
     if (data.isVerified === PostVerificationType.DENIED) {
-      setCurrentPost(data)
-      setToggleConfirmDialog(true)
+      setCurrentPost(data);
+      setToggleConfirmDialog(true);
     } else {
-      handleVerified(data)
+      handleVerified(data);
     }
 
   }
@@ -124,6 +124,6 @@ export const useVerifiedPost = () => {
     setTogglePostDialog,
     setToggleConfirmDialog,
     handleVerifiedPost,
-    handleVerified
-  }
-}
+    handleVerified,
+  };
+};

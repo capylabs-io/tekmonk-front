@@ -35,3 +35,14 @@ export const HandleReturnMessgaeErrorLogin = (error: any) => {
     return "Lỗi không xác định";
   }
 };
+
+
+/**
+ * app_001: username
+ * app_002: email
+ * app_003: password
+ * app_004: unknown
+ * app_005: not connect to server
+ * app_006: unknown
+ * app_007: product unavailable
+ */

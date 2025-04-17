@@ -52,6 +52,7 @@ const HiringContentComponent = () => {
           },
           filters: {
             type: "hiring",
+            status: "public",
             ...(searchQuery && {
               title: {
                 $contains: searchQuery, // filter by textSearch if it exists

@@ -71,7 +71,7 @@ export const CreateProfileModal = () => {
       if (data.image) {
         formData.append("image", data.image)
       }
-      const res = await uploadPost(formData)
+      const res = await uploadPost(formData);
       if (res) {
         showSuccess("Thành công", "Tạo bài viết thành công")
         reset()
@@ -81,9 +81,9 @@ export const CreateProfileModal = () => {
       console.log("error", error)
       showError("Thất bại", "Tạo bài viết Thất bại")
     } finally {
-      hideLoading()
+      hideLoading();
     }
-  }
+  };
   const handleImageUpload = (file: File | null) => {
     if (file) setValue("image", file as any)
   }

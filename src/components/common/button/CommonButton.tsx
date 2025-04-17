@@ -48,8 +48,7 @@ export const CommonButton = ({
             "text-primary-95": variant === "secondary",
             "text-[#B42419]": variant === "destructive",
           },
-          "!cursor-pointer w-full h-full flex items-center justify-center",
-          { "cursor-not-allowed": disabled }
+          "!cursor-pointer w-full h-full flex items-center justify-center"
         )}
         disabled={disabled}
         {...props}
