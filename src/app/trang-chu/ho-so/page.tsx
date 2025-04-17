@@ -19,6 +19,8 @@ import { ROUTE } from "@/contants/router";
 import { AchievementProfile } from "@/components/profile/achievement-profile";
 import { CertificateProfile } from "@/components/profile/certificate-proifile";
 import { useQuery } from "@tanstack/react-query";
+import { getListPostCustom } from "@/requests/post";
+import qs from "qs";
 
 const Profile: React.FC = () => {
   const router = useCustomRouter();
@@ -37,6 +39,28 @@ const Profile: React.FC = () => {
     fetchData();
   }, []);
 
+  // TODO: DATA of my posts
+  const { data: myPosts, refetch: refetchListPostCustom } = useQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["custom-posts"],
+    queryFn: async () => {
+      try {
+        const queryString = qs.stringify(
+          {
+            page: 1,
+            limit: 100,
+            sort: "desc",
+            authorId: userInfo?.id,
+          },
+          { encodeValuesOnly: true }
+        );
+        return await getListPostCustom(queryString);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    enabled: !!userInfo?.id,
+  });
   return (
     <>
       <div className="text-xl text-primary-900 px-8">Hồ sơ cá nhân</div>
