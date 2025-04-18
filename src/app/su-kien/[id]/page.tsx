@@ -109,7 +109,11 @@ export default function Page() {
             </div>
           </div>
           <div className="text-BodyMd text-gray-95">
-            <div>{news?.content}</div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: (news && news.content) || "",
+              }}
+            ></div>
           </div>
         </div>
       </div>

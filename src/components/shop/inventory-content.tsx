@@ -6,13 +6,32 @@ import { useQuery } from "@tanstack/react-query";
 import { userInfo } from "os";
 import qs from "qs";
 import { useUserStore } from "@/store/UserStore";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { CommonButton } from "@/components/common/button/CommonButton";
+import { ReqGetClaimedItems } from "@/requests/claimed-item";
+import { CardItem } from "@/components/shop/card-item";
 
-interface InventoryContentProps {
-  items: ShopItemUser[];
-}
+// Helper function to format date
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 export const InventoryContent = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [selectedItem, setSelectedItem] = useState<ShopItemUser | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const { data: myItems } = useQuery({
     queryKey: ["my-items"],
     queryFn: async () => {
@@ -24,10 +43,6 @@ export const InventoryContent = () => {
               id: userInfo?.id,
             },
           },
-          pagination: {
-            page: 1,
-            pageSize: 20,
-          },
         });
         return await ReqGetUserShopItems(queryString);
       } catch (error) {
@@ -36,6 +51,30 @@ export const InventoryContent = () => {
       }
     },
   });
+
+  const { data: claimedItems } = useQuery({
+    queryKey: ["claimed-items"],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: "*",
+        filters: {
+          user: { id: userInfo?.id },
+        },
+      });
+      return await ReqGetClaimedItems(queryString);
+    },
+  });
+
+  const handleItemClick = (item: ShopItemUser) => {
+    setSelectedItem(item);
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedItem(null);
+  };
+
   return (
     <>
       <div className="w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
@@ -58,35 +97,17 @@ export const InventoryContent = () => {
 
       {/* Items Grid Section */}
       <div className="mt-6">
-        {myItems && myItems.data.length > 0 && (
-          <h2 className="text-xl font-bold mb-4">VẬT PHẨM CỦA TÔI</h2>
-        )}
-
         {myItems && myItems.data.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {myItems.data.map((item, index) => (
-              <div
+              <CardItem
                 key={index}
-                className="bg-white rounded-lg overflow-hidden cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="aspect-square relative bg-gradient-to-r from-purple-500 to-purple-600 rounded-t-lg overflow-hidden">
-                  <Image
-                    src={item.shop_item.image || "/placeholder-image.jpg"}
-                    alt={item.shop_item.name || "Item image"}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="p-3">
-                  <h3 className="font-medium text-sm line-clamp-1">
-                    {item.shop_item.name}
-                  </h3>
-                  <div className="flex items-center mt-1">
-                    <div className="w-4 h-4 bg-yellow-400 rounded-full mr-1"></div>
-                    <span className="text-sm">{item.shop_item.price}</span>
-                  </div>
-                </div>
-              </div>
+                image={item.shop_item.image || "/placeholder-image.jpg"}
+                name={item.shop_item.name}
+                price={item.shop_item.price}
+                description={item.shop_item.description || ""}
+                onClick={() => handleItemClick(item)}
+              />
             ))}
           </div>
         ) : (
@@ -95,6 +116,99 @@ export const InventoryContent = () => {
           </div>
         )}
       </div>
+
+      {/* Claimed Items Section (if applicable) */}
+      {claimedItems && claimedItems.data && claimedItems.data.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-4">VẬT PHẨM ĐÃ NHẬN</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {claimedItems.data.map((item: any, index: number) => (
+              <CardItem
+                key={index}
+                image={item.image || "/placeholder-image.jpg"}
+                name={item.name}
+                price={0}
+                description={`Nhận ngày: ${formatDate(item.createdAt)}`}
+                onClick={() => {}}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Item Detail Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="w-[440px] rounded-3xl bg-white p-6">
+          <DialogHeader>
+            <DialogTitle className="text-HeadingSm text-gray-95">
+              Chi tiết vật phẩm
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedItem && (
+            <>
+              <div className="flex flex-col items-center">
+                <div className="relative w-[200px] h-[200px] mb-4">
+                  <Image
+                    src={
+                      selectedItem.shop_item.image || "/placeholder-image.jpg"
+                    }
+                    alt={selectedItem.shop_item.name || "Item image"}
+                    fill
+                    className="object-cover rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-y-2 mt-2">
+                <div className="text-SubheadMd flex items-center gap-x-2">
+                  <div className="text-gray-60 min-w-[120px]">
+                    Tên vật phẩm:
+                  </div>
+                  <div className="text-gray-95 font-medium">
+                    {selectedItem.shop_item.name}
+                  </div>
+                </div>
+                {selectedItem.shop_item.category && (
+                  <div className="text-SubheadMd flex items-center gap-x-2">
+                    <div className="text-gray-60 min-w-[120px]">Loại:</div>
+                    <div className="text-gray-95">
+                      {selectedItem.shop_item.category.name}
+                    </div>
+                  </div>
+                )}
+                <div className="text-SubheadMd flex items-center gap-x-2">
+                  <div className="text-gray-60 min-w-[120px]">Giá:</div>
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 bg-yellow-400 rounded-full mr-1"></div>
+                    <span className="text-gray-95">
+                      {selectedItem.shop_item.price}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-SubheadMd flex items-center gap-x-2">
+                  <div className="text-gray-60 min-w-[120px]">Ngày mua:</div>
+                  <div className="text-gray-95">
+                    {formatDate(selectedItem.createdAt)}
+                  </div>
+                </div>
+                {selectedItem.shop_item.description && (
+                  <div className="text-SubheadMd flex items-center gap-x-2">
+                    <div className="text-gray-60 min-w-[120px]">Mô tả:</div>
+                    <div className="text-gray-95 text-sm mt-1">
+                      {selectedItem.shop_item.description}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          <DialogFooter className="mt-6">
+            <CommonButton onClick={closeDialog}>Đóng</CommonButton>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

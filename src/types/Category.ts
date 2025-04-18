@@ -1,6 +1,7 @@
 export type Category = {
-  name?: string
-  image?: string,
-  description?: string
-  code?: string
-}
+  id: number;
+  name: string;
+  image?: string;
+  description?: string;
+  code?: string;
+};

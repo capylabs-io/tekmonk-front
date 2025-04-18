@@ -1,20 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import { ItemModal } from "@/components/shop/ItemModal";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReqGetShopItems } from "@/requests/shopItem";
-import { ReqBuyShopItem, ReqGetUserShopItems } from "@/requests/shop-item-user";
-import qs from "qs";
-import { CategoryCode, ShopItem, ShopItemUser } from "@/types/common-types";
+import { useState } from "react";
 import { ShopContent } from "@/components/shop/shop-content";
 import { InventoryContent } from "@/components/shop/inventory-content";
 import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
 import { useUserStore } from "@/store/UserStore";
-import { toast } from "react-toastify";
-import { useSnackbarStore } from "@/store/SnackbarStore";
-import { useLoadingStore } from "@/store/LoadingStore";
-import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 
 // Tab options
 enum TabOptions {
@@ -29,119 +18,10 @@ const TABS: TabItem[] = [
 ];
 
 export default function Shop() {
-  const [openModal, setOpenModal] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(TabOptions.SHOP);
-  const [itemData, setItemData] = useState<ShopItem>({
-    id: "",
-    name: "",
-    price: 0,
-    description: "",
-    image: "",
-  });
+
   /** UseStore */
-  const [userInfo, getMe] = useUserStore((state) => [
-    state.userInfo,
-    state.getMe,
-  ]);
-  const [success, error] = useSnackbarStore((state) => [
-    state.success,
-    state.error,
-  ]);
-  const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
-  const queryClient = useQueryClient();
-
-  /** UseQuery */
-  const { data: avatarItems } = useQuery({
-    queryKey: ["avatar-items"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          populate: "*",
-          filters: {
-            category: {
-              code: CategoryCode.AVATAR,
-            },
-          },
-          pagination: {
-            page: 1,
-            pageSize: 10,
-          },
-        });
-        return await ReqGetShopItems(queryString);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    },
-  });
-
-  const { data: backgroundItems } = useQuery({
-    queryKey: ["background-items"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          populate: "*",
-          filters: {
-            category: {
-              code: CategoryCode.BACKGROUND,
-            },
-          },
-          pagination: {
-            page: 1,
-            pageSize: 10,
-          },
-        });
-        return await ReqGetShopItems(queryString);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    },
-  });
-
-  // Query for user's inventory items
-
-  /** Handle Buy item here */
-  const buyItemMutation = useMutation({
-    mutationFn: async () => {
-      show();
-      if (!userInfo) return null;
-      console.log("itemData", itemData);
-      const shopItemUser = {
-        // Add any other required fields for your ShopItemUser type
-        shop_item: itemData.id,
-        user: userInfo.id,
-      };
-      return await ReqBuyShopItem(shopItemUser);
-    },
-    onSuccess: () => {
-      // Close the modal
-      setOpenModal(false);
-      success("Xong", "Mua vật phẩm thành công!");
-
-      // Invalidate relevant queries to refetch data
-      queryClient.invalidateQueries({ queryKey: ["my-items"] });
-      queryClient.invalidateQueries({ queryKey: ["user-points"] }); // If you have a query for user points
-    },
-    onError: (err) => {
-      const message = HandleReturnMessgaeErrorLogin(err);
-      // Show error message
-      error("Lỗi", message);
-    },
-    onSettled: () => {
-      setOpenModal(false);
-      getMe();
-      hide();
-    },
-  });
-
-  const handleBackgroundClick = (item: ShopItem) => {
-    setOpenModal(true);
-    setItemData(item);
-  };
-
-  const handleAvatarClick = (item: ShopItem) => {
-    setOpenModal(true);
-    setItemData(item);
-  };
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   // Tab switching handler
   const handleTabChange = (tabId: string) => {
@@ -171,24 +51,8 @@ export default function Shop() {
         />
 
         {/* Tab Content */}
-        {activeTab === TabOptions.SHOP ? (
-          <ShopContent
-            backgroundItems={backgroundItems}
-            avatarItems={avatarItems}
-            handleBackgroundClick={handleBackgroundClick}
-            handleAvatarClick={handleAvatarClick}
-          />
-        ) : (
-          <InventoryContent />
-        )}
+        {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>
-
-      <ItemModal
-        itemData={itemData}
-        isShowing={openModal}
-        close={() => setOpenModal(false)}
-        onBuy={buyItemMutation.mutate}
-      />
     </>
   );
 }

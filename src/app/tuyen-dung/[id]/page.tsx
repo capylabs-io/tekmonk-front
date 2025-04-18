@@ -107,7 +107,11 @@ export default function Page() {
             </div>
           </div>
           <div className="text-BodyMd text-gray-95">
-            <div>{data && data.data.content}</div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: (data && data.data.content) || "",
+              }}
+            ></div>
           </div>
         </div>
       </div>
