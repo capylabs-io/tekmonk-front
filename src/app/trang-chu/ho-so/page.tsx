@@ -21,6 +21,8 @@ import { CertificateProfile } from "@/components/profile/certificate-proifile";
 import { useQuery } from "@tanstack/react-query";
 import { getListPostCustom } from "@/requests/post";
 import qs from "qs";
+import { PostType } from "@/types/posts";
+import moment from "moment";
 
 const Profile: React.FC = () => {
   const router = useCustomRouter();
@@ -173,22 +175,45 @@ const Profile: React.FC = () => {
           </div> */}
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
-          <Post
-            imageUrl="bg-[url('/image/home/profile-pic.png')]"
-            thumbnailUrl="/image/new/new-pic.png"
-            userName="Andy Lou"
-            specialName="Bá Vương Học Đường"
-            userRank={
-              <span
-                className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-              >
-                IV
-              </span>
-            }
-            createdAt="23s"
-            likedCount="6.2"
-            commentCount="61"
-          />
+          {myPosts &&
+            myPosts.map((item: PostType, index: number) => (
+              <>
+                <div className="px-8 relative">
+                  <div className="text-sm text-gray-500 absolute top-2 right-8">
+                    {moment(get(item, "createdAt", ""))
+                      .format("DD/MM/YYYY")
+                      .toString()}
+                  </div>
+                  <Post
+                    isAllowClickDetail
+                    data={item}
+                    imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                    thumbnailUrl={get(item, "thumbnail") || ""}
+                    userName={userInfo?.username || "User"}
+                    specialName={get(item, "postedBy.skills", "")}
+                    userRank={
+                      <span
+                        className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                      >
+                        IV
+                      </span>
+                    }
+                    postContent={get(item, "content", "")}
+                    postName={get(item, "name", "")}
+                    createdAt={moment(get(item, "createdAt", ""))
+                      .format("DD/MM/YYYY")
+                      .toString()}
+                    likedCount={get(item, "likeCount", 0).toString() || "0"}
+                    commentCount={
+                      get(item, "commentCount", 0).toString() || "0"
+                    }
+                  />
+                </div>
+                {index !== myPosts.length - 1 && (
+                  <hr className="border-t border-gray-200 my-4" />
+                )}
+              </>
+            ))}
         </TabsContent>
       </Tabs>
     </>

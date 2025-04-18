@@ -1,4 +1,4 @@
-import { User } from "./common-types";
+import { ShopItem, User } from "./common-types";
 
 export type ClaimedItem = {
   id: number;
@@ -7,6 +7,7 @@ export type ClaimedItem = {
   quantity?: number;
   user?: User;
   status: ClaimedItemStatus;
+  shopItem: ShopItem;
   createdAt: string;
   updatedAt: string;
 };

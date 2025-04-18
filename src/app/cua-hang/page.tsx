@@ -4,7 +4,7 @@ import { ShopContent } from "@/components/shop/shop-content";
 import { InventoryContent } from "@/components/shop/inventory-content";
 import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
 import { useUserStore } from "@/store/UserStore";
-
+import Image from "next/image";
 // Tab options
 enum TabOptions {
   SHOP = "shop",
@@ -30,7 +30,7 @@ export default function Shop() {
 
   return (
     <>
-      <div className="w-full mx-auto px-4 max-w-7xl">
+      <div className="w-full mx-auto  max-w-7xl overflow-hidden">
         <div className="flex items-center justify-between px-2">
           <div className="text-primary-900 text-SubheadLg font-medium">
             <span>Cửa hàng</span>
@@ -39,7 +39,12 @@ export default function Shop() {
             <div className="text-yellow-500 font-semibold">
               {userInfo?.balance}
             </div>
-            <div className="w-6 h-6 rounded-full bg-yellow-500 ml-2"></div>
+            <Image
+              src="/image/home/coin.png"
+              alt="coin pic"
+              width={24}
+              height={24}
+            />
           </div>
         </div>
 

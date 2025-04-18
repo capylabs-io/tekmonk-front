@@ -332,7 +332,7 @@ export type Category = {
 
 export type ShopItemUser = {
   id: number;
-  user: User;
+  user?: User;
   shop_item: ShopItem;
   createdAt: string;
   updatedAt: string;

@@ -17,6 +17,7 @@ import {
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { ReqGetClaimedItems } from "@/requests/claimed-item";
 import { CardItem } from "@/components/shop/card-item";
+import { ClaimedItem } from "@/types/claimed-item";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -31,6 +32,7 @@ export const InventoryContent = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [selectedItem, setSelectedItem] = useState<ShopItemUser | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [itemClaimed, setItemClaimed] = useState<ClaimedItem | null>(null);
 
   const { data: myItems } = useQuery({
     queryKey: ["my-items"],
@@ -75,9 +77,17 @@ export const InventoryContent = () => {
     setSelectedItem(null);
   };
 
+  const handleDialogOpenChange = (open: boolean) => {
+    if (!open) {
+      setSelectedItem(null);
+      setItemClaimed(null);
+    }
+    setIsDialogOpen(open);
+  };
+
   return (
-    <>
-      <div className="w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
+    <div className="w-full">
+      <div className="w-full px-4 flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
         <div className="text-white">
           <div className={`text-[28px] leading-[44px]`}>KHO ĐỒ CỦA TÔI</div>
           <div className="text-bodyMd mt-5">
@@ -96,9 +106,9 @@ export const InventoryContent = () => {
       <hr className="border-t border-gray-200 my-4" />
 
       {/* Items Grid Section */}
-      <div className="mt-6">
+      <div className="mt-6 px-2">
         {myItems && myItems.data.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {myItems.data.map((item, index) => (
               <CardItem
                 key={index}
@@ -117,27 +127,38 @@ export const InventoryContent = () => {
         )}
       </div>
 
-      {/* Claimed Items Section (if applicable) */}
-      {claimedItems && claimedItems.data && claimedItems.data.length > 0 && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4">VẬT PHẨM ĐÃ NHẬN</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {claimedItems.data.map((item: any, index: number) => (
-              <CardItem
-                key={index}
-                image={item.image || "/placeholder-image.jpg"}
-                name={item.name}
-                price={0}
-                description={`Nhận ngày: ${formatDate(item.createdAt)}`}
-                onClick={() => {}}
-              />
-            ))}
+      <div className="px-2">
+        {/* Claimed Items Section (if applicable) */}
+        {claimedItems && claimedItems.data && claimedItems.data.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">VẬT PHẨM ĐÃ NHẬN</h2>
+            <div className=" px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {claimedItems.data.map((item, index: number) => (
+                <CardItem
+                  key={index}
+                  image={item.shopItem.image || "/placeholder-image.jpg"}
+                  name={item.shopItem.name}
+                  price={item.shopItem.price}
+                  description={`Nhận ngày: ${formatDate(item.createdAt)}`}
+                  onClick={() => {
+                    handleItemClick({
+                      shop_item: item.shopItem,
+                      createdAt: item.createdAt,
+                      id: item.id,
+                      user: item.user,
+                      updatedAt: item.updatedAt,
+                    });
+                    setItemClaimed(item);
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Item Detail Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
         <DialogContent className="w-[440px] rounded-3xl bg-white p-6">
           <DialogHeader>
             <DialogTitle className="text-HeadingSm text-gray-95">
@@ -200,6 +221,26 @@ export const InventoryContent = () => {
                     </div>
                   </div>
                 )}
+
+                {itemClaimed?.code && (
+                  <div className="text-SubheadMd flex items-center gap-x-2">
+                    <div className="text-gray-60 min-w-[120px]">
+                      Mã sản phẩm:
+                    </div>
+                    <div className="text-gray-95 text-sm mt-1">
+                      {itemClaimed.code}
+                    </div>
+                  </div>
+                )}
+
+                {itemClaimed?.quantity && (
+                  <div className="text-SubheadMd flex items-center gap-x-2">
+                    <div className="text-gray-60 min-w-[120px]">Số lượng:</div>
+                    <div className="text-gray-95 text-sm mt-1">
+                      {itemClaimed.quantity}
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -209,6 +250,6 @@ export const InventoryContent = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };

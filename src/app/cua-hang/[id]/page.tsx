@@ -5,8 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import qs from "qs";
 import { ShopItem } from "@/types/shop";
 import { useState } from "react";
-import Image from "next/image";
-import { get } from "lodash";
 import { ItemModal } from "@/components/shop/ItemModal";
 import { Pagination } from "@/components/common/Pagination";
 import { useUserStore } from "@/store/UserStore";
@@ -16,6 +14,7 @@ import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { ArrowLeft } from "lucide-react";
+import { CardItem } from "@/components/shop/card-item";
 
 export default function ShopItemDetail() {
   const router = useRouter();
@@ -128,37 +127,19 @@ export default function ShopItemDetail() {
       <div className="container mx-auto py-6 px-4 flex-1">
         <h2 className="text-HeadingMd font-bold mb-6">{categoryName}</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           {data?.data.map((item, index) => (
-            <div
+            <CardItem
               key={index}
-              className="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+              image={item.image || ""}
+              name={item.name || ""}
+              price={item.price || 0}
+              description={item.description || ""}
               onClick={() => {
                 setItemData(item);
                 setOpenModal(true);
               }}
-            >
-              <div className="aspect-square relative bg-gradient-to-r from-purple-500 to-purple-600 rounded-t-lg overflow-hidden">
-                <Image
-                  src={get(item, "image", "")}
-                  alt={get(item, "name", "Shop item")}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-bold text-gray-900">{item.name}</h3>
-                <div className="flex items-center mt-2">
-                  <div className="w-5 h-5 bg-yellow-400 rounded-full mr-2"></div>
-                  <span className="text-gray-700 font-medium">
-                    {item.price}
-                  </span>
-                </div>
-                <p className="text-gray-600 mt-2 text-sm line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-            </div>
+            />
           ))}
         </div>
 

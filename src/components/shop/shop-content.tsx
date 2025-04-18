@@ -9,7 +9,7 @@ export const ShopContent = () => {
     queryFn: () => GetCategories(),
   });
   return (
-    <>
+    <div className="w-full">
       <div className="px-4 w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
         <div className="text-white">
           <div className={`text-[28px] leading-[44px]`}>
@@ -37,6 +37,6 @@ export const ShopContent = () => {
           categoryName={category.name}
         />
       ))}
-    </>
+    </div>
   );
 };
