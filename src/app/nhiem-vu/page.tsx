@@ -294,9 +294,14 @@ export default function MissionPage() {
             <DialogDescription>
               <div className="text-BodyMd text-gray-70">
                 Bạn đã nhận được{" "}
+                <span className="font-bold text-primary-900">
+                  {claimData?.points ? claimData?.points : 0}
+                </span>{" "}
                 <span className="text-gray-70">
                   điểm và{" "}
-                  <span className="text-primary-900">{claimData?.reward}</span>{" "}
+                  <span className="font-bold text-primary-900">
+                    {claimData?.reward}
+                  </span>{" "}
                   <span className="text-gray-70">đồng</span>
                 </span>
               </div>
