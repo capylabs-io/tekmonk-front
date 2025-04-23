@@ -29,10 +29,10 @@ export default function Shop() {
   };
 
   return (
-    <>
-      <div className="w-full mx-auto max-w-7xl overflow-hidden">
+    <div className="w-full">
+      <div className="w-full mx-auto overflow-hidden">
         <div className="flex items-center justify-between px-2">
-          <div className="text-primary-900 text-SubheadLg font-medium">
+          <div className="text-primary-900 text-SubheadLg font-medium px-8">
             <span>Cửa hàng</span>
           </div>
           <div className="flex items-center">
@@ -58,6 +58,6 @@ export default function Shop() {
         {/* Tab Content */}
         {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>
-    </>
+    </div>
   );
 }

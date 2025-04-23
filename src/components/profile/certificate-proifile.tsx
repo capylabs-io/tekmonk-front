@@ -51,7 +51,7 @@ export const CertificateProfile = () => {
 
   if (!certificates?.data || certificates.data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white border border-gray-200">
+      <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white">
         <h3 className="text-lg font-medium text-gray-700 mb-1">
           Chưa có chứng chỉ nào
         </h3>

@@ -1,30 +1,30 @@
 "use client";
-import React, { useEffect } from "react";
-import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/button/Button";
-import { Settings } from "lucide-react";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { UserStat } from "@/components/profile/UserStat";
 import { Post } from "@/components/home/Post";
-import { get } from "lodash";
-import { useUserAvatarStore } from "@/store/UserAvatarStore";
-import { MissionProgress } from "@/components/profile/mission-progress";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ROUTE } from "@/contants/router";
 import { AchievementProfile } from "@/components/profile/achievement-profile";
 import { CertificateProfile } from "@/components/profile/certificate-proifile";
-import { useQuery } from "@tanstack/react-query";
+import { MissionProgress } from "@/components/profile/mission-progress";
+import { UserStat } from "@/components/profile/UserStat";
+import { ROUTE } from "@/contants/router";
 import { getListPostCustom } from "@/requests/post";
-import qs from "qs";
+import { useUserAvatarStore } from "@/store/UserAvatarStore";
+import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
+import { useQuery } from "@tanstack/react-query";
+import { get } from "lodash";
+import { Settings } from "lucide-react";
 import moment from "moment";
+import qs from "qs";
+import React, { useEffect } from "react";
 
-const Profile: React.FC = () => {
+export default function Profile() {
   const router = useCustomRouter();
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [showAvatarModal] = useUserAvatarStore((state) => [state.show]);
@@ -41,7 +41,6 @@ const Profile: React.FC = () => {
     fetchData();
   }, []);
 
-  // TODO: DATA of my posts
   const { data: myPosts, refetch: refetchListPostCustom } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: ["custom-posts"],
@@ -64,7 +63,7 @@ const Profile: React.FC = () => {
     enabled: !!userInfo?.id,
   });
   return (
-    <>
+    <div className="w-full">
       <div className="text-xl text-primary-900 px-8">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
         <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center absolute left-8 -bottom-8 h-[152px] w-[152px]" />
@@ -85,7 +84,7 @@ const Profile: React.FC = () => {
             {get(userInfo, "specialName")}
           </div>
         </div>
-        <div className="flex gap-x-2">
+        {/* <div className="flex gap-x-2">
           <Button outlined className="text-primary-900 text-sm border">
             Hồ sơ
           </Button>
@@ -96,14 +95,14 @@ const Profile: React.FC = () => {
           >
             <Settings size={24} className="text-primary-600" />
           </Button>
-        </div>
+        </div> */}
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="personal">Cá nhân</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>
         </TabsList>
-        <TabsContent value="personal" className="overflow-y-auto">
+        <TabsContent value="personal" className="overflow-y-auto w-full">
           <div className="px-6 mt-3">
             <div className="text-primary-900">THÔNG SỐ CHUNG</div>
             <UserStat />
@@ -119,7 +118,7 @@ const Profile: React.FC = () => {
                 Xem thêm
               </div>
             </div>
-            <div className="flex flex-col gap-4 mt-4">
+            <div className="flex flex-col mt-4">
               <MissionProgress />
             </div>
           </div>
@@ -216,9 +215,6 @@ const Profile: React.FC = () => {
             ))}
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
-};
-
-// export default WithAuth(Profile);
-export default Profile;
+}

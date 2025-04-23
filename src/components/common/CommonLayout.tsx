@@ -13,7 +13,7 @@ import type React from "react"; // Import React
 interface LayoutProps {
   leftSidebar: React.ReactNode;
   mainContent: React.ReactNode;
-  rightSidebar: React.ReactNode;
+  rightSidebar?: React.ReactNode;
 }
 
 export default function CommonLayout({
@@ -25,22 +25,25 @@ export default function CommonLayout({
     <div className="min-h-screen">
       <div className="container mx-auto flex">
         {/* Left Sidebar */}
-        <div className="md:block sticky top-0 hidden h-screen">
+        <div className="sticky top-0 hidden h-screen w-64 flex-shrink-0 md:block">
           {leftSidebar}
         </div>
 
-        {/* Main Content */}
-        <main className="flex-1 border-x">
-          <div className="mx-auto max-w-3xl overflow-y-auto">{mainContent}</div>
+        {/* Main Content - flex-grow makes it expand */}
+        <main className="min-w-0 flex-grow border-x">
+          {/* Removed nested div, apply overflow directly if needed, or handle scrolling within mainContent component */}
+          {mainContent}
         </main>
 
         {/* Right Sidebar */}
-        <div className="sticky top-0 hidden h-screen w-[420px] border-l p-4 xl:block">
-          {rightSidebar}
-        </div>
+        {rightSidebar && (
+          <div className="sticky top-0 hidden h-screen w-96 flex-shrink-0 border-l p-4 xl:block">
+            {rightSidebar}
+          </div>
+        )}
 
         {/* Mobile Bottom Navigation */}
-        <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-around border-t bg-background p-4 md:hidden">
+        <nav className="fixed bottom-0 left-0 right-0 z-10 flex items-center justify-around border-t bg-background p-4 md:hidden">
           <Link href="/" className="p-2">
             <Home className="h-6 w-6" />
           </Link>
@@ -49,7 +52,7 @@ export default function CommonLayout({
           </Link>
           <Link href="/bookmarks" className="p-2">
             <Bookmark className="h-6 w-6" />
-          </Link>˜
+          </Link>
           <Link href="/profile" className="p-2">
             <User className="h-6 w-6" />
           </Link>

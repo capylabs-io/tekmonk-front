@@ -15,7 +15,6 @@ import {
 import TopLoader from "nextjs-toploader";
 import Providers from "./providers";
 
-
 const inter = Inter({ subsets: ["latin"] });
 
 const delaGothicOne = localFont({
@@ -65,6 +64,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
   twitter: {
     card: "summary_large_image",
     site: "@tekmonk",
@@ -76,9 +76,9 @@ export const metadata: Metadata = {
     "fb:app_id": "1234567890",
     "og:image:alt": SHARE_TITLE,
     "og:locale": "vi_VN",
-    "og:site_name": "Tekmonk",
+    "og:site_name": SHARE_TITLE,
     "twitter:image:alt": SHARE_TITLE,
-    "twitter:creator": "@tekmonk",
+    "twitter:creator": SHARE_TITLE,
   },
 };
 export default function RootLayout({

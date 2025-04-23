@@ -71,13 +71,17 @@ const Home = () => {
       <Tabs defaultValue="all" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>
-          <TabsTrigger value="play">Sân chơi</TabsTrigger>
+          <TabsTrigger value="play">Dự án</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="overflow-y-auto">
           {listPost.map((item: PostType, index: number) => (
             <>
               <div className="px-8 relative">
-                <div className="text-sm text-gray-500 absolute top-2 right-8">{moment(get(item, 'createdAt', '')).format('DD/MM/YYYY').toString()}</div>
+                <div className="text-sm text-gray-500 absolute top-2 right-8">
+                  {moment(get(item, "createdAt", ""))
+                    .format("DD/MM/YYYY")
+                    .toString()}
+                </div>
                 <Post
                   isAllowClickDetail
                   data={item}

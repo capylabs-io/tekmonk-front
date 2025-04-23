@@ -12,31 +12,34 @@ import {
   Zap,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useUserStore } from "@/store/UserStore";
 
 type Props = {
   customClassName?: string;
 };
 const BASE_CLASS = "grow";
 export const MenuLayout = ({ customClassName }: Props) => {
+  const [isConnected] = useUserStore((state) => [state.isConnected]);
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>
       <MenuCard
-        title="Trang chủ"
-        active={usePathname() === "/trang-chu"}
+        title="Bảng tin"
+        active={usePathname() === "/bang-tin"}
         iconElement={<Home size={20} />}
-        url="/trang-chu"
+        url="/bang-tin"
       />
-      <MenuCard
+      {/* <MenuCard
         active={usePathname() === "/thong-bao"}
         title="Thông báo"
         iconElement={<Bell size={20} />}
         url="/thong-bao"
-      />
+      /> */}
       <MenuCard
         title="Nhiệm vụ"
         active={usePathname().includes("/nhiem-vu")}
         iconElement={<Goal size={20} />}
         url="/nhiem-vu"
+        hidden={!isConnected()}
       />
       <MenuCard
         title="Cửa hàng"
@@ -58,9 +61,9 @@ export const MenuLayout = ({ customClassName }: Props) => {
       /> */}
       <MenuCard
         title="Hồ sơ"
-        active={usePathname() === "/trang-chu/ho-so"}
+        active={usePathname() === "/bang-tin/ho-so"}
         iconElement={<User size={20} />}
-        url="/trang-chu/ho-so"
+        url="/bang-tin/ho-so"
       />
     </div>
   );

@@ -37,7 +37,7 @@ export const MissionProgress = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-row justify-center items-center gap-4 w-[720px] h-[112px] border border-gray-200 rounded-lg">
+      <div className="flex flex-row justify-center items-center gap-4 w-full red h-[112px] border border-gray-200 rounded-lg">
         <Skeleton className="w-[80px] h-[80px] rounded-md flex-none" />
         <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
           <div className="flex flex-row justify-between items-end w-full h-12">
@@ -56,7 +56,7 @@ export const MissionProgress = () => {
   }
 
   return (
-    <div className="flex flex-row justify-center items-center gap-4 w-[720px] h-[112px]">
+    <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
       <Image
         src={missions?.data[0]?.imageUrl || ""}
         alt="Mission"
@@ -77,7 +77,7 @@ export const MissionProgress = () => {
           </div>
 
           <div className="flex flex-row items-start gap-[7px]">
-            <span className="text-SubheadSm text-gray-95">nhiệm vụ</span>
+            <span className="text-SubheadSm text-gray-95">Tiến trình</span>
             <span className="text-BodySm text-gray-60">
               {missions?.data[0]?.currentProgress
                 ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`

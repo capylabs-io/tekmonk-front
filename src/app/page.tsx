@@ -320,7 +320,7 @@ const BannerBottom = () => {
             className="text-white border-[2px] w-[203px] h-[52px]"
             childrenClassName="flex items-center justify-center gap-2"
           >
-            <Link href={ROUTE.HOME}>Khám phá ngay</Link>
+            <Link href={ROUTE.NEWS_FEED}>Khám phá ngay</Link>
             <ChevronRight size={24} color="#ffffff" className="mt-1" />
           </CommonButton>
         </div>
@@ -333,7 +333,7 @@ const BannerBottom = () => {
 export default function Page() {
   const router = useCustomRouter();
   const handleRedirectMainPage = () => {
-    router.push(`${ROUTE.HOME}`);
+    router.push(`${ROUTE.NEWS_FEED}`);
   };
   return (
     <>

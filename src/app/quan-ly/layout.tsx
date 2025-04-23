@@ -21,7 +21,7 @@ export default function Layout({
   const [userRank, setUserRank] = useState("BẠC IV");
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const handleRidirectHomePage = () => {
-    router.push(ROUTE.HOME);
+    router.push(ROUTE.NEWS_FEED);
   };
   useEffect(() => {
     if (userInfo) {
