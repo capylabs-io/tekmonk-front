@@ -3,10 +3,9 @@ import React from "react";
 import { StatCard } from "./StatCard";
 import { useUserAnalyticQuery } from "@/hooks/user-query";
 
+export const UserStat = ({ id }: { id: number }) => {
+  const { data, isLoading, error } = useUserAnalyticQuery(id);
 
-export const UserStat = () => {
-  const { data, isLoading, error } = useUserAnalyticQuery();
-  
   if (isLoading) {
     return (
       <div className="py-4 flex flex-wrap justify-center gap-4">
@@ -36,11 +35,23 @@ export const UserStat = () => {
   return (
     <div className="py-4 flex flex-wrap justify-center gap-4">
       <StatCard value={data?.missions?.toString() || "0"} title="Số huy hiệu" />
-      <StatCard value={data?.isVerifiedPost?.toString() || "0"} title="Sản phẩm tải lên" />
+      <StatCard
+        value={data?.isVerifiedPost?.toString() || "0"}
+        title="Sản phẩm tải lên"
+      />
       <StatCard value={data?.points?.toString() || "0"} title="Điểm sở hữu" />
-      <StatCard value={data?.certificates?.toString() || "0"} title="Số chứng chỉ" />
-      <StatCard value={data?.achievements?.toString() || "0"} title="Số thành tích" />
-      <StatCard value={data?.items?.toString() || "0"} title="Trang bị đã mua" />
+      <StatCard
+        value={data?.certificates?.toString() || "0"}
+        title="Số chứng chỉ"
+      />
+      <StatCard
+        value={data?.achievements?.toString() || "0"}
+        title="Số thành tích"
+      />
+      <StatCard
+        value={data?.items?.toString() || "0"}
+        title="Trang bị đã mua"
+      />
     </div>
   );
 };

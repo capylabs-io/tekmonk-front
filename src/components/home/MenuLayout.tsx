@@ -61,9 +61,9 @@ export const MenuLayout = ({ customClassName }: Props) => {
       /> */}
       <MenuCard
         title="Hồ sơ"
-        active={usePathname() === "/bang-tin/ho-so"}
+        active={usePathname().includes("/ho-so")}
         iconElement={<User size={20} />}
-        url="/bang-tin/ho-so"
+        url="/ho-so"
       />
     </div>
   );

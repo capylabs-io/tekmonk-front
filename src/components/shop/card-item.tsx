@@ -1,10 +1,11 @@
 "use client";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 type Props = {
   image: string;
   name: string;
   price: number;
-  description?: string;
+  quantity?: number;
   onClick: () => void;
   className?: string;
 };
@@ -13,7 +14,7 @@ export const CardItem = ({
   image,
   name,
   price,
-  description,
+  quantity,
   onClick,
   className,
 }: Props) => {
@@ -37,14 +38,25 @@ export const CardItem = ({
         </h3>
 
         {/* Price with Coin Icon */}
-        <div className="flex flex-row items-center p-0 gap-1 h-[16px]">
-          <Image
-            src="/image/home/coin.png"
-            alt="coin pic"
-            width={24}
-            height={24}
-          />
-          <span className="text-BodyXs text-gray-95">{price}</span>
+        <div className="flex flex-row items-center justify-between w-full p-0 gap-1 h-[16px]">
+          <div className="flex flex-row items-center p-0 gap-1 h-[16px]">
+            <Image
+              src="/image/home/coin.png"
+              alt="coin pic"
+              width={24}
+              height={24}
+            />
+            <span className="text-BodyXs text-gray-95">{price}</span>
+          </div>
+
+          <span
+            className={cn(
+              "text-BodyXs text-[#B52224] ",
+              quantity && quantity !== 0 ? "hidden" : ""
+            )}
+          >
+            Hết hàng
+          </span>
         </div>
       </div>
     </div>

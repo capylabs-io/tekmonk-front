@@ -7,11 +7,6 @@ import { CardState } from "./types";
 import { getCardState } from "./utils";
 import MissionCardContent from "./MissionCardContent";
 
-// Mission/Achievement states:
-// 1. In Progress: When data has currentProgress field
-// 2. Done but not claimed: When data has isClaim=false
-// 3. Done and claimed: When data has isClaim=true
-
 type Props = {
   data: Mission | Achievement;
   onClick: (id: number) => void;

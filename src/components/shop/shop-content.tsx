@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { GetCategories } from "@/requests/category";

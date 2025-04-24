@@ -31,8 +31,8 @@ export default function Shop() {
   return (
     <div className="w-full">
       <div className="w-full mx-auto overflow-hidden">
-        <div className="flex items-center justify-between px-2">
-          <div className="text-primary-900 text-SubheadLg font-medium px-8">
+        <div className="flex items-center justify-between px-4">
+          <div className="text-SubheadLg text-gray-95">
             <span>Cửa hàng</span>
           </div>
           <div className="flex items-center">

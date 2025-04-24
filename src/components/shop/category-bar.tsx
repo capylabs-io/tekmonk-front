@@ -1,19 +1,19 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ShopItemCarousel } from "./shop-item-carousel";
 import { ReqGetShopItems } from "@/requests/shopItem";
 import qs from "qs";
 import { ItemModal } from "./ItemModal";
-import { useState } from "react";
-import { ShopItem } from "@/types/shop";
+import { useEffect, useState } from "react";
+import { ShopItem, ShopItemEnum } from "@/types/shop";
 import { HandleReturnMessgaeErrorLogin } from "@/requests/return-message-error";
 import { ReqBuyShopItem } from "@/requests/shop-item-user";
-import { error } from "console";
 import { useUserStore } from "@/store/UserStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
+import { cn } from "@/lib/utils";
 
 export const CategoryBar = ({
   categoryId,
@@ -32,7 +32,6 @@ export const CategoryBar = ({
     state.error,
   ]);
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
-  const queryClient = useQueryClient();
 
   const { data } = useQuery({
     queryKey: ["post-item", categoryId],
@@ -45,6 +44,7 @@ export const CategoryBar = ({
             },
           },
         },
+        sort: "createdAt:desc",
         pagination: {
           pageSize: 10,
           page: 1,
@@ -73,10 +73,6 @@ export const CategoryBar = ({
       // Close the modal
       setOpenModal(false);
       success("Xong", "Mua vật phẩm thành công!");
-
-      // Invalidate relevant queries to refetch data
-      queryClient.invalidateQueries({ queryKey: ["my-items"] });
-      queryClient.invalidateQueries({ queryKey: ["user-points"] }); // If you have a query for user points
     },
     onError: (err) => {
       const message = HandleReturnMessgaeErrorLogin(err);
@@ -91,8 +87,19 @@ export const CategoryBar = ({
   });
   const [openModal, setOpenModal] = useState(false);
   const [itemData, setItemData] = useState<ShopItem | null>(null);
+  const [isShow, setIsShow] = useState(true);
+  useEffect(() => {
+    if (data?.data?.length === 0) {
+      setIsShow(false);
+    }
+
+    // Handle if all data in this category have type is ShopItemEnum.VIRTUAL
+    if (data?.data?.every((item) => item.type === ShopItemEnum.VIRTUAL)) {
+      setIsShow(false);
+    }
+  }, [data]);
   return (
-    <div className=" p-2">
+    <div className={cn("p-2", !isShow && "hidden")}>
       <ShopItemCarousel
         items={data?.data || []}
         title={categoryName}

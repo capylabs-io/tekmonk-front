@@ -1,13 +1,9 @@
 "use client";
-import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import { usePathname } from "next/navigation";
-import { AuthorCard } from "@/components/project/AuthorCard";
-import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
 import UserProfileLink from "@/components/common/UserProfileLink";
 import { useProjects } from "@/lib/hooks/useProject";
 import { CommonButton } from "@/components/common/button/CommonButton";
@@ -17,7 +13,6 @@ import CommonLayout from "@/components/common/CommonLayout";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { useUserStore } from "@/store/UserStore";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
-import { NavigationInfo } from "@/components/common/sidebar/naivgation-info";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -43,7 +38,7 @@ export default function Layout({
     <>
       <CommonLayout
         leftSidebar={
-          <div className="h-full flex flex-col px-10 py-5 col-span-2 ">
+          <div className="h-full flex flex-col px-10 py-5 col-span-2 overflow-hidden">
             <div
               className="cursor-pointer"
               onClick={() => router.push(ROUTE.NEWS_FEED)}
@@ -65,7 +60,34 @@ export default function Layout({
             </div>
             <div className="flex flex-col mt-4 grow">
               <MenuLayout customClassName="" />
-              <NavigationInfo />
+              {isConnected() ? (
+                <div className="grow-0 px-3 w-full md:block hidden">
+                  <div className="flex flex-col gap-y-4 mt-4">
+                    <CommonButton
+                      className="w-full !rounded-3xl h-12"
+                      variant="secondary"
+                      onClick={handleRidirectAdminPage}
+                    >
+                      Quản lý
+                    </CommonButton>
+                    <CommonButton
+                      className="w-full !rounded-3xl h-12"
+                      onClick={handleOpenModal}
+                    >
+                      Đăng tải
+                    </CommonButton>
+                  </div>
+                  <UserProfileLink userName={userInfo?.username || ""} />
+                </div>
+              ) : (
+                <CommonButton
+                  className="w-full !rounded-3xl h-12"
+                  variant="primary"
+                  onClick={() => router.push(ROUTE.LOGIN)}
+                >
+                  Đăng nhập
+                </CommonButton>
+              )}
             </div>
           </div>
         }
@@ -74,7 +96,11 @@ export default function Layout({
             {children}
           </div>
         }
-        rightSidebar={<CommonRightSidebar />}
+        rightSidebar={
+          <>
+            <CommonRightSidebar />
+          </>
+        }
       />
       <CreateProfileModal />
       <AvatarConfigModal />

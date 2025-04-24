@@ -16,7 +16,7 @@ export const PointCard = ({ point, customClassName }: Props) => {
       <div className="flex gap-x-1">
         <span className="font-bold text-base">{point}</span>
         <Image
-          src="/image/home/coin.png"
+          src="/image/PointIcon.png"
           alt="coin pic"
           width={24}
           height={24}

@@ -245,9 +245,9 @@ export default function MissionPage() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
-      <div className="flex items-center justify-between px-2">
-        <div className="text-primary-900 text-SubheadLg font-medium">
+    <div className="w-full max-w-7xl mx-auto">
+      <div className="flex items-center justify-between px-4">
+        <div className="text-SubheadLg text-gray-95">
           <span>Nhiệm vụ</span>
         </div>
         <div>
@@ -268,7 +268,7 @@ export default function MissionPage() {
       />
 
       {/* Filter Component */}
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end px-4">
         <MissionFilter
           filterValue={filterValue}
           onFilterChange={handleFilterChange}

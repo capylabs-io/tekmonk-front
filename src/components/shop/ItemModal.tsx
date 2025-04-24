@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { CommonButton } from "../common/button/CommonButton";
 import {
@@ -21,13 +22,15 @@ type Props = {
 const QuantityInput = ({
   quantity,
   setQuantity,
+  currentQuantity,
 }: {
   quantity: number;
   setQuantity: (quantity: number) => void;
+  currentQuantity: number;
 }) => {
   return (
     <div className="text-SubheadMd flex items-center gap-x-2">
-      <div className="text-gray-60">Số lượng:</div>
+      <div className="text-gray-60">Số lượng mua:</div>
       <div className="flex items-center gap-x-2">
         <button
           className="w-8 h-8 rounded-full bg-gray-20 flex items-center justify-center text-gray-95"
@@ -43,7 +46,9 @@ const QuantityInput = ({
         <button
           className="w-8 h-8 rounded-full bg-gray-20 flex items-center justify-center text-gray-95"
           onClick={() => {
-            setQuantity(quantity + 1);
+            if (quantity < currentQuantity) {
+              setQuantity(quantity + 1);
+            }
           }}
         >
           +
@@ -55,9 +60,13 @@ const QuantityInput = ({
 
 export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
   const [quantity, setQuantity] = useState(1);
-
+  const totalPrice = itemData.price ? itemData.price * quantity : 1 * quantity;
+  const handleOnclose = () => {
+    setQuantity(1);
+    close();
+  };
   return (
-    <Dialog open={isShowing} onOpenChange={close}>
+    <Dialog open={isShowing} onOpenChange={handleOnclose}>
       <DialogContent className="w-[440px] rounded-3xl bg-white p-6">
         <DialogHeader>
           <DialogTitle className="text-HeadingSm text-gray-95">
@@ -90,14 +99,34 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
             <div className="text-gray-60">Giá:</div>
             <div className="text-gray-95">{itemData.price}</div>
           </div>
+          <div className="text-SubheadMd flex items-center gap-x-2">
+            <div className="text-gray-60">Số lượng trong kho:</div>
+            <div className="text-gray-95">{itemData.quantity}</div>
+          </div>
         </div>
         {itemData.type === ShopItemEnum.STATIONERY ? (
-          <QuantityInput quantity={quantity} setQuantity={setQuantity} />
+          <>
+            <QuantityInput
+              quantity={quantity}
+              setQuantity={setQuantity}
+              currentQuantity={itemData.quantity}
+            />
+            <div className="text-SubheadMd flex items-center gap-x-2">
+              <div className="text-gray-60">Tổng tiền:</div>
+              <div className="text-gray-95 font-semibold">{totalPrice}</div>
+              <Image
+                src="/image/home/coin.png"
+                alt="coin"
+                width={20}
+                height={20}
+              />
+            </div>
+          </>
         ) : (
           <></>
         )}
         <DialogFooter className="flex justify-between items-center w-full mt-4">
-          <CommonButton variant="secondary" onClick={close}>
+          <CommonButton variant="secondary" onClick={handleOnclose}>
             Thoát
           </CommonButton>
           <CommonButton onClick={() => onBuy(quantity)}>

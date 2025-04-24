@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Tabs,
   TabsContent,
@@ -19,7 +19,6 @@ import { useUserStore } from "@/store/UserStore";
 
 const Home = () => {
   //set for contest page
-  const router = useCustomRouter();
   const [showLoading, hideLoading] = useLoadingStore((state) => [
     state.show,
     state.hide,
@@ -67,7 +66,7 @@ const Home = () => {
   }, [data]);
   return (
     <>
-      <div className="text-xl text-primary-900 px-8">Trang chủ</div>
+      <div className="text-SubheadLg text-gray-95 px-4">Trang chủ</div>
       <Tabs defaultValue="all" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>

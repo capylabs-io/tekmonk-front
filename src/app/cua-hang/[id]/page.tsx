@@ -15,7 +15,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { ArrowLeft } from "lucide-react";
 import { CardItem } from "@/components/shop/card-item";
-
+import Image from "next/image";
 export default function ShopItemDetail() {
   const router = useRouter();
   const { id } = useParams();
@@ -45,6 +45,9 @@ export default function ShopItemDetail() {
             id: Number(id),
           },
         },
+        sort: {
+          quantity: "desc",
+        },
         pagination: {
           page: currentPage,
           pageSize: pageSize,
@@ -70,8 +73,6 @@ export default function ShopItemDetail() {
     onSuccess: () => {
       setOpenModal(false);
       success("Xong", "Mua vật phẩm thành công!");
-      queryClient.invalidateQueries({ queryKey: ["my-items"] });
-      queryClient.invalidateQueries({ queryKey: ["user-points"] });
     },
     onError: (err) => {
       const message = HandleReturnMessgaeErrorLogin(err);
@@ -116,10 +117,10 @@ export default function ShopItemDetail() {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-xl font-semibold text-primary-900">Cửa hàng</h1>
+          <h1 className="text-SubheadLg text-gray-95">Cửa hàng</h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-yellow-400 rounded-full"></div>
+          <Image src="/image/home/coin.png" alt="coin" width={24} height={24} />
           <span className="font-medium text-gray-800">{userPoints}</span>
         </div>
       </div>
@@ -134,7 +135,7 @@ export default function ShopItemDetail() {
               image={item.image || ""}
               name={item.name || ""}
               price={item.price || 0}
-              description={item.description || ""}
+              quantity={item.quantity || 0}
               onClick={() => {
                 setItemData(item);
                 setOpenModal(true);

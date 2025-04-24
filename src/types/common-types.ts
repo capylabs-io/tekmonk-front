@@ -1,4 +1,5 @@
 import { PostType } from "./posts";
+import { ShopItem } from "./shop";
 
 export type Event = {
   title: string;
@@ -307,15 +308,6 @@ export type ClassSessionDetail = {
   workSpeed: boolean;
   createdAt: string;
   updatedAt: string;
-};
-
-export type ShopItem = {
-  id: string;
-  name: string;
-  price: number;
-  description?: string;
-  image: string;
-  category?: Category;
 };
 
 export enum CategoryCode {

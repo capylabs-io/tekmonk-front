@@ -5,9 +5,14 @@ import { cn } from "@/lib/utils";
 type TextWithEllipsisProps = {
   text: string;
   maxLines: number;
+  secondText?: string;
 };
 
-export const TextWithEllipsis = ({ text, maxLines }: TextWithEllipsisProps) => {
+export const TextWithEllipsis = ({
+  text,
+  maxLines,
+  secondText,
+}: TextWithEllipsisProps) => {
   return (
     <div
       className={cn(
@@ -15,7 +20,10 @@ export const TextWithEllipsis = ({ text, maxLines }: TextWithEllipsisProps) => {
         maxLines ? `line-clamp-${maxLines}` : ""
       )}
     >
-      {text}
+      {text.split(" ").length > 11
+        ? `${text.split(" ").slice(0, 11).join(" ")}...`
+        : text}{" "}
+      {secondText && <span className="text-gray-500"> ({secondText})</span>}
     </div>
   );
 };

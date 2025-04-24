@@ -9,15 +9,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { get } from "lodash";
 import { CommonCard } from "../common/CommonCard";
 
-export const CertificateProfile = () => {
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+export const CertificateProfile = ({ id }: { id: number }) => {
   const { data: certificates, isLoading } = useQuery({
     queryKey: ["certificates"],
     queryFn: async () => {
       const queryString = qs.stringify({
         populate: ["certificate", "student"],
         filters: {
-          student: { id: userInfo?.id },
+          student: { id: id },
         },
         pagination: {
           page: 1,
@@ -26,7 +25,7 @@ export const CertificateProfile = () => {
       });
       return await ReqGetCertificateHistories(queryString);
     },
-    enabled: !!userInfo?.id,
+    enabled: !!id,
     refetchOnWindowFocus: false,
   });
 

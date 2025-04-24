@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const MissionProgress = () => {
+export const MissionProgress = ({ id }: { id: number }) => {
   const [progressPercentage, setProgressPercentage] = useState(0);
   const { data: missions, isLoading } = useQuery({
     queryKey: ["missions-history"],
@@ -16,10 +16,12 @@ export const MissionProgress = () => {
       const queryString = qs.stringify({
         page: 1,
         pageSize: 1,
+        id: id,
       });
       const res = await ReqGetMissionInfo(queryString);
       return res;
     },
+    enabled: !!id,
   });
 
   useEffect(() => {
@@ -37,7 +39,7 @@ export const MissionProgress = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-row justify-center items-center gap-4 w-full red h-[112px] border border-gray-200 rounded-lg">
+      <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px] rounded-lg">
         <Skeleton className="w-[80px] h-[80px] rounded-md flex-none" />
         <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
           <div className="flex flex-row justify-between items-end w-full h-12">

@@ -1,9 +1,8 @@
+"use client";
 import Image from "next/image";
-import { ShopItemCarousel } from "@/components/shop/shop-item-carousel";
-import { ShopItem, ShopItemUser } from "@/types/common-types";
+import { ShopItemUser } from "@/types/common-types";
 import { ReqGetUserShopItems } from "@/requests/shop-item-user";
 import { useQuery } from "@tanstack/react-query";
-import { userInfo } from "os";
 import qs from "qs";
 import { useUserStore } from "@/store/UserStore";
 import { useState } from "react";
@@ -113,9 +112,9 @@ export const InventoryContent = () => {
               <CardItem
                 key={index}
                 image={item.shop_item.image || "/placeholder-image.jpg"}
-                name={item.shop_item.name}
-                price={item.shop_item.price}
-                description={item.shop_item.description || ""}
+                name={item.shop_item.name || ""}
+                price={item.shop_item.price || 0}
+                quantity={item.shop_item.quantity || 0}
                 onClick={() => handleItemClick(item)}
               />
             ))}
@@ -137,9 +136,9 @@ export const InventoryContent = () => {
                 <CardItem
                   key={index}
                   image={item.shopItem.image || "/placeholder-image.jpg"}
-                  name={item.shopItem.name}
-                  price={item.shopItem.price}
-                  description={`Nhận ngày: ${formatDate(item.createdAt)}`}
+                  name={item.shopItem.name || ""}
+                  price={item.shopItem.price || 0}
+                  quantity={item.shopItem.quantity || 0}
                   onClick={() => {
                     handleItemClick({
                       shop_item: item.shopItem,

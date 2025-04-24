@@ -8,6 +8,7 @@ export type ShopItem = {
   description?: string;
   category: Category;
   type?: ShopItemEnum;
+  quantity: number;
 };
 
 export enum ShopItemEnum {

@@ -6,18 +6,16 @@ import { ReqGetAchievementHistory } from "@/requests/achievement";
 import qs from "qs";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUserStore } from "@/store/UserStore";
 
-export const AchievementProfile = () => {
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+export const AchievementProfile = ({ id }: { id: number }) => {
   const { data: achievements, isLoading } = useQuery({
-    queryKey: ["achievements"],
+    queryKey: ["achievements", id],
     queryFn: async () => {
       const queryString = qs.stringify({
         populate: ["achievement", "user"],
         filters: {
           user: {
-            id: userInfo?.id,
+            id: id,
           },
         },
         pagination: {
@@ -27,7 +25,7 @@ export const AchievementProfile = () => {
       });
       return await ReqGetAchievementHistory(queryString);
     },
-    enabled: !!userInfo?.id,
+    enabled: !!id,
   });
 
   if (isLoading) {
