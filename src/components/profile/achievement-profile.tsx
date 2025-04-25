@@ -6,8 +6,18 @@ import { ReqGetAchievementHistory } from "@/requests/achievement";
 import qs from "qs";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAchievementHistory } from "@/hooks/use-achievement-history";
+import { MissionDialog } from "../mission/MissionDialog";
+import { AchievementHistoryDialog } from "../mission/achievement-history-dialog";
+import { useState } from "react";
+
+const TOTAL_ACHIEVEMENTS = 9;
 
 export const AchievementProfile = ({ id }: { id: number }) => {
+  const [page, setPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(TOTAL_ACHIEVEMENTS);
+  const [openAchievementHistoryDialog, setOpenAchievementHistoryDialog] =
+    useState(false);
   const { data: achievements, isLoading } = useQuery({
     queryKey: ["achievements", id],
     queryFn: async () => {
@@ -20,12 +30,18 @@ export const AchievementProfile = ({ id }: { id: number }) => {
         },
         pagination: {
           page: 1,
-          pageSize: 4,
+          pageSize: 2,
         },
       });
       return await ReqGetAchievementHistory(queryString);
     },
     enabled: !!id,
+  });
+
+  const { data: AchievementHistory } = useAchievementHistory({
+    page: page,
+    pageSize: itemsPerPage,
+    id,
   });
 
   if (isLoading) {
@@ -55,29 +71,52 @@ export const AchievementProfile = ({ id }: { id: number }) => {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-      {achievements.data.map((achievement) => (
-        <CommonCard
-          key={achievement.id}
-          className="flex flex-col items-center p-4 w-[160px] h-[140px]"
+    <div className="px-6 mt-3 mb-8">
+      <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+        <div className="text-gray-95 text-SubheadLg">Thành tựu</div>
+        <div
+          className="cursor-pointer"
+          onClick={() => setOpenAchievementHistoryDialog(true)}
         >
-          <div className="relative w-[100px] h-[100px]">
-            <Image
-              src={achievement.achievement?.imageUrl || ""}
-              alt={achievement.achievement?.title || "Achievement"}
-              width={80}
-              height={80}
-              className="object-contain mx-auto"
-              onError={(e) => {
-                e.currentTarget.src = "/image/placeholder.png";
-              }}
-            />
-          </div>
-          <h3 className="text-center mt-2 text-gray-95 text-SubheadXs truncate w-full overflow-hidden whitespace-nowrap">
-            {achievement.achievement?.title || "Chứng chỉ"}
-          </h3>
-        </CommonCard>
-      ))}
+          Xem thêm
+        </div>
+      </div>
+      <div className="flex flex-col gap-4 mt-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          {achievements.data.map((achievement) => (
+            <CommonCard
+              key={achievement.id}
+              className="flex flex-col items-center p-4 w-[160px] h-[140px]"
+            >
+              <div className="relative w-[100px] h-[100px]">
+                <Image
+                  src={achievement.achievement?.imageUrl || ""}
+                  alt={achievement.achievement?.title || "Achievement"}
+                  width={80}
+                  height={80}
+                  className="object-contain mx-auto"
+                  onError={(e) => {
+                    e.currentTarget.src = "/image/placeholder.png";
+                  }}
+                />
+              </div>
+              <h3 className="text-center mt-2 text-gray-95 text-SubheadXs truncate w-full overflow-hidden whitespace-nowrap">
+                {achievement.achievement?.title || "Chứng chỉ"}
+              </h3>
+            </CommonCard>
+          ))}
+        </div>
+      </div>
+      <AchievementHistoryDialog
+        open={openAchievementHistoryDialog}
+        onOpenChange={setOpenAchievementHistoryDialog}
+        data={AchievementHistory?.data || []}
+        totalItems={AchievementHistory?.meta.pagination.total || 0}
+        currentPage={page}
+        itemsPerPage={itemsPerPage}
+        onPageChange={(page) => setPage(page)}
+        onItemsPerPageChange={(itemsPerPage) => setItemsPerPage(itemsPerPage)}
+      />
     </div>
   );
 };

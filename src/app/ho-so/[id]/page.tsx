@@ -12,18 +12,20 @@ import { AchievementProfile } from "@/components/profile/achievement-profile";
 import { CertificateProfile } from "@/components/profile/certificate-proifile";
 import { MissionProgress } from "@/components/profile/mission-progress";
 import { UserStat } from "@/components/profile/UserStat";
-import { ROUTE } from "@/contants/router";
 import { useGetUserQuery } from "@/hooks/use-user-query";
 import { getListPostCustom } from "@/requests/post";
 import { useUserAvatarStore } from "@/store/UserAvatarStore";
 import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
 import { Settings } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
+import { useState } from "react";
+import { Achievement } from "@/types/common-types";
+import { Mission } from "@/types/common-types";
 
 export default function Profile() {
   const { id } = useParams();
@@ -31,6 +33,9 @@ export default function Profile() {
   const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
   const { data: guestInfor } = useGetUserQuery(id as string);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
+
+  const queryClient = useQueryClient();
+  const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
 
   const { data: myPosts } = useQuery({
     refetchOnWindowFocus: false,
@@ -57,6 +62,7 @@ export default function Profile() {
   const showAvatarModal = () => {
     show();
   };
+
   return (
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
@@ -105,46 +111,12 @@ export default function Profile() {
             <UserStat id={guestInfor?.id} />
           </div>
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Nhiệm vụ</div>
-              <div
-                className="cursor-pointer"
-                onClick={() => router.push(ROUTE.MISSION)}
-              >
-                Xem thêm
-              </div>
-            </div>
-            <div className="flex flex-col mt-4">
-              <MissionProgress id={guestInfor?.id} />
-            </div>
-          </div>
+          <MissionProgress id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3 mb-8">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Thành tựu</div>
-              <div
-                className="cursor-pointer"
-                onClick={() => router.push(ROUTE.MISSION)}
-              >
-                Xem thêm
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 mt-4">
-              <AchievementProfile id={guestInfor?.id} />
-            </div>
-          </div>
+          <AchievementProfile id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
           {/* TODO:  */}
-          <div className="px-6 mt-4 mb-8">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Chứng chỉ</div>
-              {/* <div className="cursor-pointer">Xem thêm</div> */}
-            </div>
-            <div className="flex flex-col gap-4 mt-4">
-              <CertificateProfile id={guestInfor?.id} />
-            </div>
-          </div>
+          <CertificateProfile id={guestInfor?.id} />
           {/* <div className="px-6 mt-3">
             <div className="text-primary-900">KĨ NĂNG</div>
             <div className="mt-7 leading-1">

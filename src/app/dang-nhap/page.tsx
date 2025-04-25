@@ -140,13 +140,13 @@ export default function Login() {
           <CommonButton className="h-12" onClick={handleLogin}>
             Đăng Nhập
           </CommonButton>
-          {/* <CommonButton
+          <CommonButton
             className="h-12"
             variant="secondary"
-            onClick={handleForgotPassword}
+            onClick={() => router.push(ROUTE.HOME)}
           >
-            Quên mật khẩu
-          </CommonButton> */}
+            Về trang chủ
+          </CommonButton>
         </div>
       </div>
     </div>

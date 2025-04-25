@@ -104,7 +104,6 @@ export default function ShopItemDetail() {
   const totalPages = data?.meta?.pagination?.pageCount || 1;
   const categoryName =
     data?.data && data.data.length > 0 ? data.data[0]?.category?.name : "";
-  const userPoints = userInfo?.point || 0;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -117,17 +116,15 @@ export default function ShopItemDetail() {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-SubheadLg text-gray-95">Cửa hàng</h1>
+          <h1 className="text-SubheadLg text-gray-95">{categoryName}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Image src="/image/home/coin.png" alt="coin" width={24} height={24} />
-          <span className="font-medium text-gray-800">{userPoints}</span>
+          <span className="font-medium text-gray-800">{userInfo?.balance}</span>
         </div>
       </div>
 
       <div className="container mx-auto py-6 px-4 flex-1">
-        <h2 className="text-HeadingMd font-bold mb-6">{categoryName}</h2>
-
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           {data?.data.map((item, index) => (
             <CardItem

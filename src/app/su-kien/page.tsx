@@ -1,6 +1,6 @@
 "use client";
 
-import StudentTablePagination from "@/components/admin/student-table-pagination";
+import CommonPagination from "@/components/admin/common-pagination";
 import { CommonCard } from "@/components/common/CommonCard";
 import { CommonTag } from "@/components/common/CommonTag";
 import { Input } from "@/components/common/Input";
@@ -172,7 +172,7 @@ const EventContentComponent = () => {
           })}
       </div>
       <div className=" w-full flex items-end lg:justify-end justify-center">
-        <StudentTablePagination
+        <CommonPagination
           showDetails={false}
           totalItems={data?.data?.length || 0}
           currentPage={currentPage}

@@ -13,15 +13,20 @@ type MissionCardContentProps = {
   data: Mission | Achievement;
   cardState: CardState;
   handleMissionOnClick: () => void;
+  isShowButtonClaim?: boolean;
 };
 
 export const MissionCardContent = ({
   data,
   cardState,
   handleMissionOnClick,
+  isShowButtonClaim = true,
 }: MissionCardContentProps) => {
   // Render the appropriate button based on the state
   const renderActionButton = () => {
+    if (!isShowButtonClaim) {
+      return null;
+    }
     switch (cardState) {
       case CardState.IN_PROGRESS:
         return (

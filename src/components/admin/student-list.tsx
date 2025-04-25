@@ -1,5 +1,5 @@
 import { useState } from "react";
-import StudentTablePagination from "./student-table-pagination";
+import CommonPagination from "./common-pagination";
 import { Input } from "../common/Input";
 import { ChevronRight } from "lucide-react";
 import { StrapiResponse } from "@/requests/strapi-response-pattern";
@@ -77,7 +77,7 @@ export default function StudentList({
           </tbody>
         </table>
 
-        <StudentTablePagination
+        <CommonPagination
           showDetails={false}
           totalItems={data.meta.pagination.total}
           currentPage={currentPage}

@@ -30,11 +30,12 @@ export const UserStat = ({ id }: { id: number }) => {
     );
   }
 
-  console.log("data", data);
-
   return (
     <div className="py-4 flex flex-wrap justify-center gap-4">
-      <StatCard value={data?.missions?.toString() || "0"} title="Số huy hiệu" />
+      <StatCard
+        value={data?.missions?.toString() || "0"}
+        title="Nhiệm vụ đã hoàn thành"
+      />
       <StatCard
         value={data?.isVerifiedPost?.toString() || "0"}
         title="Sản phẩm tải lên"

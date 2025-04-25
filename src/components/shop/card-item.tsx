@@ -18,6 +18,7 @@ export const CardItem = ({
   onClick,
   className,
 }: Props) => {
+  console.log("quantity", quantity);
   return (
     <div
       className={`flex flex-col items-start p-0 gap-2 w-[156px] h-[204px] ${className}`}
@@ -49,14 +50,9 @@ export const CardItem = ({
             <span className="text-BodyXs text-gray-95">{price}</span>
           </div>
 
-          <span
-            className={cn(
-              "text-BodyXs text-[#B52224] ",
-              quantity && quantity !== 0 ? "hidden" : ""
-            )}
-          >
-            Hết hàng
-          </span>
+          {quantity !== undefined && quantity <= 0 && (
+            <div className="text-BodyXs text-[#B52224]">Hết hàng</div>
+          )}
         </div>
       </div>
     </div>

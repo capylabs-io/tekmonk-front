@@ -48,7 +48,6 @@ export const ReqCreateNews = async (data: any) => {
 
 //PUT METHODS
 export const ReqUpdateNews = async (id: string, data: any) => {
-  console.log("data", data);
   try {
     const res = await tekdojoAxios.put(
       `/news/${id}`,

@@ -32,7 +32,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Filter } from "lucide-react";
 import qs from "qs";
 import { useState } from "react";
-
+import Image from "next/image";
 // Tab options
 enum TabOptions {
   MISSION = "mission",
@@ -138,7 +138,6 @@ export default function MissionPage() {
         return await ReqGetAllAchievementsInfo(queryString);
       } catch (err) {
         console.log("mission page => ", err);
-        error("Lỗi", "Lỗi khi lấy dữ liệu");
         return { data: [] };
       }
     },
@@ -257,7 +256,12 @@ export default function MissionPage() {
               <div className="text-yellow-500 font-semibold">
                 {userInfo?.balance}
               </div>
-              <div className="w-6 h-6 rounded-full bg-yellow-500 ml-2"></div>
+              <Image
+                src="/image/home/coin.png"
+                alt="coin pic"
+                width={24}
+                height={24}
+              />
             </div>
           </div>
         </div>
@@ -294,15 +298,27 @@ export default function MissionPage() {
                 </div>
               </DialogTitle>
               <DialogDescription>
-                <div className="text-BodyMd text-gray-70">
+                <div className="text-BodyMd text-gray-70 flex items-center gap-x-1">
                   Bạn đã nhận được{" "}
                   <span className="font-bold text-primary-900">
                     {claimData?.points ? claimData?.points : 0}
                   </span>{" "}
-                  <span className="text-gray-70">
+                  <Image
+                    src="/image/home/coin.png"
+                    alt="coin pic"
+                    width={24}
+                    height={24}
+                  />{" "}
+                  <span className="text-gray-70 flex items-center gap-x-1">
                     điểm và{" "}
-                    <span className="font-bold text-primary-900">
-                      {claimData?.reward}
+                    <span className="font-bold text-primary-900 flex items-center gap-x-1">
+                      {claimData?.reward}{" "}
+                      <Image
+                        src="/image/PointIcon.png"
+                        alt="coin pic"
+                        width={24}
+                        height={24}
+                      />
                     </span>{" "}
                     <span className="text-gray-70">đồng</span>
                   </span>

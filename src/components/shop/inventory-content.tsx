@@ -114,7 +114,7 @@ export const InventoryContent = () => {
                 image={item.shop_item.image || "/placeholder-image.jpg"}
                 name={item.shop_item.name || ""}
                 price={item.shop_item.price || 0}
-                quantity={item.shop_item.quantity || 0}
+                // quantity={item.shop_item.quantity || 0}
                 onClick={() => handleItemClick(item)}
               />
             ))}
@@ -131,14 +131,13 @@ export const InventoryContent = () => {
         {claimedItems && claimedItems.data && claimedItems.data.length > 0 && (
           <div className="mt-8">
             <h2 className="text-xl font-bold mb-4">VẬT PHẨM ĐÃ NHẬN</h2>
-            <div className=" px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {claimedItems.data.map((item, index: number) => (
                 <CardItem
                   key={index}
                   image={item.shopItem.image || "/placeholder-image.jpg"}
                   name={item.shopItem.name || ""}
                   price={item.shopItem.price || 0}
-                  quantity={item.shopItem.quantity || 0}
                   onClick={() => {
                     handleItemClick({
                       shop_item: item.shopItem,

@@ -10,9 +10,14 @@ import MissionCardContent from "./MissionCardContent";
 type Props = {
   data: Mission | Achievement;
   onClick: (id: number) => void;
+  isShowButtonClaim?: boolean;
 };
 
-export const MissionCard = ({ data, onClick }: Props) => {
+export const MissionCard = ({
+  data,
+  onClick,
+  isShowButtonClaim = true,
+}: Props) => {
   // Get the card state
   const cardState = getCardState(data);
   const handleMissionOnClick = () => {
@@ -40,14 +45,12 @@ export const MissionCard = ({ data, onClick }: Props) => {
             cardState === CardState.COMPLETED &&
               "hover:border-primary-60 cursor-pointer hover:shadow-md"
           )}
-          onClick={
-            cardState === CardState.COMPLETED ? handleMissionOnClick : undefined
-          }
         >
           <MissionCardContent
             data={data}
             cardState={cardState}
             handleMissionOnClick={handleMissionOnClick}
+            isShowButtonClaim={isShowButtonClaim}
           />
         </CommonCard>
       </div>

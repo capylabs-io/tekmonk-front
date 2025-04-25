@@ -16,7 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { ReqGetUsers } from "@/requests/user";
 import { CommonTag } from "../common/CommonTag";
-import StudentTablePagination from "./student-table-pagination";
+import CommonPagination from "./common-pagination";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { ReqCreateClass } from "@/requests/class";
