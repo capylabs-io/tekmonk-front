@@ -143,7 +143,7 @@ export default function Profile() {
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
           {myPosts &&
-            myPosts.map((item: PostType, index: number) => (
+            myPosts.data.map((item: PostType, index: number) => (
               <>
                 <div className="px-8 relative">
                   <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -176,7 +176,7 @@ export default function Profile() {
                     }
                   />
                 </div>
-                {index !== myPosts.length - 1 && (
+                {index !== myPosts.data.length - 1 && (
                   <hr className="border-t border-gray-200 my-4" />
                 )}
               </>

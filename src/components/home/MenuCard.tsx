@@ -2,6 +2,7 @@
 import classNames from "classnames";
 import { useRouter } from "next/navigation";
 import React, { ReactNode } from "react";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
   title: string;
@@ -19,7 +20,7 @@ export const MenuCard = ({
   iconElement,
   hidden,
 }: Props) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const handleOnClick = () => {
     url && router.push(url);
   };

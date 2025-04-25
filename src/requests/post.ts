@@ -37,10 +37,9 @@ export const getListPostCustom = async (query?: any) => {
     const res = await tekdojoAxios.get(
       `${BASE_URL}/get-custom-list-posts?${query}`
     );
-    return res.data;
+    return res.data as StrapiResponse<PostType[]>;
   } catch (error) {
     console.log("Error: ", error);
-    return Promise.reject(error);
   }
 };
 
