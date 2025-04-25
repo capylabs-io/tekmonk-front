@@ -115,7 +115,6 @@ export default function Profile() {
           <hr className="border-t border-gray-200 my-4" />
           <AchievementProfile id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
-          {/* TODO:  */}
           <CertificateProfile id={guestInfor?.id} />
           {/* <div className="px-6 mt-3">
             <div className="text-primary-900">KĨ NĂNG</div>

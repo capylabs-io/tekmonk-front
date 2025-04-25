@@ -1,11 +1,9 @@
 "use client";
 import Image from "next/image";
-import { useEvents } from "@/lib/hooks/useEvent";
 import { CreateProfileModal } from "@/components/home/CreateProfileModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
-import { useProjects } from "@/lib/hooks/useProject";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
@@ -31,8 +29,6 @@ export default function Layout({
   const handleRidirectAdminPage = () => {
     router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
   };
-  const events = useEvents().slice(1, 4);
-  const projects = useProjects().slice(1, 5);
 
   return (
     <>

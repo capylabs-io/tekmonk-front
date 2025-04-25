@@ -19,8 +19,7 @@ import qs from "qs";
 import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
 import { get } from "lodash";
 
-const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
-  console.log(data);
+export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   const router = useCustomRouter();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
@@ -327,8 +326,6 @@ export default function News() {
       }
     },
   });
-
-  randomNews && console.log("randomNews data: ", randomNews.data);
 
   return (
     <>
