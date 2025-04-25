@@ -67,7 +67,7 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
   };
   return (
     <Dialog open={isShowing} onOpenChange={handleOnclose}>
-      <DialogContent className="w-[440px] rounded-3xl bg-white p-6">
+      <DialogContent className="w-[440px] rounded-3xl bg-white p-6 overflow-hidden">
         <DialogHeader>
           <DialogTitle className="text-HeadingSm text-gray-95">
             Thông tin vật phẩm
@@ -89,7 +89,7 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
         <div className="flex flex-col gap-y-2">
           <div className="text-SubheadMd flex items-center gap-x-2">
             <div className="text-gray-60">Tên:</div>
-            <div className="text-gray-95">{itemData.name}</div>
+            <div className="text-gray-95 max-w-[400px]">{itemData.name}</div>
           </div>
           <div className="text-SubheadMd flex items-center gap-x-2">
             <div className="text-gray-60">Loại:</div>
@@ -97,7 +97,15 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
           </div>
           <div className="text-SubheadMd flex items-center gap-x-2">
             <div className="text-gray-60">Giá:</div>
-            <div className="text-gray-95">{itemData.price}</div>
+            <div className="text-gray-95 flex items-center gap-x-2">
+              {itemData.price}{" "}
+              <Image
+                src="/image/home/coin.png"
+                alt="coin"
+                width={20}
+                height={20}
+              />
+            </div>
           </div>
           <div className="text-SubheadMd flex items-center gap-x-2">
             <div className="text-gray-60">Số lượng trong kho:</div>
@@ -126,12 +134,14 @@ export const ItemModal = ({ isShowing, close, itemData, onBuy }: Props) => {
           <></>
         )}
         <DialogFooter className="flex justify-between items-center w-full mt-4">
-          <CommonButton variant="secondary" onClick={handleOnclose}>
-            Thoát
-          </CommonButton>
-          <CommonButton onClick={() => onBuy(quantity)}>
-            Mua vật phẩm
-          </CommonButton>
+          <div className="w-full items-center justify-between flex">
+            <CommonButton variant="secondary" onClick={handleOnclose}>
+              Thoát
+            </CommonButton>
+            <CommonButton onClick={() => onBuy(quantity)}>
+              Mua vật phẩm
+            </CommonButton>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

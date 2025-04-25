@@ -13,6 +13,7 @@ import CommonLayout from "@/components/common/CommonLayout";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { useUserStore } from "@/store/UserStore";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
+import { AuthGuard } from "@/components/hoc/auth-guard";
 
 export default function Layout({
   children, // will be a page or nested layout

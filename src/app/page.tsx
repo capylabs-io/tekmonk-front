@@ -217,9 +217,9 @@ const ImageIntroduce = () => {
       <div className="w-full h-[512px] flex flex-col">
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-4">
           <Marquee pauseOnHover className="[--duration:20s]">
-            {listReview.map((review) => (
+            {listReview.map((review, index) => (
               <Image
-                key={review}
+                key={index}
                 alt=""
                 src={review}
                 width={400}
@@ -229,9 +229,9 @@ const ImageIntroduce = () => {
             ))}
           </Marquee>
           <Marquee reverse pauseOnHover className="[--duration:20s]">
-            {listReview.map((review) => (
+            {listReview.map((review, index) => (
               <Image
-                key={review}
+                key={index}
                 alt=""
                 src={review}
                 width={400}
@@ -262,9 +262,9 @@ const ReviewFromCommunity = () => {
         </div>
       </div>
       <Marquee pauseOnHover className="[--duration:20s] w-full z-0 bg-white">
-        {listReview.map((review) => (
+        {listReview.map((review, index) => (
           <div
-            key={review}
+            key={index}
             className="lg:w-[560px] w-[320px] h-[256px] border-[2px] border-gray-30 rounded-3xl flex flex-col "
             style={{
               boxShadow: "0px 8px 0px #DDD0DD",

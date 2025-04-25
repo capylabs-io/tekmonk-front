@@ -18,7 +18,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { ListStudentSelect } from "./ListStudentSelect";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,10 @@ export const Post = ({
     e.stopPropagation();
     router.push(`/bai-viet/${data?.id}`);
   };
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const { success, error } = useSnackbarStore();
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
@@ -88,21 +91,21 @@ export const Post = ({
         return;
       }
       if (!data?.id) {
-        return
+        return;
       }
       showLoading();
       const mappedSelectedStudents = selectedStudents.map((studentId) => ({
-        id: Number(studentId)
+        id: Number(studentId),
       }));
       const res = await updatePost(data?.id, {
-        tagged_users: mappedSelectedStudents
+        tagged_users: mappedSelectedStudents,
       });
       if (res) {
-        success('Thành công', 'Đã tag người dùng');
+        success("Thành công", "Đã tag người dùng");
       }
     } catch (err) {
       console.log("error", err);
-      error('Lỗi', 'Đã xảy ra lỗi khi tag người dùng');
+      error("Lỗi", "Đã xảy ra lỗi khi tag người dùng");
     } finally {
       hideLoading();
       setAddStudentDialogOpen(false);
@@ -111,7 +114,6 @@ export const Post = ({
   };
   return (
     <>
-
       <div
         className={classNames("relative", customClassname)}
         onDoubleClick={(e) => {
@@ -155,13 +157,13 @@ export const Post = ({
             userRank={userRank}
             specialName={specialName}
           />
-          {isVerified &&
+          {isVerified && (
             <div className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs">
               <span className="px-2 py-1">
                 {ConvertoStatusPostToText(get(data, "isVerified", ""))}
               </span>
             </div>
-          }
+          )}
         </div>
         <div className="pl-10 mt-3">
           {!isVerified && (
@@ -193,7 +195,9 @@ export const Post = ({
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
               <div className="flex gap-x-10">
-                <div className={classNames("flex items-center gap-x-1 font-bold ")}>
+                <div
+                  className={classNames("flex items-center gap-x-1 font-bold ")}
+                >
                   <button
                     onClick={() => {
                       data && onLikedPostClick?.(data);
@@ -206,9 +210,9 @@ export const Post = ({
                       viewBox="0 0 24 24"
                       fill={data?.isLiked ? "#ef4444" : "none"}
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className={classNames(
                         "cursor-pointer",
                         data?.isLiked ? "text-red-500" : ""

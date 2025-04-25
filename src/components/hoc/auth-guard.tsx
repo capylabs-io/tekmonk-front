@@ -15,6 +15,6 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     router.push(ROUTE.LOGIN);
-  }, [isConnected, router]);
+  }, []);
   return isAuthenticated ? children : null;
 };
