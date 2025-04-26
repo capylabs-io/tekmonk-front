@@ -37,8 +37,8 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-8">
-      <div className="w-full max-w-[628px] mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
+    <div className="w-full flex flex-col items-center gap-8  pt-[28px] pb-[64px]">
+      <div className="w-full container mx-auto mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
         <Image
           alt="Demo image"
           src="/image/landing/demo1.png"
@@ -115,12 +115,14 @@ export default function Page() {
           </div>
         </div>
       </div>
+      <div className="w-full flex flex-col items-center px-[80px]">
+        <div className="w-full h-[1px] bg-gray-20"></div>
+      </div>
       <RelatedInfo
         type="hiring"
         data={get(randomNews, "data", [])}
         title="TIN TUYỂN DỤNG MỚI"
       />
-      <LandingFooter />
     </div>
   );
 }

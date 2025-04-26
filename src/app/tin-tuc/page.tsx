@@ -18,6 +18,9 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
 import { get } from "lodash";
+import moment from "moment";
+import { SearchNewContent } from "@/components/news/SearchNewContent";
+import classNames from "classnames";
 
 export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   const router = useCustomRouter();
@@ -67,10 +70,10 @@ export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
                   <Image
                     alt=""
                     src={item.thumbnail ? item.thumbnail : ""}
-                    width={100}
-                    height={360}
+                    width={845}
+                    height={563}
                     layout="responsive"
-                    className="w-full h-full max-h-[360px] object-cover rounded-2xl"
+                    className="w-full h-full max-h-[360px] object-cover rounded-2xl aspect-auto"
                   />
                   <div className="w-full flex flex-col items-start justify-center gap-4">
                     <div className="flex items-center justify-center gap-2">
@@ -95,11 +98,10 @@ export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
         {data.map((article, index) => (
           <button
             key={article.id}
-            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-              index === carouselIndex
-                ? "bg-primary-60"
-                : "bg-primary-30 hover:cursor-pointer"
-            }`}
+            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${index === carouselIndex
+              ? "bg-primary-60"
+              : "bg-primary-30 hover:cursor-pointer"
+              }`}
             onClick={() => {
               setCarouselIndex(index);
               api?.scrollTo(index);
@@ -168,55 +170,59 @@ const FeaturedNewsComponent = ({
       <div className="flex flex-col gap-4">
         {data &&
           data.map((newsItem) => (
-            <CommonCard
-              key={newsItem.id}
-              size="medium"
-              className="h-[220px] w-full flex items-center justify-center"
-              onClick={() => handleRedirect(newsItem.id)}
-            >
-              <div className="flex-1 flex flex-col gap-2 p-6 overflow-hidden">
-                <div className="flex gap-2">
-                  {newsItem.tags?.split(",").map((tag, index) => (
-                    <CommonTag key={index}>{tag.trim()}</CommonTag>
-                  ))}
+            <>
+              <div
+                key={newsItem.id}
+                className="h-[220px] w-full flex items-center gap-2 justify-center"
+                onClick={() => handleRedirect(newsItem.id)}
+              >
+                <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
+                  <div className="flex gap-2">
+                    {newsItem.tags?.split(",").map((tag, index) => (
+                      <CommonTag key={index}>{tag.trim()}</CommonTag>
+                    ))}
+                  </div>
+                  <div className="flex flex-col gap-2 flex-grow">
+                    <div
+                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                      dangerouslySetInnerHTML={{
+                        __html: (get(newsItem, "title", "") || "")
+                          .replace(/<[^>]+>/g, "")
+                          .trim()
+                          .slice(0, 80)
+                          .concat(
+                            get(newsItem, "title", "").length > 100 ? "..." : ""
+                          ),
+                      }}
+                    ></div>
+
+                    <div
+                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          get(newsItem, "content", "")
+                            .replace(/<[^>]+>/g, "")
+                            .substring(0, 200) + "...",
+                      }}
+                    ></div>
+                  </div>
+
+                  <time className="text-BodySm text-gray-70">
+                    {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
+                  </time>
                 </div>
 
-                <div
-                  className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
-                  dangerouslySetInnerHTML={{
-                    __html: (get(newsItem, "title", "") || "")
-                      .replace(/<[^>]+>/g, "")
-                      .trim()
-                      .slice(0, 80)
-                      .concat(
-                        get(newsItem, "title", "").length > 80 ? "..." : ""
-                      ),
-                  }}
-                ></div>
-
-                <div
-                  className="text-BodyMd text-gray-95 max-h-12 overflow-hidden"
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      get(newsItem, "content", "")
-                        .replace(/<[^>]+>/g, "")
-                        .substring(0, 100) + "...",
-                  }}
-                ></div>
-
-                <time className="text-BodySm text-gray-70">
-                  {newsItem.startTime}
-                </time>
+                <Image
+                  src={newsItem.thumbnail ? newsItem.thumbnail : ""}
+                  alt=""
+                  width={200}
+                  height={200}
+                  className="h-[200px] object-cover rounded-2xl"
+                />
               </div>
+              <div className="w-full h-[1px] bg-gray-20 my-4"></div>
 
-              <Image
-                src={newsItem.thumbnail ? newsItem.thumbnail : ""}
-                alt=""
-                width={220}
-                height={220}
-                className="h-[220px] object-cover rounded-r-2xl"
-              />
-            </CommonCard>
+            </>
           ))}
       </div>
 
@@ -241,24 +247,23 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
     router.push(`${ROUTE.NEWS}/${id}`);
   };
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
       {data.map((newsItem) => (
-        <CommonCard
+        <div
           key={newsItem.id}
-          size="medium"
-          className="h-[124px] w-full flex items-center justify-center"
+          className="h-[80px] w-full flex items-start justify-center gap-4"
           onClick={() => handleRedirect(newsItem.id)}
         >
           <Image
             src={newsItem.thumbnail ? newsItem.thumbnail : ""}
             alt=""
             width={108}
-            height={220}
-            className="h-full object-cover rounded-l-2xl"
+            height={80}
+            className="h-full object-cover rounded-2xl"
           />
-          <div className="flex-1 flex flex-col gap-2 p-4">
+          <div className="flex-1 flex flex-col gap-2">
             <time className="text-BodySm text-gray-70">
-              {newsItem.startTime}
+              {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
             </time>
             <div
               className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
@@ -271,14 +276,15 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
               }}
             ></div>
           </div>
-        </CommonCard>
+        </div>
       ))}
     </div>
   );
 };
 export default function News() {
   //use state
-
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const handleLoadMoreContentt = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -286,7 +292,7 @@ export default function News() {
   };
 
   // use query
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchNews } =
     useInfiniteQuery({
       refetchOnWindowFocus: false,
       queryKey: ["news"],
@@ -300,6 +306,9 @@ export default function News() {
             filters: {
               type: "news",
               status: "public",
+              title: {
+                $contains: searchValue,
+              },
             },
             populate: "*",
           });
@@ -327,39 +336,50 @@ export default function News() {
     },
   });
 
+
+  const handleSearchNews = (value: string) => {
+    setSearchValue(value);
+    refetchNews();
+  };
   return (
     <>
-      <div className="w-full min-h-[100vh] mt-16 grid grid-cols-3 gap-4 p-2">
-        <div className="lg:col-span-2 col-span-3">
-          <ShowCarouselItemsComponent data={randomNews?.data || []} />
-          <FeaturedNewsComponent
-            data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
-            onLoadMore={handleLoadMoreContentt}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        </div>
-        <div className="col-span-1 flex-col gap-8 lg:flex hidden">
-          <Input
-            type="text"
-            placeholder="Tìm kiếm article theo từ khoá"
-            isSearch={true}
-          />
-          <SuggestComponent data={randomNews?.data || []} />
-          <Image
-            src="/image/home/banner-layout.png"
-            alt="Default"
-            width={220}
-            height={456}
-            className="w-full object-cover"
-          />
-          <Image
-            src="/image/home/banner-layout.png"
-            alt="Default"
-            width={220}
-            height={456}
-            className="w-full object-cover"
-          />
-        </div>
+      <div className={classNames("w-full  container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
+        {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
+          <>
+            <div className="lg:col-span-2 col-span-3">
+              <ShowCarouselItemsComponent data={randomNews?.data || []} />
+              <div className="w-full h-[1px] bg-gray-20 my-6"></div>
+              <FeaturedNewsComponent
+                data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
+                onLoadMore={handleLoadMoreContentt}
+                isFetchingNextPage={isFetchingNextPage}
+              />
+            </div>
+            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
+              <Input
+                type="text"
+                placeholder="Tìm kiếm article theo từ khoá"
+                isSearch={true}
+                value={searchValue}
+                onChange={setSearchValue}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setIsSearch(true);
+                    refetchNews();
+                  }
+                }}
+              />
+              <SuggestComponent data={randomNews?.data || []} />
+              <Image
+                src="/image/home/banner-layout.png"
+                alt="Default"
+                width={220}
+                height={350}
+                className="w-full object-cover rounded-2xl"
+              />
+            </div>
+          </>
+        }
       </div>
     </>
   );

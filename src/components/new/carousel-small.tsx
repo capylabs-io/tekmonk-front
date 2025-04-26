@@ -54,7 +54,7 @@ export const ShowSmallCarouselItems = () => {
             data.data.map((item, index) => (
               <CarouselItem key={index}>
                 <div
-                  className="w-full h-full relative flex flex-col items-center justify-center cursor-pointer group"
+                  className="w-[319px] h-[200px] relative flex flex-col items-center justify-center cursor-pointer group"
                   onClick={() => handleRedirect(item.id)}
                 >
                   <Image

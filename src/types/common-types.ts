@@ -55,6 +55,7 @@ export type User = {
   point: number;
   totalPrice: number;
   user_role?: UserRole;
+  imageURL?: string;
 };
 
 export type TListCourse = {

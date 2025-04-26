@@ -16,6 +16,7 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
 }) => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -32,7 +33,7 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
           onClick={toggleMenu}
         />
         <div className="xl:block hidden">
-          <p className="text-sm truncate">{userName}</p>
+          <p className="text-sm truncate" onClick={() => router.push(`/ho-so/${userInfo?.id}`)}>{userName}</p>
           {userRank && <p className="text-sm text-gray-500">{userRank}</p>}
         </div>
       </div>

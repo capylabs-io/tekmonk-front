@@ -12,14 +12,15 @@ import { Controller, FormProvider, useForm } from "react-hook-form"
 import dynamic from "next/dynamic"
 import "react-quill/dist/quill.snow.css"
 import { uploadPost } from "@/requests/post"
-import { PostVerificationType } from "@/types"
+import { PostTypeEnum, PostVerificationType } from "@/types"
 import { useSnackbarStore } from "@/store/SnackbarStore"
 import { useLoadingStore } from "@/store/LoadingStore"
 import { profileFormSchema, ProfileFormValues } from "@/validation/post"
 
-export const CreateProfileModal = () => {
+
+export const CreatePostModal = () => {
   const ReactQuill = useMemo(() => dynamic(() => import("react-quill"), { ssr: false }), [])
-  const [isShowing, hide] = useProfileStore((state) => [state.isShowing, state.hide])
+  const [isShowing, hide, type] = useProfileStore((state) => [state.isShowing, state.hide, state.type])
   const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
   const [showSuccess, showError] = useSnackbarStore((state) => [state.success, state.error])
   const method = useForm<ProfileFormValues>({
@@ -71,6 +72,8 @@ export const CreateProfileModal = () => {
       if (data.image) {
         formData.append("image", data.image)
       }
+      formData.append("type", type === PostTypeEnum.PROJECT ? PostTypeEnum.PROJECT : PostTypeEnum.POST)
+
       const res = await uploadPost(formData);
       if (res) {
         showSuccess("Thành công", "Tạo bài viết thành công")
@@ -99,14 +102,14 @@ export const CreateProfileModal = () => {
         </button>
 
         <div className="w-full text-start p-6">
-          <div className="text-HeadingSm font-bold text-gray-95">Đăng bài</div>
+          <div className="text-HeadingSm font-bold text-gray-95">{type === PostTypeEnum.PROJECT ? 'Đăng dự án' : 'Đăng bài viết'}</div>
           <div className="text-BodyMd text-gray-60">Khoe ngay dự án mới của mình cho các đồng môn nhé! </div>
         </div>
         <hr className="border-t border-gray-200" />
         <FormProvider {...method}>
           <div className="p-6 space-y-5 grow">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-60 text-SubheadMd">Tiêu đề dự án</span>
+              <span className="text-gray-60 text-SubheadMd">Tiêu đề</span>
               <div className="flex flex-col w-[424px]">
                 <Controller
                   control={control}
@@ -198,7 +201,7 @@ export const CreateProfileModal = () => {
             </div>
 
             <div className="flex justify-between text-sm">
-              <span className="text-gray-60">Nội dung bài viết</span>
+              <span className="text-gray-60">Nội dung</span>
               <div className="flex flex-col w-[424px]">
                 <Controller
                   control={control}

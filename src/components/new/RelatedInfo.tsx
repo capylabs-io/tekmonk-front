@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { get } from "lodash";
+import moment from "moment";
 
 export const RelatedInfo = ({
   type,
@@ -31,7 +32,7 @@ export const RelatedInfo = ({
     }
   };
   return (
-    <div className="w-full flex items-start flex-col gap-4 border-t border-gray-20 py-12">
+    <div className="w-full flex items-start  justify-center flex-col gap-4 mt-8 px-[80px]">
       <div
         className="text-HeadingSm text-[#320130]"
         dangerouslySetInnerHTML={{
@@ -43,13 +44,12 @@ export const RelatedInfo = ({
         }}
       ></div>
       {data ? (
-        <div className="flex items-center gap-4 lg:flex-row flex-col w-full">
+        <div className="flex items-center justify-center gap-4 lg:flex-row flex-col w-full">
           {data.map((item, index) => {
             return (
-              <CommonCard
+              <div
                 key={index}
-                size="medium"
-                className="h-[124px] w-full flex items-center justify-center"
+                className="w-full h-[92px] relative flex items-start justify-center gap-4 cursor-pointer"
                 onClick={() => handleRedirectToNewsDetail(item.id.toString())}
               >
                 <Image
@@ -61,11 +61,11 @@ export const RelatedInfo = ({
                   alt=""
                   width={108}
                   height={220}
-                  className="h-full object-cover rounded-l-2xl"
+                  className="h-full object-cover rounded-2xl"
                 />
-                <div className="flex-1 flex flex-col gap-2 p-4">
+                <div className="w-full flex-1 flex flex-col items-start justify-start gap-2">
                   <time className="text-BodySm text-gray-70">
-                    {item.startTime}
+                    {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
                   </time>
                   <div
                     className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
@@ -80,7 +80,7 @@ export const RelatedInfo = ({
                     }}
                   ></div>
                 </div>
-              </CommonCard>
+              </div>
             );
           })}
         </div>

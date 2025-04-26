@@ -12,6 +12,18 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
 import { useQuery } from "@tanstack/react-query";
+import Script from "next/script";
+
+// Thêm kiểu cho window.FB
+declare global {
+  interface Window {
+    FB?: {
+      XFBML: {
+        parse: () => void;
+      };
+    };
+  }
+}
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useRouter();
@@ -37,6 +49,63 @@ export default function Page({ params }: { params: { id: number } }) {
     enabled: !!params.id,
   });
 
+  // Thêm Facebook Open Graph script
+  useEffect(() => {
+    if (postData) {
+      // Tạo hoặc cập nhật meta tags
+      const updateMetaTags = () => {
+        // Facebook / Open Graph
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+
+        if (!ogTitle) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:title');
+          meta.setAttribute('content', postData.name || 'Bài viết');
+          document.head.appendChild(meta);
+        } else {
+          ogTitle.setAttribute('content', postData.name || 'Bài viết');
+        }
+
+        if (!ogDesc) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:description');
+          meta.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+          document.head.appendChild(meta);
+        } else {
+          ogDesc.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+        }
+
+        if (!ogImage) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:image');
+          meta.setAttribute('content', postData.thumbnail || '');
+          document.head.appendChild(meta);
+        } else {
+          ogImage.setAttribute('content', postData.thumbnail || '');
+        }
+
+        if (!ogUrl) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:url');
+          meta.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+          document.head.appendChild(meta);
+        } else {
+          ogUrl.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+        }
+      };
+
+      updateMetaTags();
+
+      // Facebook Refresh
+      if (window.FB) {
+        window.FB.XFBML.parse();
+      }
+    }
+  }, [postData, params.id]);
+
   const handleLikedPostClick = async (data: PostType) => {
     try {
       if (!params.id || typeof Number(params.id) !== "number") {
@@ -55,6 +124,12 @@ export default function Page({ params }: { params: { id: number } }) {
 
   return (
     <>
+      <Script
+        id="facebook-jssdk"
+        strategy="afterInteractive"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v18.0"
+      />
+
       <div className="flex justify-between px-4 pb-[10px] item-center border-b">
         <div className="flex gap-2 item-center">
           <ArrowLeft
@@ -79,6 +154,7 @@ export default function Page({ params }: { params: { id: number } }) {
               IV
             </span>
           }
+          isDetail
           postContent={get(postData, "content", "")}
           postName={get(postData, "name", "")}
           createdAt={moment(get(postData, "createdAt", ""))

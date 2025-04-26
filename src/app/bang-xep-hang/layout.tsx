@@ -5,7 +5,7 @@ import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
 import { useState } from "react";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import { usePathname } from "next/navigation";
@@ -103,7 +103,7 @@ export default function Layout({
           </div>
         }
       />
-      <CreateProfileModal />
+      <CreatePostModal />
       <AvatarConfigModal />
     </>
   );

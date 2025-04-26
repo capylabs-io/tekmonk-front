@@ -6,7 +6,7 @@ import UserProfileLink from "../UserProfileLink";
 import { useCustomRouter } from "../router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useProfileStore } from "@/store/ProfileStore";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 
 export const NavigationInfo = () => {
   const router = useCustomRouter();

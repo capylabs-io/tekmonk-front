@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
@@ -28,8 +28,8 @@ export default function Layout({
   const handleOpenModal = () => {
     show();
   };
-  const handleRidirectAdminPage = () => {
-    router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
+  const handleRidirectHomePage = () => {
+    router.push(ROUTE.NEWS_FEED);
   };
   const events = useEvents().slice(1, 4);
   const projects = useProjects().slice(1, 5);
@@ -38,7 +38,7 @@ export default function Layout({
     <>
       <CommonLayout
         leftSidebar={
-          <div className="h-full flex flex-col px-10 py-5 col-span-2 overflow-hidden">
+          <div className="h-full flex flex-col px-4 py-5 col-span-2 overflow-hidden">
             <div
               className="cursor-pointer"
               onClick={() => router.push(ROUTE.NEWS_FEED)}
@@ -61,14 +61,14 @@ export default function Layout({
             <div className="flex flex-col mt-4 grow">
               <MenuLayout customClassName="" />
               {isConnected() ? (
-                <div className="grow-0 px-3 w-full md:block hidden">
+                <div className="grow-0 w-full md:block hidden">
                   <div className="flex flex-col gap-y-4 mt-4">
                     <CommonButton
                       className="w-full !rounded-3xl h-12"
                       variant="secondary"
-                      onClick={handleRidirectAdminPage}
+                      onClick={handleRidirectHomePage}
                     >
-                      Quản lý
+                      Quay lại trang chủ
                     </CommonButton>
                     <CommonButton
                       className="w-full !rounded-3xl h-12"
@@ -102,7 +102,7 @@ export default function Layout({
           </>
         }
       />
-      <CreateProfileModal />
+      <CreatePostModal />
       <AvatarConfigModal />
     </>
   );

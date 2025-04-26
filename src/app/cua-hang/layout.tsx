@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
@@ -29,7 +29,6 @@ export default function Layout({
   const handleRidirectAdminPage = () => {
     router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
   };
-
   return (
     <>
       <CommonLayout
@@ -98,7 +97,7 @@ export default function Layout({
           </>
         }
       />
-      <CreateProfileModal />
+      <CreatePostModal />
       <AvatarConfigModal />
     </>
   );

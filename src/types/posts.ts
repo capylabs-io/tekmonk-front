@@ -12,10 +12,16 @@ export type PostType = {
   likeCount?: number;
   commentCount?: number;
   isVerified?: PostVerificationType;
-  isLiked?: boolean;
-  createdAt?: string;
-  tagged_users?: User[];
+  isLiked?: boolean
+  createdAt?: string
+  tagged_users?: User[]
+  type?: PostTypeEnum
 };
+
+export enum PostTypeEnum {
+  PROJECT = "project",
+  POST = "normal",
+}
 
 export enum PostVerificationType {
   PENDING = "pending",

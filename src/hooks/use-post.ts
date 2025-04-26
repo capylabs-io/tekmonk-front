@@ -1,4 +1,4 @@
-import { PostVerificationType } from "@/types";
+import { PostTypeEnum, PostVerificationType } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import qs from "qs";
 
@@ -7,12 +7,14 @@ import { getListPostCustom } from "@/requests/post";
 export const useInfiniteLatestPost = ({
   page,
   limit,
+  type,
 }: {
   page: number;
   limit: number;
+  type: PostTypeEnum;
 }) => {
   return useInfiniteQuery({
-    queryKey: ["latest-sell-post", page, limit],
+    queryKey: ["latest-sell-post", page, limit, type],
     queryFn: async ({ pageParam = page }) => {
       try {
         const queryString = qs.stringify(
@@ -21,6 +23,7 @@ export const useInfiniteLatestPost = ({
             limit,
             sort: "desc",
             isVerified: PostVerificationType.ACCEPTED,
+            type: type || "normal",
           },
           { encodeValuesOnly: true }
         );

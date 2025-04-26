@@ -52,6 +52,7 @@
     "next": "^14.1.4",
     "nextjs-toploader": "^3.7.15",
     "pdfjs-dist": "^3.4.120",
+    "pnpm": "^10.8.1",
     "qs": "^6.13.1",
     "quill": "^2.0.0-dev.4",
     "react": "^18",
