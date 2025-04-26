@@ -6,8 +6,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { Dela_Gothic_One } from "next/font/google";
 import { LeadeboardContent } from "@/components/leaderboard/LeadeboardContent";
+import { UserRankingType } from "@/types/users";
 
 const Leaderboard: React.FC = () => {
   return (
@@ -17,24 +17,21 @@ const Leaderboard: React.FC = () => {
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="student">Top Học Bá</TabsTrigger>
           <TabsTrigger value="pointCollector">Top Tài Phú</TabsTrigger>
-          <TabsTrigger value="creator">Thiên tài sáng tạo</TabsTrigger>
-          <TabsTrigger value="friendly">Đại sứ thân thiện</TabsTrigger>
+          <TabsTrigger value="creator">Đại sứ thân thiện</TabsTrigger>
+          <TabsTrigger value="friendly">Thiên tài sáng tạo</TabsTrigger>
         </TabsList>
         <TabsContent value="student" className="overflow-y-auto mt-0">
-          <LeadeboardContent />
+          <LeadeboardContent type={UserRankingType.POINT} />
         </TabsContent>
-        <TabsContent
-          value="pointCollector"
-          className="overflow-y-auto mt-0"
-        ></TabsContent>
-        <TabsContent
-          value="creator"
-          className="overflow-y-auto mt-0"
-        ></TabsContent>
-        <TabsContent
-          value="friendly"
-          className="overflow-y-auto mt-0"
-        ></TabsContent>
+        <TabsContent value="pointCollector" className="overflow-y-auto mt-0">
+          <LeadeboardContent type={UserRankingType.TOTAL_PRICE} />
+        </TabsContent>
+        <TabsContent value="creator" className="overflow-y-auto mt-0">
+          <LeadeboardContent type={UserRankingType.POST} />
+        </TabsContent>
+        <TabsContent value="friendly" className="overflow-y-auto mt-0">
+          <LeadeboardContent type={UserRankingType.PROJECT} />
+        </TabsContent>
       </Tabs>
     </div>
   );

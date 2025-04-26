@@ -4,7 +4,7 @@ import { BASE_URL } from "@/contants/api-url";
 import tekdojoAxios from "./axios.config";
 import { StrapiResponse } from "./strapi-response-pattern";
 import { User } from "@/types/common-types";
-import { UserStatProps } from "@/types/users";
+import { UserRankingProps, UserStatProps } from "@/types/users";
 
 export const ReqGetUsers = async (query: string = "") => {
   const response = await tekdojoAxios.get(
@@ -33,4 +33,11 @@ export const ReqGetUserAnalytic = async (query: string = "") => {
     `${BASE_URL}/custom-user/analytics?${query}`
   );
   return response.data as UserStatProps;
+};
+
+export const ReqGetUserRanking = async (query: string = "") => {
+  const response = await tekdojoAxios.get(
+    `${BASE_URL}/custom-user/user-rank?${query}`
+  );
+  return response.data as StrapiResponse<UserRankingProps[]>;
 };

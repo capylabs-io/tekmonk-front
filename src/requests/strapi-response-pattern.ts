@@ -7,6 +7,7 @@ type StrapiPagination = {
 
 type StrapiMeta = {
   pagination: StrapiPagination;
+  userRank?: number;
 };
 
 export type StrapiResponse<T> = {
