@@ -12,11 +12,11 @@ const BASE_CLASS =
 export const PointCard = ({ point, customClassName }: Props) => {
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>
-      <span className="text-sm">KHO ĐIỂM</span>
+      <span className="text-SubheadMd text-gray-95">KHO ĐIỂM</span>
       <div className="flex gap-x-1">
         <span className="font-bold text-base">{point}</span>
         <Image
-          src="/image/home/coin.png"
+          src="/image/PointIcon.png"
           alt="coin pic"
           width={24}
           height={24}

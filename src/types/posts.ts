@@ -1,7 +1,7 @@
 import { User } from "./common-types";
 
 export type PostType = {
-  id?: number
+  id: number;
   content?: string;
   name?: string;
   url?: string;
@@ -9,8 +9,8 @@ export type PostType = {
   postedBy?: User | null;
   tags: string;
   metadata?: any;
-  likeCount?: number
-  commentCount?: number
+  likeCount?: number;
+  commentCount?: number;
   isVerified?: PostVerificationType;
   isLiked?: boolean
   createdAt?: string

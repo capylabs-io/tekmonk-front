@@ -13,6 +13,7 @@ import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { siginChema } from "@/validation/auth";
+import { ROUTE } from "@/contants/router";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -59,7 +60,7 @@ export default function Login() {
 
       if (roleName === Role.STUDENT.toLowerCase()) {
         success("Xong!", "Chúc mừng bạn đã đăng nhập thành công");
-        router.push("/trang-chu");
+        router.push(ROUTE.NEWS_FEED);
       } else {
         useUserStore.getState().clear();
         setUser({
@@ -79,7 +80,7 @@ export default function Login() {
   return (
     <div className="mx-auto min-h-[calc(100vh-64px)] flex justify-center items-center p-2">
       <div
-        className="w-[368px] h-max mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl"
+        className="w-[368px] 2xl:w-[460px] h-max mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl"
         style={{
           boxShadow: "0px 4px 0px #DDD0DD",
         }}
@@ -133,17 +134,6 @@ export default function Login() {
               Tạo mới tài khoản?
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="w-[20px] h-[20px] text-red-500 accent-primary-80 
-             appearance-none bg-white border border-gray-20 rounded-[4px] outline-none 
-             focus:ring-0 focus:outline-none checked:appearance-auto"
-            />
-
-            <div>Lưu trạng thái đăng nhập</div>
-          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -153,9 +143,9 @@ export default function Login() {
           <CommonButton
             className="h-12"
             variant="secondary"
-            onClick={handleForgotPassword}
+            onClick={() => router.push(ROUTE.HOME)}
           >
-            Quên mật khẩu
+            Về trang chủ
           </CommonButton>
         </div>
       </div>

@@ -8,18 +8,11 @@ import {
 } from "@/components/common/Tabs";
 import { Dela_Gothic_One } from "next/font/google";
 import { LeadeboardContent } from "@/components/leaderboard/LeadeboardContent";
-import WithAuth from "@/components/hoc/WithAuth";
-
-const delaGothicOne = Dela_Gothic_One({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
-});
 
 const Leaderboard: React.FC = () => {
   return (
-    <>
-      <div className="text-xl text-primary-900 px-8">Bảng xếp hạng</div>
+    <div className="w-full">
+      <div className="text-SubheadLg text-gray-95 px-4">Bảng xếp hạng</div>
       <Tabs defaultValue="student" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="student">Top Học Bá</TabsTrigger>
@@ -43,7 +36,7 @@ const Leaderboard: React.FC = () => {
           className="overflow-y-auto mt-0"
         ></TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 

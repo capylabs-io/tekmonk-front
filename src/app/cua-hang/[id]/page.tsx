@@ -15,7 +15,8 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { ArrowLeft } from "lucide-react";
 import { CardItem } from "@/components/shop/card-item";
-
+import Image from "next/image";
+import { ClaimedItem } from "@/types/claimed-item";
 export default function ShopItemDetail() {
   const router = useRouter();
   const { id } = useParams();
@@ -23,7 +24,11 @@ export default function ShopItemDetail() {
   const [pageSize] = useState(12);
   const [openModal, setOpenModal] = useState(false);
   const [itemData, setItemData] = useState<ShopItem | null>(null);
+  const [claimedItem, setClaimedItem] = useState<ClaimedItem | undefined>(
+    undefined
+  );
 
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [userInfo, getMe] = useUserStore((state) => [
     state.userInfo,
     state.getMe,
@@ -44,6 +49,9 @@ export default function ShopItemDetail() {
           category: {
             id: Number(id),
           },
+        },
+        sort: {
+          quantity: "desc",
         },
         pagination: {
           page: currentPage,
@@ -67,18 +75,17 @@ export default function ShopItemDetail() {
       };
       return await ReqBuyShopItem(shopItemUser);
     },
-    onSuccess: () => {
-      setOpenModal(false);
+    onSuccess: (data) => {
       success("Xong", "Mua vật phẩm thành công!");
-      queryClient.invalidateQueries({ queryKey: ["my-items"] });
-      queryClient.invalidateQueries({ queryKey: ["user-points"] });
+      setShowSuccessDialog(true);
+      setClaimedItem(data);
+      queryClient.invalidateQueries({ queryKey: ["shop-item", id] });
     },
     onError: (err) => {
       const message = HandleReturnMessgaeErrorLogin(err);
       error("Lỗi", message);
     },
     onSettled: () => {
-      setOpenModal(false);
       getMe();
       hide();
     },
@@ -103,7 +110,6 @@ export default function ShopItemDetail() {
   const totalPages = data?.meta?.pagination?.pageCount || 1;
   const categoryName =
     data?.data && data.data.length > 0 ? data.data[0]?.category?.name : "";
-  const userPoints = userInfo?.point || 0;
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -116,17 +122,15 @@ export default function ShopItemDetail() {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-xl font-semibold text-primary-900">Cửa hàng</h1>
+          <h1 className="text-SubheadLg text-gray-95">{categoryName}</h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-yellow-400 rounded-full"></div>
-          <span className="font-medium text-gray-800">{userPoints}</span>
+          <Image src="/image/home/coin.png" alt="coin" width={24} height={24} />
+          <span className="font-medium text-gray-800">{userInfo?.balance}</span>
         </div>
       </div>
 
       <div className="container mx-auto py-6 px-4 flex-1">
-        <h2 className="text-HeadingMd font-bold mb-6">{categoryName}</h2>
-
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           {data?.data.map((item, index) => (
             <CardItem
@@ -134,7 +138,7 @@ export default function ShopItemDetail() {
               image={item.image || ""}
               name={item.name || ""}
               price={item.price || 0}
-              description={item.description || ""}
+              quantity={item.quantity || 0}
               onClick={() => {
                 setItemData(item);
                 setOpenModal(true);
@@ -158,9 +162,12 @@ export default function ShopItemDetail() {
         {itemData && (
           <ItemModal
             itemData={itemData}
+            claimedItem={claimedItem}
             isShowing={openModal}
             close={() => setOpenModal(false)}
             onBuy={buyItemMutation.mutate}
+            showSuccessDialog={showSuccessDialog}
+            setShowSuccessDialog={setShowSuccessDialog}
           />
         )}
       </div>

@@ -1,48 +1,43 @@
 "use client";
-import React, { useEffect } from "react";
-import { useUserStore } from "@/store/UserStore";
 import { Button } from "@/components/common/button/Button";
-import { Settings } from "lucide-react";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { UserStat } from "@/components/profile/UserStat";
 import { Post } from "@/components/home/Post";
-import { get } from "lodash";
-import { useUserAvatarStore } from "@/store/UserAvatarStore";
-import { MissionProgress } from "@/components/profile/mission-progress";
-import { useCustomRouter } from "@/components/common/router/CustomRouter";
-import { ROUTE } from "@/contants/router";
 import { AchievementProfile } from "@/components/profile/achievement-profile";
 import { CertificateProfile } from "@/components/profile/certificate-proifile";
-import { useQuery } from "@tanstack/react-query";
+import { MissionProgress } from "@/components/profile/mission-progress";
+import { UserStat } from "@/components/profile/UserStat";
+import { useGetUserQuery } from "@/hooks/use-user-query";
 import { getListPostCustom } from "@/requests/post";
-import qs from "qs";
+import { useUserAvatarStore } from "@/store/UserAvatarStore";
+import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { get } from "lodash";
+import { Settings } from "lucide-react";
 import moment from "moment";
+import { useParams } from "next/navigation";
+import qs from "qs";
+import { useState } from "react";
+import { Achievement } from "@/types/common-types";
+import { Mission } from "@/types/common-types";
 
-const Profile: React.FC = () => {
+export default function Profile() {
+  const { id } = useParams();
   const router = useCustomRouter();
+  const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
+  const { data: guestInfor } = useGetUserQuery(id as string);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
-  const [showAvatarModal] = useUserAvatarStore((state) => [state.show]);
-  const getMe = useUserStore((state) => state.getMe);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await getMe();
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const queryClient = useQueryClient();
+  const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
 
-  // TODO: DATA of my posts
-  const { data: myPosts, refetch: refetchListPostCustom } = useQuery({
+  const { data: myPosts } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: ["custom-posts"],
     queryFn: async () => {
@@ -52,7 +47,7 @@ const Profile: React.FC = () => {
             page: 1,
             limit: 100,
             sort: "desc",
-            authorId: userInfo?.id,
+            authorId: guestInfor?.id,
           },
           { encodeValuesOnly: true }
         );
@@ -61,11 +56,16 @@ const Profile: React.FC = () => {
         return Promise.reject(error);
       }
     },
-    enabled: !!userInfo?.id,
+    enabled: !!guestInfor?.id,
   });
+
+  const showAvatarModal = () => {
+    show();
+  };
+
   return (
-    <>
-      <div className="text-xl text-primary-900 px-8">Hồ sơ cá nhân</div>
+    <div className="w-full">
+      <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
         <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center absolute left-8 -bottom-8 h-[152px] w-[152px]" />
       </div>
@@ -73,29 +73,31 @@ const Profile: React.FC = () => {
         <div>
           <div className="truncate flex gap-x-2 items-center">
             <span className="text-xl font-bold text-primary-950">
-              {userInfo?.username}
+              {guestInfor?.username}
             </span>
             <span
               className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
             >
-              {get(userInfo, "userRank")}
+              {get(guestInfor, "userRank")}
             </span>
           </div>
           <div className="text-base text-primary-950">
-            {get(userInfo, "specialName")}
+            {get(guestInfor, "specialName")}
           </div>
         </div>
         <div className="flex gap-x-2">
-          <Button outlined className="text-primary-900 text-sm border">
+          {/* <Button outlined className="text-primary-900 text-sm border">
             Hồ sơ
-          </Button>
-          <Button
-            outlined
-            className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
-            onClick={showAvatarModal}
-          >
-            <Settings size={24} className="text-primary-600" />
-          </Button>
+          </Button> */}
+          {userInfo && userInfo.id === guestInfor?.id && (
+            <Button
+              outlined
+              className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+              onClick={showAvatarModal}
+            >
+              <Settings size={24} className="text-primary-600" />
+            </Button>
+          )}
         </div>
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">
@@ -103,52 +105,17 @@ const Profile: React.FC = () => {
           <TabsTrigger value="personal">Cá nhân</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>
         </TabsList>
-        <TabsContent value="personal" className="overflow-y-auto">
+        <TabsContent value="personal" className="overflow-y-auto w-full">
           <div className="px-6 mt-3">
             <div className="text-primary-900">THÔNG SỐ CHUNG</div>
-            <UserStat />
+            <UserStat id={guestInfor?.id} />
           </div>
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Nhiệm vụ</div>
-              <div
-                className="cursor-pointer"
-                onClick={() => router.push(ROUTE.MISSION)}
-              >
-                Xem thêm
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 mt-4">
-              <MissionProgress />
-            </div>
-          </div>
+          <MissionProgress id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
-          <div className="px-6 mt-3 mb-8">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Thành tựu</div>
-              <div
-                className="cursor-pointer"
-                onClick={() => router.push(ROUTE.MISSION)}
-              >
-                Xem thêm
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 mt-4">
-              <AchievementProfile />
-            </div>
-          </div>
+          <AchievementProfile id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
-          {/* TODO:  */}
-          <div className="px-6 mt-4 mb-8">
-            <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
-              <div className="text-gray-95 text-SubheadLg">Chứng chỉ</div>
-              {/* <div className="cursor-pointer">Xem thêm</div> */}
-            </div>
-            <div className="flex flex-col gap-4 mt-4">
-              <CertificateProfile />
-            </div>
-          </div>
+          <CertificateProfile id={guestInfor?.id} />
           {/* <div className="px-6 mt-3">
             <div className="text-primary-900">KĨ NĂNG</div>
             <div className="mt-7 leading-1">
@@ -176,7 +143,7 @@ const Profile: React.FC = () => {
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
           {myPosts &&
-            myPosts.map((item: PostType, index: number) => (
+            myPosts.data.map((item: PostType, index: number) => (
               <>
                 <div className="px-8 relative">
                   <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -189,7 +156,7 @@ const Profile: React.FC = () => {
                     data={item}
                     imageUrl="bg-[url('/image/home/profile-pic.png')]"
                     thumbnailUrl={get(item, "thumbnail") || ""}
-                    userName={userInfo?.username || "User"}
+                    userName={guestInfor?.username || "User"}
                     specialName={get(item, "postedBy.skills", "")}
                     userRank={
                       <span
@@ -209,16 +176,13 @@ const Profile: React.FC = () => {
                     }
                   />
                 </div>
-                {index !== myPosts.length - 1 && (
+                {index !== myPosts.data.length - 1 && (
                   <hr className="border-t border-gray-200 my-4" />
                 )}
               </>
             ))}
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
-};
-
-// export default WithAuth(Profile);
-export default Profile;
+}

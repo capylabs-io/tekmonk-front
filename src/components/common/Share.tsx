@@ -34,6 +34,7 @@ type ShareProps = {
   description?: string;
   hashtags?: string[];
   className?: string;
+  image?: string;
 };
 
 export default function Share({
@@ -41,7 +42,8 @@ export default function Share({
   title = "",
   description = "",
   hashtags = [],
-  className = ""
+  className = "",
+  image = ""
 }: ShareProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -71,7 +73,11 @@ export default function Share({
       name: "Facebook",
       icon: Facebook,
       component: FacebookShareButton,
-      props: { url, hashtag: hashtags.join(',') }
+      props: {
+        url,
+        hashtag: hashtags.length > 0 ? '#' + hashtags[0] : undefined,
+        quote: title ? `${title} - ${description}` : description
+      }
     },
     {
       name: "Twitter",
@@ -120,9 +126,10 @@ export default function Share({
           <DialogHeader>
             <DialogTitle className="text-center text-lg font-semibold">Chia sẻ bài viết</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-3 gap-4 py-4">
+          <div className="h-[1px] bg-gray-300 w-full my-2"></div>
+          <div className="grid grid-cols-3 gap-4">
             {shareButtons.map(({ name, icon: Icon, component: ShareButton, props }) => (
-              <ShareButton key={name} {...props} className="flex flex-col items-center gap-2 h-auto p-4 transition-colors">
+              <ShareButton key={name} {...props} className="flex flex-col items-center gap-2 h-auto px-3 py-2 transition-colors">
                 <Icon className="h-6 w-6 text-primary-70" />
                 <span className="text-xs text-gray-600">{name}</span>
               </ShareButton>
@@ -130,7 +137,7 @@ export default function Share({
 
             {typeof navigator.share === 'function' && (
               <div
-                className="flex flex-col items-center gap-2 h-auto p-4 cursor-pointer"
+                className="flex flex-col items-center gap-2 h-auto px-3 py-2 cursor-pointer"
                 onClick={handleWebShare}
               >
                 <Share2 className="h-6 w-6 text-primary-70" />
@@ -139,7 +146,7 @@ export default function Share({
             )}
 
             <div
-              className="flex flex-col items-center gap-2 h-auto p-4 cursor-pointer"
+              className="flex flex-col items-center gap-2 h-auto px-3 py-2 cursor-pointer"
               onClick={handleCopyLink}
             >
               <Link className="h-6 w-6 text-primary-70" />

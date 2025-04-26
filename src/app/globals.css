@@ -7,11 +7,6 @@
   --font-kanit: "Kanit", sans-serif;
 }
 
-/* Mission description styles */
-.mission-description-container {
-  overflow: hidden;
-}
-
 .mission-description * {
   margin: 0;
   padding: 0;

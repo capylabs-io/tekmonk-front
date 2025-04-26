@@ -1,46 +1,135 @@
 "use client";
 import { ArrowLeft } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PostCommentContent } from "@/components/home/PostCommentContent";
 import { Post } from "@/components/home/Post";
 import { PostType } from "@/types";
 import { get } from "lodash";
 import moment from "moment";
-import { findPost } from "@/requests/post";
+import { findPost, likePost } from "@/requests/post";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
+import { useQuery } from "@tanstack/react-query";
+import Script from "next/script";
+
+// Thêm kiểu cho window.FB
+declare global {
+  interface Window {
+    FB?: {
+      XFBML: {
+        parse: () => void;
+      };
+    };
+  }
+}
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useRouter();
-  const [currentPost, setCurrentPost] = useState<PostType>();
-  const [hideLoading, showLoading] = useLoadingStore((state) => [state.hide, state.show])
-  const [showError] = useSnackbarStore((state) => [state.error])
+  // const [currentPost, setCurrentPost] = useState<PostType>();
+  const [hideLoading, showLoading] = useLoadingStore((state) => [
+    state.hide,
+    state.show,
+  ]);
+  const [showError] = useSnackbarStore((state) => [state.error]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
-  const fetchPost = async (id: number) => {
-    try {
-      showLoading()
-      const res = await findPost(id)
-      if (res) {
-        setCurrentPost(get(res, 'attributes'))
+  const { data: postData, refetch } = useQuery({
+    queryKey: ["post", params.id],
+    queryFn: async () => {
+      try {
+        return await findPost(params.id);
+      } catch (error) {
+        console.log("error", error);
+        showError("Lỗi", "Không tìm thấy bài viết");
+        return null;
       }
-    } catch (error) {
-      console.log('error', error);
-      showError('Lỗi', "Không tìm thấy bài viết")
-    } finally {
-      hideLoading()
-    }
-  }
+    },
+    enabled: !!params.id,
+  });
+
+  // Thêm Facebook Open Graph script
   useEffect(() => {
-    if (params.id) {
-      fetchPost(params.id)
+    if (postData) {
+      // Tạo hoặc cập nhật meta tags
+      const updateMetaTags = () => {
+        // Facebook / Open Graph
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogImage = document.querySelector('meta[property="og:image"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+
+        if (!ogTitle) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:title');
+          meta.setAttribute('content', postData.name || 'Bài viết');
+          document.head.appendChild(meta);
+        } else {
+          ogTitle.setAttribute('content', postData.name || 'Bài viết');
+        }
+
+        if (!ogDesc) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:description');
+          meta.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+          document.head.appendChild(meta);
+        } else {
+          ogDesc.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+        }
+
+        if (!ogImage) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:image');
+          meta.setAttribute('content', postData.thumbnail || '');
+          document.head.appendChild(meta);
+        } else {
+          ogImage.setAttribute('content', postData.thumbnail || '');
+        }
+
+        if (!ogUrl) {
+          const meta = document.createElement('meta');
+          meta.setAttribute('property', 'og:url');
+          meta.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+          document.head.appendChild(meta);
+        } else {
+          ogUrl.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+        }
+      };
+
+      updateMetaTags();
+
+      // Facebook Refresh
+      if (window.FB) {
+        window.FB.XFBML.parse();
+      }
     }
-  }, [params])
+  }, [postData, params.id]);
+
+  const handleLikedPostClick = async (data: PostType) => {
+    try {
+      if (!params.id || typeof Number(params.id) !== "number") {
+        showError("Lỗi", "Không tìm thấy bài viết");
+        return;
+      }
+      await likePost({
+        postId: Number(params.id),
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      refetch();
+    }
+  };
 
   return (
     <>
+      <Script
+        id="facebook-jssdk"
+        strategy="afterInteractive"
+        src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v18.0"
+      />
+
       <div className="flex justify-between px-4 pb-[10px] item-center border-b">
         <div className="flex gap-2 item-center">
           <ArrowLeft
@@ -53,11 +142,11 @@ export default function Page({ params }: { params: { id: number } }) {
       </div>
       <div className="mt-3 px-6">
         <Post
-          data={currentPost}
+          data={postData}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"
-          thumbnailUrl={get(currentPost, 'thumbnail') || ''}
-          userName={userInfo?.username || 'User'}
-          specialName={get(currentPost, 'postedBy.skills', '')}
+          thumbnailUrl={get(postData, "thumbnail") || ""}
+          userName={userInfo?.username || "User"}
+          specialName={get(postData, "postedBy.skills", "")}
           userRank={
             <span
               className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
@@ -65,16 +154,23 @@ export default function Page({ params }: { params: { id: number } }) {
               IV
             </span>
           }
-          postContent={get(currentPost, 'content', '')}
-          postName={get(currentPost, 'name', '')}
-          createdAt={moment(get(currentPost, 'createdAt', '')).format('DD/MM/YYYY').toString()}
-          likedCount={get(currentPost, 'likeCount', 0).toString() || '0'}
-          commentCount={get(currentPost, 'commentCount', 0).toString() || '0'}
+          isDetail
+          postContent={get(postData, "content", "")}
+          postName={get(postData, "name", "")}
+          createdAt={moment(get(postData, "createdAt", ""))
+            .format("DD/MM/YYYY")
+            .toString()}
+          likedCount={get(postData, "likeCount", 0).toString() || "0"}
+          commentCount={get(postData, "commentCount", 0).toString() || "0"}
+          onLikedPostClick={handleLikedPostClick}
         />
         <div className="mt-3">
-          <PostCommentContent postId={params.id} onUpdateComment={() => fetchPost(params.id)} />
+          <PostCommentContent
+            postId={params.id}
+            onUpdateComment={() => refetch()}
+          />
         </div>
       </div>
     </>
   );
-};
+}

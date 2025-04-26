@@ -1,6 +1,7 @@
 "use client";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { TabItem, TabNavigation } from "@/components/common/TabNavigation";
+import { AuthGuard } from "@/components/hoc/auth-guard";
 import { MissionCard } from "@/components/mission/MissionCard";
 import {
   Dialog,
@@ -31,7 +32,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Filter } from "lucide-react";
 import qs from "qs";
 import { useState } from "react";
-
+import Image from "next/image";
 // Tab options
 enum TabOptions {
   MISSION = "mission",
@@ -137,7 +138,6 @@ export default function MissionPage() {
         return await ReqGetAllAchievementsInfo(queryString);
       } catch (err) {
         console.log("mission page => ", err);
-        error("Lỗi", "Lỗi khi lấy dữ liệu");
         return { data: [] };
       }
     },
@@ -245,75 +245,99 @@ export default function MissionPage() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4">
-      <div className="flex items-center justify-between px-2">
-        <div className="text-primary-900 text-SubheadLg font-medium">
-          <span>Nhiệm vụ</span>
-        </div>
-        <div>
-          <div className="flex items-center">
-            <div className="text-yellow-500 font-semibold">
-              {userInfo?.balance}
+    <AuthGuard>
+      <div className="w-full max-w-7xl mx-auto">
+        <div className="flex items-center justify-between px-4">
+          <div className="text-SubheadLg text-gray-95">
+            <span>Nhiệm vụ</span>
+          </div>
+          <div>
+            <div className="flex items-center">
+              <div className="text-SubheadLg text-primary-900">
+                {userInfo?.balance}
+              </div>
+              <Image
+                src="/image/home/coin.png"
+                alt="coin pic"
+                width={24}
+                height={24}
+              />
             </div>
-            <div className="w-6 h-6 rounded-full bg-yellow-500 ml-2"></div>
           </div>
         </div>
-      </div>
 
-      {/* Tab Navigation */}
-      <TabNavigation
-        tabs={TABS}
-        activeTabId={activeTab}
-        onTabChange={handleTabChange}
-      />
-
-      {/* Filter Component */}
-      <div className="w-full flex justify-end">
-        <MissionFilter
-          filterValue={filterValue}
-          onFilterChange={handleFilterChange}
+        {/* Tab Navigation */}
+        <TabNavigation
+          tabs={TABS}
+          activeTabId={activeTab}
+          onTabChange={handleTabChange}
         />
-      </div>
 
-      {/* Tab Content */}
-      <div>
-        {activeTab === TabOptions.MISSION
-          ? renderMissionContent()
-          : renderAchievementContent()}
-      </div>
+        {/* Filter Component */}
+        <div className="w-full flex justify-end px-4">
+          <MissionFilter
+            filterValue={filterValue}
+            onFilterChange={handleFilterChange}
+          />
+        </div>
 
-      {/* Show Dialog when user click to claim here */}
-      <Dialog open={claimDialog} onOpenChange={setClaimDialog}>
-        <DialogContent className="max-w-[500px] bg-white">
-          <DialogHeader>
-            <DialogTitle>
-              <div className="text-primary-900 text-SubheadLg font-medium">
-                <span>Chúc mừng</span>
-              </div>
-            </DialogTitle>
-            <DialogDescription>
-              <div className="text-BodyMd text-gray-70">
-                Bạn đã nhận được{" "}
-                <span className="text-gray-70">
-                  điểm và{" "}
-                  <span className="text-primary-900">{claimData?.reward}</span>{" "}
-                  <span className="text-gray-70">đồng</span>
-                </span>
-              </div>
-            </DialogDescription>
-            <DialogFooter>
-              <CommonButton
-                className="w-full"
-                onClick={() => {
-                  setClaimDialog(false);
-                }}
-              >
-                <span>Đồng ý</span>
-              </CommonButton>
-            </DialogFooter>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    </div>
+        {/* Tab Content */}
+        <div>
+          {activeTab === TabOptions.MISSION
+            ? renderMissionContent()
+            : renderAchievementContent()}
+        </div>
+
+        {/* Show Dialog when user click to claim here */}
+        <Dialog open={claimDialog} onOpenChange={setClaimDialog}>
+          <DialogContent className="max-w-[500px] bg-white">
+            <DialogHeader>
+              <DialogTitle>
+                <div className="text-primary-900 text-SubheadLg font-medium">
+                  <span>Chúc mừng</span>
+                </div>
+              </DialogTitle>
+              <DialogDescription>
+                <div className="text-BodyMd text-gray-70 flex items-center gap-x-1">
+                  Bạn đã nhận được{" "}
+                  <span className="font-bold text-primary-900">
+                    {claimData?.points ? claimData?.points : 0}
+                  </span>{" "}
+                  <Image
+                    src="/image/home/coin.png"
+                    alt="coin pic"
+                    width={24}
+                    height={24}
+                  />{" "}
+                  <span className="text-gray-70 flex items-center gap-x-1">
+                    điểm và{" "}
+                    <span className="font-bold text-primary-900 flex items-center gap-x-1">
+                      {claimData?.reward}{" "}
+                      <Image
+                        src="/image/PointIcon.png"
+                        alt="coin pic"
+                        width={24}
+                        height={24}
+                      />
+                    </span>{" "}
+                    <span className="text-gray-70">đồng</span>
+                  </span>
+                </div>
+              </DialogDescription>
+              <DialogFooter>
+                <CommonButton
+                  className="w-full"
+                  onClick={() => {
+                    setClaimDialog(false);
+                  }}
+                >
+                  <span>Đồng ý</span>
+                </CommonButton>
+              </DialogFooter>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </AuthGuard>
   );
 }

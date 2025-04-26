@@ -1,9 +1,8 @@
+"use client";
 import Image from "next/image";
-import { ShopItemCarousel } from "@/components/shop/shop-item-carousel";
-import { ShopItem, ShopItemUser } from "@/types/common-types";
+import { ShopItemUser } from "@/types/common-types";
 import { ReqGetUserShopItems } from "@/requests/shop-item-user";
 import { useQuery } from "@tanstack/react-query";
-import { userInfo } from "os";
 import qs from "qs";
 import { useUserStore } from "@/store/UserStore";
 import { useState } from "react";
@@ -18,6 +17,7 @@ import { CommonButton } from "@/components/common/button/CommonButton";
 import { ReqGetClaimedItems } from "@/requests/claimed-item";
 import { CardItem } from "@/components/shop/card-item";
 import { ClaimedItem } from "@/types/claimed-item";
+import { BillCard } from "@/components/shop/BillCard";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -28,11 +28,15 @@ const formatDate = (dateString: string) => {
   return `${day}/${month}/${year}`;
 };
 
+// Tab types
+type TabType = "items" | "claimed";
+
 export const InventoryContent = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [selectedItem, setSelectedItem] = useState<ShopItemUser | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [itemClaimed, setItemClaimed] = useState<ClaimedItem | null>(null);
+  const [activeTab, setActiveTab] = useState<TabType>("items");
 
   const { data: myItems } = useQuery({
     queryKey: ["my-items"],
@@ -87,77 +91,94 @@ export const InventoryContent = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full px-4 flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
-        <div className="text-white">
-          <div className={`text-[28px] leading-[44px]`}>KHO ĐỒ CỦA TÔI</div>
-          <div className="text-bodyMd mt-5">
-            Quản lý và sử dụng các vật phẩm bạn đã sở hữu
-          </div>
-        </div>
-        <Image
-          src="/image/recruitment/recruitment-pic.png"
-          alt="left banner"
-          className=""
-          width={222}
-          height={200}
-        />
-      </div>
-
-      <hr className="border-t border-gray-200 my-4" />
-
-      {/* Items Grid Section */}
-      <div className="mt-6 px-2">
-        {myItems && myItems.data.length > 0 ? (
-          <div className="px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {myItems.data.map((item, index) => (
-              <CardItem
-                key={index}
-                image={item.shop_item.image || "/placeholder-image.jpg"}
-                name={item.shop_item.name}
-                price={item.shop_item.price}
-                description={item.shop_item.description || ""}
-                onClick={() => handleItemClick(item)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-10 rounded-lg">
-            <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
-          </div>
-        )}
-      </div>
-
-      <div className="px-2">
-        {/* Claimed Items Section (if applicable) */}
-        {claimedItems && claimedItems.data && claimedItems.data.length > 0 && (
-          <div className="mt-8">
-            <h2 className="text-xl font-bold mb-4">VẬT PHẨM ĐÃ NHẬN</h2>
-            <div className=" px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {claimedItems.data.map((item, index: number) => (
-                <CardItem
-                  key={index}
-                  image={item.shopItem.image || "/placeholder-image.jpg"}
-                  name={item.shopItem.name}
-                  price={item.shopItem.price}
-                  description={`Nhận ngày: ${formatDate(item.createdAt)}`}
-                  onClick={() => {
-                    handleItemClick({
-                      shop_item: item.shopItem,
-                      createdAt: item.createdAt,
-                      id: item.id,
-                      user: item.user,
-                      updatedAt: item.updatedAt,
-                    });
-                    setItemClaimed(item);
-                  }}
-                />
-              ))}
+      <div className="w-full px-4">
+        <div className="w-full px-4 flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
+          <div className="text-white">
+            <div className={`text-[28px] leading-[44px]`}>KHO ĐỒ CỦA TÔI</div>
+            <div className="text-bodyMd mt-5">
+              Quản lý và sử dụng các vật phẩm bạn đã sở hữu
             </div>
           </div>
+          <Image
+            src="/image/recruitment/recruitment-pic.png"
+            alt="left banner"
+            className=""
+            width={222}
+            height={200}
+          />
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex border-b border-gray-20 mb-6 px-4">
+        <button
+          className={`py-3 px-6 font-medium text-base ${
+            activeTab === "items"
+              ? "border-b-4 border-primary-40 text-primary-95"
+              : "text-gray-50"
+          }`}
+          onClick={() => setActiveTab("items")}
+        >
+          Vật phẩm đã sở hữu
+        </button>
+        <button
+          className={`py-3 px-6 font-medium text-base ${
+            activeTab === "claimed"
+              ? "border-b-4 border-primary-40 text-primary-95"
+              : "text-gray-50"
+          }`}
+          onClick={() => setActiveTab("claimed")}
+        >
+          Mã quy đổi vật phẩm
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="px-2">
+        {/* Items Section */}
+        {activeTab === "items" && (
+          <div className="mt-2">
+            {myItems && myItems.data.length > 0 ? (
+              <div className="px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                {myItems.data.map((item, index) => (
+                  <CardItem
+                    key={index}
+                    image={item.shop_item.image || "/placeholder-image.jpg"}
+                    name={item.shop_item.name || ""}
+                    price={item.shop_item.price || 0}
+                    onClick={() => handleItemClick(item)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 rounded-lg">
+                <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Claimed Items Section */}
+        {activeTab === "claimed" && (
+          <div className="mt-2">
+            {claimedItems &&
+            claimedItems.data &&
+            claimedItems.data.length > 0 ? (
+              <div className="px-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {claimedItems.data.map((item, index: number) => (
+                  <BillCard key={index} item={item} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 rounded-lg">
+                <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
-      {/* Item Detail Dialog */}
+      {/* Item Detail Dialog for regular items (not claimed) */}
       <Dialog open={isDialogOpen} onOpenChange={handleDialogOpenChange}>
         <DialogContent className="w-[440px] rounded-3xl bg-white p-6">
           <DialogHeader>
@@ -218,26 +239,6 @@ export const InventoryContent = () => {
                     <div className="text-gray-60 min-w-[120px]">Mô tả:</div>
                     <div className="text-gray-95 text-sm mt-1">
                       {selectedItem.shop_item.description}
-                    </div>
-                  </div>
-                )}
-
-                {itemClaimed?.code && (
-                  <div className="text-SubheadMd flex items-center gap-x-2">
-                    <div className="text-gray-60 min-w-[120px]">
-                      Mã sản phẩm:
-                    </div>
-                    <div className="text-gray-95 text-sm mt-1">
-                      {itemClaimed.code}
-                    </div>
-                  </div>
-                )}
-
-                {itemClaimed?.quantity && (
-                  <div className="text-SubheadMd flex items-center gap-x-2">
-                    <div className="text-gray-60 min-w-[120px]">Số lượng:</div>
-                    <div className="text-gray-95 text-sm mt-1">
-                      {itemClaimed.quantity}
                     </div>
                   </div>
                 )}

@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
-import StudentTablePagination from "./student-table-pagination";
+import CommonPagination from "./common-pagination";
 import { Edit, Pencil, Trash2 } from "lucide-react";
 import { EditUserDialog } from "./dialogs/edit-user-dialog";
 import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
@@ -425,7 +425,7 @@ export const AccountTable = () => {
       )}
 
       {data && data.meta.pagination.total > 0 && (
-        <StudentTablePagination
+        <CommonPagination
           totalItems={data.meta.pagination.total}
           currentPage={currentPage}
           itemsPerPage={itemsPerPage}

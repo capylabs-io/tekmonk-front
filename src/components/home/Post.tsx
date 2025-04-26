@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import { MessageCircle, Tag, UserPlus } from "lucide-react";
 import classNames from "classnames";
@@ -18,17 +18,20 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { ListStudentSelect } from "./ListStudentSelect";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Button } from "@/components/ui/button";
+import { User } from "@/types/common-types";
+import { useUserStore } from "@/store/UserStore";
+
 
 type Props = {
   data?: PostType | null;
   imageUrl: string;
   thumbnailUrl: string;
   userName: string;
-  userRank: ReactNode;
+  userRank?: ReactNode;
   specialName: string;
   createdAt: string;
   likedCount: string;
@@ -40,9 +43,11 @@ type Props = {
   isAllowClickDetail?: boolean;
   showButton?: boolean;
   hideSocial?: boolean;
+  taggedUsers?: User[];
   onVerifiedPost?: (data: PostType) => void;
   onLikedPostClick?: (data: PostType) => void;
   onUpdatePost?: () => void;
+  isDetail?: boolean;
 };
 
 export const Post = ({
@@ -64,7 +69,9 @@ export const Post = ({
   isAllowClickDetail,
   onVerifiedPost,
   onLikedPostClick,
+  taggedUsers,
   onUpdatePost,
+  isDetail,
 }: Props) => {
   const router = useRouter();
   const handleOnClick = (value: any) => {
@@ -77,10 +84,24 @@ export const Post = ({
     e.stopPropagation();
     router.push(`/bai-viet/${data?.id}`);
   };
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
   const { success, error } = useSnackbarStore();
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
+
+  // Tự động chọn người dùng đã được tag khi mở dialog tag
+  useEffect(() => {
+    if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
+      const taggedUserIds = taggedUsers.map(user => user.id.toString());
+      setSelectedStudents(taggedUserIds);
+    }
+  }, [addStudentDialogOpen, taggedUsers]);
+
   const handleTaggingUser = async () => {
     try {
       if (selectedStudents.length === 0) {
@@ -88,21 +109,21 @@ export const Post = ({
         return;
       }
       if (!data?.id) {
-        return
+        return;
       }
       showLoading();
       const mappedSelectedStudents = selectedStudents.map((studentId) => ({
-        id: Number(studentId)
+        id: Number(studentId),
       }));
       const res = await updatePost(data?.id, {
-        tagged_users: mappedSelectedStudents
+        tagged_users: mappedSelectedStudents,
       });
       if (res) {
-        success('Thành công', 'Đã tag người dùng');
+        success("Thành công", "Đã tag người dùng");
       }
     } catch (err) {
       console.log("error", err);
-      error('Lỗi', 'Đã xảy ra lỗi khi tag người dùng');
+      error("Lỗi", "Đã xảy ra lỗi khi tag người dùng");
     } finally {
       hideLoading();
       setAddStudentDialogOpen(false);
@@ -111,9 +132,8 @@ export const Post = ({
   };
   return (
     <>
-
       <div
-        className={classNames("relative", customClassname)}
+        className={classNames("relative cursor-pointer", customClassname)}
         onDoubleClick={(e) => {
           isAllowClickDetail && handleClickPostCard(e);
         }}
@@ -148,20 +168,28 @@ export const Post = ({
             </CommonButton>
           </div>
         )}
-        <div className="flex items-center mt-8 w-full justify-between">
+        <div className="flex items-center mt-8 w-full gap-2">
           <ProfileInfoBox
             imageUrl={imageUrl}
             userName={userName}
             userRank={userRank}
             specialName={specialName}
           />
-          {isVerified &&
+          {
+            taggedUsers && taggedUsers?.length > 0 &&
+            <div className="flex items-center gap-1">
+              cùng với
+              <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => router.push(`/ho-so/${taggedUsers[0]?.id}`)}>{taggedUsers[0]?.username}</div>
+              và <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}>{taggedUsers.length - 1} người khác.</div>
+            </div>
+          }
+          {isVerified && (
             <div className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs">
               <span className="px-2 py-1">
                 {ConvertoStatusPostToText(get(data, "isVerified", ""))}
               </span>
             </div>
-          }
+          )}
         </div>
         <div className="pl-10 mt-3">
           {!isVerified && (
@@ -174,13 +202,33 @@ export const Post = ({
           )}
 
           <div className="mt-3">
-            <p className="text-xl font-bold text-gray-800">{postName}</p>
-            <div
-              className="text-base text-gray-800"
-              dangerouslySetInnerHTML={{
-                __html: postContent || "",
-              }}
-            ></div>
+            {
+              !isDetail ? (
+                <p className="text-xl font-bold text-gray-800 hover:text-primary-70 hover:underline" onClick={() => router.push(`/bai-viet/${data?.id}`)}>{postName}</p>
+              ) : (
+                <p className="text-xl font-bold text-gray-800">{postName}</p>
+              )
+            }
+            <div className="relative">
+              <div
+                className={classNames("text-base text-gray-800", isDetail ? "line-clamp-none" : "line-clamp-3")}
+                dangerouslySetInnerHTML={{
+                  __html: postContent || "",
+                }}
+              ></div>
+              {data?.id && !isDetail && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push(`/bai-viet/${data?.id}`);
+                  }}
+                  className="text-primary-70 hover:text-primary-80 font-medium mt-2 hover:underline"
+                >
+                  Xem thêm
+                </button>
+              )}
+            </div>
           </div>
           {isVerified && (
             <div
@@ -193,7 +241,9 @@ export const Post = ({
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
               <div className="flex gap-x-10">
-                <div className={classNames("flex items-center gap-x-1 font-bold ")}>
+                <div
+                  className={classNames("flex items-center gap-x-1 font-bold ")}
+                >
                   <button
                     onClick={() => {
                       data && onLikedPostClick?.(data);
@@ -206,9 +256,9 @@ export const Post = ({
                       viewBox="0 0 24 24"
                       fill={data?.isLiked ? "#ef4444" : "none"}
                       stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                       className={classNames(
                         "cursor-pointer",
                         data?.isLiked ? "text-red-500" : ""
@@ -228,19 +278,25 @@ export const Post = ({
               </div>
             )}
             <div className="flex items-center gap-2">
-              <div
-                onClick={() => setAddStudentDialogOpen(true)}
-                className="inline-flex items-center gap-2 !text-gray-500 hover:!text-primary-70"
-              >
-                <Tag className="h-4 w-4" />
-                <span className="text-sm">Tag</span>
-              </div>
-              <Share
-                url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
-                title={postName}
-                description={postContent}
-                hashtags={["tekmonk"]}
-              />
+              {
+                data?.postedBy?.id === userInfo?.id &&
+                <>
+                  <div
+                    onClick={() => setAddStudentDialogOpen(true)}
+                    className="inline-flex items-center gap-2 !text-gray-500 hover:!text-primary-70"
+                  >
+                    <Tag className="h-4 w-4" />
+                    <span className="text-sm">Tag</span>
+                  </div>
+                  <Share
+                    url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
+                    title={postName}
+                    description={postContent?.replace(/<[^>]*>?/gm, '').substring(0, 200) || ''}
+                    hashtags={["tekmonk"]}
+                    image={thumbnailUrl || ''}
+                  />
+                </>
+              }
             </div>
           </div>
         </div>
@@ -284,6 +340,58 @@ export const Post = ({
                   Tag
                 </CommonButton>
               </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={taggedUsersDialogOpen}
+        onOpenChange={setTaggedUsersDialogOpen}
+      >
+        <DialogContent className="w-[680px] bg-white">
+          <DialogHeader className="px-4">
+            <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
+              Người dùng được tag
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="p-4">
+            <div className="max-h-[400px] overflow-y-auto">
+              {taggedUsers && taggedUsers.slice(1).map((user, index) => (
+                <div key={user.id} className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-0">
+                  <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <Image
+                      src={'/image/home/profile-pic.png'}
+                      alt={user.username || 'User'}
+                      width={40}
+                      height={40}
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p
+                      className="font-medium text-gray-800 hover:text-primary-70 hover:underline cursor-pointer"
+                      onClick={() => {
+                        router.push(`/ho-so/${user.id}`);
+                        setTaggedUsersDialogOpen(false);
+                      }}
+                    >
+                      {user.username}
+                    </p>
+                    <p className="text-xs text-gray-500">{user.username}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={() => setTaggedUsersDialogOpen(false)}
+                className="bg-primary-70 hover:bg-primary-80 text-white"
+              >
+                Đóng
+              </Button>
             </div>
           </div>
         </DialogContent>

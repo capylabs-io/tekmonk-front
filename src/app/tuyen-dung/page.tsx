@@ -2,7 +2,7 @@
 
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import qs from "qs";
-import StudentTablePagination from "@/components/admin/student-table-pagination";
+import CommonPagination from "@/components/admin/common-pagination";
 import { CommonCard } from "@/components/common/CommonCard";
 import { CommonTag } from "@/components/common/CommonTag";
 import { Input } from "@/components/common/Input";
@@ -194,7 +194,7 @@ export default function Hiring() {
           </div>
       }
       <div className="w-full flex items-end lg:justify-end justify-center">
-        <StudentTablePagination
+        <CommonPagination
           showDetails={false}
           totalItems={data?.meta?.pagination?.total || 0}
           currentPage={currentPage}

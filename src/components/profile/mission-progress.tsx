@@ -1,26 +1,45 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Progress } from "@/components/common/Progress";
 import { ReqGetMissionInfo } from "@/requests/mission";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { Skeleton } from "@/components/ui/skeleton";
-
-export const MissionProgress = () => {
+import { MissionDialog } from "../mission/MissionDialog";
+import { useMissionHistory } from "@/hooks/use-mission-history";
+const PAGE = 1;
+const ITEM_PER_PAGE = 9;
+export const MissionProgress = ({ id }: { id: number }) => {
+  const [showMissionDialog, setShowMissionDialog] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
+  const [page, setPage] = useState(PAGE);
+  const [itemsPerPage, setItemsPerPage] = useState(ITEM_PER_PAGE);
   const { data: missions, isLoading } = useQuery({
     queryKey: ["missions-history"],
     queryFn: async () => {
       const queryString = qs.stringify({
         page: 1,
-        pageSize: 1,
+        pageSize: 2,
+        id: id,
+        status: "all",
       });
       const res = await ReqGetMissionInfo(queryString);
       return res;
     },
+    enabled: !!id,
   });
+
+  const { data: missionHistory } = useMissionHistory({
+    page,
+    pageSize: itemsPerPage,
+    id,
+  });
+
+  const handleShowMissionDialog = () => {
+    setShowMissionDialog(true);
+  };
 
   useEffect(() => {
     if (missions?.data && missions.data.length > 0) {
@@ -37,7 +56,7 @@ export const MissionProgress = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-row justify-center items-center gap-4 w-[720px] h-[112px] border border-gray-200 rounded-lg">
+      <div className="flex flex-row justify-center items-center gap-4 px-6 mx-4 border border-gray-100">
         <Skeleton className="w-[80px] h-[80px] rounded-md flex-none" />
         <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
           <div className="flex flex-row justify-between items-end w-full h-12">
@@ -56,38 +75,58 @@ export const MissionProgress = () => {
   }
 
   return (
-    <div className="flex flex-row justify-center items-center gap-4 w-[720px] h-[112px]">
-      <Image
-        src={missions?.data[0]?.imageUrl || ""}
-        alt="Mission"
-        width={80}
-        height={80}
-        className="object-contain flex-none"
-      />
+    <div className="px-6 mt-3">
+      <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
+        <div className="text-gray-95 text-SubheadLg">Nhiệm vụ</div>
+        <div className="cursor-pointer" onClick={handleShowMissionDialog}>
+          Xem thêm
+        </div>
+      </div>
+      <div className="flex flex-col mt-4">
+        <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
+          <Image
+            src={missions?.data[0]?.imageUrl || ""}
+            alt="Mission"
+            width={80}
+            height={80}
+            className="object-contain flex-none"
+          />
 
-      <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
-        <div className="flex flex-row justify-between items-end w-full h-12">
-          <div className="flex flex-col items-start">
-            <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
-              {missions?.data[0]?.title || ""}
-            </h3>
-            <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
-              #{missions?.data[0]?.id || ""}
-            </p>
-          </div>
+          <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
+            <div className="flex flex-row justify-between items-end w-full h-12">
+              <div className="flex flex-col items-start">
+                <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
+                  {missions?.data[0]?.title || ""}
+                </h3>
+                <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
+                  #{missions?.data[0]?.id || ""}
+                </p>
+              </div>
 
-          <div className="flex flex-row items-start gap-[7px]">
-            <span className="text-SubheadSm text-gray-95">nhiệm vụ</span>
-            <span className="text-BodySm text-gray-60">
-              {missions?.data[0]?.currentProgress
-                ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`
-                : `${missions?.data[0]?.requiredQuantity}/${missions?.data[0]?.requiredQuantity}`}
-            </span>
+              <div className="flex flex-row items-start gap-[7px]">
+                <span className="text-SubheadSm text-gray-95">Tiến trình</span>
+                <span className="text-BodySm text-gray-60">
+                  {missions?.data[0]?.currentProgress
+                    ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`
+                    : `${missions?.data[0]?.requiredQuantity}/${missions?.data[0]?.requiredQuantity}`}
+                </span>
+              </div>
+            </div>
+
+            <Progress value={progressPercentage} />
           </div>
         </div>
-
-        <Progress value={progressPercentage} />
       </div>
+      <MissionDialog
+        open={showMissionDialog}
+        onOpenChange={setShowMissionDialog}
+        data={missionHistory?.data || []}
+        totalItems={missionHistory?.meta.pagination.total || 0}
+        currentPage={page}
+        itemsPerPage={itemsPerPage}
+        onPageChange={(page) => setPage(page)}
+        onItemsPerPageChange={(itemsPerPage) => setItemsPerPage(itemsPerPage)}
+      />
     </div>
   );
 };

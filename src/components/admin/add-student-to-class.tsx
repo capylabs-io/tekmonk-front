@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CommonTag } from "../common/CommonTag";
-import StudentTablePagination from "./student-table-pagination";
+import CommonPagination from "./common-pagination";
 import { ReqGetClassUserRemaining, ReqGetUsers } from "@/requests/user";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
@@ -134,7 +134,7 @@ export const AddStudentToClass = ({
           </div>
           {studentList?.meta && (
             <div className="border-t bg-white">
-              <StudentTablePagination
+              <CommonPagination
                 showDetails={false}
                 totalItems={studentList.meta.pagination.total}
                 currentPage={currentPage}

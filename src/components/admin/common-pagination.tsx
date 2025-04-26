@@ -98,7 +98,7 @@ const generatePaginationItems = (
   return pages;
 };
 
-export default function StudentTablePagination({
+export default function CommonPagination({
   showDetails = true,
   totalItems,
   currentPage,

@@ -1,15 +1,13 @@
 "use client";
-import { useState } from "react";
 import { ShopContent } from "@/components/shop/shop-content";
 import { InventoryContent } from "@/components/shop/inventory-content";
 import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
 import { useUserStore } from "@/store/UserStore";
 import Image from "next/image";
-// Tab options
-enum TabOptions {
-  SHOP = "shop",
-  INVENTORY = "inventory",
-}
+import {
+  useShopInventoryStore,
+  TabOptions,
+} from "@/store/switch-shop-inventory";
 
 // Tab data
 const TABS: TabItem[] = [
@@ -18,25 +16,26 @@ const TABS: TabItem[] = [
 ];
 
 export default function Shop() {
-  const [activeTab, setActiveTab] = useState<string>(TabOptions.SHOP);
+  // Use the shop inventory store instead of local state
+  const { activeTab, setActiveTab } = useShopInventoryStore();
 
   /** UseStore */
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   // Tab switching handler
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
+    setActiveTab(tabId as TabOptions);
   };
 
   return (
-    <>
-      <div className="w-full mx-auto  max-w-7xl overflow-hidden">
-        <div className="flex items-center justify-between px-2">
-          <div className="text-primary-900 text-SubheadLg font-medium">
+    <div className="w-full">
+      <div className="w-full mx-auto overflow-hidden">
+        <div className="flex items-center justify-between px-4">
+          <div className="text-SubheadLg text-gray-95">
             <span>Cửa hàng</span>
           </div>
           <div className="flex items-center">
-            <div className="text-yellow-500 font-semibold">
+            <div className="text-SubheadLg text-primary-900">
               {userInfo?.balance}
             </div>
             <Image
@@ -58,6 +57,6 @@ export default function Shop() {
         {/* Tab Content */}
         {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>
-    </>
+    </div>
   );
 }

@@ -8,8 +8,9 @@ import {
   CarouselApi,
 } from "@/components/ui/carousel";
 import { CommonButton } from "@/components/common/button/CommonButton";
-import { ShopItem } from "@/types/shop";
+import { ShopItem, ShopItemEnum } from "@/types/shop";
 import { CardItem } from "./card-item";
+import { cn } from "@/lib/utils";
 
 interface ShopItemCarouselProps {
   items: ShopItem[];
@@ -66,13 +67,16 @@ export const ShopItemCarousel = ({
           {items.map((item, index) => (
             <CarouselItem
               key={index}
-              className="basis-full sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 gap-[2px] p-2 grid place-items-center"
+              className={cn(
+                "basis-full sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 gap-[2px] p-2 grid place-items-center",
+                item.type == ShopItemEnum.VIRTUAL && "hidden"
+              )}
             >
               <CardItem
                 image={item.image || ""}
                 name={item.name || ""}
                 price={item.price || 0}
-                description={item.description || ""}
+                quantity={item.quantity || 0}
                 onClick={() => onItemClick?.(item)}
               />
             </CarouselItem>

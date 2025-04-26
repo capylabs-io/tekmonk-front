@@ -1,14 +1,16 @@
 export const ROUTE = {
+  HOME: "/",
   CONTEST_SUBMISSION: "/tong-hop-bai-du-thi",
   LOGIN: "/dang-nhap",
   ADMIN: "/quan-ly",
-  HOME: "/trang-chu",
+  NEWS_FEED: "/bang-tin",
   NEWS: "/tin-tuc",
   EVENTS: "/su-kien",
   HIRING: "/tuyen-dung",
   MODERATOR: "/phe-duyet",
   SHOP: "/cua-hang",
   MISSION: "/nhiem-vu",
+  PROFILE: "/ho-so",
   //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",
   ACCOUNT: "/quan-ly-tai-khoan",

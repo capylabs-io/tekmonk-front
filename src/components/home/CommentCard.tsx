@@ -10,14 +10,15 @@ import {
   Edit2,
   Check,
   X,
-  Pencil
-} from 'lucide-react';
-import { get } from 'lodash';
-import { timeAgo } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { useSnackbarStore } from '@/store/SnackbarStore';
-import { editCommentPost } from '@/requests/post';
-import { PostComment } from '@/types/common-types';
+  Pencil,
+} from "lucide-react";
+import { get } from "lodash";
+import { timeAgo } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { editCommentPost } from "@/requests/post";
+import { PostComment } from "@/types/common-types";
+import { useUserStore } from "@/store/UserStore";
 
 type Props = {
   comment: PostComment;
@@ -50,8 +51,9 @@ export const CommentCard = ({
 }: Props) => {
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(content || '');
+  const [editedContent, setEditedContent] = useState(content || "");
   const { success, error } = useSnackbarStore();
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,13 +69,13 @@ export const CommentCard = ({
     try {
       const res = await editCommentPost(comment.id, { content: editedContent });
       if (res) {
-        success('Thành công', 'Đã cập nhật bình luận');
+        success("Thành công", "Đã cập nhật bình luận");
         onUpdateComment?.();
         setIsEditing(false);
       }
     } catch (err) {
-      console.error('Error updating comment:', err);
-      error('Lỗi', 'Không thể cập nhật bình luận');
+      console.error("Error updating comment:", err);
+      error("Lỗi", "Không thể cập nhật bình luận");
     }
   };
 
@@ -81,19 +83,21 @@ export const CommentCard = ({
     <div className="flex items-start gap-3">
       <div
         className={`h-[40px] w-[40px] flex-shrink-0 rounded-full border bg-cover bg-center bg-no-repeat`}
-        style={{ backgroundImage: `url(${comment?.commentedBy?.data?.avatar || '/image/home/profile-pic.png'})` }}
+        style={{
+          backgroundImage: `url(${
+            comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
+          })`,
+        }}
       ></div>
       <div className="w-full flex-1 space-y-0.5">
         <div className="text-black flex items-center gap-1 text-base font-medium">
-          <div>
-            {comment?.commentedBy?.fullName || name}
-          </div>
+          <div>{comment?.commentedBy?.fullName || name}</div>
           <div className="inline-flex items-center gap-1 text-sm text-grey-500">
             @{comment?.commentedBy?.username || username}
             <Dot size={20} />
             {time ? timeAgo(Number(time)) : "Invalid time"}
           </div>
-          {comment?.commentedBy?.id && (
+          {comment?.commentedBy?.id === userInfo?.id && (
             <Button
               variant="ghost"
               size="sm"
@@ -118,7 +122,7 @@ export const CommentCard = ({
                 size="sm"
                 onClick={() => {
                   setIsEditing(false);
-                  setEditedContent(content || '');
+                  setEditedContent(content || "");
                 }}
               >
                 Huỷ

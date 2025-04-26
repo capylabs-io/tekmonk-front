@@ -22,8 +22,7 @@ import moment from "moment";
 import { SearchNewContent } from "@/components/news/SearchNewContent";
 import classNames from "classnames";
 
-const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
-  console.log(data);
+export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   const router = useCustomRouter();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
@@ -337,7 +336,6 @@ export default function News() {
     },
   });
 
-  randomNews && console.log("randomNews data: ", randomNews.data);
 
   const handleSearchNews = (value: string) => {
     setSearchValue(value);

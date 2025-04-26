@@ -15,7 +15,7 @@ export const ProfileInfoBox = ({
   specialName,
 }: Props) => {
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-x-2 justify-center">
       {/* <div className='h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center'>
                 <Image src={imageUrl} alt='profile pic' width={32} height={32} />
             </div> */}
@@ -30,7 +30,9 @@ export const ProfileInfoBox = ({
         <div className="truncate flex gap-x-2 items-center">
           <span className="text-base font-bold">{userName}</span>
         </div>
-        <div className="text-sm text-gray-500 inline-flex gap-1 items-center">{userRank} {specialName}</div>
+        {/* <div className="text-sm text-gray-500 inline-flex gap-1 items-center">
+          {userRank} {specialName}
+        </div> */}
       </div>
     </div>
   );

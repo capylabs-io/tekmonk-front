@@ -18,7 +18,7 @@ type Props = {
 export const ListStudentSelect = ({
   selectedStudents,
   setSelectedStudents,
-  listFilteredStudent
+  listFilteredStudent,
 }: Props) => {
   /** UseState */
   //   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
@@ -72,10 +72,10 @@ export const ListStudentSelect = ({
   const filteredStudents = useMemo(() => {
     return get(studentList, "data", [])
       ? get(studentList, "data", [])?.filter((student: User) =>
-        student.username.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      : []
-  }, [studentList, listFilteredStudent, searchQuery])
+          student.username.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : [];
+  }, [studentList, listFilteredStudent, searchQuery]);
   return (
     <div>
       <div className="space-y-2">
@@ -119,27 +119,25 @@ export const ListStudentSelect = ({
 
         <div className="border rounded-md overflow-hidden">
           <div className="space-y-0 max-h-[300px] overflow-y-auto custom-scrollbar">
-            {
-              filteredStudents
-                .map((student: User) => (
-                  <div
-                    key={student.id}
-                    className="flex items-center justify-between p-3 hover:bg-primary-10 border-b last:border-b-0"
-                  >
-                    <div>
-                      <div className="font-medium text-sm text-gray-900">
-                        {student.username}
-                      </div>
-                      <div className="text-sm text-gray-500">{student.email}</div>
-                    </div>
-                    <input
-                      type="checkbox"
-                      checked={selectedStudents.includes(student.id.toString())}
-                      onChange={() => handleStudentSelect(student.id.toString())}
-                      className="h-4 w-4 rounded cursor-pointer border-gray-300 text-purple-600 focus:ring-purple-500"
-                    />
+            {filteredStudents.map((student: User) => (
+              <div
+                key={student.id}
+                className="flex items-center justify-between p-3 hover:bg-primary-10 border-b last:border-b-0"
+              >
+                <div>
+                  <div className="font-medium text-sm text-gray-900">
+                    {student.username}
                   </div>
-                ))}
+                  <div className="text-sm text-gray-500">{student.email}</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={selectedStudents.includes(student.id.toString())}
+                  onChange={() => handleStudentSelect(student.id.toString())}
+                  className="h-4 w-4 rounded cursor-pointer border-gray-300 text-purple-600 focus:ring-purple-500"
+                />
+              </div>
+            ))}
           </div>
           {studentList?.meta && (
             <div className="border-t bg-white">

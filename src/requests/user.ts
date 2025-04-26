@@ -28,7 +28,9 @@ export const ReqGetClassUserRemaining = async (query: string = "") => {
   )) as StrapiResponse<User[]>;
 };
 
-export const ReqGetUserAnalytic = async () => {
-  const response = await tekdojoAxios.get(`/custom-user/analytics`);
+export const ReqGetUserAnalytic = async (query: string = "") => {
+  const response = await tekdojoAxios.get(
+    `${BASE_URL}/custom-user/analytics?${query}`
+  );
   return response.data as UserStatProps;
 };

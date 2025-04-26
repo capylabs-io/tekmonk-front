@@ -7,17 +7,17 @@ import { CardState } from "./types";
 import { getCardState } from "./utils";
 import MissionCardContent from "./MissionCardContent";
 
-// Mission/Achievement states:
-// 1. In Progress: When data has currentProgress field
-// 2. Done but not claimed: When data has isClaim=false
-// 3. Done and claimed: When data has isClaim=true
-
 type Props = {
   data: Mission | Achievement;
   onClick: (id: number) => void;
+  isShowButtonClaim?: boolean;
 };
 
-export const MissionCard = ({ data, onClick }: Props) => {
+export const MissionCard = ({
+  data,
+  onClick,
+  isShowButtonClaim = true,
+}: Props) => {
   // Get the card state
   const cardState = getCardState(data);
   const handleMissionOnClick = () => {
@@ -45,14 +45,12 @@ export const MissionCard = ({ data, onClick }: Props) => {
             cardState === CardState.COMPLETED &&
               "hover:border-primary-60 cursor-pointer hover:shadow-md"
           )}
-          onClick={
-            cardState === CardState.COMPLETED ? handleMissionOnClick : undefined
-          }
         >
           <MissionCardContent
             data={data}
             cardState={cardState}
             handleMissionOnClick={handleMissionOnClick}
+            isShowButtonClaim={isShowButtonClaim}
           />
         </CommonCard>
       </div>

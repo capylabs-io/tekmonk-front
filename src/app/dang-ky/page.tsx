@@ -15,11 +15,6 @@ import { ReqRegister } from "@/requests/login";
 import { z } from "zod";
 
 export default function Login() {
-  const [user, setUser] = useState({
-    identifier: "",
-    password: "",
-  });
-
   const [login] = useUserStore((state) => [state.login]);
 
   const [isShowing, show, hide] = useLoadingStore((state) => [
@@ -42,13 +37,19 @@ export default function Login() {
       confirmPassword: "",
     },
   });
-  const { getValues, reset, setValue, formState: { errors }, handleSubmit } = signUpForm
+  const {
+    getValues,
+    reset,
+    setValue,
+    formState: { errors },
+    handleSubmit,
+  } = signUpForm;
   const router = useCustomRouter();
 
   const handleSignUp = async () => {
     show();
     try {
-      const data = getValues()
+      const data = getValues();
       const res = await ReqRegister(data);
       if (res) {
         success("Xong!", "Chúc mừng bạn đã đăng ký thành công");
@@ -62,25 +63,21 @@ export default function Login() {
     }
   };
   useEffect(() => {
-    console.log('errors', errors);
-
-  }, [errors])
+    console.log("errors", errors);
+  }, [errors]);
 
   return (
     <div className="mx-auto min-h-[calc(100vh-64px)] flex justify-center items-center p-2">
       <div
-        className="w-[368px] h-max mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl relative"
+        className="w-[368px] 2xl:w-[460px] h-max mx-auto flex flex-col gap-6 border border-gray-20 p-6 bg-gray-00 rounded-2xl relative"
         style={{
           boxShadow: "0px 4px 0px #DDD0DD",
         }}
       >
-
         <form id="signup" onSubmit={handleSubmit(handleSignUp)}>
           <div className="w-full">
             <div className="inline-flex justify-between w-full items-center">
-              <div className="text-HeadingSm text-gray-95">
-                Đăng ký
-              </div>
+              <div className="text-HeadingSm text-gray-95">Đăng ký</div>
             </div>
             <div className="text-BodySm text-gray-60">
               Tham gia ngay vào cộng đồng Tekmonk
@@ -88,9 +85,7 @@ export default function Login() {
           </div>
           <div className="flex flex-col gap-4 overflow-y-auto">
             <div className="w-full flex flex-col gap-2">
-              <div className="text-SubheadSm text-gray-60">
-                Tên tài khoản
-              </div>
+              <div className="text-SubheadSm text-gray-60">Tên tài khoản</div>
 
               <Controller
                 name="username"
@@ -106,12 +101,9 @@ export default function Login() {
                   />
                 )}
               />
-
             </div>
             <div className="w-full flex flex-col gap-2">
-              <div className="text-SubheadSm text-gray-60">
-                Email
-              </div>
+              <div className="text-SubheadSm text-gray-60">Email</div>
               <Controller
                 name="email"
                 control={signUpForm.control}
@@ -126,7 +118,6 @@ export default function Login() {
                   />
                 )}
               />
-
             </div>
             <div className="w-full flex flex-col gap-2">
               <div className="text-SubheadSm text-gray-60">Mật khẩu</div>
@@ -146,7 +137,9 @@ export default function Login() {
               />
             </div>
             <div className="w-full flex flex-col gap-2">
-              <div className="text-SubheadSm text-gray-60">Xác nhận lại mật khẩu</div>
+              <div className="text-SubheadSm text-gray-60">
+                Xác nhận lại mật khẩu
+              </div>
               <Controller
                 name="confirmPassword"
                 control={signUpForm.control}
@@ -163,7 +156,12 @@ export default function Login() {
               />
             </div>
           </div>
-          <div className="inline-flex gap-2 items-center justify-end text-sm underline hover:cursor-pointer hover:text-blue-500 w-full mt-2" onClick={() => { router.push('/dang-nhap') }}>
+          <div
+            className="inline-flex gap-2 items-center justify-end text-sm text-primary-80 hover:cursor-pointer w-full mt-2"
+            onClick={() => {
+              router.push("/dang-nhap");
+            }}
+          >
             Back to login
           </div>
           <div className="flex flex-col gap-2 mt-3">

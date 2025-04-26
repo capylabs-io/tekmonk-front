@@ -1,4 +1,5 @@
-import { ShopItem, User } from "./common-types";
+import { User } from "./common-types";
+import { ShopItem } from "./shop";
 
 export type ClaimedItem = {
   id: number;

@@ -7,41 +7,49 @@ import { cn } from "@/lib/utils";
 import { Achievement, Mission } from "@/types/common-types";
 import { CardState } from "./types";
 import TextWithEllipsis from "./TextWithEllipsis";
+import { CommonButton } from "../common/button/CommonButton";
 
 type MissionCardContentProps = {
   data: Mission | Achievement;
   cardState: CardState;
   handleMissionOnClick: () => void;
+  isShowButtonClaim?: boolean;
 };
 
 export const MissionCardContent = ({
   data,
   cardState,
   handleMissionOnClick,
+  isShowButtonClaim = true,
 }: MissionCardContentProps) => {
   // Render the appropriate button based on the state
   const renderActionButton = () => {
+    if (!isShowButtonClaim) {
+      return null;
+    }
     switch (cardState) {
       case CardState.IN_PROGRESS:
         return (
-          <Button
-            urlIcon="/image/home/coin.png"
-            className="flex flex-row items-center justify-center py-[6px] px-[12px] gap-1 h-7 !bg-white !border-2 !border-gray-30 !text-primary-900 cursor-default rounded-md"
+          <CommonButton
+            className="flex flex-row items-center justify-center gap-1 h-7"
+            onClick={handleMissionOnClick}
+            disabled={true}
           >
-            <span className="text-SubheadXs font-medium">{data.reward}</span>
-          </Button>
+            <span className="text-SubheadXs font-medium text-white">
+              Nhận thưởng
+            </span>
+          </CommonButton>
         );
       case CardState.COMPLETED:
         return (
-          <Button
-            urlIcon="/image/home/coin.png"
-            className="flex flex-row items-center justify-center py-[6px] px-[12px] gap-1 h-7 !bg-primary-60 !border-2 !border-primary-70 shadow-[0px_2px_0px_#9A1571] rounded-md"
+          <CommonButton
+            className="flex flex-row items-center justify-center gap-1 h-7"
             onClick={handleMissionOnClick}
           >
             <span className="text-SubheadXs font-medium text-white">
-              {data.reward}
+              Nhận thưởng
             </span>
-          </Button>
+          </CommonButton>
         );
       case CardState.CLAIMED:
         return (
@@ -59,15 +67,11 @@ export const MissionCardContent = ({
       cardState === CardState.IN_PROGRESS &&
       data.currentProgress !== undefined
     ) {
-      return (
-        <div className="text-BodyXs text-gray-70">
-          {data.type === "Manual"
-            ? "0/1"
-            : `${data.currentProgress}/${data.requiredQuantity}`}
-        </div>
-      );
+      return data.type === "Manual"
+        ? "0/1"
+        : `${data.currentProgress}/${data.requiredQuantity}`;
     }
-    return null;
+    return undefined;
   };
 
   return (
@@ -78,8 +82,8 @@ export const MissionCardContent = ({
       <Image
         src={data.imageUrl || ""}
         alt={data.title || "mission"}
-        width={100}
-        height={100}
+        width={80}
+        height={80}
         className={cn(
           "object-contain h-1/2 relative z-10",
           cardState === CardState.IN_PROGRESS && "opacity-50 brightness-50"
@@ -91,11 +95,36 @@ export const MissionCardContent = ({
           {data.title}
         </h3>
 
-        <div className="mission-description-container text-BodyXs font-light text-gray-70 w-full h-8 text-center mt-1">
-          <TextWithEllipsis text={data.description || ""} maxLines={2} />
+        <div className="text-BodyXs font-light text-gray-70 w-full h-8 text-center mt-1">
+          <TextWithEllipsis
+            text={data.description || ""}
+            maxLines={2}
+            secondText={renderProgressIndicator()}
+          />
         </div>
 
-        {renderProgressIndicator()}
+        <div className="flex flex-row items-center justify-center gap-2">
+          <div className="flex items-center gap-1">
+            <Image
+              src="/image/home/coin.png"
+              alt="Point"
+              width={16}
+              height={16}
+              className="object-contain"
+            />
+            <span className="text-SubheadXs text-gray-95">{data.reward}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Image
+              src="/image/PointIcon.png"
+              alt="Point"
+              width={16}
+              height={16}
+              className="object-contain"
+            />
+            <span className="text-SubheadXs text-gray-95">{data.points}</span>
+          </div>
+        </div>
       </div>
       <div className="mt-2 relative z-10">{renderActionButton()}</div>
     </>
