@@ -16,6 +16,7 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { ArrowLeft } from "lucide-react";
 import { CardItem } from "@/components/shop/card-item";
 import Image from "next/image";
+import { ClaimedItem } from "@/types/claimed-item";
 export default function ShopItemDetail() {
   const router = useRouter();
   const { id } = useParams();
@@ -23,7 +24,11 @@ export default function ShopItemDetail() {
   const [pageSize] = useState(12);
   const [openModal, setOpenModal] = useState(false);
   const [itemData, setItemData] = useState<ShopItem | null>(null);
+  const [claimedItem, setClaimedItem] = useState<ClaimedItem | undefined>(
+    undefined
+  );
 
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [userInfo, getMe] = useUserStore((state) => [
     state.userInfo,
     state.getMe,
@@ -70,16 +75,17 @@ export default function ShopItemDetail() {
       };
       return await ReqBuyShopItem(shopItemUser);
     },
-    onSuccess: () => {
-      setOpenModal(false);
+    onSuccess: (data) => {
       success("Xong", "Mua vật phẩm thành công!");
+      setShowSuccessDialog(true);
+      setClaimedItem(data);
+      queryClient.invalidateQueries({ queryKey: ["shop-item", id] });
     },
     onError: (err) => {
       const message = HandleReturnMessgaeErrorLogin(err);
       error("Lỗi", message);
     },
     onSettled: () => {
-      setOpenModal(false);
       getMe();
       hide();
     },
@@ -156,9 +162,12 @@ export default function ShopItemDetail() {
         {itemData && (
           <ItemModal
             itemData={itemData}
+            claimedItem={claimedItem}
             isShowing={openModal}
             close={() => setOpenModal(false)}
             onBuy={buyItemMutation.mutate}
+            showSuccessDialog={showSuccessDialog}
+            setShowSuccessDialog={setShowSuccessDialog}
           />
         )}
       </div>

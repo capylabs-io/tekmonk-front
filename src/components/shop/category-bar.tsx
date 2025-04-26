@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ShopItemCarousel } from "./shop-item-carousel";
 import { ReqGetShopItems } from "@/requests/shopItem";
 import qs from "qs";
@@ -14,6 +14,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { cn } from "@/lib/utils";
+import { ClaimedItem } from "@/types/claimed-item";
 
 export const CategoryBar = ({
   categoryId,
@@ -32,9 +33,13 @@ export const CategoryBar = ({
     state.error,
   ]);
   const [show, hide] = useLoadingStore((state) => [state.show, state.hide]);
-
+  const queryClient = useQueryClient();
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [claimedItem, setClaimedItem] = useState<ClaimedItem | undefined>(
+    undefined
+  );
   const { data } = useQuery({
-    queryKey: ["post-item", categoryId],
+    queryKey: ["shop-item", categoryId],
     queryFn: async () => {
       const queryString = qs.stringify({
         filters: {
@@ -58,33 +63,32 @@ export const CategoryBar = ({
     refetchOnWindowFocus: false,
   });
 
-  const buyItemMutation = useMutation({
-    mutationFn: async (quantity: number) => {
+  const handleBuyItem = async (quantity: number) => {
+    try {
       show();
       if (!userInfo || !itemData) return null;
+
       const shopItemUser = {
         shop_item: itemData?.id,
         user: userInfo.id,
         quantity: quantity,
       };
-      return await ReqBuyShopItem(shopItemUser);
-    },
-    onSuccess: () => {
-      // Close the modal
-      setOpenModal(false);
+
+      const res = await ReqBuyShopItem(shopItemUser);
+
       success("Xong", "Mua vật phẩm thành công!");
-    },
-    onError: (err) => {
+      setClaimedItem(res);
+      queryClient.invalidateQueries({ queryKey: ["shop-item", categoryId] });
+      setShowSuccessDialog(true);
+    } catch (err) {
       const message = HandleReturnMessgaeErrorLogin(err);
-      // Show error message
       error("Lỗi", message);
-    },
-    onSettled: () => {
-      setOpenModal(false);
+      return null;
+    } finally {
       getMe();
       hide();
-    },
-  });
+    }
+  };
   const [openModal, setOpenModal] = useState(false);
   const [itemData, setItemData] = useState<ShopItem | null>(null);
   const [isShow, setIsShow] = useState(true);
@@ -115,7 +119,10 @@ export const CategoryBar = ({
           itemData={itemData}
           isShowing={openModal}
           close={() => setOpenModal(false)}
-          onBuy={buyItemMutation.mutate}
+          onBuy={handleBuyItem}
+          showSuccessDialog={showSuccessDialog}
+          setShowSuccessDialog={setShowSuccessDialog}
+          claimedItem={claimedItem}
         />
       )}
     </div>

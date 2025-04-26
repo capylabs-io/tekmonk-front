@@ -253,7 +253,7 @@ export default function MissionPage() {
           </div>
           <div>
             <div className="flex items-center">
-              <div className="text-yellow-500 font-semibold">
+              <div className="text-SubheadLg text-primary-900">
                 {userInfo?.balance}
               </div>
               <Image

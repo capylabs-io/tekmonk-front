@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Send } from 'lucide-react';
-import { CommentCard } from './CommentCard';
-import { Button } from '../common/button/Button';
-import { addCommentPost, getListCommentPost } from '@/requests/post';
-import { useLoadingStore } from '@/store/LoadingStore';
-import { useSnackbarStore } from '@/store/SnackbarStore';
-import { useQuery } from '@tanstack/react-query';
-import qs from 'qs';
-import { PostComment } from '@/types/common-types';
-import { StrapiResponse } from '@/types/strapi-types';
+import React, { useState } from "react";
+import { Send } from "lucide-react";
+import { CommentCard } from "./CommentCard";
+import { Button } from "../common/button/Button";
+import { addCommentPost, getListCommentPost } from "@/requests/post";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { PostComment } from "@/types/common-types";
+import { StrapiResponse } from "@/types/strapi-types";
+import { containsForbiddenWords } from "@/validation/validate-forbiden-word";
 
 type Props = {
   imageUrl?: string;
@@ -43,11 +44,20 @@ type Props = {
 //   },
 // ];
 
-export const PostCommentContent = ({ imageUrl, postId, onUpdateComment }: Props) => {
-  const [text, setText] = useState('');
+export const PostCommentContent = ({
+  imageUrl,
+  postId,
+  onUpdateComment,
+}: Props) => {
+  const [text, setText] = useState("");
   const { success, error } = useSnackbarStore();
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
-  const { data: listComment, refetch: refetchListPostComment } = useQuery<StrapiResponse<PostComment[]>>({
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
+  const { data: listComment, refetch: refetchListPostComment } = useQuery<
+    StrapiResponse<PostComment[]>
+  >({
     refetchOnWindowFocus: false,
     queryKey: ["post-comment"],
     queryFn: async () => {
@@ -59,18 +69,18 @@ export const PostCommentContent = ({ imageUrl, postId, onUpdateComment }: Props)
           {
             populate: {
               commentedBy: {
-                fields: ['username', 'id']
+                fields: ["username", "id"],
               },
               post: {
-                fields: ['id']
-              }
+                fields: ["id"],
+              },
             },
             filters: {
               post: {
-                id: Number(postId)
-              }
+                id: Number(postId),
+              },
             },
-            sort: ['createdAt:desc'],
+            sort: ["createdAt:desc"],
             pagination: {
               page: 1,
               pageSize: 100,
@@ -87,19 +97,24 @@ export const PostCommentContent = ({ imageUrl, postId, onUpdateComment }: Props)
   const handleSend = async () => {
     try {
       showLoading();
+      if (containsForbiddenWords(text)) {
+        error("Lỗi", "Nội dung bình luận không hợp lệ");
+        return;
+      }
       const res = await addCommentPost({
         content: text,
         postId: Number(postId),
       });
       if (res) {
-        success('Thành công', 'Đã thêm bình luận');
-        setText('');
+        success("Thành công", "Đã thêm bình luận");
+        setText("");
       }
     } catch (err) {
       console.log("error", err);
-      error('Lỗi', 'Đã xảy ra lỗi khi thêm bình luận');
+      error("Lỗi", "Đã xảy ra lỗi khi thêm bình luận");
     } finally {
       hideLoading();
+      setText("");
       refetchListPostComment();
       onUpdateComment?.();
     }
@@ -134,7 +149,8 @@ export const PostCommentContent = ({ imageUrl, postId, onUpdateComment }: Props)
       </div>
       <div className="space-y-5">
         {listComment?.data?.map((item: PostComment, index: number) => (
-          <CommentCard key={index}
+          <CommentCard
+            key={index}
             comment={item}
             name={item.commentedBy?.username}
             username={item.commentedBy?.username}

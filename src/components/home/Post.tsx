@@ -28,7 +28,7 @@ type Props = {
   imageUrl: string;
   thumbnailUrl: string;
   userName: string;
-  userRank: ReactNode;
+  userRank?: ReactNode;
   specialName: string;
   createdAt: string;
   likedCount: string;
@@ -115,7 +115,7 @@ export const Post = ({
   return (
     <>
       <div
-        className={classNames("relative", customClassname)}
+        className={classNames("relative cursor-pointer", customClassname)}
         onDoubleClick={(e) => {
           isAllowClickDetail && handleClickPostCard(e);
         }}

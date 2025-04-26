@@ -97,13 +97,13 @@ const Home = () => {
                         "User"
                       }
                       specialName={get(item, "postedBy.skills", "")}
-                      userRank={
-                        <span
-                          className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                        >
-                          IV
-                        </span>
-                      }
+                      // userRank={
+                      //   <span
+                      //     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
+                      //   >
+                      //     IV
+                      //   </span>
+                      // }
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))

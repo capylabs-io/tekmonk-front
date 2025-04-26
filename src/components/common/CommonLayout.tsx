@@ -37,14 +37,14 @@ export default function CommonLayout({
           </div>
 
           {/* Main Content - flex-grow makes it expand */}
-          <main className="min-w-0 flex-grow border-x">
+          <main className="min-w-0 flex-grow border-x border-gray-20">
             {/* Removed nested div, apply overflow directly if needed, or handle scrolling within mainContent component */}
             {mainContent}
           </main>
 
           {/* Right Sidebar */}
           {rightSidebar && (
-            <div className="sticky top-0 hidden h-screen w-96 flex-shrink-0 border-l p-4 xl:block">
+            <div className="sticky top-0 hidden h-screen w-96 flex-shrink-0 border-l border-gray-20 p-4 xl:block">
               {rightSidebar}
             </div>
           )}

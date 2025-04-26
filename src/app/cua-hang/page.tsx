@@ -1,15 +1,13 @@
 "use client";
-import { useState } from "react";
 import { ShopContent } from "@/components/shop/shop-content";
 import { InventoryContent } from "@/components/shop/inventory-content";
 import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
 import { useUserStore } from "@/store/UserStore";
 import Image from "next/image";
-// Tab options
-enum TabOptions {
-  SHOP = "shop",
-  INVENTORY = "inventory",
-}
+import {
+  useShopInventoryStore,
+  TabOptions,
+} from "@/store/switch-shop-inventory";
 
 // Tab data
 const TABS: TabItem[] = [
@@ -18,14 +16,15 @@ const TABS: TabItem[] = [
 ];
 
 export default function Shop() {
-  const [activeTab, setActiveTab] = useState<string>(TabOptions.SHOP);
+  // Use the shop inventory store instead of local state
+  const { activeTab, setActiveTab } = useShopInventoryStore();
 
   /** UseStore */
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
   // Tab switching handler
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
+    setActiveTab(tabId as TabOptions);
   };
 
   return (
@@ -36,7 +35,7 @@ export default function Shop() {
             <span>Cửa hàng</span>
           </div>
           <div className="flex items-center">
-            <div className="text-yellow-500 font-semibold">
+            <div className="text-SubheadLg text-primary-900">
               {userInfo?.balance}
             </div>
             <Image

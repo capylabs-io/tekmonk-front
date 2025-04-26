@@ -18,7 +18,6 @@ export const CardItem = ({
   onClick,
   className,
 }: Props) => {
-  console.log("quantity", quantity);
   return (
     <div
       className={`flex flex-col items-start p-0 gap-2 w-[156px] h-[204px] ${className}`}
