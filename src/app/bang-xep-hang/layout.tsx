@@ -2,7 +2,7 @@
 import { Button } from "@/components/common/button/Button";
 import Image from "next/image";
 import { useState } from "react";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
@@ -42,7 +42,7 @@ export default function Layout({
         </div>
       </div>
       <div className="col-span-8 py-5 overflow-y-auto">{children}</div>
-      <CreateProfileModal />
+      <CreatePostModal />
     </section>
   );
 }

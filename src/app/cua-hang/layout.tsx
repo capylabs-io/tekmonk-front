@@ -5,7 +5,7 @@ import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
 import { useState } from "react";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -35,7 +36,9 @@ export default function Layout({
   };
   const events = useEvents().slice(1, 4);
   const projects = useProjects().slice(1, 5);
-
+  const [userInfo] = useUserStore((state) => [
+    state.userInfo
+  ]);
   return (
     <>
       <CommonLayout
@@ -88,9 +91,9 @@ export default function Layout({
             <div className="h-full flex flex-col gap-y-4 px-10 py-5 border-gray-200 border-l col-span-3">
               {!usePathname().includes("/project") ? (
                 <>
-                  <PointCard point="9999" />
+                  <PointCard point={userInfo?.balance?.toString() || "0"} />
                   {/* <EventList listEvent={events} /> */}
-                  <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover bg-center h-full" />
+                  <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover bg-center h-[400px]" />
                 </>
               ) : (
                 <>
@@ -115,7 +118,7 @@ export default function Layout({
           </>
         }
       />
-      <CreateProfileModal />
+      <CreatePostModal />
     </>
   );
 }

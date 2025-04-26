@@ -1,0 +1,169 @@
+BÁO CÁO TỔNG HỢP CHỨC NĂNG
+HỆ THỐNG FRONTEND ADMIN TEKMONK
+
+I. TỔNG QUAN HỆ THỐNG
+
+Hệ thống TekMonk Frontend Admin là ứng dụng web được phát triển bằng Next.js, một framework React hiện đại, với mục đích quản lý và vận hành nền tảng học tập trực tuyến. Hệ thống được thiết kế theo mô hình SPA (Single Page Application) với các tính năng phân quyền, quản lý người dùng, quản lý lớp học, khóa học và nhiều chức năng khác.
+
+II. CÔNG NGHỆ SỬ DỤNG
+
+1. Framework chính: Next.js
+2. Ngôn ngữ lập trình: TypeScript
+3. Quản lý state: Zustand
+4. Xác thực: JWT (JSON Web Token)
+5. Style: Tailwind CSS
+6. Form management: React Hook Form + Zod validation
+7. HTTP Client: Axios
+
+III. CẤU TRÚC DỰ ÁN
+
+Dự án được tổ chức theo cấu trúc thư mục sau:
+- src/app: Chứa các route và layout của ứng dụng theo cấu trúc của Next.js App Router
+- src/components: Các component UI được tái sử dụng
+- src/store: Quản lý state toàn cục (Zustand)
+- src/requests: Các hàm gọi API
+- src/types: Định nghĩa kiểu dữ liệu TypeScript
+- src/lib: Các utility và helper functions
+- src/hooks: Custom hooks
+- src/validation: Schema validation (Zod)
+- src/contants: Các hằng số và enum
+
+IV. CÁC CHỨC NĂNG CHÍNH
+
+1. QUẢN LÝ NGƯỜI DÙNG
+
+- Đăng nhập/Đăng xuất: Hệ thống xác thực JWT với refresh token
+- Quản lý tài khoản: Xem, thêm, sửa, xóa tài khoản người dùng
+- Phân quyền: Phân chia quyền theo các vai trò (TEACHER, CLASSMANAGEMENT, MODERATOR, STUDENT)
+- Đổi mật khẩu: Cho phép reset và đổi mật khẩu
+
+2. QUẢN LÝ LỚP HỌC
+
+- Xem danh sách lớp học
+- Tạo lớp học mới
+- Quản lý buổi học của lớp
+- Điểm danh học viên
+- Theo dõi tiến độ học tập
+
+3. QUẢN LÝ KHÓA HỌC
+
+- Tạo và chỉnh sửa khóa học
+- Gán nhiệm vụ cho khóa học
+- Quản lý nội dung khóa học
+- Theo dõi hiệu suất khóa học
+
+4. QUẢN LÝ THÀNH TÍCH
+
+- Xem và quản lý thành tích của học viên
+- Cấp thành tích cho học viên
+- Theo dõi lịch sử thành tích
+
+5. QUẢN LÝ NHIỆM VỤ
+
+- Tạo và chỉnh sửa nhiệm vụ
+- Gán nhiệm vụ cho học viên
+- Theo dõi tiến độ hoàn thành nhiệm vụ
+
+6. QUẢN LÝ CHỨNG CHỈ
+
+- Cấu hình chứng chỉ
+- Phê duyệt yêu cầu cấp chứng chỉ
+- Quản lý chứng chỉ đã cấp
+
+7. QUẢN LÝ CỬA HÀNG
+
+- Cấu hình vật phẩm trong cửa hàng
+- Phê duyệt yêu cầu cấp vật phẩm
+- Quản lý giao dịch
+
+8. QUẢN LÝ TIN TỨC VÀ SỰ KIỆN
+
+- Tạo và quản lý tin tức
+- Quản lý sự kiện
+- Tạo và quản lý bài đăng tuyển dụng
+
+V. LUỒNG XỬ LÝ CHÍNH
+
+1. LUỒNG ĐĂNG NHẬP
+
+- Người dùng nhập thông tin đăng nhập (email/username và mật khẩu)
+- Hệ thống gửi yêu cầu xác thực đến API
+- Nếu thành công, hệ thống lưu JWT và refresh token vào state và localStorage
+- Redirect người dùng đến trang phù hợp với vai trò của họ
+- Nếu thất bại, hiển thị thông báo lỗi
+
+2. LUỒNG PHÊ DUYỆT CẤP CHỨNG CHỈ
+
+- Admin xem danh sách yêu cầu cấp chứng chỉ
+- Kiểm tra thông tin và điều kiện cấp chứng chỉ
+- Phê duyệt hoặc từ chối yêu cầu
+- Hệ thống ghi nhận và cập nhật trạng thái
+
+3. LUỒNG QUẢN LÝ LỚP HỌC
+
+- Tạo lớp học mới với thông tin cơ bản
+- Thêm học viên vào lớp học
+- Tạo các buổi học
+- Điểm danh học viên mỗi buổi học
+- Theo dõi và đánh giá tiến độ
+
+4. LUỒNG QUẢN LÝ TIN TỨC
+
+- Tạo bài viết mới với nội dung, hình ảnh
+- Phê duyệt bài viết
+- Xuất bản bài viết
+- Quản lý các bài viết đã xuất bản
+
+VI. CÁC THÀNH PHẦN UI CHÍNH
+
+1. Layout: Cấu trúc chung của ứng dụng với sidebar, header, content area
+2. Form components: Input, Select, Button, DatePicker, etc.
+3. Table components: Hiển thị dữ liệu dạng bảng với phân trang, sắp xếp
+4. Modal components: Hiển thị form, thông báo dưới dạng popup
+5. Card components: Hiển thị thông tin dạng card
+6. Chart components: Biểu đồ và visualizations cho dữ liệu
+7. Notification components: Hiển thị thông báo, alerts
+
+VII. QUẢN LÝ STATE
+
+Ứng dụng sử dụng Zustand để quản lý state toàn cục với các store chính:
+1. UserStore: Quản lý thông tin người dùng đăng nhập, token
+2. LoadingStore: Quản lý trạng thái loading toàn cục
+3. SnackbarStore: Quản lý hiển thị thông báo
+4. PostStore: Quản lý dữ liệu bài đăng
+5. ProfileStore: Quản lý thông tin profile người dùng
+6. ClassStore: Quản lý thông tin lớp học
+
+VIII. XỬ LÝ API VÀ AUTHENTICATION
+
+Ứng dụng sử dụng Axios để gọi API với cấu hình:
+- Interceptors cho việc thêm token vào header
+- Refresh token tự động khi token hết hạn
+- Xử lý lỗi và retry
+
+IX. ROUTING VÀ PHÂN QUYỀN
+
+Cấu trúc routing của ứng dụng được tổ chức theo Next.js App Router với các route chính:
+1. /dang-nhap: Trang đăng nhập
+2. /quan-ly: Nhóm trang quản lý với các route con:
+   - /quan-ly/lop-hoc-cua-toi: Quản lý lớp học
+   - /quan-ly/quan-ly-lop-hoc: Quản lý toàn bộ lớp học
+   - /quan-ly/khoa-hoc: Quản lý khóa học
+   - /quan-ly/nhiem-vu: Quản lý nhiệm vụ
+   - /quan-ly/thanh-tich: Quản lý thành tích
+   - /quan-ly/chung-chi: Quản lý chứng chỉ
+   - /quan-ly/xin-cap-chung-chi: Quản lý yêu cầu cấp chứng chỉ
+   - /quan-ly/cau-hinh-chung-chi: Cấu hình chứng chỉ
+   - /quan-ly/quan-ly-tai-khoan: Quản lý tài khoản
+   - /quan-ly/tin-tuc: Quản lý tin tức
+   - /quan-ly/su-kien: Quản lý sự kiện
+   - /quan-ly/tuyen-dung: Quản lý tuyển dụng
+   - /quan-ly/cau-hinh-cua-hang: Cấu hình cửa hàng
+   - /quan-ly/duyet-cap-vat-pham: Duyệt cấp vật phẩm
+   - /quan-ly/phe-duyet: Phê duyệt các yêu cầu
+
+X. KẾT LUẬN
+
+Hệ thống TekMonk Frontend Admin cung cấp một bộ công cụ toàn diện cho việc quản lý nền tảng học tập trực tuyến. Với các chức năng quản lý lớp học, khóa học, chứng chỉ và nhiều tính năng khác, ứng dụng đáp ứng đầy đủ nhu cầu quản trị và vận hành hệ thống giáo dục trực tuyến.
+
+Ứng dụng được phát triển trên nền tảng công nghệ hiện đại, với thiết kế hướng component, giúp dễ dàng mở rộng và bảo trì. Hệ thống phân quyền chi tiết đảm bảo tính bảo mật và phù hợp với vai trò của từng người dùng trong hệ thống. 

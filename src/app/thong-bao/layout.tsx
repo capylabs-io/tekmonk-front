@@ -4,7 +4,7 @@ import { EventList } from "@/components/home/EventList";
 import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useState } from "react";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import UserProfileLink from "@/components/common/UserProfileLink";
@@ -52,7 +52,7 @@ export default function Layout({
         {/* <EventList listEvent={events} /> */}
         <div className="w-full rounded-xl bg-[url('/image//home/banner-layout.png')] bg-no-repeat bg-cover h-full" />
       </div>
-      <CreateProfileModal />
+      <CreatePostModal />
     </section>
   );
 }

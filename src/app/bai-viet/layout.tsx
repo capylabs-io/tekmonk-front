@@ -5,7 +5,7 @@ import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
 import { useEvents } from "@/lib/hooks/useEvent";
 import { useState } from "react";
-import { CreateProfileModal } from "@/components/home/CreateProfileModal";
+import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
+import { PostTypeEnum } from "@/types";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -26,8 +27,9 @@ export default function Layout({
   const router = useCustomRouter();
   const [userName, setUserName] = useState("HENRY NGUYEN");
   const [userRank, setUserRank] = useState("BẠC IV");
-  const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
+  const [show, hide, setTypeModal] = useProfileStore((state) => [state.show, state.hide, state.setTypeModal]);
   const handleOpenModal = () => {
+    setTypeModal(PostTypeEnum.POST);
     show();
   };
   const handleRidirectAdminPage = () => {
@@ -115,7 +117,7 @@ export default function Layout({
           </>
         }
       />
-      <CreateProfileModal />
+      <CreatePostModal />
     </>
   );
 }

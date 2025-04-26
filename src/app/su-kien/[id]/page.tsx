@@ -35,8 +35,8 @@ export default function Page() {
     return <Loading />;
   }
   return (
-    <div className="w-full flex flex-col items-center gap-8">
-      <div className="w-full max-w-[628px] mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
+    <div className="w-full flex flex-col items-center gap-8 pt-[28px] pb-[64px]">
+      <div className="w-full container mx-auto mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
         <div className="w-full h-[360px] rounded-2xl relative">
           <Image
             alt="Demo image"
@@ -117,6 +117,9 @@ export default function Page() {
           </div>
         </div>
       </div>
+      <div className="w-full flex flex-col items-center px-[80px]">
+        <div className="w-full h-[1px] bg-gray-20"></div>
+      </div>
       {randomNews?.data && (
         <RelatedInfo
           type="event"
@@ -124,7 +127,6 @@ export default function Page() {
           title="SỰ KIỆN GẦN ĐÂY"
         />
       )}
-      <LandingFooter />
     </div>
   );
 }
