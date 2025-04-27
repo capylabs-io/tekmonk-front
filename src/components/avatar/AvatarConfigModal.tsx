@@ -169,7 +169,7 @@ export const AvatarConfigModal = () => {
 
   return isShowing && (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
-      <div className="relative mx-auto w-max flex flex-col h-[50%] rounded-3xl bg-white overflow-y-auto p-6">
+      <div className="relative mx-auto w-max flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto p-6">
         <div className='text-HeadingSm'>Tuỳ chỉnh ảnh đại diện</div>
         <Tabs defaultValue="cloth" className="w-full h-full overflow-y-auto mt-2">
           <TabsList className="w-full border-b border-gray-200 !justify-start">

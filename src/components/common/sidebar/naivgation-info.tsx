@@ -6,7 +6,6 @@ import UserProfileLink from "../UserProfileLink";
 import { useCustomRouter } from "../router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useProfileStore } from "@/store/ProfileStore";
-import { CreatePostModal } from "@/components/home/CreatePostModal";
 
 export const NavigationInfo = () => {
   const router = useCustomRouter();
@@ -32,7 +31,7 @@ export const NavigationInfo = () => {
               variant="secondary"
               onClick={handleRidirectAdminPage}
             >
-              Quản lý
+              Trang chủ
             </CommonButton>
             <CommonButton
               className="w-full !rounded-3xl h-12"
@@ -44,13 +43,22 @@ export const NavigationInfo = () => {
           <UserProfileLink userName={userInfo?.username || ""} />
         </div>
       ) : (
-        <CommonButton
-          className="w-full !rounded-3xl h-12"
-          variant="primary"
-          onClick={() => router.push(ROUTE.LOGIN)}
-        >
-          Đăng nhập
-        </CommonButton>
+        <div className="flex flex-col gap-y-4 mt-4">
+          <CommonButton
+            className="w-full !rounded-3xl h-12"
+            variant="secondary"
+            onClick={handleRidirectAdminPage}
+          >
+            Trang chủ
+          </CommonButton>
+          <CommonButton
+            className="w-full !rounded-3xl h-12"
+            variant="primary"
+            onClick={() => router.push(ROUTE.LOGIN)}
+          >
+            Đăng nhập
+          </CommonButton>
+        </div>
       )}
     </>
   );

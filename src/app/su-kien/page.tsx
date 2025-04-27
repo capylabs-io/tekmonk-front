@@ -130,7 +130,7 @@ export default function Event() {
             <Loading />
           </div>
           :
-          <div className="w-full gap-6 flex flex-wrap overflow-y-auto">
+          <div className="w-full gap-6 flex flex-wrap">
             {data && data.data && data.data.length > 0 ?
               data.data?.map((item, index) => {
                 return (

@@ -80,22 +80,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center px-8">
-        <div className="text-xl text-primary-900">Trang chủ
-        </div>
-        {
-          tabValue === "project" && (
-            <CommonButton
-              variant="secondary"
-              className="w-full !rounded-3xl h-12"
-              onClick={handleOpenModal}
-            >
-              Đăng dự án
-            </CommonButton>
-          )
-        }
-      </div>
-      <Tabs defaultValue="all" className="w-full mt-5" onValueChange={handleTabChange}>
+      <Tabs defaultValue="all" className="w-full">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>

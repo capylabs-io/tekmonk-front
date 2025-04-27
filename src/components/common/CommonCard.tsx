@@ -7,7 +7,7 @@ interface CommonCardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   size?: "small" | "medium" | "large";
   isActive?: boolean;
-  onClick?: () => void;
+  onCardClick?: () => void;
 }
 
 export const CommonCard: React.FC<CommonCardProps> = ({
@@ -15,12 +15,12 @@ export const CommonCard: React.FC<CommonCardProps> = ({
   className,
   size = "medium",
   isActive = false,
-  onClick,
+  onCardClick,
   ...props
 }) => {
   return (
     <div
-      onClick={onClick}
+      onClick={onCardClick}
       className={cn(
         className,
         "hover:cursor-pointer",

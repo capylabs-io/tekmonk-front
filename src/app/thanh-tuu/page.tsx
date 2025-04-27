@@ -1,6 +1,6 @@
 "use client";
 import { CommonButton } from "@/components/common/button/CommonButton";
-import { TabItem, TabNavigation } from "@/components/common/TabNavigation";
+import { TabItem } from "@/components/common/TabNavigation";
 import { AuthGuard } from "@/components/hoc/auth-guard";
 import { MissionCard } from "@/components/mission/MissionCard";
 import {
@@ -23,7 +23,6 @@ import {
   ReqClaimAchievement,
   ReqGetAllAchievementsInfo,
 } from "@/requests/achievement";
-import { ReqClaimMission, ReqGetMissionInfo } from "@/requests/mission";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
@@ -34,8 +33,9 @@ import qs from "qs";
 import { useState } from "react";
 import Image from "next/image";
 import CommonPagination from "@/components/admin/common-pagination";
+
 // Filter dropdown component
-const MissionFilter = ({
+const AchievementFilter = ({
   filterValue,
   onFilterChange,
 }: {
@@ -88,7 +88,7 @@ const MissionFilter = ({
   );
 };
 
-export default function MissionPage() {
+export default function AchievementPage() {
   /** UseState */
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(30);
@@ -111,7 +111,7 @@ export default function MissionPage() {
   /** UseQuery */
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
-    queryKey: ["mission-list", page, pageSize, filterValue],
+    queryKey: ["mission-achievement", page, pageSize, filterValue],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -119,8 +119,7 @@ export default function MissionPage() {
           pageSize,
           status: filterValue,
         });
-
-        return await ReqGetMissionInfo(queryString);
+        return await ReqGetAllAchievementsInfo(queryString);
       } catch (err) {
         console.log("mission page => ", err);
       }
@@ -132,7 +131,7 @@ export default function MissionPage() {
     mutationFn: async (id: number) => {
       try {
         show();
-        await ReqClaimMission(id);
+        await ReqClaimAchievement(id);
         setClaimDialog(true);
       } catch (err) {
         console.log("mission page => ", err);
@@ -140,19 +139,19 @@ export default function MissionPage() {
       } finally {
         hide();
         queryClient.invalidateQueries({
-          queryKey: ["mission-list"],
+          queryKey: ["mission-achievement", page, pageSize, filterValue],
         });
         await getMe();
       }
     },
   });
 
+  /** Functions */
   const handleFilterChange = (value: string) => {
     setFilterValue(value);
   };
-
-  // Render mission content
-  const renderMissionContent = () => {
+  // Render achievement content
+  const renderAchievementContent = () => {
     return (
       <div className="px-4 py-6">
         {isLoading ? (
@@ -161,14 +160,14 @@ export default function MissionPage() {
           </div>
         ) : data?.data && data.data.length > 0 ? (
           <>
-            <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
-              {data.data.map((mission, index: number) => (
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {data.data.map((achievement: Achievement, index: number) => (
                 <MissionCard
                   key={index}
-                  data={mission}
+                  data={achievement}
                   onClick={() => {
-                    updateMission(mission.historyId ?? 0); // Add null check with default value
-                    setClaimData(mission);
+                    updateMission(achievement.historyId ?? 0);
+                    setClaimData(achievement);
                   }}
                 />
               ))}
@@ -186,7 +185,7 @@ export default function MissionPage() {
           </>
         ) : (
           <div className="text-center w-full py-10">
-            <p className="text-gray-500">Không có nhiệm vụ nào</p>
+            <p className="text-gray-500">Không có thành tựu nào</p>
           </div>
         )}
       </div>
@@ -198,20 +197,20 @@ export default function MissionPage() {
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex items-center justify-between px-4">
           <div className="text-SubheadLg text-gray-95">
-            <span>Nhiệm vụ</span>
+            <span>Thành tựu</span>
           </div>
         </div>
 
         {/* Filter Component */}
         <div className="w-full flex justify-end px-4">
-          <MissionFilter
+          <AchievementFilter
             filterValue={filterValue}
             onFilterChange={handleFilterChange}
           />
         </div>
 
         {/* Tab Content */}
-        <div>{renderMissionContent()}</div>
+        <div>{renderAchievementContent()}</div>
 
         {/* Show Dialog when user click to claim here */}
         <Dialog open={claimDialog} onOpenChange={setClaimDialog}>

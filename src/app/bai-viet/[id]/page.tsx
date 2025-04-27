@@ -14,6 +14,7 @@ import { useUserStore } from "@/store/UserStore";
 import { useQuery } from "@tanstack/react-query";
 import Script from "next/script";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { AuthGuard } from "@/components/hoc/auth-guard";
 
 // Thêm kiểu cho window.FB
 declare global {
@@ -124,7 +125,7 @@ export default function Page({ params }: { params: { id: number } }) {
   };
 
   return (
-    <>
+    <AuthGuard>
       <Script
         id="facebook-jssdk"
         strategy="afterInteractive"
@@ -172,6 +173,6 @@ export default function Page({ params }: { params: { id: number } }) {
           />
         </div>
       </div>
-    </>
+    </AuthGuard>
   );
 }

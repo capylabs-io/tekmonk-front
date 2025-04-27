@@ -88,10 +88,12 @@ export const EventList = () => {
     <div className="w-full rounded-2xl border border-gray-200 overflow-hidden">
       <div className="flex justify-between items-center p-4 border-b border-gray-200">
         <h3 className="text-SubheadMd text-gray-95">SỰ KIỆN</h3>
-        <ArrowRight
-          className="h-5 w-5 text-gray-500 cursor-pointer hover:text-primary-90 transition-colors"
+        <div
+          className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
           onClick={() => router.push(ROUTE.EVENTS)}
-        />
+        >
+          Xem thêm
+        </div>
       </div>
       <div className="flex flex-col divide-y">
         {data?.data.map((event) => {

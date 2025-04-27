@@ -21,8 +21,133 @@ import { get } from "lodash";
 import moment from "moment";
 import { SearchNewContent } from "@/components/news/SearchNewContent";
 import classNames from "classnames";
+export default function News() {
+  //use state
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const handleLoadMoreContentt = () => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
-export const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
+  // use query
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchNews } =
+    useInfiniteQuery({
+      refetchOnWindowFocus: false,
+      queryKey: ["news"],
+      queryFn: async ({ pageParam = 1 }) => {
+        try {
+          const queryString = qs.stringify({
+            pagination: {
+              page: pageParam,
+              pageSize: 4,
+            },
+            filters: {
+              type: "news",
+              status: "public",
+              title: {
+                $contains: searchValue,
+              },
+            },
+            populate: "*",
+          });
+          return await ReqGetAllNews(queryString);
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      },
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.meta?.pagination.pageCount
+          ? allPages.length + 1
+          : undefined;
+      },
+    });
+
+  const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
+    queryKey: ["news/random"],
+    queryFn: async () => {
+      try {
+        return await ReqGetRamdomNews("news");
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+  });
+
+
+  const handleSearchNews = (value: string) => {
+    setSearchValue(value);
+    refetchNews();
+  };
+  return (
+    <>
+      <div className={classNames("w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
+        {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
+          <>
+            <div className="lg:col-span-2 col-span-3">
+              {
+                randomNews?.data && randomNews?.data?.length > 0 ?
+                  <>
+                    <ShowCarouselItemsComponent data={randomNews?.data || []} />
+                    <div className="w-full h-[1px] bg-gray-20 my-6"></div>
+                    <FeaturedNewsComponent
+                      data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
+                      onLoadMore={handleLoadMoreContentt}
+                      isFetchingNextPage={isFetchingNextPage}
+                    />
+                  </> :
+                  <>
+                    <div className="w-full h-full flex flex-col items-center justify-center">
+                      <Image
+                        alt="empty-state"
+                        src="/image/empty-data-image.png"
+                        width={300}
+                        height={200}
+                      />
+                      <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
+                      <div className="text-BodyMd text-gray-70">
+                        Chúng tôi sẽ sớm cập nhật thông tin mới
+                      </div>
+                    </div>
+                  </>
+              }
+
+            </div>
+            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
+              <Input
+                type="text"
+                placeholder="Tìm kiếm article theo từ khoá"
+                isSearch={true}
+                value={searchValue}
+                onChange={setSearchValue}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setIsSearch(true);
+                    refetchNews();
+                  }
+                }}
+              />
+              {
+                randomNews?.data && randomNews?.data?.length > 0 &&
+                <SuggestComponent data={randomNews?.data || []} />
+              }
+              <Image
+                src="/image/home/banner-layout.png"
+                alt="Default"
+                width={220}
+                height={350}
+                className="w-full object-cover rounded-2xl"
+              />
+            </div>
+          </>
+        }
+      </div>
+    </>
+  );
+}
+const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
   const router = useCustomRouter();
   const [carouselIndex, setCarouselIndex] = useState(0);
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
@@ -281,129 +406,3 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
     </div>
   );
 };
-export default function News() {
-  //use state
-  const [isSearch, setIsSearch] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const handleLoadMoreContentt = () => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  };
-
-  // use query
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchNews } =
-    useInfiniteQuery({
-      refetchOnWindowFocus: false,
-      queryKey: ["news"],
-      queryFn: async ({ pageParam = 1 }) => {
-        try {
-          const queryString = qs.stringify({
-            pagination: {
-              page: pageParam,
-              pageSize: 4,
-            },
-            filters: {
-              type: "news",
-              status: "public",
-              title: {
-                $contains: searchValue,
-              },
-            },
-            populate: "*",
-          });
-          return await ReqGetAllNews(queryString);
-        } catch (error) {
-          return Promise.reject(error);
-        }
-      },
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        return lastPage.meta?.pagination.pageCount
-          ? allPages.length + 1
-          : undefined;
-      },
-    });
-
-  const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
-    queryKey: ["news/random"],
-    queryFn: async () => {
-      try {
-        return await ReqGetRamdomNews("news");
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    },
-  });
-
-
-  const handleSearchNews = (value: string) => {
-    setSearchValue(value);
-    refetchNews();
-  };
-  return (
-    <>
-      <div className={classNames("w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
-        {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
-          <>
-            <div className="lg:col-span-2 col-span-3">
-              {
-                randomNews?.data && randomNews?.data?.length > 0 ?
-                  <>
-                    <ShowCarouselItemsComponent data={randomNews?.data || []} />
-                    <div className="w-full h-[1px] bg-gray-20 my-6"></div>
-                    <FeaturedNewsComponent
-                      data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
-                      onLoadMore={handleLoadMoreContentt}
-                      isFetchingNextPage={isFetchingNextPage}
-                    />
-                  </> :
-                  <>
-                    <div className="w-full h-full flex flex-col items-center justify-center">
-                      <Image
-                        alt="empty-state"
-                        src="/image/empty-data-image.png"
-                        width={300}
-                        height={200}
-                      />
-                      <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
-                      <div className="text-BodyMd text-gray-70">
-                        Chúng tôi sẽ sớm cập nhật thông tin mới
-                      </div>
-                    </div>
-                  </>
-              }
-
-            </div>
-            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
-              <Input
-                type="text"
-                placeholder="Tìm kiếm article theo từ khoá"
-                isSearch={true}
-                value={searchValue}
-                onChange={setSearchValue}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setIsSearch(true);
-                    refetchNews();
-                  }
-                }}
-              />
-              {
-                randomNews?.data && randomNews?.data?.length > 0 &&
-                <SuggestComponent data={randomNews?.data || []} />
-              }
-              <Image
-                src="/image/home/banner-layout.png"
-                alt="Default"
-                width={220}
-                height={350}
-                className="w-full object-cover rounded-2xl"
-              />
-            </div>
-          </>
-        }
-      </div>
-    </>
-  );
-}

@@ -8,6 +8,7 @@ import {
   Home,
   Newspaper,
   ShoppingCart,
+  Trophy,
   User,
   Zap,
   Award
@@ -47,6 +48,14 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={usePathname().includes("/chung-chi")}
         iconElement={<Award size={20} />}
         url="/chung-chi"
+
+        hidden={!isConnected()}
+      />
+      <MenuCard
+        title="Thành tựu"
+        active={usePathname().includes("/thanh-tuu")}
+        iconElement={<Trophy size={20} />}
+        url="/thanh-tuu"
         hidden={!isConnected()}
       />
       <MenuCard

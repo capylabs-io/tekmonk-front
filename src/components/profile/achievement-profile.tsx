@@ -10,12 +10,17 @@ import { useAchievementHistory } from "@/hooks/use-achievement-history";
 import { MissionDialog } from "../mission/MissionDialog";
 import { AchievementHistoryDialog } from "../mission/achievement-history-dialog";
 import { useState } from "react";
-
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
+import { useUserStore } from "@/store/UserStore";
 const TOTAL_ACHIEVEMENTS = 9;
 
 export const AchievementProfile = ({ id }: { id: number }) => {
+  const router = useCustomRouter();
   const [page, setPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(TOTAL_ACHIEVEMENTS);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const userId = userInfo?.id;
   const [openAchievementHistoryDialog, setOpenAchievementHistoryDialog] =
     useState(false);
   const { data: achievements, isLoading } = useQuery({
@@ -43,6 +48,14 @@ export const AchievementProfile = ({ id }: { id: number }) => {
     pageSize: itemsPerPage,
     id,
   });
+
+  const handleOpenAchievementHistoryDialog = () => {
+    if (userId === id) {
+      router.push(ROUTE.ACHIEVEMENT);
+      return;
+    }
+    setOpenAchievementHistoryDialog(true);
+  };
 
   if (isLoading) {
     return (
@@ -76,7 +89,7 @@ export const AchievementProfile = ({ id }: { id: number }) => {
         <div className="text-gray-95 text-SubheadLg">Thành tựu</div>
         <div
           className="cursor-pointer"
-          onClick={() => setOpenAchievementHistoryDialog(true)}
+          onClick={handleOpenAchievementHistoryDialog}
         >
           Xem thêm
         </div>
