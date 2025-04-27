@@ -3,10 +3,11 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { toast, ToastContainer } from "react-toastify";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 const WithAuth = (WrappedComponent: React.FC) => {
   const Comp: React.FC = () => {
-    const router = useRouter();
+    const router = useCustomRouter();
     const isConnected = useUserStore((state) => state.isConnected);
     useEffect(() => {
       if (!isConnected()) {

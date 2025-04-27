@@ -136,7 +136,7 @@ export default function Event() {
                 return (
                   <div
                     key={index}
-                    className="w-[411px] h-[376px] flex flex-col items-center gap-4 self-stretch"
+                    className="w-[411px] max-h-[400px] flex flex-col items-center gap-4 self-stretch"
                     onClick={() => handleRedirectDetail(item.id)}
                   >
                     <Image
@@ -191,7 +191,7 @@ export default function Event() {
             }
           </div>
       }
-      <div className=" w-full flex items-end lg:justify-end justify-center">
+      <div className=" w-full flex justify-center">
         <CommonPagination
           showDetails={false}
           totalItems={data?.data?.length || 0}
@@ -206,7 +206,7 @@ export default function Event() {
 
   )
   return (
-    <div className={classNames("w-full flex flex-col items-center gap-8 px-[80px] py-7 mt-16", data?.data && data?.data?.length > 0 ? "" : "h-[calc(100vh-64px-372px)]")}>
+    <div className={classNames("w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16")}>
       <BannerCard className="w-full rounded-3xl h-[500px]">
         <div className="flex flex-col items-center gap-2">
           <div className="text-DisplayMd text-gray-10">Sự kiện của TekMonk</div>

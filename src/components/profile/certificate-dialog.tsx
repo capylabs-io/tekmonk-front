@@ -48,10 +48,10 @@ export const CertificateDialog = ({
                 className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-2"
               >
                 <Image
-                  src={get(certificate, "certificate.imgUrl") || ""}
+                  src={get(certificate, "certificate.certificatePdfConfig.backgroundUrl") || ""}
                   alt={certificate.certificate?.name || "Certificate"}
-                  width={56}
-                  height={56}
+                  width={100}
+                  height={100}
                   className="object-contain"
                   onError={(e) => {
                     e.currentTarget.src = "/image/placeholder.png";

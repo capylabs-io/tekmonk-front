@@ -65,7 +65,7 @@ export const Navbar = () => {
       >
         <div className="flex items-center justify-between px-4 w-full">
           {/* Logo */}
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-10">
             <Link href="/" className="flex items-center">
               <Image
                 src="/image/app-logo.png"
@@ -84,10 +84,10 @@ export const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-4 text-SubheadMd text-gray-95">
+            <nav className="hidden md:flex items-center space-x-6 text-SubheadMd text-gray-95">
               <Link
                 href="https://courses.tekmonk.edu.vn/"
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
                 Khóa học
               </Link>
@@ -99,19 +99,19 @@ export const Navbar = () => {
               </Link> */}
               <Link
                 href={ROUTE.NEWS}
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
                 Tin tức
               </Link>
               <Link
                 href={ROUTE.HIRING}
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
                 Tuyển Dụng
               </Link>
               <Link
                 href="/su-kien"
-                className="text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
               >
                 Sự kiện
               </Link>
@@ -121,16 +121,20 @@ export const Navbar = () => {
           {/* Action Buttons */}
           <div
             className={cn(
-              "flex items-center space-x-4 w-[200px] justify-end",
-              isConnected() && "w-[120px]"
+              "flex items-center space-x-4 justify-end "
             )}
           >
             {/* <Link
-              href="/lien-he"
+              href="/bang-tin"
               className="hidden md:inline-flex text-SubheadMd text-gray-95"
             >
-              Liên hệ
+              Vào bảng tin
             </Link> */}
+            <CommonButton variant="secondary" className="h-8 text-white md:block hidden">
+              <Link href={ROUTE.NEWS_FEED} className="text-SubheadSm">
+                Vào bảng tin
+              </Link>
+            </CommonButton>
             {isConnected() ? (
               <div className="flex items-center xl:justify-between justify-center relative md:block">
                 <Dialog open={isMenuOpen} onOpenChange={toggleMenu}>

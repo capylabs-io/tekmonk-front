@@ -1,7 +1,7 @@
 "use client";
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { PostCommentContent } from "@/components/home/PostCommentContent";
 import { Post } from "@/components/home/Post";
 import { PostType } from "@/types";
@@ -13,6 +13,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
 import { useQuery } from "@tanstack/react-query";
 import Script from "next/script";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 // Thêm kiểu cho window.FB
 declare global {
@@ -26,7 +27,7 @@ declare global {
 }
 
 export default function Page({ params }: { params: { id: number } }) {
-  const router = useRouter();
+  const router = useCustomRouter();
   // const [currentPost, setCurrentPost] = useState<PostType>();
   const [hideLoading, showLoading] = useLoadingStore((state) => [
     state.hide,

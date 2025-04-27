@@ -11,7 +11,9 @@ export default function Layout({
   return (
     <div className="flex flex-col items-center">
       <Navbar />
-      {children}
+      <div className="w-full h-full px-[80px]">
+        {children}
+      </div>
       <LandingFooter />
     </div>
   );

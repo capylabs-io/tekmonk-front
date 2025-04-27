@@ -17,8 +17,9 @@ import { ArrowLeft } from "lucide-react";
 import { CardItem } from "@/components/shop/card-item";
 import Image from "next/image";
 import { ClaimedItem } from "@/types/claimed-item";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 export default function ShopItemDetail() {
-  const router = useRouter();
+  const router = useCustomRouter();
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12);

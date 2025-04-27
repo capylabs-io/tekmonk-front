@@ -7,6 +7,7 @@ interface CommonCardProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   size?: "small" | "medium" | "large";
   isActive?: boolean;
+  onClick?: () => void;
 }
 
 export const CommonCard: React.FC<CommonCardProps> = ({
@@ -14,10 +15,12 @@ export const CommonCard: React.FC<CommonCardProps> = ({
   className,
   size = "medium",
   isActive = false,
+  onClick,
   ...props
 }) => {
   return (
     <div
+      onClick={onClick}
       className={cn(
         className,
         "hover:cursor-pointer",
@@ -31,10 +34,10 @@ export const CommonCard: React.FC<CommonCardProps> = ({
         boxShadow: isActive
           ? "none"
           : size === "small"
-          ? "0px 2px 0px #DDD0DD"
-          : size === "medium"
-          ? "0px 4px 0px #DDD0DD"
-          : "0px 8px 0px #DDD0DD",
+            ? "0px 2px 0px #DDD0DD"
+            : size === "medium"
+              ? "0px 4px 0px #DDD0DD"
+              : "0px 8px 0px #DDD0DD",
       }}
       {...props}
     >

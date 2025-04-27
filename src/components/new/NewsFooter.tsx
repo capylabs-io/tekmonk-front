@@ -5,8 +5,8 @@ import Link from "next/link";
 
 export const LandingFooter = () => {
   return (
-    <div className="bg-[#320130] text-white p-[80px] w-full">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <div className="bg-[#320130] p-[80px] text-white w-full">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div className="space-y-4 mb-6 md:mb-0">
           {/* Logo */}
           <Image alt="" src="/image/app-logo-white.png" width={159} height={32} />

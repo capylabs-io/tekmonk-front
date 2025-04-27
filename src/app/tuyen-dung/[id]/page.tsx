@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
 import { get } from "lodash";
 import { useEffect } from "react";
+import moment from "moment";
 export default function Page() {
   const router = useCustomRouter();
   const { id } = useParams();
@@ -37,12 +38,12 @@ export default function Page() {
   }
 
   return (
-    <div className="w-full flex flex-col items-center gap-8  pt-[28px] pb-[64px]">
-      <div className="w-full container mx-auto mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
+    <div className="w-full  container mx-auto flex flex-col items-center gap-8  pt-[28px] pb-[64px]">
+      <div className="w-full mt-16 p-2 flex flex-col items-center justify-center gap-4 ">
         <Image
           alt="Demo image"
-          src="/image/landing/demo1.png"
-          width={100}
+          src={data?.data.thumbnail || "/image/landing/demo1.png"}
+          width={800}
           height={360}
           className="w-full h-[360px] object-cover rounded-2xl"
         />
@@ -86,27 +87,27 @@ export default function Page() {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <div className="flex items-center text-SubheadMd text-gray-95 gap-2">
             <Banknote className="text-gray-70" size={16} />
-            <div>{data && data.data.salary}</div>
+            <div>{data && data.data.salary || "Lương thỏa thuận"}</div>
           </div>
           <div className="flex items-start text-BodyMd text-gray-95 gap-2">
             <MapPin className="text-gray-70 mt-1" size={16} />
-            <div>{data && data.data.location}</div>
+            <div>{data && data.data.location || "Không xác định"}</div>
           </div>
         </div>
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 w-full">
           <div className="text-HeadingMd text-gray-95">
             {data && data.data.title}
           </div>
           <div className="flex items-center justify-between w-full">
             <div className="text-BodySm text-gray-70">
-              {data && data.data.createdAt}
+              {data && moment(data.data.createdAt).format("DD/MM/YYYY HH:mm")}
             </div>
             <div className="flex items-center justify-center gap-1">
               <div className="text-BodySm text-gray-70">Đăng tải bởi:</div>
-              <div className="text-SubheadSm text-gray-95">Admin</div>
+              <div className="text-SubheadSm text-gray-95">Tekmonk</div>
             </div>
           </div>
-          <div className="text-BodyMd text-gray-95">
+          <div className="text-BodyMd text-gray-95  w-full">
             <div
               dangerouslySetInnerHTML={{
                 __html: (data && data.data.content) || "",
@@ -115,7 +116,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col items-center px-[80px]">
+      <div className="w-full flex flex-col items-center">
         <div className="w-full h-[1px] bg-gray-20"></div>
       </div>
       <RelatedInfo

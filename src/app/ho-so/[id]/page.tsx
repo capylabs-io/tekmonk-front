@@ -19,13 +19,14 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Settings } from "lucide-react";
+import { Settings, Share2 } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
 import { useState } from "react";
 import { Achievement } from "@/types/common-types";
 import { Mission } from "@/types/common-types";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 export default function Profile() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ export default function Profile() {
   const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
   const { data: guestInfor } = useGetUserQuery(id as string);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
-
+  const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
 
@@ -58,6 +59,12 @@ export default function Profile() {
     },
     enabled: !!guestInfor?.id,
   });
+
+  const handleShareProfile = () => {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/ho-so/${guestInfor?.id}`;
+    window.navigator.clipboard.writeText(url);
+    success("Hồ sơ cá nhân ", "Đã copy link hồ sơ");
+  };
 
   const showAvatarModal = () => {
     show();
@@ -89,14 +96,24 @@ export default function Profile() {
           {/* <Button outlined className="text-primary-900 text-sm border">
             Hồ sơ
           </Button> */}
+
           {userInfo && userInfo.id === guestInfor?.id && (
-            <Button
-              outlined
-              className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
-              onClick={showAvatarModal}
-            >
-              <Settings size={24} className="text-primary-600" />
-            </Button>
+            <>
+              <Button
+                outlined
+                className="border border-gray-95 rounded-lg !p-3"
+                onClick={handleShareProfile}
+              >
+                <Share2 size={24} className="text-gray-95" />
+              </Button>
+              <Button
+                outlined
+                className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+                onClick={showAvatarModal}
+              >
+                <Settings size={24} className="text-primary-600" />
+              </Button>
+            </>
           )}
         </div>
       </div>

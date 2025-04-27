@@ -24,6 +24,8 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { useMemo } from "react";
 
 
 type Props = {
@@ -73,7 +75,7 @@ export const Post = ({
   onUpdatePost,
   isDetail,
 }: Props) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const handleOnClick = (value: any) => {
     onVerifiedPost?.(value);
   };
@@ -93,7 +95,9 @@ export const Post = ({
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
-
+  const taggedList = useMemo(() => {
+    return taggedUsers?.filter(user => user.id.toString() !== userInfo?.id.toString());
+  }, [taggedUsers]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
@@ -176,11 +180,11 @@ export const Post = ({
             specialName={specialName}
           />
           {
-            taggedUsers && taggedUsers?.length > 0 &&
+            taggedList && taggedList?.length > 0 &&
             <div className="flex items-center gap-1">
               cùng với
-              <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => router.push(`/ho-so/${taggedUsers[0]?.id}`)}>{taggedUsers[0]?.username}</div>
-              và <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}>{taggedUsers.length - 1} người khác.</div>
+              <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => router.push(`/ho-so/${taggedList[0]?.id}`)}>{taggedList[0]?.username}</div>
+              và <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}>{taggedList.length - 1} người khác.</div>
             </div>
           }
           {isVerified && (

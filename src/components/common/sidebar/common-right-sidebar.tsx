@@ -17,7 +17,7 @@ export const CommonRightSidebar = () => {
   switch (true) {
     case true:
       return (
-        <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto max-h-screen hide-scrollbar">
+        <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto h-screen hide-scrollbar overflow-y-auto">
           <PointCard point={userInfo?.point && userInfo?.point.toString() || "0"} />
           <div className="flex flex-col gap-y-1">
             <div className="text-SubheadMd text-gray-95 uppercase px-4">

@@ -32,7 +32,7 @@ export const RelatedInfo = ({
     }
   };
   return (
-    <div className="w-full flex items-start  justify-center flex-col gap-4 mt-8 px-[80px]">
+    <div className="w-full flex items-start  justify-center flex-col gap-4 mt-8">
       <div
         className="text-HeadingSm text-[#320130]"
         dangerouslySetInnerHTML={{

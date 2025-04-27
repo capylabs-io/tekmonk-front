@@ -343,7 +343,7 @@ export default function News() {
   };
   return (
     <>
-      <div className={classNames("w-full  container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
+      <div className={classNames("w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
         {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
           <>
             <div className="lg:col-span-2 col-span-3">
@@ -359,7 +359,7 @@ export default function News() {
                     />
                   </> :
                   <>
-                    <div className="w-full flex flex-col items-center justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center">
                       <Image
                         alt="empty-state"
                         src="/image/empty-data-image.png"
@@ -389,7 +389,10 @@ export default function News() {
                   }
                 }}
               />
-              <SuggestComponent data={randomNews?.data || []} />
+              {
+                randomNews?.data && randomNews?.data?.length > 0 &&
+                <SuggestComponent data={randomNews?.data || []} />
+              }
               <Image
                 src="/image/home/banner-layout.png"
                 alt="Default"

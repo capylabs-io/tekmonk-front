@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { CONTEST_QUESTION_AND_ANSWER } from "@/contants/contest/tekmonk";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 type StateTime = {
   started: boolean;
@@ -25,7 +26,7 @@ type StateTime = {
 };
 
 const Clock = ({ contestData }: { contestData: Contest }) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   //ENV
   const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
 

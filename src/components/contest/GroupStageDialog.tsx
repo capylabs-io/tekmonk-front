@@ -9,6 +9,7 @@ import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 const GroupStageDialog = ({
   groupStageData,
@@ -16,7 +17,7 @@ const GroupStageDialog = ({
   groupStageData: ContestGroupStage;
 }) => {
   //import others
-  const router = useRouter();
+  const router = useCustomRouter();
 
   //useState
   const [isClient, setIsClient] = useState(false);

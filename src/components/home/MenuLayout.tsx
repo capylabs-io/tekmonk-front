@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   User,
   Zap,
+  Award
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
@@ -39,6 +40,13 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={usePathname().includes("/nhiem-vu")}
         iconElement={<Goal size={20} />}
         url="/nhiem-vu"
+        hidden={!isConnected()}
+      />
+      <MenuCard
+        title="Chứng chỉ"
+        active={usePathname().includes("/chung-chi")}
+        iconElement={<Award size={20} />}
+        url="/chung-chi"
         hidden={!isConnected()}
       />
       <MenuCard

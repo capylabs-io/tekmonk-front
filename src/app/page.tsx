@@ -102,7 +102,7 @@ const CoreValueComponent = () => {
       </ScrollAnimateIn>
       <ScrollAnimateIn
         animation="stagger-fade"
-        className="mt-12 flex items-center gap-8"
+        className="mt-12 flex items-center justify-between w-full"
         threshold={0.2}
       >
         {
@@ -224,7 +224,7 @@ const AboutCourseComponent = () => {
   return (
     <ScrollAnimateIn
       animation="fade-up"
-      className="w-full container mx-auto min-h-[2236px] flex flex-col items-center justify-start"
+      className="w-full container mx-auto px-[80px] min-h-[2236px] flex flex-col items-center justify-start"
       threshold={0.1}
 
     >

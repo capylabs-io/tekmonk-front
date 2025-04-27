@@ -24,7 +24,7 @@ export const CertificateProfile = ({ id }: { id: number }) => {
     queryKey: ["certificates", id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["certificate", "student"],
+        populate: ['certificate', 'student', 'certificate.course', 'certificate.certificatePdfConfig', 'certificate.certificatePdfConfig.fields'],
         filters: {
           student: { id: id },
         },
@@ -92,25 +92,28 @@ export const CertificateProfile = ({ id }: { id: number }) => {
       <div className="flex flex-col gap-4 mt-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {certificates.data.map((certificate) => {
-            let imgUrl = get(certificate, "certificate.imgUrl", "");
+            let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
             if (imgUrl == null) {
               imgUrl = "/image/placeholder.png";
             }
             return (
               <CommonCard
                 key={certificate.id}
-                className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-2"
+                className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-3"
               >
                 <Image
                   src={imgUrl}
                   alt="Python"
-                  width={56}
-                  height={56}
+                  width={100}
+                  height={100}
                   className="object-contain"
                 />
                 <div className="flex flex-col items-start justify-between h-full w-full text-gray-500 text-sm">
                   <div className="text-SubheadSm text-gray-95">
                     {get(certificate, "certificate.name", "")}
+                  </div>
+                  <div className="text-BodyXs text-gray-600">
+                    Tên khoá học: <span className="text-gray-95 font-medium">{get(certificate, "certificate.course.name", "")}</span>
                   </div>
                   <div className="flex items-center text-BodyXs text-gray-600">
                     <span className="mr-1">Hoàn thành:</span>

@@ -131,13 +131,13 @@ export default function Hiring() {
             <Loading />
           </div>
           :
-          <div className="w-full gap-6 flex flex-wrap overflow-y-auto">
+          <div className="w-full gap-6 flex flex-wrap">
             {data?.data && data?.data?.length > 0 ?
               data.data.map((item, index) => {
                 return (
                   <div
                     key={index}
-                    className="w-[411px] h-[376px] flex flex-col items-center gap-4 self-stretch"
+                    className="w-[411px] max-h-[411px] flex flex-col items-center gap-4 self-stretch"
                     onClick={() => handleRedirectDetail(item.id)}
                   >
                     <Image
@@ -193,7 +193,7 @@ export default function Hiring() {
             }
           </div>
       }
-      <div className="w-full flex items-end lg:justify-end justify-center">
+      <div className="w-full flex justify-center">
         <CommonPagination
           showDetails={false}
           totalItems={data?.meta?.pagination?.total || 0}
@@ -207,7 +207,7 @@ export default function Hiring() {
     </div>
   )
   return (
-    <div className={classNames("w-full flex flex-col items-center gap-8 px-[80px] py-7 mt-16", data?.data && data?.data?.length > 0 ? "" : "h-[calc(100vh-64px-372px)]")}>
+    <div className={classNames("w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16")}>
       <BannerCard className="w-full rounded-3xl h-[500px]" isHiring>
         <div className="flex flex-col items-center gap-6 z-10">
           <div className="text-DisplayMd text-gray-10">
@@ -216,9 +216,9 @@ export default function Hiring() {
           <div className="text-center text-SubheadLg text-gray-10 max-w-[560px]">
             Cùng nhau gieo mầm công nghệ – Nơi bạn truyền cảm hứng cho thế hệ lập trình viên tương lai!
           </div>
-          <CommonButton className="h-10 text-white md:block hidden">
+          {/* <CommonButton className="h-10 text-white md:block hidden">
             Liên hệ
-          </CommonButton>
+          </CommonButton> */}
         </div>
       </BannerCard>
       {hiringContent}

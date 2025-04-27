@@ -23,6 +23,7 @@ import { getOneContestEntry } from "@/requests/contestEntry";
 import { getContestSubmissionByContestEntry } from "@/requests/contestSubmit";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Link as LinkToScroll } from "react-scroll";
+import { useCustomRouter } from "../common/router/CustomRouter";
 const nunitoSans = Nunito_Sans({
   // weight: "600",
   subsets: ["latin"],
@@ -34,7 +35,7 @@ type ContestLayoutProps = {
 };
 
 const ContestLayout = ({ children }: ContestLayoutProps) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const pathname = usePathname();
   const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
   //use state
