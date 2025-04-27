@@ -33,6 +33,7 @@ import { Filter } from "lucide-react";
 import qs from "qs";
 import { useState } from "react";
 import Image from "next/image";
+import CommonPagination from "@/components/admin/common-pagination";
 // Tab options
 enum TabOptions {
   MISSION = "mission",
@@ -101,8 +102,8 @@ const MissionFilter = ({
 
 export default function MissionPage() {
   /** UseState */
-  const [page] = useState(1);
-  const [pageSize] = useState(30);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(30);
   const [activeTab, setActiveTab] = useState<string>(TabOptions.MISSION);
   const [filterValue, setFilterValue] = useState<string>(StatusFilter.ALL);
   const [claimDialog, setClaimDialog] = useState<boolean>(false);
@@ -138,7 +139,6 @@ export default function MissionPage() {
         return await ReqGetAllAchievementsInfo(queryString);
       } catch (err) {
         console.log("mission page => ", err);
-        return { data: [] };
       }
     },
     refetchOnWindowFocus: false,
@@ -193,18 +193,30 @@ export default function MissionPage() {
             <p className="text-gray-500">Đang tải...</p>
           </div>
         ) : data?.data && data.data.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {data.data.map((mission, index: number) => (
-              <MissionCard
-                key={index}
-                data={mission}
-                onClick={() => {
-                  updateMission(mission.historyId ?? 0); // Add null check with default value
-                  setClaimData(mission);
-                }}
+          <>
+            <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+              {data.data.map((mission, index: number) => (
+                <MissionCard
+                  key={index}
+                  data={mission}
+                  onClick={() => {
+                    updateMission(mission.historyId ?? 0); // Add null check with default value
+                    setClaimData(mission);
+                  }}
+                />
+              ))}
+            </div>
+            <div className="flex w-full mx-auto">
+              <CommonPagination
+                currentPage={page}
+                itemsPerPage={pageSize}
+                totalItems={data?.meta?.pagination?.total}
+                showDetails={false}
+                onPageChange={(page) => setPage(page)}
+                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
               />
-            ))}
-          </div>
+            </div>
+          </>
         ) : (
           <div className="text-center w-full py-10">
             <p className="text-gray-500">Không có nhiệm vụ nào</p>
@@ -223,18 +235,30 @@ export default function MissionPage() {
             <p className="text-gray-500">Đang tải...</p>
           </div>
         ) : data?.data && data.data.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {data.data.map((achievement: Achievement, index: number) => (
-              <MissionCard
-                key={index}
-                data={achievement}
-                onClick={() => {
-                  updateMission(achievement.historyId ?? 0);
-                  setClaimData(achievement);
-                }}
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {data.data.map((achievement: Achievement, index: number) => (
+                <MissionCard
+                  key={index}
+                  data={achievement}
+                  onClick={() => {
+                    updateMission(achievement.historyId ?? 0);
+                    setClaimData(achievement);
+                  }}
+                />
+              ))}
+            </div>
+            <div className="flex w-full mx-auto">
+              <CommonPagination
+                currentPage={page}
+                itemsPerPage={pageSize}
+                totalItems={data?.meta?.pagination?.total}
+                showDetails={false}
+                onPageChange={(page) => setPage(page)}
+                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
               />
-            ))}
-          </div>
+            </div>
+          </>
         ) : (
           <div className="text-center w-full py-10">
             <p className="text-gray-500">Không có thành tựu nào</p>

@@ -3,7 +3,6 @@ import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { CommonTable } from "../common/CommonTable";
 import { UserRankingProps } from "@/types/users";
-import { useState } from "react";
 import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
