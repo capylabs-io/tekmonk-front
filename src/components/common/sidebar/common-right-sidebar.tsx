@@ -10,18 +10,29 @@ import Image from "next/image";
 import { ROUTE } from "@/contants/router";
 import { ShowSmallCarouselItems } from "@/components/new/carousel-small";
 import { EventList } from "@/components/new/event-list";
+import { PriceCard } from "@/components/home/price-card";
+import { useCustomRouter } from "../router/CustomRouter";
 export const CommonRightSidebar = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const projects = useProjects().slice(1, 5);
-
+  const router = useCustomRouter();
   switch (true) {
     case true:
       return (
         <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto max-h-screen hide-scrollbar">
           <PointCard point={userInfo?.point.toString() || "0"} />
+          <PriceCard price={userInfo?.balance.toString() || "0"} />
           <div className="flex flex-col gap-y-1">
-            <div className="text-SubheadMd text-gray-95 uppercase px-4">
-              Tin tức
+            <div className="flex justify-between items-center px-4">
+              <div className="text-SubheadMd text-gray-95 uppercase ">
+                Tin tức
+              </div>
+              <div
+                className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
+                onClick={() => router.push(ROUTE.NEWS)}
+              >
+                Xem thêm
+              </div>
             </div>
             <ShowSmallCarouselItems />
 

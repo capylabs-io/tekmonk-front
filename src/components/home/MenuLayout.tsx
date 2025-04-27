@@ -8,6 +8,7 @@ import {
   Home,
   Newspaper,
   ShoppingCart,
+  Trophy,
   User,
   Zap,
 } from "lucide-react";
@@ -39,6 +40,13 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={usePathname().includes("/nhiem-vu")}
         iconElement={<Goal size={20} />}
         url="/nhiem-vu"
+        hidden={!isConnected()}
+      />
+      <MenuCard
+        title="Thành tựu"
+        active={usePathname().includes("/thanh-tuu")}
+        iconElement={<Trophy size={20} />}
+        url="/thanh-tuu"
         hidden={!isConnected()}
       />
       <MenuCard

@@ -62,16 +62,10 @@ export const ShowSmallCarouselItems = () => {
                     src={item.thumbnail ? item.thumbnail : ""}
                     width={200}
                     height={360}
-                    // layout="responsive"
                     className="!w-full h-full max-h-[200px] object-cover rounded-2xl transition-opacity duration-300"
                   />
-                  <div className="absolute  w-full inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 rounded-2xl flex flex-col items-start justify-end p-6">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2">
-                      <div className="flex items-center justify-center gap-2">
-                        {item.tags?.split(",").map((tag, indexTag) => (
-                          <CommonTag key={indexTag}>{tag.trim()}</CommonTag>
-                        ))}
-                      </div>
+                  <div className="absolute w-full bottom-0 h-1/2 bg-black bg-opacity-50 rounded-b-2xl flex flex-col items-start justify-end p-6">
+                    <div className="flex flex-col gap-2">
                       <div className="text-white text-BodySm font-semibold line-clamp-3 overflow-hidden">
                         {item.title}
                       </div>

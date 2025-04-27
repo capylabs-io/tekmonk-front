@@ -1,13 +1,18 @@
 import { LeaderboardTopUserCard } from "./LeaderboardTopUserCard";
 import { LeaderboardTable } from "./LeaderboardTable";
-import { useLeaderboardDatas } from "@/lib/hooks/useLeaderboardData";
 import { get } from "lodash";
 import { useUserRanking } from "@/hooks/user-query";
 import { useUserStore } from "@/store/UserStore";
-import { UserRankingType } from "@/types/users";
 import { useState } from "react";
+import { UserRankingType } from "@/types/users";
 
-export const LeadeboardContent = ({ type }: { type: UserRankingType }) => {
+export const LeadeboardContent = ({
+  type,
+  countText,
+}: {
+  type: UserRankingType;
+  countText: string;
+}) => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -75,6 +80,7 @@ export const LeadeboardContent = ({ type }: { type: UserRankingType }) => {
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         isLoading={isLoading}
+        countText={countText}
       />
     </div>
   );

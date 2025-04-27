@@ -55,6 +55,16 @@ export const BillCard = ({ item }: BillCardProps) => {
           {item.status === "claimed" ? "Đã đổi" : "Chờ đổi"}
         </div>
 
+        {/* Item image */}
+        <div className="relative w-full h-32 mb-3 max-w-[100px] max-h-[100px]">
+          <Image
+            src={item.shopItem.image || "/placeholder-image.jpg"}
+            alt={item.shopItem.name || "Item image"}
+            fill
+            className="object-cover rounded-lg"
+          />
+        </div>
+
         <div className="flex flex-col gap-2">
           <div className="text-lg font-semibold text-gray-900">
             {item.shopItem.name}

@@ -21,16 +21,19 @@ const Leaderboard: React.FC = () => {
           <TabsTrigger value="friendly">Thiên tài sáng tạo</TabsTrigger>
         </TabsList>
         <TabsContent value="student" className="overflow-y-auto mt-0">
-          <LeadeboardContent type={UserRankingType.POINT} />
+          <LeadeboardContent type={UserRankingType.POINT} countText="ĐIỂM SỐ" />
         </TabsContent>
         <TabsContent value="pointCollector" className="overflow-y-auto mt-0">
-          <LeadeboardContent type={UserRankingType.TOTAL_PRICE} />
+          <LeadeboardContent
+            type={UserRankingType.TOTAL_PRICE}
+            countText="ĐIỂM THƯỞNG"
+          />
         </TabsContent>
         <TabsContent value="creator" className="overflow-y-auto mt-0">
-          <LeadeboardContent type={UserRankingType.POST} />
+          <LeadeboardContent type={UserRankingType.POST} countText="BÀI VIẾT" />
         </TabsContent>
         <TabsContent value="friendly" className="overflow-y-auto mt-0">
-          <LeadeboardContent type={UserRankingType.PROJECT} />
+          <LeadeboardContent type={UserRankingType.PROJECT} countText="DỰ ÁN" />
         </TabsContent>
       </Tabs>
     </div>

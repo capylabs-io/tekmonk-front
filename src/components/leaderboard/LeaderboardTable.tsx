@@ -13,6 +13,7 @@ type Props = {
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
   isLoading?: boolean;
+  countText: string;
 };
 
 export const LeaderboardTable = ({
@@ -23,6 +24,7 @@ export const LeaderboardTable = ({
   onPageChange,
   onPageSizeChange,
   isLoading,
+  countText = "ĐIỂM SỐ",
 }: Props) => {
   const router = useCustomRouter();
   const columns = [
@@ -69,7 +71,7 @@ export const LeaderboardTable = ({
     },
     {
       id: "score",
-      header: "ĐIỂM SỐ",
+      header: countText,
       cell: ({ row }: any) => row.original?.count.toString(),
     },
   ];

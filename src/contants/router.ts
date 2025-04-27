@@ -10,6 +10,7 @@ export const ROUTE = {
   MODERATOR: "/phe-duyet",
   SHOP: "/cua-hang",
   MISSION: "/nhiem-vu",
+  ACHIEVEMENT: "/thanh-tuu",
   PROFILE: "/ho-so",
   //Sub Route admin
   MY_CLASS: "/lop-hoc-cua-toi",

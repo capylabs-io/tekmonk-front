@@ -9,13 +9,19 @@ import qs from "qs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MissionDialog } from "../mission/MissionDialog";
 import { useMissionHistory } from "@/hooks/use-mission-history";
+import { useUserStore } from "@/store/UserStore";
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
 const PAGE = 1;
 const ITEM_PER_PAGE = 9;
 export const MissionProgress = ({ id }: { id: number }) => {
+  const router = useCustomRouter();
   const [showMissionDialog, setShowMissionDialog] = useState(false);
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [page, setPage] = useState(PAGE);
   const [itemsPerPage, setItemsPerPage] = useState(ITEM_PER_PAGE);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const userId = userInfo?.id;
   const { data: missions, isLoading } = useQuery({
     queryKey: ["missions-history"],
     queryFn: async () => {
@@ -38,6 +44,10 @@ export const MissionProgress = ({ id }: { id: number }) => {
   });
 
   const handleShowMissionDialog = () => {
+    if (userId === id) {
+      router.push(ROUTE.MISSION);
+      return;
+    }
     setShowMissionDialog(true);
   };
 

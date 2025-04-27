@@ -65,8 +65,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="text-SubheadLg text-gray-95 px-4">Trang chủ</div>
-      <Tabs defaultValue="all" className="w-full mt-5">
+      <Tabs defaultValue="all" className="w-full">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>
           <TabsTrigger value="play">Dự án</TabsTrigger>

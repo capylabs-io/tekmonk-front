@@ -34,17 +34,6 @@ export default function Shop() {
           <div className="text-SubheadLg text-gray-95">
             <span>Cửa hàng</span>
           </div>
-          <div className="flex items-center">
-            <div className="text-SubheadLg text-primary-900">
-              {userInfo?.balance}
-            </div>
-            <Image
-              src="/image/home/coin.png"
-              alt="coin pic"
-              width={24}
-              height={24}
-            />
-          </div>
         </div>
 
         {/* Tab Navigation */}

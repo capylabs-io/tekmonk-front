@@ -13,6 +13,7 @@ import CommonLayout from "@/components/common/CommonLayout";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { useUserStore } from "@/store/UserStore";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
+import { NavigationInfo } from "@/components/common/sidebar/naivgation-info";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -60,34 +61,7 @@ export default function Layout({
             </div>
             <div className="flex flex-col mt-4 grow">
               <MenuLayout customClassName="" />
-              {isConnected() ? (
-                <div className="grow-0 px-3 w-full md:block hidden">
-                  <div className="flex flex-col gap-y-4 mt-4">
-                    <CommonButton
-                      className="w-full !rounded-3xl h-12"
-                      variant="secondary"
-                      onClick={handleRidirectAdminPage}
-                    >
-                      Quản lý
-                    </CommonButton>
-                    <CommonButton
-                      className="w-full !rounded-3xl h-12"
-                      onClick={handleOpenModal}
-                    >
-                      Đăng tải
-                    </CommonButton>
-                  </div>
-                  <UserProfileLink userName={userInfo?.username || ""} />
-                </div>
-              ) : (
-                <CommonButton
-                  className="w-full !rounded-3xl h-12"
-                  variant="primary"
-                  onClick={() => router.push(ROUTE.LOGIN)}
-                >
-                  Đăng nhập
-                </CommonButton>
-              )}
+              <NavigationInfo />
             </div>
           </div>
         }
