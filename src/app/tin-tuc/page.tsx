@@ -347,13 +347,33 @@ export default function News() {
         {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
           <>
             <div className="lg:col-span-2 col-span-3">
-              <ShowCarouselItemsComponent data={randomNews?.data || []} />
-              <div className="w-full h-[1px] bg-gray-20 my-6"></div>
-              <FeaturedNewsComponent
-                data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
-                onLoadMore={handleLoadMoreContentt}
-                isFetchingNextPage={isFetchingNextPage}
-              />
+              {
+                randomNews?.data && randomNews?.data?.length > 0 ?
+                  <>
+                    <ShowCarouselItemsComponent data={randomNews?.data || []} />
+                    <div className="w-full h-[1px] bg-gray-20 my-6"></div>
+                    <FeaturedNewsComponent
+                      data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
+                      onLoadMore={handleLoadMoreContentt}
+                      isFetchingNextPage={isFetchingNextPage}
+                    />
+                  </> :
+                  <>
+                    <div className="w-full flex flex-col items-center justify-center">
+                      <Image
+                        alt="empty-state"
+                        src="/image/empty-data-image.png"
+                        width={300}
+                        height={200}
+                      />
+                      <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
+                      <div className="text-BodyMd text-gray-70">
+                        Chúng tôi sẽ sớm cập nhật thông tin mới
+                      </div>
+                    </div>
+                  </>
+              }
+
             </div>
             <div className="col-span-1 flex-col gap-8 lg:flex hidden">
               <Input

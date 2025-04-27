@@ -121,16 +121,16 @@ export const Navbar = () => {
           {/* Action Buttons */}
           <div
             className={cn(
-              "flex items-center space-x-4 w-[200px] justify-between",
+              "flex items-center space-x-4 w-[200px] justify-end",
               isConnected() && "w-[120px]"
             )}
           >
-            <Link
+            {/* <Link
               href="/lien-he"
               className="hidden md:inline-flex text-SubheadMd text-gray-95"
             >
               Liên hệ
-            </Link>
+            </Link> */}
             {isConnected() ? (
               <div className="flex items-center xl:justify-between justify-center relative md:block">
                 <Dialog open={isMenuOpen} onOpenChange={toggleMenu}>
