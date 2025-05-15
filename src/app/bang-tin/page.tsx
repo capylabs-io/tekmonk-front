@@ -48,7 +48,10 @@ const Home = () => {
     setTabValue(value);
     setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
   };
-  const [show, setTypeModal] = useProfileStore((state) => [state.show, state.setTypeModal]);
+  const [show, setTypeModal] = useProfileStore((state) => [
+    state.show,
+    state.setTypeModal,
+  ]);
   const handleOpenModal = () => {
     setTypeModal(PostTypeEnum.PROJECT);
     show();
@@ -76,7 +79,6 @@ const Home = () => {
   // Flatten posts from all pages
   const flattenedPosts =
     currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
-
 
   return (
     <>
@@ -143,8 +145,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </div>
             </>
           )}
@@ -175,13 +177,6 @@ const Home = () => {
                         "User"
                       }
                       specialName={get(item, "postedBy.skills", "")}
-                      // userRank={
-                      //   <span
-                      //     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                      //   >
-                      //     IV
-                      //   </span>
-                      // }
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))
@@ -206,8 +201,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </div>
             </>
           )}

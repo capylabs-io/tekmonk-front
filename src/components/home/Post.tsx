@@ -27,7 +27,6 @@ import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { useMemo } from "react";
 
-
 type Props = {
   data?: PostType | null;
   imageUrl: string;
@@ -50,6 +49,7 @@ type Props = {
   onLikedPostClick?: (data: PostType) => void;
   onUpdatePost?: () => void;
   isDetail?: boolean;
+  postTags?: string[];
 };
 
 export const Post = ({
@@ -72,6 +72,7 @@ export const Post = ({
   onVerifiedPost,
   onLikedPostClick,
   taggedUsers,
+  postTags,
   onUpdatePost,
   isDetail,
 }: Props) => {
@@ -96,12 +97,14 @@ export const Post = ({
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
   const taggedList = useMemo(() => {
-    return taggedUsers?.filter(user => user.id.toString() !== userInfo?.id.toString());
+    return taggedUsers?.filter(
+      (user) => user.id.toString() !== userInfo?.id.toString()
+    );
   }, [taggedUsers]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
-      const taggedUserIds = taggedUsers.map(user => user.id.toString());
+      const taggedUserIds = taggedUsers.map((user) => user.id.toString());
       setSelectedStudents(taggedUserIds);
     }
   }, [addStudentDialogOpen, taggedUsers]);
@@ -142,36 +145,6 @@ export const Post = ({
           isAllowClickDetail && handleClickPostCard(e);
         }}
       >
-        {showButton && (
-          <div className="flex gap-2 absolute top-0 right-0">
-            <CommonButton
-              variant="primary"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleOnClick({
-                  ...data,
-                  isVerified: PostVerificationType.ACCEPTED,
-                });
-              }}
-            >
-              Chấp thuận
-            </CommonButton>
-            <CommonButton
-              variant="secondary"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleOnClick({
-                  ...data,
-                  isVerified: PostVerificationType.DENIED,
-                });
-              }}
-            >
-              Từ chối
-            </CommonButton>
-          </div>
-        )}
         <div className="flex items-center mt-8 w-full gap-2">
           <ProfileInfoBox
             imageUrl={imageUrl}
@@ -179,14 +152,24 @@ export const Post = ({
             userRank={userRank}
             specialName={specialName}
           />
-          {
-            taggedList && taggedList?.length > 0 &&
+          {taggedList && taggedList?.length > 0 && (
             <div className="flex items-center gap-1">
               cùng với
-              <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => router.push(`/ho-so/${taggedList[0]?.id}`)}>{taggedList[0]?.username}</div>
-              và <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}>{taggedList.length - 1} người khác.</div>
+              <div
+                className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
+                onClick={() => router.push(`/ho-so/${taggedList[0]?.id}`)}
+              >
+                {taggedList[0]?.username}
+              </div>
+              và{" "}
+              <div
+                className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
+                onClick={() => setTaggedUsersDialogOpen(true)}
+              >
+                {taggedList.length - 1} người khác.
+              </div>
             </div>
-          }
+          )}
           {isVerified && (
             <div className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs">
               <span className="px-2 py-1">
@@ -206,16 +189,22 @@ export const Post = ({
           )}
 
           <div className="mt-3">
-            {
-              !isDetail ? (
-                <p className="text-xl font-bold text-gray-800 hover:text-primary-70 hover:underline" onClick={() => router.push(`/bai-viet/${data?.id}`)}>{postName}</p>
-              ) : (
-                <p className="text-xl font-bold text-gray-800">{postName}</p>
-              )
-            }
+            {!isDetail ? (
+              <p
+                className="text-xl font-bold text-gray-800 hover:text-primary-70 hover:underline"
+                onClick={() => router.push(`/bai-viet/${data?.id}`)}
+              >
+                {postName}
+              </p>
+            ) : (
+              <p className="text-xl font-bold text-gray-800">{postName}</p>
+            )}
             <div className="relative">
               <div
-                className={classNames("text-base text-gray-800", isDetail ? "line-clamp-none" : "line-clamp-3")}
+                className={classNames(
+                  "text-base text-gray-800",
+                  isDetail ? "line-clamp-none" : "line-clamp-3"
+                )}
                 dangerouslySetInnerHTML={{
                   __html: postContent || "",
                 }}
@@ -282,8 +271,7 @@ export const Post = ({
               </div>
             )}
             <div className="flex items-center gap-2">
-              {
-                data?.postedBy?.id === userInfo?.id &&
+              {data?.postedBy?.id === userInfo?.id && (
                 <>
                   <div
                     onClick={() => setAddStudentDialogOpen(true)}
@@ -295,12 +283,16 @@ export const Post = ({
                   <Share
                     url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
                     title={postName}
-                    description={postContent?.replace(/<[^>]*>?/gm, '').substring(0, 200) || ''}
+                    description={
+                      postContent
+                        ?.replace(/<[^>]*>?/gm, "")
+                        .substring(0, 200) || ""
+                    }
                     hashtags={["tekmonk"]}
-                    image={thumbnailUrl || ''}
+                    image={thumbnailUrl || ""}
                   />
                 </>
-              }
+              )}
             </div>
           </div>
         </div>
@@ -362,31 +354,35 @@ export const Post = ({
 
           <div className="p-4">
             <div className="max-h-[400px] overflow-y-auto">
-              {taggedUsers && taggedUsers.slice(1).map((user, index) => (
-                <div key={user.id} className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-0">
-                  <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <Image
-                      src={'/image/home/profile-pic.png'}
-                      alt={user.username || 'User'}
-                      width={40}
-                      height={40}
-                      className="object-cover"
-                    />
+              {taggedUsers &&
+                taggedUsers.slice(1).map((user, index) => (
+                  <div
+                    key={user.id}
+                    className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-0"
+                  >
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                      <Image
+                        src={"/image/home/profile-pic.png"}
+                        alt={user.username || "User"}
+                        width={40}
+                        height={40}
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p
+                        className="font-medium text-gray-800 hover:text-primary-70 hover:underline cursor-pointer"
+                        onClick={() => {
+                          router.push(`/ho-so/${user.id}`);
+                          setTaggedUsersDialogOpen(false);
+                        }}
+                      >
+                        {user.username}
+                      </p>
+                      <p className="text-xs text-gray-500">{user.username}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p
-                      className="font-medium text-gray-800 hover:text-primary-70 hover:underline cursor-pointer"
-                      onClick={() => {
-                        router.push(`/ho-so/${user.id}`);
-                        setTaggedUsersDialogOpen(false);
-                      }}
-                    >
-                      {user.username}
-                    </p>
-                    <p className="text-xs text-gray-500">{user.username}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
 
             <div className="flex justify-end mt-4">

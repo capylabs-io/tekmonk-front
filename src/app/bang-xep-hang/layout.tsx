@@ -1,19 +1,8 @@
 "use client";
-import { Button } from "@/components/common/button/Button";
-import { EventList } from "@/components/home/EventList";
-import { PointCard } from "@/components/home/PointCard";
 import Image from "next/image";
-import { useEvents } from "@/lib/hooks/useEvent";
-import { useState } from "react";
 import { CreatePostModal } from "@/components/home/CreatePostModal";
 import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import { usePathname } from "next/navigation";
-import { AuthorCard } from "@/components/project/AuthorCard";
-import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
-import UserProfileLink from "@/components/common/UserProfileLink";
-import { useProjects } from "@/lib/hooks/useProject";
-import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
@@ -38,8 +27,6 @@ export default function Layout({
   const handleRidirectAdminPage = () => {
     router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
   };
-  const events = useEvents().slice(1, 4);
-  const projects = useProjects().slice(1, 5);
 
   return (
     <>

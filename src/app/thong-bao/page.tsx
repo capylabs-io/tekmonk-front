@@ -9,7 +9,6 @@ import {
 import { Dela_Gothic_One } from "next/font/google";
 import { NotiCard } from "@/components/notification/NotiCard";
 import WithAuth from "@/components/hoc/WithAuth";
-import { useNotifications } from "@/lib/hooks/useNotification";
 import { Notification as NotificationType } from "@/types/common-types";
 
 const delaGothicOne = Dela_Gothic_One({
@@ -19,7 +18,7 @@ const delaGothicOne = Dela_Gothic_One({
 });
 
 const Notification: React.FC = () => {
-  const notifications: NotificationType[] = useNotifications();
+  const notifications: NotificationType[] = [];
 
   return (
     <>

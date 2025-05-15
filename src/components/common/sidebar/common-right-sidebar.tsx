@@ -3,9 +3,7 @@
 import { PointCard } from "@/components/home/PointCard";
 import { AuthorCard } from "@/components/project/AuthorCard";
 import { AuthorProjectsCard } from "@/components/project/AuthorProjectsCard";
-import { useProjects } from "@/lib/hooks/useProject";
 import { useUserStore } from "@/store/UserStore";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ROUTE } from "@/contants/router";
 import { ShowSmallCarouselItems } from "@/components/new/carousel-small";
@@ -14,7 +12,6 @@ import { PriceCard } from "@/components/home/price-card";
 import { useCustomRouter } from "../router/CustomRouter";
 export const CommonRightSidebar = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
-  const projects = useProjects().slice(1, 5);
   const router = useCustomRouter();
   switch (true) {
     case true:
@@ -66,7 +63,7 @@ export const CommonRightSidebar = () => {
             likedCount="134"
             projectCount="5"
           />
-          <AuthorProjectsCard projects={projects} />
+          <AuthorProjectsCard projects={[]} />
         </>
       );
       break;

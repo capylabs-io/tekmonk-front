@@ -1,13 +1,8 @@
 "use client";
 
 import { type KeyboardEvent, useEffect, useState } from "react";
-import { Info, X } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { X } from "lucide-react";
+import { TooltipProvider } from "../ui/tooltip";
 import classNames from "classnames";
 
 type Props = {
@@ -16,24 +11,16 @@ type Props = {
   error?: string; // Added error prop
   placeholder?: string;
   name?: string;
-  isRequired?: boolean;
-  isTooltip?: boolean;
-  hideTitle?: boolean;
-  tooltipContent?: string;
   value?: string;
   onValueChange?: (value: string) => void;
 };
 
 export const InputTags = ({
   error,
-  placeholder,
-  isRequired,
-  hideTitle,
   name = "",
   customClassNames,
+  placeholder,
   customInputClassNames,
-  isTooltip = false,
-  tooltipContent,
   value,
   onValueChange,
 }: Props) => {
@@ -74,39 +61,22 @@ export const InputTags = ({
     <TooltipProvider>
       <div className="space-y-1.5 w-full">
         <div className="relative block sm:flex justify-between  w-full items-start">
-          {!hideTitle &&
-            <div className="w-full sm:w-1/4 flex text-primary-950 text-SubheadSm items-center">
-              <div className="text-SubheadMd text-gray-60">Tags</div>
-              {isTooltip ? (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info
-                      size={16}
-                      className={`ml-1`}
-                      color={`${isRequired ? "#DC58C8" : "#0000f7"}`}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="right"
-                    align="start"
-                    className="max-w-[200px]"
-                  >
-                    <p>{tooltipContent}</p>
-                  </TooltipContent>
-                </Tooltip>
-              ) : (
-                <span className="text-red-500">{isRequired ? " *" : ""}</span>
-              )}
-            </div>
-          }
           <div className="w-full flex flex-col items-end gap-2">
-            <div className={classNames("min-h-[3rem] w-full rounded-xl border border-grey-300 bg-grey-50 px-3 py-2 text-sm", customClassNames)}>
+            <div
+              className={classNames(
+                "min-h-[3rem] w-full rounded-xl border border-grey-300 bg-grey-50 px-3 py-2 text-sm",
+                customClassNames
+              )}
+            >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className={classNames("flex-1 bg-transparent min-w-[120px] w-full text-BodyMd outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-gray-70 placeholder:text-BodyMd", customInputClassNames)}
+                className={classNames(
+                  "flex-1 bg-transparent min-w-[120px] w-full text-BodyMd outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-gray-70 placeholder:text-BodyMd",
+                  customInputClassNames
+                )}
                 placeholder="Nhập tags ..."
               />
             </div>

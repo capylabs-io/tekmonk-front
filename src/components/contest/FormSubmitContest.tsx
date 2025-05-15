@@ -329,10 +329,7 @@ const FormSubmitContest = React.forwardRef<
             <InputTags
               error={errors.tags?.message}
               onValueChange={onValueTagChange}
-              isTooltip={true}
-              isRequired
               // tooltipContent="Để nhập một tag, hãy viết tên tag sau đó ấn enter trên bàn phím"
-              tooltipContent="Thí sinh bổ sung thêm tag để có thể tìm kiếm bài dự thi của mình dễ dàng hơn!"
             />
 
             <InputField
