@@ -99,7 +99,7 @@ export const CertificateProfile = ({ id }: { id: number }) => {
             return (
               <CommonCard
                 key={certificate.id}
-                className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-3"
+                className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-max flex items-center gap-3"
               >
                 <Image
                   src={imgUrl}

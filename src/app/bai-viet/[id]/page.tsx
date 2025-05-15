@@ -15,7 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 import Script from "next/script";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { AuthGuard } from "@/components/hoc/auth-guard";
-
+import qs from "qs";
+import { User } from "@/types/common-types";
 // Thêm kiểu cho window.FB
 declare global {
   interface Window {
@@ -41,7 +42,11 @@ export default function Page({ params }: { params: { id: number } }) {
     queryKey: ["post", params.id],
     queryFn: async () => {
       try {
-        return await findPost(params.id);
+        const queryString = qs.stringify({
+          populate: ["postedBy", "tagged_users", "comments"],
+        });
+        const res = await findPost(params.id, queryString);
+        return res;
       } catch (error) {
         console.log("error", error);
         showError("Lỗi", "Không tìm thấy bài viết");
@@ -125,7 +130,7 @@ export default function Page({ params }: { params: { id: number } }) {
   };
 
   return (
-    <AuthGuard>
+    <>
       <Script
         id="facebook-jssdk"
         strategy="afterInteractive"
@@ -144,10 +149,20 @@ export default function Page({ params }: { params: { id: number } }) {
       </div>
       <div className="mt-3 px-6">
         <Post
-          data={postData}
+          data={{
+            ...postData,
+            id: postData?.id || 0,
+            tags: postData?.tags || "",
+            tagged_users: get(postData, "tagged_users.data", []).map((user: User) => { return { ...get(user, "attributes", {}), id: get(user, "id") } }) as User[],
+            postedBy: get(postData, "postedBy.data") ? { ...get(postData, "postedBy.data.attributes", {}), id: get(postData, "postedBy.data.id") } as unknown as User : null,
+          }}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"
           thumbnailUrl={get(postData, "thumbnail") || ""}
-          userName={userInfo?.username || "User"}
+          userName={
+            get(postData, "postedBy.data.attributes.username") ||
+            userInfo?.username ||
+            "User"
+          }
           specialName={get(postData, "postedBy.skills", "")}
           userRank={
             <span
@@ -156,14 +171,17 @@ export default function Page({ params }: { params: { id: number } }) {
               IV
             </span>
           }
-          isDetail
+          taggedUsers={get(postData, "tagged_users.data", []).map((user: User) => { return { ...get(user, "attributes", {}), id: get(user, "id") } }) as User[]}
           postContent={get(postData, "content", "")}
           postName={get(postData, "name", "")}
           createdAt={moment(get(postData, "createdAt", ""))
             .format("DD/MM/YYYY")
             .toString()}
           likedCount={get(postData, "likeCount", 0).toString() || "0"}
-          commentCount={get(postData, "commentCount", 0).toString() || "0"}
+          commentCount={
+            get(postData, "commentCount", 0).toString() || "0"
+          }
+          isDetail={true}
           onLikedPostClick={handleLikedPostClick}
         />
         <div className="mt-3">
@@ -173,6 +191,6 @@ export default function Page({ params }: { params: { id: number } }) {
           />
         </div>
       </div>
-    </AuthGuard>
+    </>
   );
 }

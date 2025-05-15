@@ -20,8 +20,14 @@ export const CommonRightSidebar = () => {
     case true:
       return (
         <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto max-h-screen hide-scrollbar">
-          <PointCard point={userInfo?.point.toString() || "0"} />
-          <PriceCard price={userInfo?.balance.toString() || "0"} />
+          {
+            userInfo?.id &&
+            <div className="flex flex-col gap-y-1">
+              <PointCard point={userInfo?.point && userInfo?.point.toString() || "0"} />
+              <PriceCard price={userInfo?.balance && userInfo?.balance.toString() || "0"} />
+            </div>
+
+          }
           <div className="flex flex-col gap-y-1">
             <div className="flex justify-between items-center px-4">
               <div className="text-SubheadMd text-gray-95 uppercase ">

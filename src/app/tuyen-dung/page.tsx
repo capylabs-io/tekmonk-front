@@ -171,7 +171,7 @@ export default function Hiring() {
                       ></div>
                       <div className="text-BodySm text-gray-95 flex gap-2 items-center">
                         <Banknote className="text-gray-70" size={16} />
-                        <div>Mức lương: {item.salary}</div>
+                        <div>Mức lương: {item.minSalary} - {item.maxSalary}</div>
                       </div>
                     </div>
                   </div>

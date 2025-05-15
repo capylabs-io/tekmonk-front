@@ -47,6 +47,8 @@ const Home = () => {
   const handleTabChange = (value: string) => {
     setTabValue(value);
     setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
+    setTypeModal(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
+
   };
   const [show, hide, setTypeModal] = useProfileStore((state) => [state.show, state.hide, state.setTypeModal]);
   const handleOpenModal = () => {
@@ -80,7 +82,20 @@ const Home = () => {
 
   return (
     <>
-      <Tabs defaultValue="all" className="w-full">
+      {/* <div className="flex justify-end items-center px-8">
+        {
+          tabValue === "project" && (
+            <CommonButton
+              variant="secondary"
+              className="w-full !rounded-3xl h-12"
+              onClick={handleOpenModal}
+            >
+              Đăng dự án
+            </CommonButton>
+          )
+        }
+      </div> */}
+      <Tabs onValueChange={handleTabChange} defaultValue="all" className="w-full">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>
@@ -153,7 +168,7 @@ const Home = () => {
           {isLoading ? (
             <div className="p-8 text-center">Truy xuất dữ liệu...</div>
           ) : flattenedPosts.length === 0 ? (
-            <div className="p-8 text-center">Không có bài viết nào</div>
+            <div className="p-8 text-center">Không có dự án nào</div>
           ) : (
             <>
               {flattenedPosts.map((item: PostType, index: number) => (

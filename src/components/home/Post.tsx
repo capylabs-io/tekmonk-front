@@ -26,6 +26,7 @@ import { User } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { useMemo } from "react";
+import { ActionGuard } from "../common/ActionGuard";
 
 
 type Props = {
@@ -95,8 +96,9 @@ export const Post = ({
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const taggedList = useMemo(() => {
-    return taggedUsers?.filter(user => user.id.toString() !== userInfo?.id.toString());
+    return taggedUsers?.filter(user => user.id.toString() !== data?.postedBy?.id.toString());
   }, [taggedUsers]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
@@ -178,13 +180,19 @@ export const Post = ({
             userName={userName}
             userRank={userRank}
             specialName={specialName}
+            onClick={() => router.push(`/ho-so/${data?.postedBy?.id}`)}
           />
           {
             taggedList && taggedList?.length > 0 &&
             <div className="flex items-center gap-1">
               cùng với
               <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => router.push(`/ho-so/${taggedList[0]?.id}`)}>{taggedList[0]?.username}</div>
-              và <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}>{taggedList.length - 1} người khác.</div>
+              {taggedList.length - 1 > 0 &&
+                <>
+                  <span>và</span>
+                  <div className="text-primary-70 hover:text-primary-80 font-medium hover:underline" onClick={() => setTaggedUsersDialogOpen(true)}> {taggedList.length - 1} người khác.</div>
+                </>
+              }
             </div>
           }
           {isVerified && (
@@ -248,63 +256,70 @@ export const Post = ({
                 <div
                   className={classNames("flex items-center gap-x-1 font-bold ")}
                 >
-                  <button
-                    onClick={() => {
-                      data && onLikedPostClick?.(data);
-                    }}
+                  <ActionGuard
+                    onAction={() => data && onLikedPostClick?.(data)}
+                    actionName="thích bài viết"
+                    className="cursor-pointer flex items-center justify-center "
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill={data?.isLiked ? "#ef4444" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={classNames(
-                        "cursor-pointer",
-                        data?.isLiked ? "text-red-500" : ""
-                      )}
-                    >
-                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                    </svg>
-                  </button>
+                    <button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill={data?.isLiked ? "#ef4444" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={classNames(
+                          "cursor-pointer",
+                          data?.isLiked ? "text-red-500" : ""
+                        )}
+                      >
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                      </svg>
+                    </button>
+                  </ActionGuard>
                   <span>{likedCount}</span>
                 </div>
                 <div className="flex items-center gap-x-1 font-bold text-gray-500">
-                  <button>
-                    <MessageCircle size={20} />
-                  </button>
+                  <ActionGuard
+                    onAction={() => { }}
+                    actionName="bình luận"
+                    className="cursor-pointer flex items-center justify-center"
+                  >
+                    <button>
+                      <MessageCircle size={20} />
+                    </button>
+                  </ActionGuard>
                   <span>{commentCount}</span>
                 </div>
               </div>
             )}
             <div className="flex items-center gap-2">
               {
-                data?.postedBy?.id === userInfo?.id &&
-                <>
-                  <div
-                    onClick={() => setAddStudentDialogOpen(true)}
-                    className="inline-flex items-center gap-2 !text-gray-500 hover:!text-primary-70"
-                  >
-                    <Tag className="h-4 w-4" />
-                    <span className="text-sm">Tag</span>
-                  </div>
-                  <Share
-                    url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
-                    title={postName}
-                    description={postContent?.replace(/<[^>]*>?/gm, '').substring(0, 200) || ''}
-                    hashtags={["tekmonk"]}
-                    image={thumbnailUrl || ''}
-                  />
-                </>
+                !userInfo?.id || data?.postedBy?.id === userInfo?.id &&
+                <div
+                  onClick={() => setAddStudentDialogOpen(true)}
+                  className="inline-flex items-center gap-2 !text-gray-500 hover:!text-primary-70"
+                >
+                  <Tag className="h-4 w-4" />
+                  <span className="text-sm">Tag</span>
+                </div>
               }
+
+              <Share
+                url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
+                title={postName}
+                description={postContent?.replace(/<[^>]*>?/gm, '').substring(0, 200) || ''}
+                hashtags={["tekmonk"]}
+                image={thumbnailUrl || ''}
+              />
             </div>
           </div>
         </div>
-      </div>
+      </div >
       <Dialog
         open={addStudentDialogOpen}
         onOpenChange={setAddStudentDialogOpen}
