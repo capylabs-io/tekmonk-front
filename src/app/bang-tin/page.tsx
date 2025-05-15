@@ -48,7 +48,7 @@ const Home = () => {
     setTabValue(value);
     setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
   };
-  const [show, hide, setTypeModal] = useProfileStore((state) => [state.show, state.hide, state.setTypeModal]);
+  const [show, setTypeModal] = useProfileStore((state) => [state.show, state.setTypeModal]);
   const handleOpenModal = () => {
     setTypeModal(PostTypeEnum.PROJECT);
     show();
