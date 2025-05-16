@@ -18,4 +18,6 @@ export const ROUTE = {
   COURSES: "/khoa-hoc",
   AVATAR_SHOP: "/anh-dai-dien",
   BACKGROUND_SHOP: "/hinh-nen",
+  SEARCH: "/tim-kiem",
+  HISTORY: "/lich-su-dang-bai",
 };

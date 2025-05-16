@@ -23,7 +23,7 @@ export const ListStudentRemainingSelect = ({
   /** UseState */
   //   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemPerPage] = useState(5);
+  const [itemsPerPage, setItemPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
 
   /** UseQuery */
@@ -37,7 +37,7 @@ export const ListStudentRemainingSelect = ({
               {
                 user_role: {
                   code: {
-                    $eq: "TEACHER",
+                    $eq: "STUDENT",
                   },
                 },
                 id: {
@@ -46,7 +46,6 @@ export const ListStudentRemainingSelect = ({
               },
             ],
           },
-          populate: ["user_role", "role"],
           pagination: {
             page: currentPage,
             pageSize: itemsPerPage,
@@ -81,8 +80,8 @@ export const ListStudentRemainingSelect = ({
         <div className="flex flex-wrap gap-2 rounded-md min-h-[48px]">
           {selectedStudents.map((selectedId) => {
             const student =
-              get(studentList, "data?.data", []) &&
-              get(studentList, "data.data", []).find(
+              get(studentList, "data?", []) &&
+              get(studentList, "data", []).find(
                 (s: User) => s.id.toString() === selectedId
               );
             return student ? (

@@ -10,6 +10,8 @@ import { ShowSmallCarouselItems } from "@/components/new/carousel-small";
 import { EventList } from "@/components/new/event-list";
 import { PriceCard } from "@/components/home/price-card";
 import { useCustomRouter } from "../router/CustomRouter";
+import { SearchHeader } from "@/components/search/SearchHeader";
+import { SearchFilter } from "@/components/search/search-filter";
 export const CommonRightSidebar = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const router = useCustomRouter();
@@ -17,6 +19,7 @@ export const CommonRightSidebar = () => {
     case true:
       return (
         <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto max-h-screen hide-scrollbar">
+          <SearchFilter />
           <PointCard point={userInfo?.point.toString() || "0"} />
           <PriceCard price={userInfo?.balance.toString() || "0"} />
           <div className="flex flex-col gap-y-1">

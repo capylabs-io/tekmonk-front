@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, User } from "lucide-react";
 import { useUserStore } from "@/store/UserStore";
 import { LogOut } from "lucide-react";
 import { Dialog, DialogContent, DialogTrigger } from "@radix-ui/react-dialog";
 import { useCustomRouter } from "./router/CustomRouter";
+import { FaHistory } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { ROUTE } from "@/contants/router";
 
 type UserProfileLinkProps = {
   userName: string;
@@ -26,6 +29,10 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
     router.push("/dang-nhap");
   };
 
+  const handleRedirectToHistory = () => {
+    router.push(ROUTE.HISTORY);
+  };
+
   return (
     <div className="flex items-center mt-8 w-full xl:justify-between justify-center relative">
       <div className="flex items-center gap-x-2 cursor-pointer hover:text-primary-600">
@@ -34,7 +41,12 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
           onClick={toggleMenu}
         />
         <div className="xl:block hidden">
-          <p className="text-sm truncate" onClick={() => router.push(`/ho-so/${userInfo?.id}`)}>{userName}</p>
+          <p
+            className="text-sm truncate"
+            onClick={() => router.push(`/ho-so/${userInfo?.id}`)}
+          >
+            {userName}
+          </p>
           {userRank && <p className="text-sm text-gray-500">{userRank}</p>}
         </div>
       </div>
@@ -46,14 +58,39 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
         >
           <MoreHorizontal size={20} />
         </DialogTrigger>
-        <DialogContent className=" z-[999] absolute -translate-x-1/2 -top-[70px] left-1/2 rounded-lg pl-4 bg-white shadow-md flex gap-2 items-center">
-          <LogOut size={18} className="text-red-600" />
-          <button
-            className="w-max text-gray-600 font-normal p-4 pl-2"
-            onClick={handleLogout}
-          >
-            Đăng xuất tài khoản
-          </button>
+        <DialogContent className=" z-[999] absolute -translate-x-1/2 bottom-[50px] left-1/2 rounded-lg pl-4 bg-white shadow-md flex gap-2 items-center">
+          <div>
+            <div className="flex items-center gap-x-2 text-gray-600 hover:text-primary-600">
+              <User size={18} className="" />
+              <button className="w-max  font-normal p-4 pl-2">
+                Thay đổi thông tin cá nhân
+              </button>
+            </div>
+            <div
+              className="flex items-center gap-x-2 text-gray-600 hover:text-primary-600"
+              onClick={handleRedirectToHistory}
+            >
+              <FaHistory size={18} className="" />
+              <button className="w-max  font-normal p-4 pl-2">
+                Lịch sử đăng bài
+              </button>
+            </div>
+            <div className="flex items-center gap-x-2 text-gray-600 hover:text-primary-600">
+              <RiLockPasswordFill size={18} className="" />
+              <button className="w-max  font-normal p-4 pl-2">
+                Đổi mật khẩu
+              </button>
+            </div>
+            <div className="flex items-center gap-x-2 text-gray-600 hover:text-red-600">
+              <LogOut size={18} className="" />
+              <button
+                className="w-max font-normal p-4 pl-2"
+                onClick={handleLogout}
+              >
+                Đăng xuất tài khoản
+              </button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

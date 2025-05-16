@@ -4,7 +4,7 @@ import Image from "next/image";
 import { MessageCircle, Tag } from "lucide-react";
 import classNames from "classnames";
 import { ProfileInfoBox } from "./ProfileInfoBox";
-import { PostType } from "@/types";
+import { PostType, PostTypeEnum } from "@/types";
 import { CommonButton } from "../common/button/CommonButton";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { updatePost } from "@/requests/post";
@@ -25,6 +25,7 @@ import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { useMemo } from "react";
 import { CommonTag } from "../common/CommonTag";
+import { ROUTE } from "@/contants/router";
 
 type Props = {
   data?: PostType | null;
@@ -76,9 +77,6 @@ export const Post = ({
   isDetail,
 }: Props) => {
   const router = useCustomRouter();
-  const handleOnClick = (value: any) => {
-    onVerifiedPost?.(value);
-  };
   const handleClickPostCard = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
@@ -136,6 +134,10 @@ export const Post = ({
       onUpdatePost?.();
     }
   };
+
+  const handleSearchByTag = (tag: string) => {
+    router.push(`${ROUTE.SEARCH}?q=${tag}&filter=hashtag`);
+  };
   return (
     <>
       <div
@@ -169,6 +171,17 @@ export const Post = ({
                 onClick={() => setTaggedUsersDialogOpen(true)}
               >
                 {taggedList.length - 1} người khác.
+              </div>
+              <div className="ml-1">
+                {data?.type === PostTypeEnum.PROJECT ? (
+                  <div>
+                    <span className="font-medium">Dự án</span>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="font-medium">Bài viết</span>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -205,7 +218,9 @@ export const Post = ({
             {data?.tags && data?.tags?.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2 mb-2">
                 {data?.tags.split(", ").map((tag: string, index: number) => (
-                  <CommonTag key={index}>{tag}</CommonTag>
+                  <CommonTag key={index} onClick={() => handleSearchByTag(tag)}>
+                    {tag}
+                  </CommonTag>
                 ))}
               </div>
             )}

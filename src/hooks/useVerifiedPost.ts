@@ -1,12 +1,11 @@
-import { getListPost, getListPostCustom, updatePost } from '@/requests/post'
+import { getListPostCustom, updatePost } from '@/requests/post'
 import { useLoadingStore } from '@/store/LoadingStore'
 import { useSnackbarStore } from '@/store/SnackbarStore'
-import { useUserStore } from '@/store/UserStore'
 import { PostType, PostVerificationType } from '@/types'
 import { useQuery } from '@tanstack/react-query'
 import { get } from 'lodash'
 import qs from 'qs'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 export const useVerifiedPost = () => {
   // const [listPost, setListPost] = useState<PostType[]>()

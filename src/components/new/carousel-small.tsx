@@ -64,7 +64,7 @@ export const ShowSmallCarouselItems = () => {
                     height={360}
                     className="!w-full h-full max-h-[200px] object-cover rounded-2xl transition-opacity duration-300"
                   />
-                  <div className="absolute w-full bottom-0 h-1/2 bg-black bg-opacity-50 rounded-b-2xl flex flex-col items-start justify-end p-6">
+                  <div className="absolute w-full bottom-0 h-1/2 bg-gradient-to-t from-black via-black/100 to-transparent rounded-b-2xl flex flex-col items-start justify-end p-6">
                     <div className="flex flex-col gap-2">
                       <div className="text-white text-BodySm font-semibold line-clamp-3 overflow-hidden">
                         {item.title}

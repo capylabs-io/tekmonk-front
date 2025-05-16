@@ -10,14 +10,12 @@ type Props = {
   customInputClassNames?: string;
   error?: string; // Added error prop
   placeholder?: string;
-  name?: string;
   value?: string;
   onValueChange?: (value: string) => void;
 };
 
 export const InputTags = ({
   error,
-  name = "",
   customClassNames,
   placeholder,
   customInputClassNames,
@@ -42,8 +40,25 @@ export const InputTags = ({
     if (e.key === "Enter" && inputValue.trim() !== "") {
       e.preventDefault();
       e.stopPropagation();
-      if (!tags.includes(inputValue.trim())) {
-        const newTags = [...tags, inputValue.trim()];
+
+      // Split input by spaces to create multiple tags
+      const inputTags = inputValue
+        .split(" ")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "");
+
+      // Add each new tag if it doesn't already exist
+      const newTags = [...tags];
+      let tagsAdded = false;
+
+      inputTags.forEach((tag) => {
+        if (!newTags.includes(tag)) {
+          newTags.push(tag);
+          tagsAdded = true;
+        }
+      });
+
+      if (tagsAdded) {
         setTags(newTags);
         setInputValue("");
         onValueChange && onValueChange(newTags.join(", "));
@@ -77,7 +92,7 @@ export const InputTags = ({
                   "flex-1 bg-transparent min-w-[120px] w-full text-BodyMd outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-gray-70 placeholder:text-BodyMd",
                   customInputClassNames
                 )}
-                placeholder="Nhập tags ..."
+                placeholder={placeholder || "Nhập tags, cách nhau bởi dấu phẩy"}
               />
             </div>
             <div className="flex flex-wrap gap-2 w-full">

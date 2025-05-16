@@ -119,18 +119,17 @@ export const Navbar = () => {
           </div>
 
           {/* Action Buttons */}
-          <div
-            className={cn(
-              "flex items-center space-x-4 justify-end "
-            )}
-          >
+          <div className={cn("flex items-center space-x-4 justify-end ")}>
             {/* <Link
               href="/bang-tin"
               className="hidden md:inline-flex text-SubheadMd text-gray-95"
             >
               Vào bảng tin
             </Link> */}
-            <CommonButton variant="secondary" className="h-8 text-white md:block hidden">
+            <CommonButton
+              variant="secondary"
+              className="h-8 text-white md:block hidden"
+            >
               <Link href={ROUTE.NEWS_FEED} className="text-SubheadSm">
                 Vào bảng tin
               </Link>
