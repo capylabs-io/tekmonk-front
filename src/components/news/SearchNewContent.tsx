@@ -15,10 +15,13 @@ type Props = {
   data: TNews[]
   value: string
   onSearch: (value: string) => void
+  onBack: () => void
 }
-export const SearchNewContent = ({ data, value, onSearch }: Props) => {
+export const SearchNewContent = ({ data, value, onSearch, onBack }: Props) => {
   const router = useCustomRouter();
   const [searchValue, setSearchValue] = useState(value);
+  const [textSearch, setTextSearch] = useState(value);
+
   const handleRedirect = (id: number) => {
     router.push(`${ROUTE.NEWS}/${id}`);
   };
@@ -28,7 +31,9 @@ export const SearchNewContent = ({ data, value, onSearch }: Props) => {
   return (
     <div className='container mx-auto col-span-3'>
       <div className='flex items-center gap-4'>
-        <button className='flex items-center justify-center gap-2 border border-gray-20 rounded-xl w-12 h-12'>
+        <button className='flex items-center justify-center gap-2 border border-gray-20 rounded-xl w-12 h-12' onClick={() => {
+          onBack()
+        }}>
           <ArrowLeft size={16} />
         </button>
         <Input
@@ -39,6 +44,7 @@ export const SearchNewContent = ({ data, value, onSearch }: Props) => {
           onChange={setSearchValue}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
+              setTextSearch(searchValue);
               onSearch(searchValue);
             }
           }}
@@ -46,7 +52,7 @@ export const SearchNewContent = ({ data, value, onSearch }: Props) => {
 
       </div>
       <div className='mt-4 text-gray-50 text-SubheadMd'>
-        Tìm thấy <span className='text-primary-95'>{data?.length}</span> kết quả phù hợp với từ khoá: <span className='text-primary-95'>&quot;{searchValue}&quot;</span>
+        Tìm thấy <span className='text-primary-95'>{data?.length}</span> kết quả phù hợp với từ khoá: <span className='text-primary-95'>&quot;{textSearch}&quot;</span>
       </div>
       <div className="flex flex-col gap-4 mt-4">
         {data &&

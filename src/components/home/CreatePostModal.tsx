@@ -321,7 +321,7 @@ export const CreatePostModal = () => {
                 }}
                 onClick={method.handleSubmit(handleCreatePost)}
               >
-                <div className="!text-sm !font-normal"> Đăng dự án</div>
+                <div className="!text-sm !font-normal">{type === PostTypeEnum.PROJECT ? "Đăng dự án" : "Đăng bài viết"}</div>
               </Button>
             </div>
           </div>

@@ -35,7 +35,7 @@ export default function News() {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchNews } =
     useInfiniteQuery({
       refetchOnWindowFocus: false,
-      queryKey: ["news"],
+      queryKey: ["news", searchValue],
       queryFn: async ({ pageParam = 1 }) => {
         try {
           const queryString = qs.stringify({
@@ -84,7 +84,10 @@ export default function News() {
   return (
     <>
       <div className={classNames("w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
-        {isSearch ? <SearchNewContent value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
+        {isSearch ? <SearchNewContent onBack={() => {
+          setIsSearch(false);
+          handleSearchNews('')
+        }} value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
           <>
             <div className="lg:col-span-2 col-span-3">
               {
@@ -258,7 +261,7 @@ const FeaturedNewsComponent = ({
     <div className="w-full mt-8 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <div className="text-HeadingMd text-[#320130]">TIN TỨC NỔI BẬT</div>
-        <div className="flex gap-1">
+        {/* <div className="flex gap-1">
           <CommonCard
             size="small"
             isActive={true}
@@ -290,7 +293,7 @@ const FeaturedNewsComponent = ({
           >
             Khóa học
           </CommonCard>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-4">
         {data &&
@@ -349,11 +352,26 @@ const FeaturedNewsComponent = ({
 
             </>
           ))}
+        {data && data.length === 0 && (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <Image
+              alt="empty-state"
+              src="/image/empty-data-image.png"
+              width={300}
+              height={200}
+            />
+            <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
+            <div className="text-BodyMd text-gray-70">
+              Chúng tôi sẽ sớm cập nhật thông tin mới
+            </div>
+          </div>
+        )}
       </div>
 
-      {isFetchingNextPage ? (
+      {/* {isFetchingNextPage ? (
         <div className="text-center">Loading . . .</div>
       ) : (
+        data && data.length > 0 &&
         <CommonCard
           size="medium"
           className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
@@ -361,7 +379,7 @@ const FeaturedNewsComponent = ({
         >
           Xem thêm
         </CommonCard>
-      )}
+      )} */}
     </div>
   );
 };

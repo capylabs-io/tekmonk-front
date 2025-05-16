@@ -21,7 +21,7 @@ export const CalendarCard = ({
     <CommonCard
       size="small"
       className={cn(
-        "w-16 h-[74px] flex flex-col items-center justify-center overflow-hidden",
+        "min-w-16 h-[74px] flex flex-col items-center justify-center overflow-hidden",
         className
       )}
       {...props}

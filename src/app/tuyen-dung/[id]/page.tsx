@@ -87,7 +87,7 @@ export default function Page() {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <div className="flex items-center text-SubheadMd text-gray-95 gap-2">
             <Banknote className="text-gray-70" size={16} />
-            <div>{data && data.data.salary || "Lương thỏa thuận"}</div>
+            <div>{data && data.data.minSalary && data.data.maxSalary ? `${data.data.minSalary} - ${data.data.maxSalary}` : "Lương thỏa thuận"}</div>
           </div>
           <div className="flex items-start text-BodyMd text-gray-95 gap-2">
             <MapPin className="text-gray-70 mt-1" size={16} />

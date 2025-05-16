@@ -8,6 +8,7 @@ import {
   useShopInventoryStore,
   TabOptions,
 } from "@/store/switch-shop-inventory";
+import { AuthGuard } from "@/components/hoc/auth-guard";
 
 // Tab data
 const TABS: TabItem[] = [
@@ -37,12 +38,14 @@ export default function Shop() {
         </div>
 
         {/* Tab Navigation */}
-        <TabNavigation
-          tabs={TABS}
-          activeTabId={activeTab}
-          onTabChange={handleTabChange}
-        />
-
+        {
+          userInfo?.id &&
+          <TabNavigation
+            tabs={TABS}
+            activeTabId={activeTab}
+            onTabChange={handleTabChange}
+          />
+        }
         {/* Tab Content */}
         {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>

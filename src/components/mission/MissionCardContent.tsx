@@ -91,8 +91,13 @@ export const MissionCardContent = ({
       />
 
       <div className="flex flex-col items-center p-0 w-full gap-0 flex-none self-stretch relative z-10">
-        <h3 className="text-SubheadSm font-medium text-center text-gray-95 w-full h-5 overflow-hidden text-ellipsis whitespace-nowrap">
+        <h3 className="text-SubheadSm font-medium text-center text-gray-95 w-full h-[40px] overflow-hidden text-ellipsis text-wrap">
           {data.title}
+          {/* <TextWithEllipsis
+            text={data.title || ""}
+            maxLines={3}
+            secondText={renderProgressIndicator()}
+          /> */}
         </h3>
 
         <div className="text-BodyXs font-light text-gray-70 w-full h-8 text-center mt-1">
@@ -103,7 +108,7 @@ export const MissionCardContent = ({
           />
         </div>
 
-        <div className="flex flex-row items-center justify-center gap-2">
+        <div className="flex flex-row items-center justify-center gap-2 mt-1">
           <div className="flex items-center gap-1">
             <Image
               src="/image/home/coin.png"

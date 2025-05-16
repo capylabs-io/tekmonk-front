@@ -95,11 +95,11 @@ export const MissionProgress = ({ id }: { id: number }) => {
       <div className="flex flex-col mt-4">
         <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
           <Image
-            src={missions?.data[0]?.imageUrl || ""}
+            src={missions?.data[0]?.imageUrl == "" || missions?.data[0]?.imageUrl == null ? "/image/app-logox2.png" : missions?.data[0]?.imageUrl}
             alt="Mission"
             width={80}
             height={80}
-            className="object-contain flex-none"
+            className="object-contain flex-none border border-gray-200 rounded-md"
           />
 
           <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">

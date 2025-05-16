@@ -69,6 +69,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import FontPreloader from "./FontPreloader"
+import { useUserStore } from "@/store/UserStore"
 
 // Danh sách các font cho người dùng lựa chọn
 const fontOptions = [
@@ -99,14 +100,15 @@ export default function CertificateEditor({
   onBackgroundChange,
   isPreviewCertificate = false
 }: CertificateEditorProps) {
+  const [userInfo] = useUserStore((state) => [state.userInfo])
   // Certificate background image
   const [backgroundImage, setBackgroundImage] = useState<string | null>(initialBackgroundImage || null)
   const [backgroundFile, setBackgroundFile] = useState<File | null>(null)
   const [isOpenAddTextBlock, setIsOpenAddTextBlock] = useState(false)
   const [textBlockName, setTextBlockName] = useState("")
   // Certificate dimensions
-  const certificateWidth = 1200
-  const certificateHeight = 800
+  const certificateWidth = 800
+  const certificateHeight = 600
 
   // Thêm ref để theo dõi thay đổi và tránh vòng lặp vô hạn
   const onFieldsChangeRef = useRef<string | null>(null);
@@ -121,7 +123,7 @@ export default function CertificateEditor({
       label: "Tên người nhận",
       value: "John Doe",
       htmlContent: "<p>John Doe</p>",
-      position: { x: 400, y: 300 },
+      position: { x: 400, y: 250 },
       fontSize: 24,
       fontWeight: "normal",
       color: "#333333",
@@ -133,7 +135,7 @@ export default function CertificateEditor({
       label: "Tên khóa học",
       value: "Web Development Masterclass",
       htmlContent: "<p>Web Development Masterclass</p>",
-      position: { x: 400, y: 200 },
+      position: { x: 400, y: 150 },
       fontSize: 36,
       fontWeight: "bold",
       color: "#000000",
@@ -145,7 +147,7 @@ export default function CertificateEditor({
       label: "Ngày cấp",
       value: new Date().toLocaleDateString(),
       htmlContent: new Date().toLocaleDateString(),
-      position: { x: 400, y: 400 },
+      position: { x: 400, y: 350 },
       fontSize: 18,
       fontWeight: "normal",
       color: "#555555",
@@ -157,7 +159,7 @@ export default function CertificateEditor({
       label: "Chữ ký",
       value: "Jane Smith",
       htmlContent: "<p>Jane Smith</p>",
-      position: { x: 400, y: 500 },
+      position: { x: 400, y: 450 },
       fontSize: 20,
       fontWeight: "normal",
       color: "#000000",
@@ -337,7 +339,7 @@ export default function CertificateEditor({
       img.onload = () => {
         const canvas = document.createElement('canvas')
 
-        // Luôn tạo canvas với kích thước 1200x800
+        // Luôn tạo canvas với kích thước 800x600
         canvas.width = certificateWidth;
         canvas.height = certificateHeight;
 
@@ -351,7 +353,7 @@ export default function CertificateEditor({
         ctx.imageSmoothingEnabled = true;
         ctx.imageSmoothingQuality = 'high';
 
-        // Tính toán tỷ lệ để vẽ ảnh đầy đủ vào khung 1200x800
+        // Tính toán tỷ lệ để vẽ ảnh đầy đủ vào khung 800x600
         const hRatio = canvas.width / img.width;
         const vRatio = canvas.height / img.height;
         const ratio = Math.max(hRatio, vRatio);
@@ -868,8 +870,8 @@ export default function CertificateEditor({
             className="relative bg-white border border-gray-200 rounded-lg overflow-hidden my-4 shadow-lg mx-auto"
             style={{
               width: "100%",
-              maxWidth: "1200px", // Giới hạn kích thước tối đa trong chế độ preview
-              maxHeight: "800px",
+              maxWidth: "800px", // Giới hạn kích thước tối đa trong chế độ preview
+              maxHeight: "600px",
               aspectRatio: `${certificateWidth} / ${certificateHeight}`,
               backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
               backgroundSize: "cover",
@@ -883,7 +885,7 @@ export default function CertificateEditor({
                 <p>Không có ảnh nền</p>
               </div>
             )}
-            {fields.map((field) => (
+            {fields.map((field, index) => (
               <div
                 key={field.id}
                 data-id={field.id}
@@ -899,7 +901,14 @@ export default function CertificateEditor({
                   top: `${field.position.y}px`,
                 }}
               >
-                <div dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
+                {
+                  initialFields?.[index]?.label === "Tên người nhận" ?
+                    <div dangerouslySetInnerHTML={{ __html: `${userInfo?.fullName}` }} />
+                    : initialFields?.[index]?.label === "Chữ ký" ?
+                      <div dangerouslySetInnerHTML={{ __html: `${userInfo?.username}` }} />
+                      :
+                      <div dangerouslySetInnerHTML={{ __html: field.htmlContent }} />
+                }
               </div>
             ))}
           </div>
@@ -930,11 +939,11 @@ export default function CertificateEditor({
               <div
                 ref={certificateRef}
                 data-certificate
-                className="relative bg-white border border-gray-200 rounded-lg overflow-hidden my-4 shadow-lg"
+                className="relative bg-white border border-gray-200 rounded-lg overflow-auto my-4 shadow-lg"
                 style={{
-                  width: "100%",
+                  width: "800px", // Giới hạn kích thước tối đa trong chế độ preview
+                  maxHeight: "600px",
                   aspectRatio: `${certificateWidth} / ${certificateHeight}`,
-                  maxWidth: "100%",
                   backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
                   backgroundSize: "cover",
                   backgroundPosition: "center",

@@ -19,6 +19,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { editCommentPost } from "@/requests/post";
 import { PostComment } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
   comment: PostComment;
@@ -49,6 +50,7 @@ export const CommentCard = ({
   comment,
   onUpdateComment,
 }: Props) => {
+  const router = useCustomRouter();
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(content || "");
@@ -84,15 +86,14 @@ export const CommentCard = ({
       <div
         className={`h-[40px] w-[40px] flex-shrink-0 rounded-full border bg-cover bg-center bg-no-repeat`}
         style={{
-          backgroundImage: `url(${
-            comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
-          })`,
+          backgroundImage: `url(${comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
+            })`,
         }}
       ></div>
       <div className="w-full flex-1 space-y-0.5">
         <div className="text-black flex items-center gap-1 text-base font-medium">
-          <div>{comment?.commentedBy?.fullName || name}</div>
-          <div className="inline-flex items-center gap-1 text-sm text-grey-500">
+          <div className="hover:cursor-pointer hover:underline hover:text-primary-70" onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}>{comment?.commentedBy?.fullName || name}</div>
+          <div className="inline-flex items-center gap-1 text-sm text-grey-500 hover:cursor-pointer hover:underline hover:text-primary-70" onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}>
             @{comment?.commentedBy?.username || username}
             <Dot size={20} />
             {time ? timeAgo(Number(time)) : "Invalid time"}

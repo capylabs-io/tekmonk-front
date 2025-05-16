@@ -161,7 +161,7 @@ export default function MissionPage() {
           </div>
         ) : data?.data && data.data.length > 0 ? (
           <>
-            <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-10">
+            <div className="w-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
               {data.data.map((mission, index: number) => (
                 <MissionCard
                   key={index}
