@@ -6,7 +6,7 @@ import { StrapiResponse } from "./strapi-response-pattern";
 import { User } from "@/types/common-types";
 import { UserRankingProps, UserStatProps } from "@/types/users";
 
-export const ReqGetUsers = async (query: string = "") => {
+export const ReqCustomGetUsers = async (query: string = "") => {
   const response = await tekdojoAxios.get(
     `${BASE_URL}/custom-auth/users?${query}`
   );
@@ -24,7 +24,7 @@ export const ReqDeleteUser = async (id: string) => {
 
 export const ReqGetClassUserRemaining = async (query: string = "") => {
   return (await tekdojoAxios.get(
-    `${BASE_URL}/custom-auth/remaining-users?${query}`
+    `${BASE_URL}/custom-auth/remaining-users-in-class?${query}`
   )) as StrapiResponse<User[]>;
 };
 

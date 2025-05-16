@@ -16,7 +16,11 @@ import { DeactivateUserDialog } from "./dialogs/deactivate-user-dialog";
 import { DeleteUserDialog } from "./dialogs/delete-user-dialog";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { ReqGetUsers, ReqUpdateUser, ReqDeleteUser } from "@/requests/user";
+import {
+  ReqCustomGetUsers,
+  ReqUpdateUser,
+  ReqDeleteUser,
+} from "@/requests/user";
 import qs from "qs";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
@@ -71,7 +75,7 @@ export const AccountTable = () => {
           pageSize: itemsPerPage,
           sort: [`id:${sortOrder}`],
         });
-        return await ReqGetUsers(queryString);
+        return await ReqCustomGetUsers(queryString);
       } catch (error) {
         console.log(error);
       }

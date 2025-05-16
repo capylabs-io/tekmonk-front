@@ -7,15 +7,17 @@ type Props = {
   userName: string;
   userRank: ReactNode;
   specialName: string;
+  onClick?: () => void;
 };
 export const ProfileInfoBox = ({
   imageUrl,
   userName,
   userRank,
   specialName,
+  onClick,
 }: Props) => {
   return (
-    <div className="flex items-center gap-x-2 justify-center">
+    <div className="flex items-center gap-x-2 justify-center" onClick={onClick}>
       {/* <div className='h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center'>
                 <Image src={imageUrl} alt='profile pic' width={32} height={32} />
             </div> */}
@@ -28,7 +30,9 @@ export const ProfileInfoBox = ({
 
       <div>
         <div className="truncate flex gap-x-2 items-center">
-          <span className="text-base font-bold">{userName}</span>
+          <span className="text-base font-bold hover:text-primary-70">
+            {userName}
+          </span>
         </div>
         {/* <div className="text-sm text-gray-500 inline-flex gap-1 items-center">
           {userRank} {specialName}

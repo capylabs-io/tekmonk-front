@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CommonTag } from "../common/CommonTag";
 import CommonPagination from "./common-pagination";
-import { ReqGetClassUserRemaining, ReqGetUsers } from "@/requests/user";
+import { ReqGetClassUserRemaining, ReqCustomGetUsers } from "@/requests/user";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { Input } from "../common/Input";
@@ -51,7 +51,7 @@ export const AddStudentToClass = ({
             pageSize: itemsPerPage,
           },
         });
-        return await ReqGetUsers(queryString);
+        return await ReqCustomGetUsers(queryString);
       } catch (error) {
         console.log("error when fetching student list", error);
       }

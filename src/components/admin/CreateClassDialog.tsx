@@ -14,7 +14,7 @@ import "react-calendar/dist/Calendar.css";
 import { Input } from "../common/Input";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
-import { ReqGetUsers } from "@/requests/user";
+import { ReqCustomGetUsers } from "@/requests/user";
 import { CommonTag } from "../common/CommonTag";
 import CommonPagination from "./common-pagination";
 import { useLoadingStore } from "@/store/LoadingStore";
@@ -92,7 +92,7 @@ export function CreateClassDialog({
           page: currentPage,
           pageSize: itemsPerPage,
         });
-        return await ReqGetUsers(queryString);
+        return await ReqCustomGetUsers(queryString);
       } catch (error) {
         console.log("error when fetching teacher list", error);
       }

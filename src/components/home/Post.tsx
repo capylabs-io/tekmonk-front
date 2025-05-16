@@ -1,16 +1,14 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
-import { MessageCircle, Tag, UserPlus } from "lucide-react";
+import { MessageCircle, Tag } from "lucide-react";
 import classNames from "classnames";
 import { ProfileInfoBox } from "./ProfileInfoBox";
-import { PostType, PostVerificationType } from "@/types";
+import { PostType } from "@/types";
 import { CommonButton } from "../common/button/CommonButton";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { likePost, updatePost } from "@/requests/post";
+import { updatePost } from "@/requests/post";
 import { get } from "lodash";
-import { PostCommentContent } from "./PostCommentContent";
-import { useRouter } from "next/navigation";
 import { ConvertoStatusPostToText } from "@/lib/utils";
 import Share from "../common/Share";
 import {
@@ -19,13 +17,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ListStudentSelect } from "./ListStudentSelect";
+import { ListStudentRemainingSelect } from "./ListStudentSelect";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { useMemo } from "react";
+import { CommonTag } from "../common/CommonTag";
 
 type Props = {
   data?: PostType | null;
@@ -100,7 +99,7 @@ export const Post = ({
     return taggedUsers?.filter(
       (user) => user.id.toString() !== userInfo?.id.toString()
     );
-  }, [taggedUsers]);
+  }, [taggedUsers, userInfo]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
@@ -151,6 +150,9 @@ export const Post = ({
             userName={userName}
             userRank={userRank}
             specialName={specialName}
+            onClick={() =>
+              router.push(`/ho-so/${get(data, "postedBy.id", "")}`)
+            }
           />
           {taggedList && taggedList?.length > 0 && (
             <div className="flex items-center gap-1">
@@ -198,6 +200,14 @@ export const Post = ({
               </p>
             ) : (
               <p className="text-xl font-bold text-gray-800">{postName}</p>
+            )}
+            {/* Make component tag here */}
+            {data?.tags && data?.tags?.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2 mb-2">
+                {data?.tags.split(", ").map((tag: string, index: number) => (
+                  <CommonTag key={index}>{tag}</CommonTag>
+                ))}
+              </div>
             )}
             <div className="relative">
               <div
@@ -278,7 +288,7 @@ export const Post = ({
                     className="inline-flex items-center gap-2 !text-gray-500 hover:!text-primary-70"
                   >
                     <Tag className="h-4 w-4" />
-                    <span className="text-sm">Tag</span>
+                    <span className="text-sm">Tag người khác</span>
                   </div>
                   <Share
                     url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
@@ -309,10 +319,13 @@ export const Post = ({
           </DialogHeader>
 
           <div className="p-4">
-            <ListStudentSelect
-              selectedStudents={selectedStudents}
-              setSelectedStudents={setSelectedStudents}
-            />
+            {data?.postedBy?.id && (
+              <ListStudentRemainingSelect
+                selectedStudents={selectedStudents}
+                setSelectedStudents={setSelectedStudents}
+                studentId={data?.postedBy?.id}
+              />
+            )}
 
             {/* Actions */}
             <div className="flex justify-between mt-4">

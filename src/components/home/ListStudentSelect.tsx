@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { CommonTag } from "../common/CommonTag";
 import StudentTablePagination from "./StudentTablePagination";
-import { ReqGetClassUserRemaining, ReqGetUsers } from "@/requests/user";
+import { ReqCustomGetUsers } from "@/requests/user";
 import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { Input } from "../common/Input";
@@ -12,48 +12,47 @@ import { User } from "@/types/common-types";
 type Props = {
   selectedStudents: string[];
   setSelectedStudents: (students: any) => void;
-  listFilteredStudent?: User[];
+  studentId: number;
 };
 
-export const ListStudentSelect = ({
+export const ListStudentRemainingSelect = ({
   selectedStudents,
   setSelectedStudents,
-  listFilteredStudent,
+  studentId,
 }: Props) => {
   /** UseState */
   //   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemPerPage] = useState(10);
+  const [itemsPerPage, setItemPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
 
   /** UseQuery */
   const { data: studentList } = useQuery({
-    queryKey: ["studentList"],
+    queryKey: ["remainingStudentList", currentPage, itemsPerPage],
     queryFn: async () => {
       try {
-        // if (classId) {
-        //   const queryString = qs.stringify({
-        //     classId: classId,
-        //     page: currentPage,
-        //     limit: itemsPerPage,
-        //   });
-        //   return await ReqGetClassUserRemaining(queryString);
-        // }
         const queryString = qs.stringify({
           filters: {
-            user_role: {
-              code: {
-                $eq: "STUDENT",
+            $and: [
+              {
+                user_role: {
+                  code: {
+                    $eq: "TEACHER",
+                  },
+                },
+                id: {
+                  $ne: studentId,
+                },
               },
-            },
+            ],
           },
-          populate: "user_role",
+          populate: ["user_role", "role"],
           pagination: {
             page: currentPage,
             pageSize: itemsPerPage,
           },
         });
-        return await ReqGetUsers(queryString);
+        return await ReqCustomGetUsers(queryString);
       } catch (error) {
         console.log("error when fetching student list", error);
       }
@@ -75,7 +74,7 @@ export const ListStudentSelect = ({
           student.username.toLowerCase().includes(searchQuery.toLowerCase())
         )
       : [];
-  }, [studentList, listFilteredStudent, searchQuery]);
+  }, [studentList, searchQuery]);
   return (
     <div>
       <div className="space-y-2">
