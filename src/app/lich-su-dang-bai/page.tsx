@@ -44,18 +44,11 @@ const HistoryPage = () => {
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
-          pagination: {
-            page: DEFAULT_PAGE,
-            pageSize: DEFAULT_PAGE_SIZE,
-          },
-          populate: "*",
-          filters: {
-            isVerified: postStatus,
-            postedBy: {
-              id: userInfo?.id,
-            },
-          },
-          sort: ["createdAt:desc"],
+          page: DEFAULT_PAGE,
+          limit: DEFAULT_PAGE_SIZE,
+          isVerified: postStatus,
+          authorId: userInfo?.id,
+          sort: "desc",
         });
 
         const results = await getListPostCustom(queryString);
