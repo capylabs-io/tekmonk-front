@@ -8,6 +8,7 @@ import CommonLayout from "@/components/common/CommonLayout";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
 import { NavigationInfo } from "@/components/common/sidebar/naivgation-info";
+import { AuthGuard } from "@/components/hoc/auth-guard";
 
 export default function Layout({
   children, // will be a page or nested layout
@@ -47,7 +48,7 @@ export default function Layout({
         }
         mainContent={
           <div className="col-span-6 py-5 overflow-y-auto overflow-x-hidden">
-            {children}
+            <AuthGuard>{children}</AuthGuard>
           </div>
         }
         rightSidebar={

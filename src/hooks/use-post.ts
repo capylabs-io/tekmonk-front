@@ -1,20 +1,26 @@
 import { PostTypeEnum, PostVerificationType } from "@/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import qs from "qs";
 
-import { getListPostCustom } from "@/requests/post";
+import { countPosts, getListPostCustom } from "@/requests/post";
+
+type UseInfiniteLatestPostProps = {
+  page: number;
+  limit: number;
+  type?: PostTypeEnum;
+  isVerified: PostVerificationType;
+  authorId?: number;
+};
 
 export const useInfiniteLatestPost = ({
   page,
   limit,
   type,
-}: {
-  page: number;
-  limit: number;
-  type: PostTypeEnum;
-}) => {
+  isVerified = PostVerificationType.ACCEPTED,
+  authorId,
+}: UseInfiniteLatestPostProps) => {
   return useInfiniteQuery({
-    queryKey: ["latest-sell-post", page, limit, type],
+    queryKey: ["latest-sell-post", page, limit, type, isVerified, authorId],
     queryFn: async ({ pageParam = page }) => {
       try {
         const queryString = qs.stringify(
@@ -22,8 +28,9 @@ export const useInfiniteLatestPost = ({
             page: pageParam,
             limit,
             sort: "desc",
-            isVerified: PostVerificationType.ACCEPTED,
-            type: type || "normal",
+            isVerified: isVerified,
+            type: type,
+            authorId: authorId,
           },
           { encodeValuesOnly: true }
         );
@@ -43,5 +50,18 @@ export const useInfiniteLatestPost = ({
     },
     initialPageParam: page,
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useCountPosts = (isVerified: string, userId?: number) => {
+  return useQuery({
+    queryKey: ["count-posts", isVerified, userId],
+    queryFn: async () => {
+      const queryString = qs.stringify({ isVerified });
+      const result = await countPosts(queryString);
+      return result;
+    },
+    refetchOnWindowFocus: false,
+    enabled: !!userId,
   });
 };

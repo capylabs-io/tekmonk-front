@@ -12,18 +12,38 @@ import moment from "moment";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useUserStore } from "@/store/UserStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { User } from "@/types/common-types";
-import { useQuery } from "@tanstack/react-query";
-import { getListPostCustom } from "@/requests/post";
-import qs from "qs";
+import { useInfiniteLatestPost } from "@/hooks/use-post";
+import { Clock, XCircle } from "lucide-react";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
 
+const StatusBadge = ({ status }: { status: PostVerificationType }) => {
+  switch (status) {
+    case PostVerificationType.PENDING:
+      return (
+        <div className="flex items-center gap-1 text-yellow-600 bg-yellow-50 px-2 py-1 rounded-md text-sm">
+          <Clock size={16} />
+          <span>Đang chờ duyệt</span>
+        </div>
+      );
+    case PostVerificationType.DENIED:
+      return (
+        <div className="flex items-center gap-1 text-red-600 bg-red-50 px-2 py-1 rounded-md text-sm">
+          <XCircle size={16} />
+          <span>Đã bị từ chối</span>
+        </div>
+      );
+    default:
+      return null;
+  }
+};
+
 const HistoryPage = () => {
-  const { ref } = useInView();
+  const { ref, inView } = useInView();
   const [showLoading, hideLoading] = useLoadingStore((state) => [
     state.show,
     state.hide,
@@ -33,31 +53,19 @@ const HistoryPage = () => {
     PostVerificationType.ACCEPTED
   );
 
-  // Custom useQuery instead of useInfiniteLatestPost to include verification status
   const {
     data: currentPageData,
     isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     refetch,
-  } = useQuery({
-    queryKey: ["post-history", postStatus],
-    refetchOnWindowFocus: false,
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          page: DEFAULT_PAGE,
-          limit: DEFAULT_PAGE_SIZE,
-          isVerified: postStatus,
-          authorId: userInfo?.id,
-          sort: "desc",
-        });
-
-        const results = await getListPostCustom(queryString);
-        return results;
-      } catch (error) {
-        console.error("Error fetching history posts:", error);
-        return { data: [] };
-      }
-    },
+  } = useInfiniteLatestPost({
+    page: DEFAULT_PAGE,
+    limit: DEFAULT_PAGE_SIZE,
+    isVerified: postStatus,
+    type: PostTypeEnum.POST,
+    authorId: userInfo?.id,
   });
 
   const handleTabChange = (value: string) => {
@@ -78,31 +86,46 @@ const HistoryPage = () => {
     }
   };
 
-  // Flatten posts
-  const posts = currentPageData?.data || [];
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Render post list for each tab
-  const renderPosts = () => {
+  // Flatten posts from all pages
+  const flattenedPosts =
+    currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
+
+  const renderPostList = () => {
     if (isLoading) {
       return <div className="p-8 text-center">Truy xuất dữ liệu...</div>;
     }
 
-    if (posts.length === 0) {
-      return <div className="p-8 text-center">Không có bài viết nào</div>;
+    if (flattenedPosts.length === 0) {
+      return (
+        <div className="p-8 text-center mx-auto">Không có bài viết nào</div>
+      );
     }
 
     return (
       <>
-        {posts.map((item: PostType, index: number) => (
+        {flattenedPosts.map((item: PostType, index: number) => (
           <div key={item.id || index}>
             <div className="px-8 relative">
+              {postStatus !== PostVerificationType.ACCEPTED && (
+                <div className="absolute top-2 right-8 z-10">
+                  <StatusBadge status={postStatus} />
+                </div>
+              )}
               <div className="text-sm text-gray-500 absolute top-2 right-8">
                 {moment(get(item, "createdAt", ""))
                   .format("DD/MM/YYYY")
                   .toString()}
               </div>
               <Post
-                isAllowClickDetail
+                isAllowClickDetail={
+                  postStatus === PostVerificationType.ACCEPTED
+                }
                 data={item}
                 imageUrl="bg-[url('/image/home/profile-pic.png')]"
                 thumbnailUrl={get(item, "thumbnail") || ""}
@@ -122,11 +145,20 @@ const HistoryPage = () => {
                 onUpdatePost={refetch}
               />
             </div>
-            {index !== posts.length - 1 && (
+            {index !== flattenedPosts.length - 1 && (
               <hr className="border-t border-gray-200 my-4" />
             )}
           </div>
         ))}
+
+        {/* Loading indicator and intersection observer target */}
+        <div ref={ref} className="p-4 text-center">
+          {isFetchingNextPage
+            ? "Đang tải thêm bài viết..."
+            : !hasNextPage && flattenedPosts.length > 0
+            ? ""
+            : ""}
+        </div>
       </>
     );
   };
@@ -157,21 +189,21 @@ const HistoryPage = () => {
           value={PostVerificationType.ACCEPTED}
           className="overflow-y-auto"
         >
-          {renderPosts()}
+          {renderPostList()}
         </TabsContent>
 
         <TabsContent
           value={PostVerificationType.PENDING}
           className="overflow-y-auto"
         >
-          {renderPosts()}
+          {renderPostList()}
         </TabsContent>
 
         <TabsContent
           value={PostVerificationType.DENIED}
           className="overflow-y-auto"
         >
-          {renderPosts()}
+          {renderPostList()}
         </TabsContent>
       </Tabs>
     </div>

@@ -6,18 +6,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { Dela_Gothic_One } from "next/font/google";
 import { NotiCard } from "@/components/notification/NotiCard";
-import WithAuth from "@/components/hoc/WithAuth";
 import { Notification as NotificationType } from "@/types/common-types";
 
-const delaGothicOne = Dela_Gothic_One({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-delo",
-});
-
-const Notification: React.FC = () => {
+export default function Notification() {
   const notifications: NotificationType[] = [];
 
   return (
@@ -52,6 +44,4 @@ const Notification: React.FC = () => {
       </Tabs>
     </>
   );
-};
-
-export default WithAuth(Notification);
+}

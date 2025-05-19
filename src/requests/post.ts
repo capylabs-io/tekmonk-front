@@ -1,20 +1,8 @@
 import { PostType } from "@/types";
 import tekdojoAxios from "./axios.config";
 import { BASE_URL } from "@/contants/api-url";
-import { AxiosResponse } from "axios";
 import { StrapiResponse } from "./strapi-response-pattern";
 import { PostComment } from "@/types/common-types";
-
-const fakeData = [
-  {
-    id: 1,
-    content: "Hello",
-    media: "https://www.google.com",
-    postedBy: 1,
-    type: "image",
-    metadata: "metadata",
-  },
-];
 
 //for get all post (pagination)
 export const getPostsPagination = async (page: number, limit: number) => {
@@ -55,6 +43,12 @@ export const uploadPost = async (data: any) => {
 export const findPost = async (id: number) => {
   const response = await tekdojoAxios.get(`${BASE_URL}/posts/${id}`);
   return response.data as PostType;
+};
+export const countPosts = async (query: string = "") => {
+  const response = await tekdojoAxios.get(
+    `${BASE_URL}/posts/get-count-posts?${query}`
+  );
+  return response.data as number;
 };
 export const updatePost = async (id: number, data: any) => {
   const response = await tekdojoAxios.put(`${BASE_URL}/posts/${id}`, { data });

@@ -132,7 +132,7 @@ export const CreatePostModal = () => {
     isShowing && (
       <TooltipProvider>
         <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
-          <div className="relative mx-auto w-[688px] flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto">
+          <div className="relative mx-auto w-[688px] flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto custom-scrollbar">
             <button
               type="button"
               onClick={hide}
@@ -205,7 +205,7 @@ export const CreatePostModal = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex justify-between text-sm">
+                <div className="flex justify-between items-start text-sm">
                   <span className="text-gray-60 text-SubheadMd flex items-center">
                     Tags{" "}
                     <Tooltip>

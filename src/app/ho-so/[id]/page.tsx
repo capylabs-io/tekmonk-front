@@ -12,7 +12,7 @@ import { AchievementProfile } from "@/components/profile/achievement-profile";
 import { CertificateProfile } from "@/components/profile/certificate-proifile";
 import { MissionProgress } from "@/components/profile/mission-progress";
 import { UserStat } from "@/components/profile/UserStat";
-import { useGetUserQuery } from "@/hooks/use-user-query";
+import { useGetUserQueryById } from "@/hooks/use-user-query";
 import { getListPostCustom } from "@/requests/post";
 import { useUserAvatarStore } from "@/store/UserAvatarStore";
 import { useUserStore } from "@/store/UserStore";
@@ -32,7 +32,7 @@ export default function Profile() {
   const { id } = useParams();
   const router = useCustomRouter();
   const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
-  const { data: guestInfor } = useGetUserQuery(id as string);
+  const { data: guestInfor } = useGetUserQueryById(id as string);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();

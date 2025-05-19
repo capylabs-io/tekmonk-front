@@ -7,16 +7,15 @@ import {
 } from "@/components/common/Tabs";
 import { Post } from "@/components/home/Post";
 import { likePost } from "@/requests/post";
-import { PostType, PostTypeEnum } from "@/types";
+import { PostType, PostTypeEnum, PostVerificationType } from "@/types";
 import moment from "moment";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useUserStore } from "@/store/UserStore";
 import { useEffect, useState } from "react";
-import { useInfiniteLatestPost } from "@/hooks/use-post";
+import { useCountPosts, useInfiniteLatestPost } from "@/hooks/use-post";
 import { useInView } from "react-intersection-observer";
 import { useProfileStore } from "@/store/ProfileStore";
-import { CommonButton } from "@/components/common/button/CommonButton";
 import { User } from "@/types/common-types";
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -42,6 +41,7 @@ const Home = () => {
     page: DEFAULT_PAGE,
     limit: DEFAULT_PAGE_SIZE,
     type: postType,
+    isVerified: PostVerificationType.ACCEPTED,
   });
   const [tabValue, setTabValue] = useState<string>("all");
   const handleTabChange = (value: string) => {
@@ -114,13 +114,6 @@ const Home = () => {
                       }
                       taggedUsers={get(item, "tagged_users", []) as User[]}
                       specialName={get(item, "postedBy.skills", "")}
-                      // userRank={
-                      //   <span
-                      //     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                      //   >
-                      //     IV
-                      //   </span>
-                      // }
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))

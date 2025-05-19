@@ -9,7 +9,7 @@ import moment from "moment";
 import { CommonTag } from "../common/CommonTag";
 import { SplitRenderItem } from "../common/SplitRenderItem";
 
-export type SearchResultType = "post" | "person" | "project" | "hashtag";
+export type SearchResultType = "post" | "people" | "project" | "hashtag";
 
 export interface SearchResultItemProps {
   id: string;
@@ -25,7 +25,7 @@ export interface SearchResultItemProps {
 
 const TYPE_LABELS: Record<SearchResultType, string> = {
   post: "Bài viết",
-  person: "Người dùng",
+  people: "Người dùng",
   hashtag: "Hashtag",
   project: "Dự án",
 };
@@ -44,7 +44,7 @@ export const SearchResultItem = ({
     switch (type) {
       case "post":
         return <FileText className="h-5 w-5 text-primary-60" />;
-      case "person":
+      case "people":
         return <User className="h-5 w-5 text-primary-60" />;
       case "hashtag":
         return <FaHashtag className="h-5 w-5 text-primary-60" />;
@@ -56,9 +56,11 @@ export const SearchResultItem = ({
   };
 
   const tagList = tags
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
+    ? tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+    : [];
 
   const tagElements = tagList.map((tag, index) => (
     <CommonTag key={`tag-${index}`}>

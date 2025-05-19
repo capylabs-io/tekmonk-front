@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import { PostCommentContent } from "@/components/home/PostCommentContent";
 import { Post } from "@/components/home/Post";
-import { PostType } from "@/types";
+import { PostType, PostVerificationType } from "@/types";
 import { get } from "lodash";
 import moment from "moment";
 import { findPost, likePost } from "@/requests/post";
@@ -37,7 +37,11 @@ export default function Page({ params }: { params: { id: number } }) {
   const [showError] = useSnackbarStore((state) => [state.error]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
-  const { data: postData, refetch } = useQuery({
+  const {
+    data: postData,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["post", params.id],
     queryFn: async () => {
       try {
@@ -58,44 +62,58 @@ export default function Page({ params }: { params: { id: number } }) {
       const updateMetaTags = () => {
         // Facebook / Open Graph
         const ogTitle = document.querySelector('meta[property="og:title"]');
-        const ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogDesc = document.querySelector(
+          'meta[property="og:description"]'
+        );
         const ogImage = document.querySelector('meta[property="og:image"]');
         const ogUrl = document.querySelector('meta[property="og:url"]');
 
         if (!ogTitle) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', 'og:title');
-          meta.setAttribute('content', postData.name || 'Bài viết');
+          const meta = document.createElement("meta");
+          meta.setAttribute("property", "og:title");
+          meta.setAttribute("content", postData.name || "Bài viết");
           document.head.appendChild(meta);
         } else {
-          ogTitle.setAttribute('content', postData.name || 'Bài viết');
+          ogTitle.setAttribute("content", postData.name || "Bài viết");
         }
 
         if (!ogDesc) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', 'og:description');
-          meta.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+          const meta = document.createElement("meta");
+          meta.setAttribute("property", "og:description");
+          meta.setAttribute(
+            "content",
+            postData.content?.replace(/<[^>]*>?/gm, "").substring(0, 200) || ""
+          );
           document.head.appendChild(meta);
         } else {
-          ogDesc.setAttribute('content', postData.content?.replace(/<[^>]*>?/gm, '').substring(0, 200) || '');
+          ogDesc.setAttribute(
+            "content",
+            postData.content?.replace(/<[^>]*>?/gm, "").substring(0, 200) || ""
+          );
         }
 
         if (!ogImage) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', 'og:image');
-          meta.setAttribute('content', postData.thumbnail || '');
+          const meta = document.createElement("meta");
+          meta.setAttribute("property", "og:image");
+          meta.setAttribute("content", postData.thumbnail || "");
           document.head.appendChild(meta);
         } else {
-          ogImage.setAttribute('content', postData.thumbnail || '');
+          ogImage.setAttribute("content", postData.thumbnail || "");
         }
 
         if (!ogUrl) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', 'og:url');
-          meta.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+          const meta = document.createElement("meta");
+          meta.setAttribute("property", "og:url");
+          meta.setAttribute(
+            "content",
+            `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`
+          );
           document.head.appendChild(meta);
         } else {
-          ogUrl.setAttribute('content', `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`);
+          ogUrl.setAttribute(
+            "content",
+            `${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${params.id}`
+          );
         }
       };
 
@@ -124,6 +142,13 @@ export default function Page({ params }: { params: { id: number } }) {
     }
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (postData?.isVerified !== PostVerificationType.ACCEPTED) {
+    return <div>Bài viết đang chờ duyệt</div>;
+  }
   return (
     <AuthGuard>
       <Script

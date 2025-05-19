@@ -1,28 +1,10 @@
 "use client";
 import Link from "next/link";
-import { FaHashtag } from "react-icons/fa6";
-import {
-  Search,
-  FileText,
-  User,
-  Video,
-  ShoppingBag,
-  Flag,
-  MapPin,
-  Users,
-  Calendar,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePathname, useSearchParams } from "next/navigation";
 import { SearchHeader } from "./SearchHeader";
 import { ROUTE } from "@/contants/router";
-
-const filterCategories = [
-  { id: "all", label: "Tất cả", icon: <Search className="h-5 w-5" /> },
-  { id: "posts", label: "Bài viết", icon: <FileText className="h-5 w-5" /> },
-  { id: "people", label: "Người dùng", icon: <User className="h-5 w-5" /> },
-  { id: "hashtag", label: "Hashtag", icon: <FaHashtag className="h-5 w-5" /> },
-];
+import { filterCategories } from "@/contants/search/filter-category";
 
 export const SearchFilter = () => {
   const pathname = usePathname();
@@ -37,7 +19,7 @@ export const SearchFilter = () => {
         <div className="w-full bg-white rounded-xl border border-gray-20 p-2 mb-4">
           <h2 className="font-semibold mb-4 text-gray-90">Bộ lọc</h2>
           <div className="space-y-2">
-            {filterCategories.map((category) => ( 
+            {filterCategories.map((category) => (
               <Link
                 key={category.id}
                 href={`${ROUTE.SEARCH}?q=${queryParam}&filter=${category.id}`}
