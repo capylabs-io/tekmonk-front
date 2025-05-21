@@ -175,11 +175,6 @@ export const EditAllDialog: React.FC<EditAllDialogProps> = ({
                           <p className="text-xs text-muted-foreground">
                             {(file.file.size / (1024 * 1024)).toFixed(2)} MB
                           </p>
-                          {file.status === "error" && (
-                            <p className="text-xs text-red-500 mt-1">
-                              {file.errorMessage || "Tải lên thất bại"}
-                            </p>
-                          )}
                         </div>
 
                         {/* Actions */}

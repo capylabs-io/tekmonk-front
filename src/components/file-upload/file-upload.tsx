@@ -1,34 +1,21 @@
+"use client";
 import React, { useState, useRef, useCallback } from "react";
-import {
-  Upload,
-  X,
-  FileImage,
-  FileVideo,
-  Move,
-  PencilIcon,
-} from "lucide-react";
+import { X, PencilIcon, UploadIcon } from "lucide-react";
 // import { toast } from "sonner";
-import { AnimatePresence, motion } from "framer-motion";
 import {
-  DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
   DragEndEvent,
-  DragOverlay,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { Button } from "@/components/ui/button";
 import { ImageGrid } from "./image-grid";
 import { EditAllDialog } from "./edit-all-dialog";
 import { UploadArea } from "./upload-area";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { get } from "lodash";
 
 export interface FileItem {
   id: string;
@@ -60,16 +47,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+  const [warn, error] = useSnackbarStore((state) => [state.warn, state.error]);
 
   const validateFile = (file: File): { valid: boolean; message?: string } => {
     if (!acceptedFileTypes.includes(file.type)) {
@@ -93,8 +71,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   };
 
   const simulateUpload = (fileItem: FileItem): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      const duration = Math.random() * 2000 + 500; // Between 500ms and 2.5s
+    return new Promise((resolve) => {
+      const duration = 1000; // Fixed duration of 1 second for all uploads
       const interval = 50;
       const steps = duration / interval;
       let currentStep = 0;
@@ -109,24 +87,12 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
         if (progress === 100) {
           clearInterval(timer);
-          // Simulate a small chance of error for demo purposes
-          if (Math.random() > 0.9) {
-            setFiles((prevFiles) =>
-              prevFiles.map((f) =>
-                f.id === fileItem.id
-                  ? { ...f, status: "error", errorMessage: "Tải lên thất bại" }
-                  : f
-              )
-            );
-            reject(new Error("Lỗi tải lên ngẫu nhiên"));
-          } else {
-            setFiles((prevFiles) =>
-              prevFiles.map((f) =>
-                f.id === fileItem.id ? { ...f, status: "success" } : f
-              )
-            );
-            resolve();
-          }
+          setFiles((prevFiles) =>
+            prevFiles.map((f) =>
+              f.id === fileItem.id ? { ...f, status: "success" } : f
+            )
+          );
+          resolve();
         }
       }, interval);
     });
@@ -135,7 +101,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const handleFiles = useCallback(
     async (acceptedFiles: File[]) => {
       if (files.length + acceptedFiles.length > maxFiles) {
-        // toast.error(`You can upload a maximum of ${maxFiles} files`);
+        warn("Tệp đã tải lên", `Bạn có thể tải lên tối đa ${maxFiles} tệp`);
         return;
       }
 
@@ -145,7 +111,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         const validation = validateFile(file);
 
         if (!validation.valid) {
-          // toast.error(validation.message);
+          error("Lỗi", get(validation, "message", "Lỗi tải lên tệp"));
           continue;
         }
 
@@ -174,14 +140,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         onFilesChange(updatedFiles.map((item) => item.file));
       }
 
-      // Simulate upload for each new file
-      newFileItems.forEach((fileItem) => {
-        simulateUpload(fileItem).catch(() => {
-          // Error handling is done inside simulateUpload
-        });
-      });
+      // Simulate upload for each new file in parallel
+      const uploadPromises = newFileItems.map((fileItem) =>
+        simulateUpload(fileItem)
+      );
+      await Promise.all(uploadPromises);
     },
-    [files, maxFiles, onFilesChange]
+    [files, maxFiles, onFilesChange, warn, error]
   );
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -218,51 +183,36 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     });
   };
 
-  const handleDragStart = (event: DragEndEvent) => {
-    setActiveId(event.active.id as string);
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
-
-    if (over && active.id !== over.id) {
-      setFiles((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-
-        const newItems = arrayMove(items, oldIndex, newIndex);
-
-        if (onFilesChange) {
-          onFilesChange(newItems.map((item) => item.file));
-        }
-
-        return newItems;
-      });
+  const handleOpenFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
   return (
     <div className={`w-full ${className}`}>
-      <div
-        className="mb-4"
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-      >
-        <UploadArea
-          isDragging={isDragging}
-          onClick={() => fileInputRef.current?.click()}
-        />
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept={acceptedFileTypes.join(",")}
-          onChange={handleInputChange}
-          className="hidden"
-        />
-      </div>
+      {files.length === 0 ? (
+        <div
+          className=""
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <UploadArea
+            isDragging={isDragging}
+            onClick={() => fileInputRef.current?.click()}
+          />
+        </div>
+      ) : null}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept={acceptedFileTypes.join(",")}
+        onChange={handleInputChange}
+        className="hidden"
+      />
 
       {files.length > 0 && (
         <div className="relative">
@@ -270,8 +220,16 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             <h3 className="text-lg font-medium">
               Tệp đã tải lên ({files.length})
             </h3>
-            {/* Floating Edit All Button */}
+            {/* Action buttons */}
             <div className="flex gap-x-2">
+              <Button
+                onClick={handleOpenFileInput}
+                className="text-sm"
+                size="sm"
+                variant="outline"
+              >
+                <UploadIcon className="h-4 w-4 mr-1" /> Thêm ảnh
+              </Button>
               <Button
                 onClick={() => setIsDialogOpen(true)}
                 className="text-sm"

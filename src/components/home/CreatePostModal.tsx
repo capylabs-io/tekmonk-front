@@ -120,9 +120,12 @@ export const CreatePostModal = () => {
 
       const res = await uploadPost(formData);
       if (res) {
-        showSuccess("Thành công", "Tạo bài viết thành công");
-        // reset();
-        // hide();
+        showSuccess(
+          "Thành công",
+          "Đăng tải bài viết thành công, vui lòng chờ duyệt"
+        );
+        reset();
+        hide();
       }
     } catch (error) {
       console.log("error", error);
@@ -137,8 +140,8 @@ export const CreatePostModal = () => {
   return (
     isShowing && (
       <TooltipProvider>
-        <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
-          <div className="relative mx-auto xl:w-[80vw] w-[688px] flex flex-col h-[80%] rounded-3xl bg-white overflow-hidden">
+        <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-between bg-black/60">
+          <div className="relative mx-auto xl:w-[80vw] w-[688px] flex flex-col max-h-[80%] rounded-3xl bg-white overflow-hidden">
             <button
               type="button"
               onClick={hide}
@@ -268,7 +271,7 @@ export const CreatePostModal = () => {
                 </div>
 
                 <div className="flex flex-col gap-y-2 text-sm p-6">
-                  <span className="text-gray-60">Nội dung</span>
+                  <span className="text-gray-60 lg:hidden">Nội dung</span>
                   <div className="flex flex-col w-full h-full">
                     <Controller
                       control={control}
@@ -313,7 +316,11 @@ export const CreatePostModal = () => {
                 }}
                 onClick={method.handleSubmit(handleCreatePost)}
               >
-                <div className="!text-sm !font-normal">{type === PostTypeEnum.PROJECT ? "Đăng dự án" : "Đăng bài viết"}</div>
+                <div className="!text-sm !font-normal">
+                  {type === PostTypeEnum.PROJECT
+                    ? "Đăng dự án"
+                    : "Đăng bài viết"}
+                </div>
               </Button>
             </div>
           </div>

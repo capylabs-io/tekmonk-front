@@ -226,6 +226,7 @@ export default function Page({ params }: { params: { id: number } }) {
           commentCount={get(postData, "commentCount", 0).toString() || "0"}
           isDetail={true}
           onLikedPostClick={handleLikedPostClick}
+          onUpdatePost={() => refetch()}
         />
         <div className="mt-3">
           <PostCommentContent

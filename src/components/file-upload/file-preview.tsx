@@ -53,7 +53,6 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
         className={`
           relative rounded-lg overflow-hidden border border-gray-200
           aspect-square cursor-grab active:cursor-grabbing group
-          ${fileItem.status === "error" ? "border-red-300 bg-red-50" : ""}
           ${isDragging ? "ring-2 ring-primary shadow-lg" : ""}
         `}
         whileTap={{ scale: 0.95 }}
@@ -117,23 +116,6 @@ export const FilePreview: React.FC<FilePreviewProps> = ({
               >
                 {fileItem.progress}%
               </motion.p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Error message */}
-        <AnimatePresence>
-          {fileItem.status === "error" && (
-            <motion.div
-              className="absolute inset-0 bg-red-500 bg-opacity-70 flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p className="text-white text-center text-sm px-2">
-                {fileItem.errorMessage || "Tải lên thất bại"}
-              </p>
             </motion.div>
           )}
         </AnimatePresence>

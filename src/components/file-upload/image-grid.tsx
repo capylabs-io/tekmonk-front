@@ -113,15 +113,6 @@ export const ImageGrid: React.FC<ImageGridProps> = ({ files, onDelete }) => {
               </div>
             )}
 
-            {/* Error Overlay */}
-            {fileItem.status === "error" && (
-              <div className="absolute inset-0 bg-red-500/70 flex items-center justify-center">
-                <p className="text-white text-center text-sm px-2">
-                  {fileItem.errorMessage || "Tải lên thất bại"}
-                </p>
-              </div>
-            )}
-
             {/* Remaining Count Overlay */}
             {isLastWithMore && (
               <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">

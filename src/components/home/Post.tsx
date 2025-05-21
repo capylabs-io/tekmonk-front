@@ -1,13 +1,13 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
-import { MessageCircle, Tag } from "lucide-react";
+import { MessageCircle, Tag, Plus, Send } from "lucide-react";
 import classNames from "classnames";
 import { ProfileInfoBox } from "./ProfileInfoBox";
 import { PostType, PostTypeEnum } from "@/types";
 import { CommonButton } from "../common/button/CommonButton";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { updatePost } from "@/requests/post";
+import { updatePost, addCommentPost } from "@/requests/post";
 import { get } from "lodash";
 import { ConvertoStatusPostToText } from "@/lib/utils";
 import Share from "../common/Share";
@@ -27,6 +27,8 @@ import { useMemo } from "react";
 import { CommonTag } from "../common/CommonTag";
 import { ROUTE } from "@/contants/router";
 import { ActionGuard } from "../common/ActionGuard";
+import { motion } from "framer-motion";
+import { PostImageGallery } from "./post-detail";
 
 type Props = {
   data?: PostType | null;
@@ -48,6 +50,7 @@ type Props = {
   taggedUsers?: User[];
   onVerifiedPost?: (data: PostType) => void;
   onLikedPostClick?: (data: PostType) => void;
+  onCommentClick?: (data: PostType) => void;
   onUpdatePost?: () => void;
   isDetail?: boolean;
   postTags?: string[];
@@ -72,6 +75,7 @@ export const Post = ({
   isAllowClickDetail,
   onVerifiedPost,
   onLikedPostClick,
+  onCommentClick,
   taggedUsers,
   postTags,
   onUpdatePost,
@@ -94,12 +98,76 @@ export const Post = ({
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [commentText, setCommentText] = useState("");
   const taggedList = useMemo(() => {
     return taggedUsers?.filter(
       (user) => user.id.toString() !== data?.postedBy?.id.toString()
     );
   }, [taggedUsers, data]);
+
+  // Extract images from the post data
+  const postImages = useMemo(() => {
+    // For now, we'll use the thumbnail as the first image
+    // In a real implementation, you would get all images from the post data
+    const images = [];
+    if (thumbnailUrl) {
+      images.push(thumbnailUrl);
+    }
+
+    // Add more images if available in the post data
+    if (data?.images) {
+      // Handle images which are objects with url property
+      const imageUrls = (data.images as { url: string }[]).map(
+        (img) => img.url
+      );
+      images.push(...imageUrls);
+    }
+
+    return images;
+  }, [thumbnailUrl, data]);
+
+  // Determine the grid layout based on number of images
+  const getGridLayout = () => {
+    switch (postImages.length) {
+      case 0:
+        return "";
+      case 1:
+        return "grid-cols-1";
+      case 2:
+        return "grid-cols-2";
+      case 3:
+        return "grid-cols-2 md:grid-cols-4";
+      case 4:
+        return "grid-cols-2 md:grid-cols-3";
+      default:
+        return "grid-cols-2 md:grid-cols-4";
+    }
+  };
+
+  // Generate specific class for each item based on its position
+  const getItemClass = (index: number) => {
+    if (postImages.length === 1) {
+      return "col-span-1";
+    } else if (postImages.length === 2) {
+      return "col-span-1";
+    } else if (postImages.length === 3) {
+      return index === 0
+        ? "col-span-2 row-span-2 md:col-span-2 md:row-span-2"
+        : "col-span-1 md:col-span-1";
+    } else if (postImages.length === 4) {
+      return index === 0
+        ? "col-span-2 row-span-2 md:col-span-1 md:row-span-2"
+        : "col-span-1";
+    } else {
+      return index === 0
+        ? "col-span-2 row-span-2 md:col-span-2 md:row-span-2"
+        : "col-span-1";
+    }
+  };
+
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
@@ -140,6 +208,59 @@ export const Post = ({
   const handleSearchByTag = (tag: string) => {
     router.push(`${ROUTE.SEARCH}?q=${tag}&filter=hashtag`);
   };
+
+  const handleOpenGallery = (index: number) => {
+    setCurrentImageIndex(index);
+    setGalleryOpen(true);
+  };
+
+  // Display only first 5 items in grid, with counter on the last one if more
+  const displayImages =
+    postImages.length > 5 ? postImages.slice(0, 5) : postImages;
+  const remainingCount = postImages.length - 5;
+
+  // Extract tags from post data if available
+  const postTagsList = useMemo(() => {
+    if (data?.tags) {
+      return data.tags.split(", ");
+    }
+    return [];
+  }, [data?.tags]);
+
+  const handleCommentClick = () => {
+    if (isDetail) {
+      // If we're already on the detail page, just show the comment input
+      setShowCommentInput(!showCommentInput);
+    } else {
+      // If we're not on the detail page, navigate to the post detail
+      data && router.push(`/bai-viet/${data?.id}`);
+    }
+  };
+
+  const handleSendComment = async () => {
+    try {
+      if (!data?.id) return;
+
+      showLoading();
+      const res = await addCommentPost({
+        content: commentText,
+        postId: Number(data.id),
+      });
+
+      if (res) {
+        success("Thành công", "Đã thêm bình luận");
+        setCommentText("");
+        setShowCommentInput(false);
+        onUpdatePost?.();
+      }
+    } catch (err) {
+      console.log("error", err);
+      error("Lỗi", "Đã xảy ra lỗi khi thêm bình luận");
+    } finally {
+      hideLoading();
+    }
+  };
+
   return (
     <>
       <div
@@ -213,7 +334,7 @@ export const Post = ({
             <div className="relative">
               <div
                 className={classNames(
-                  "text-base text-gray-800",
+                  "!font-light text-gray-800",
                   isDetail ? "line-clamp-none" : "line-clamp-3"
                 )}
                 dangerouslySetInnerHTML={{
@@ -233,47 +354,63 @@ export const Post = ({
                 </button>
               )}
             </div>
-            {!isVerified && (
-              <div
-                className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat relative mt-2`}
-                style={{
-                  backgroundImage: `url(${thumbnailUrl})`,
-                }}
-              >
-                <div className="absolute right-4 top-4">
-                  {data?.type === PostTypeEnum.PROJECT ? (
-                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
-                      <span className="font-medium">Dự án</span>
-                    </div>
-                  ) : (
-                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
-                      <span className="font-medium">Bài viết</span>
-                    </div>
-                  )}
-                </div>
+
+            {/* Image Grid */}
+            {postImages.length > 0 && (
+              <div className={`grid gap-2 ${getGridLayout()} mt-3`}>
+                {displayImages.map((imageUrl, index) => {
+                  const isLastWithMore = index === 4 && remainingCount > 0;
+
+                  return (
+                    <motion.div
+                      key={index}
+                      className={`relative rounded-lg overflow-hidden ${getItemClass(
+                        index
+                      )}`}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Image
+                        src={imageUrl}
+                        alt={`Post image ${index + 1}`}
+                        width={300}
+                        height={300}
+                        className="w-full h-full object-cover"
+                        onClick={() => handleOpenGallery(index)}
+                      />
+
+                      {/* Type indicator */}
+                      {index === 0 && (
+                        <div className="absolute right-4 top-4">
+                          {data?.type === PostTypeEnum.PROJECT ? (
+                            <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                              <span className="font-medium">Dự án</span>
+                            </div>
+                          ) : (
+                            <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                              <span className="font-medium">Bài viết</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Remaining Count Overlay */}
+                      {isLastWithMore && (
+                        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center">
+                          <div className="text-white text-2xl font-bold flex items-center">
+                            <Plus className="h-6 w-6 mr-1" />
+                            {remainingCount}
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
-          {isVerified && (
-            <div
-              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3 relative`}
-              style={{
-                backgroundImage: `url(${thumbnailUrl})`,
-              }}
-            >
-              <div className="absolute right-4 top-4">
-                {data?.type === PostTypeEnum.PROJECT ? (
-                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
-                    <span className="font-medium">Dự án</span>
-                  </div>
-                ) : (
-                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
-                    <span className="font-medium">Bài viết</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
               <div className="flex gap-x-10">
@@ -297,7 +434,7 @@ export const Post = ({
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         className={classNames(
-                          "cursor-pointer",
+                          "cursor-pointer hover:scale-110 transition-transform",
                           data?.isLiked ? "text-red-500" : ""
                         )}
                       >
@@ -309,12 +446,15 @@ export const Post = ({
                 </div>
                 <div className="flex items-center gap-x-1 font-bold text-gray-500">
                   <ActionGuard
-                    onAction={() => {}}
+                    onAction={handleCommentClick}
                     actionName="bình luận"
                     className="cursor-pointer flex items-center justify-center"
                   >
                     <button>
-                      <MessageCircle size={20} />
+                      <MessageCircle
+                        size={20}
+                        className="hover:scale-110 transition-transform"
+                      />
                     </button>
                   </ActionGuard>
                   <span>{commentCount}</span>
@@ -346,8 +486,64 @@ export const Post = ({
               )}
             </div>
           </div>
+
+          {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
+          {showCommentInput && isDetail && (
+            <div className="mt-4 flex items-center gap-2">
+              <div
+                className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
+                style={{
+                  backgroundImage: `url(/image/home/profile-pic.png)`,
+                  height: 40,
+                  width: 40,
+                }}
+              ></div>
+              <div className="flex h-14 w-full items-center justify-center gap-1 rounded-lg border border-gray-300 px-3">
+                <textarea
+                  value={commentText}
+                  placeholder="Viết bình luận"
+                  className="text-black h-10 min-w-0 flex-1 resize-none rounded-md bg-transparent px-3 py-2 outline-none"
+                  onChange={(e) => setCommentText(e.target.value)}
+                />
+                <Button
+                  onClick={handleSendComment}
+                  disabled={commentText.length === 0}
+                  className="!rounded-lg bg-primary-70 hover:bg-primary-80"
+                >
+                  <Send size={20} />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {/* Image Gallery Dialog */}
+      {data && (
+        <PostImageGallery
+          data={data}
+          open={galleryOpen}
+          onOpenChange={setGalleryOpen}
+          images={postImages}
+          currentIndex={currentImageIndex}
+          onIndexChange={setCurrentImageIndex}
+          userName={userName}
+          imageUrl={imageUrl}
+          specialName={specialName}
+          postName={postName}
+          postContent={postContent}
+          createdAt={createdAt}
+          likedCount={likedCount}
+          commentCount={commentCount}
+          tags={postTagsList}
+          onTagClick={handleSearchByTag}
+          isLiked={data?.isLiked}
+          onLike={() => data && onLikedPostClick?.(data)}
+          postId={data.id}
+          onUpdateComment={onUpdatePost}
+        />
+      )}
+
       <Dialog
         open={addStudentDialogOpen}
         onOpenChange={setAddStudentDialogOpen}

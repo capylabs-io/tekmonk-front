@@ -86,14 +86,23 @@ export const CommentCard = ({
       <div
         className={`h-[40px] w-[40px] flex-shrink-0 rounded-full border bg-cover bg-center bg-no-repeat`}
         style={{
-          backgroundImage: `url(${comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
-            })`,
+          backgroundImage: `url(${
+            comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
+          })`,
         }}
       ></div>
       <div className="w-full flex-1 space-y-0.5">
         <div className="text-black flex items-center gap-1 text-base font-medium">
-          <div className="hover:cursor-pointer hover:underline hover:text-primary-70" onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}>{comment?.commentedBy?.fullName || name}</div>
-          <div className="inline-flex items-center gap-1 text-sm text-grey-500 hover:cursor-pointer hover:underline hover:text-primary-70" onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}>
+          <div
+            className="hover:cursor-pointer hover:underline hover:text-primary-70"
+            onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}
+          >
+            {comment?.commentedBy?.fullName || name}
+          </div>
+          <div
+            className="inline-flex items-center gap-1 text-sm text-grey-500 hover:cursor-pointer hover:underline hover:text-primary-70"
+            onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}
+          >
             @{comment?.commentedBy?.username || username}
             <Dot size={20} />
             {time ? timeAgo(Number(time)) : "Invalid time"}
@@ -140,22 +149,6 @@ export const CommentCard = ({
         ) : (
           <p className="text-sm md:text-base">{content}</p>
         )}
-        <div className="flex justify-between gap-x-4 text-sm">
-          <div className="flex gap-x-4 lg:gap-[35.5px]">
-            <div className="inline-flex items-center gap-1 md:gap-2">
-              <MessageCircle size={16} />
-              {get(interact, "numberOfMessage", "")}
-            </div>
-            {/* <div className="inline-flex items-center gap-1 md:gap-2">
-              <Repeat2 size={16} />
-              {get(interact, 'numberOfShare', '')}
-            </div> */}
-            <div className="inline-flex items-center gap-1 md:gap-2">
-              <Heart size={16} />
-              {get(interact, "numberOflike", "")}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

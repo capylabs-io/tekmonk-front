@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import { Send } from "lucide-react";
 import { CommentCard } from "./CommentCard";
 import { Button } from "../common/button/Button";
-import { addCommentPost, getListCommentPost } from "@/requests/post";
+import { addCommentPost } from "@/requests/post";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
-import { useQuery } from "@tanstack/react-query";
-import qs from "qs";
 import { PostComment } from "@/types/common-types";
-import { StrapiResponse } from "@/types/strapi-types";
 import { containsForbiddenWords } from "@/validation/validate-forbiden-word";
 import { ActionGuard } from "../common/ActionGuard";
+import { useInView } from "react-intersection-observer";
+import { useInfiniteComment } from "@/hooks/use-comment";
 
 type Props = {
   imageUrl?: string;
@@ -51,50 +51,32 @@ export const PostCommentContent = ({
   onUpdateComment,
 }: Props) => {
   const [text, setText] = useState("");
+  const { ref, inView } = useInView();
   const { success, error } = useSnackbarStore();
   const [showLoading, hideLoading] = useLoadingStore((state) => [
     state.show,
     state.hide,
   ]);
-  const { data: listComment, refetch: refetchListPostComment } = useQuery<
-    StrapiResponse<PostComment[]>
-  >({
-    refetchOnWindowFocus: false,
-    queryKey: ["post-comment"],
-    queryFn: async () => {
-      try {
-        if (!postId || isNaN(Number(postId)) || Number(postId) <= 0) {
-          return { data: [] };
-        }
-        const queryString = qs.stringify(
-          {
-            populate: {
-              commentedBy: {
-                fields: ["username", "id"],
-              },
-              post: {
-                fields: ["id"],
-              },
-            },
-            filters: {
-              post: {
-                id: Number(postId),
-              },
-            },
-            sort: ["createdAt:desc"],
-            pagination: {
-              page: 1,
-              pageSize: 100,
-            },
-          },
-          { encodeValuesOnly: true }
-        );
-        return await getListCommentPost(queryString);
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    },
+
+  const {
+    data: listComment,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch: refetchListPostComment,
+  } = useInfiniteComment({
+    page: 1,
+    limit: 2,
+    postId: postId,
   });
+
+  // Load more comments when the user scrolls to the bottom
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   const handleSend = async () => {
     try {
       showLoading();
@@ -152,23 +134,36 @@ export const PostCommentContent = ({
         </div>
       </ActionGuard>
       <div className="space-y-5">
-        {listComment?.data?.map((item: PostComment, index: number) => (
-          <CommentCard
-            key={index}
-            comment={item}
-            name={item.commentedBy?.username}
-            username={item.commentedBy?.username}
-            time={item.createdAt}
-            content={item.content}
-            interact={{
-              numberOflike: 0,
-              numberOfMessage: 0,
-              numberOfShare: 0,
-              numberOfView: 0,
-            }}
-            onUpdateComment={refetchListPostComment}
-          />
-        ))}
+        {listComment?.pages?.map((page, pageIndex) =>
+          page.data.map((item: PostComment, index: number) => (
+            <CommentCard
+              key={`${pageIndex}-${index}`}
+              comment={item}
+              name={item.commentedBy?.username}
+              username={item.commentedBy?.username}
+              time={item.createdAt}
+              content={item.content}
+              interact={{
+                numberOflike: 0,
+                numberOfMessage: 0,
+                numberOfShare: 0,
+                numberOfView: 0,
+              }}
+              onUpdateComment={refetchListPostComment}
+            />
+          ))
+        )}
+
+        {/* Loading indicator and intersection observer reference */}
+        {hasNextPage && (
+          <div ref={ref} className="flex justify-center py-4">
+            {isFetchingNextPage ? (
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary-70 border-t-transparent"></div>
+            ) : (
+              <div className="h-4"></div> // Invisible element to trigger intersection
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

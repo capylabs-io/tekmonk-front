@@ -15,12 +15,12 @@ export const UploadArea: React.FC<UploadAreaProps> = ({
   return (
     <motion.div
       className={`
-        border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
+        border-2 border-dashed !border-gray-30 rounded-lg p-8 text-center cursor-pointer
         transition-all duration-200 ease-in-out
         ${
           isDragging
             ? "border-primary bg-primary/5"
-            : "border-gray-300 hover:border-primary/50 hover:bg-gray-50"
+            : "border-gray-300/10 hover:border-primary-50"
         }
       `}
       onClick={onClick}
