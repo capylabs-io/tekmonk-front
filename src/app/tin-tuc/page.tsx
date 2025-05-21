@@ -285,7 +285,7 @@ const FeaturedNewsComponent = ({
             size="small"
             className="h-6 rounded-[4px] px-2 py-1 flex items-center !text-SubheadXs"
           >
-            Tutorial
+            Tutorial 
           </CommonCard>
           <CommonCard
             size="small"

@@ -1,15 +1,11 @@
 "use client";
 import Image from "next/image";
 import { CreatePostModal } from "@/components/home/CreatePostModal";
-import { useProfileStore } from "@/store/ProfileStore";
 import { MenuLayout } from "@/components/home/MenuLayout";
-import UserProfileLink from "@/components/common/UserProfileLink";
-import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
-import { useUserStore } from "@/store/UserStore";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
 import { NavigationInfo } from "@/components/common/sidebar/naivgation-info";
 
@@ -19,22 +15,11 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   const router = useCustomRouter();
-  const [userInfo, isConnected] = useUserStore((state) => [
-    state.userInfo,
-    state.isConnected,
-  ]);
-  const [show, hide] = useProfileStore((state) => [state.show, state.hide]);
-  const handleOpenModal = () => {
-    show();
-  };
-  const handleRidirectAdminPage = () => {
-    router.push(ROUTE.ADMIN + ROUTE.MODERATOR);
-  };
   return (
     <>
       <CommonLayout
         leftSidebar={
-          <div className="h-full flex flex-col px-10 py-5 col-span-2 overflow-hidden">
+          <div className="h-full flex flex-col px-4 py-5 col-span-2 overflow-hidden">
             <div
               className="cursor-pointer"
               onClick={() => router.push(ROUTE.NEWS_FEED)}

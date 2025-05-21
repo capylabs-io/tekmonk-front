@@ -48,7 +48,6 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={usePathname().includes("/chung-chi")}
         iconElement={<Award size={20} />}
         url="/chung-chi"
-
         hidden={!isConnected()}
       />
       <MenuCard
@@ -81,6 +80,7 @@ export const MenuLayout = ({ customClassName }: Props) => {
         active={usePathname().includes("/ho-so")}
         iconElement={<User size={20} />}
         url="/ho-so"
+        hidden={!isConnected()}
       />
     </div>
   );

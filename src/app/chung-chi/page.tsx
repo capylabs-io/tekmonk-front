@@ -129,7 +129,7 @@ export default function CertificatePage() {
       <Dialog open={isOpenDetailCertificate} onOpenChange={setIsOpenDetailCertificate}>
         <DialogContent className="w-[1200px] h-[700px] overflow-auto bg-white">
           <DialogHeader>
-            <DialogTitle>Xác nhận phê duyệt chứng chỉ</DialogTitle>
+            <DialogTitle>Chứng chỉ</DialogTitle>
             <DialogDescription>
               <div className="mt-4 space-y-3">
                 <div className="grid grid-cols-2  gap-x-4 max-w-[500px]">

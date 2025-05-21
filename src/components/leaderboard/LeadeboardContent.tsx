@@ -5,6 +5,7 @@ import { useUserRanking } from "@/hooks/user-query";
 import { useUserStore } from "@/store/UserStore";
 import { useState } from "react";
 import { UserRankingType } from "@/types/users";
+import { motion } from "framer-motion";
 
 export const LeadeboardContent = ({
   type,
@@ -36,40 +37,59 @@ export const LeadeboardContent = ({
   return (
     <div>
       <div className="w-full flex justify-center items-center bg-[url('/image/leaderboard/leaderboard-banner.png')] bg-no-repeat bg-cover h-[400px] gap-x-12 pb-7">
-        <LeaderboardTopUserCard
-          customClassNames="mt-4"
-          rank="second"
-          name={userRankingData?.data[1]?.user?.username ?? ""}
-          specialName={get(userRankingData?.data[1]?.user, "specialName", "")}
-          score={userRankingData?.data[1]?.count.toString() ?? "0"}
-          imageUrl={
-            // dataMockData[1]?.user?.imageURL ??
-            "bg-[url('/image/leaderboard/user1.png')]"
-          }
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <LeaderboardTopUserCard
+            customClassNames="mt-4"
+            rank="second"
+            name={userRankingData?.data[1]?.user?.username ?? ""}
+            specialName={get(userRankingData?.data[1]?.user, "username", "không có")}
+            score={userRankingData?.data[1]?.count.toString() ?? "0"}
+            imageUrl={
+              // dataMockData[1]?.user?.imageURL ??
+              "bg-[url('/image/leaderboard/user1.png')]"
+            }
+          />
+        </motion.div>
 
-        <LeaderboardTopUserCard
-          customClassNames="mb-4"
-          rank="first"
-          name={userRankingData?.data[0]?.user?.username ?? ""}
-          specialName={userRankingData?.data[0]?.user?.username ?? ""}
-          score={userRankingData?.data[0]?.count.toString() ?? "0"}
-          imageUrl={
-            // dataMockData[0]?.user?.imageURL ??
-            "bg-[url('/image/leaderboard/user3.png')]"
-          }
-        />
-        <LeaderboardTopUserCard
-          customClassNames="mt-4"
-          rank="third"
-          name={userRankingData?.data[2]?.user?.username ?? ""}
-          specialName={userRankingData?.data[2]?.user?.username ?? ""}
-          score={userRankingData?.data[2]?.count.toString() ?? "0"}
-          imageUrl={
-            // dataMockData[2]?.user?.imageURL ??
-            "bg-[url('/image/leaderboard/user2.png')]"
-          }
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0 }}
+        >
+          <LeaderboardTopUserCard
+            customClassNames="mb-4"
+            rank="first"
+            name={userRankingData?.data[0]?.user?.username ?? ""}
+            specialName={userRankingData?.data[0]?.user?.username ?? "không có"}
+            score={userRankingData?.data[0]?.count.toString() ?? "0"}
+            imageUrl={
+              // dataMockData[0]?.user?.imageURL ??
+              "bg-[url('/image/leaderboard/user3.png')]"
+            }
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          <LeaderboardTopUserCard
+            customClassNames="mt-4"
+            rank="third"
+            name={userRankingData?.data[2]?.user?.username ?? ""}
+            specialName={userRankingData?.data[2]?.user?.username ?? "không có"}
+            score={userRankingData?.data[2]?.count.toString() ?? "0"}
+            imageUrl={
+              // dataMockData[2]?.user?.imageURL ??
+              "bg-[url('/image/leaderboard/user2.png')]"
+            }
+          />
+        </motion.div>
       </div>
 
       <LeaderboardTable

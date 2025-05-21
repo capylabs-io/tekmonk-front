@@ -18,19 +18,19 @@ import { useInView } from "react-intersection-observer";
 import { useProfileStore } from "@/store/ProfileStore";
 import { CommonButton } from "@/components/common/button/CommonButton";
 import { User } from "@/types/common-types";
+import { motion } from "framer-motion";
+import { Loading } from "@/components/common/Loading";
+import { AnimationLoading } from "@/components/lottie/AnimationLoading";
+
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
 const Home = () => {
   const { ref, inView } = useInView();
 
   //set for contest page
-  const [showLoading, hideLoading] = useLoadingStore((state) => [
-    state.show,
-    state.hide,
-  ]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [postType, setPostType] = useState<PostTypeEnum>(PostTypeEnum.POST);
-
+  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
   const {
     data: currentPageData,
     isLoading,
@@ -82,6 +82,22 @@ const Home = () => {
   const flattenedPosts =
     currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
 
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     showLoading();
+  //   } else {
+  //     hideLoading();
+  //   }
+  // }, [isLoading, showLoading, hideLoading]);
+  if (isLoading) {
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
+        <div className="flex flex-col items-center">
+          <AnimationLoading className="w-[400px] h-[400px]" />
+        </div>
+      </div>
+    )
+  }
   return (
     <>
       {/* <div className="flex justify-end items-center px-8">
@@ -103,16 +119,25 @@ const Home = () => {
           <TabsTrigger value="project">Dự án</TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="overflow-y-auto">
-          {isLoading ? (
-            <div className="p-8 text-center">Truy xuất dữ liệu...</div>
-          ) : flattenedPosts.length === 0 ? (
-            <div className="p-8 text-center">Không có bài viết nào</div>
-          ) : (
+          {!isLoading && (
             <>
               {flattenedPosts.map((item: PostType, index: number) => (
-                <div key={item.id || index}>
-                  <div className="px-8 relative">
-                    <div className="text-sm text-gray-500 absolute top-2 right-8">
+                <motion.div
+                  key={item.id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.1,
+                    ease: "easeOut"
+                  }}
+                // whileHover={{
+                //   scale: 1.01,
+                //   transition: { duration: 0.2 }
+                // }}
+                >
+                  <div className="p-4 relative">
+                    <div className="text-sm text-gray-500 absolute top-7 right-4">
                       {moment(get(item, "createdAt", ""))
                         .format("DD/MM/YYYY")
                         .toString()}
@@ -129,13 +154,6 @@ const Home = () => {
                       }
                       taggedUsers={get(item, "tagged_users", []) as User[]}
                       specialName={get(item, "postedBy.skills", "")}
-                      // userRank={
-                      //   <span
-                      //     className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                      //   >
-                      //     IV
-                      //   </span>
-                      // }
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))
@@ -150,31 +168,46 @@ const Home = () => {
                     />
                   </div>
                   {index !== flattenedPosts.length - 1 && (
-                    <hr className="border-t border-gray-200 my-4" />
+                    <hr className="border-t border-gray-200" />
                   )}
-                </div>
+                </motion.div>
               ))}
 
               {/* Loading indicator and intersection observer target */}
-              <div ref={ref} className="p-4 text-center">
+              <motion.div
+                ref={ref}
+                className="p-4 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
-              </div>
+                    ? ""
+                    : ""}
+              </motion.div>
             </>
           )}
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
-          {isLoading ? (
-            <div className="p-8 text-center">Truy xuất dữ liệu...</div>
-          ) : flattenedPosts.length === 0 ? (
-            <div className="p-8 text-center">Không có dự án nào</div>
-          ) : (
+          {!isLoading && (
             <>
               {flattenedPosts.map((item: PostType, index: number) => (
-                <div key={item.id || index}>
+                <motion.div
+                  key={item.id || index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: index * 0.1,
+                    ease: "easeOut"
+                  }}
+                // whileHover={{
+                //   scale: 1.01,
+                //   transition: { duration: 0.2 }
+                // }}
+                >
                   <div className="px-8 relative">
                     <div className="text-sm text-gray-500 absolute top-2 right-8">
                       {moment(get(item, "createdAt", ""))
@@ -208,17 +241,23 @@ const Home = () => {
                   {index !== flattenedPosts.length - 1 && (
                     <hr className="border-t border-gray-200 my-4" />
                   )}
-                </div>
+                </motion.div>
               ))}
 
               {/* Loading indicator and intersection observer target */}
-              <div ref={ref} className="p-4 text-center">
+              <motion.div
+                ref={ref}
+                className="p-4 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
-              </div>
+                    ? ""
+                    : ""}
+              </motion.div>
             </>
           )}
         </TabsContent>

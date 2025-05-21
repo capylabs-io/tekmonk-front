@@ -98,9 +98,9 @@ export const Post = ({
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const taggedList = useMemo(() => {
     return taggedUsers?.filter(
-      (user) => user.id.toString() !== userInfo?.id.toString()
+      (user) => user.id.toString() !== data?.postedBy?.id.toString()
     );
-  }, [taggedUsers, userInfo]);
+  }, [taggedUsers, data]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
@@ -149,7 +149,7 @@ export const Post = ({
           isAllowClickDetail && handleClickPostCard(e);
         }}
       >
-        <div className="flex items-center mt-8 w-full gap-2">
+        <div className="flex items-center w-full gap-2">
           <ProfileInfoBox
             imageUrl={imageUrl}
             userName={userName}
@@ -175,17 +175,7 @@ export const Post = ({
               >
                 {taggedList.length - 1} người khác.
               </div>
-              <div className="ml-1">
-                {data?.type === PostTypeEnum.PROJECT ? (
-                  <div>
-                    <span className="font-medium">Dự án</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className="font-medium">Bài viết</span>
-                  </div>
-                )}
-              </div>
+
             </div>
           )}
           {isVerified && (
@@ -197,14 +187,7 @@ export const Post = ({
           )}
         </div>
         <div className="pl-10 mt-3">
-          {!isVerified && (
-            <div
-              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat`}
-              style={{
-                backgroundImage: `url(${thumbnailUrl})`,
-              }}
-            ></div>
-          )}
+
 
           <div className="mt-3">
             {!isDetail ? (
@@ -250,14 +233,46 @@ export const Post = ({
                 </button>
               )}
             </div>
+            {!isVerified && (
+              <div
+                className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat relative mt-2`}
+                style={{
+                  backgroundImage: `url(${thumbnailUrl})`,
+                }}
+              >
+                <div className="absolute right-4 top-4">
+                  {data?.type === PostTypeEnum.PROJECT ? (
+                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                      <span className="font-medium">Dự án</span>
+                    </div>
+                  ) : (
+                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                      <span className="font-medium">Bài viết</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           {isVerified && (
             <div
-              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3`}
+              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3 relative`}
               style={{
                 backgroundImage: `url(${thumbnailUrl})`,
               }}
-            ></div>
+            >
+              <div className="absolute right-4 top-4">
+                {data?.type === PostTypeEnum.PROJECT ? (
+                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                    <span className="font-medium">Dự án</span>
+                  </div>
+                ) : (
+                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                    <span className="font-medium">Bài viết</span>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
