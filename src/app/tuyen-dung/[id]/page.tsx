@@ -41,9 +41,8 @@ export default function Page() {
     const url = `${process.env.NEXT_PUBLIC_BASE_URL}/tuyen-dung/${id}`;
     window.navigator.clipboard.writeText(url);
     success("Tuyển dụng ", "Đã copy link tuyển dụng");
-  }
+  };
   const handleRedirect = (id: number) => {
-
     router.push(`${ROUTE.HIRING}/${id}`);
   };
 
@@ -54,7 +53,6 @@ export default function Page() {
   return (
     <div className="w-full container mx-auto grid grid-cols-3 gap-12 pt-[28px] pb-[64px]">
       <div className="w-full flex flex-col gap-8 col-span-2">
-
         <div className="w-full mt-16 flex flex-col items-center justify-center gap-4 ">
           <Image
             alt="Demo image"
@@ -75,18 +73,26 @@ export default function Page() {
             <div className="flex items-center justify-center gap-2">
               <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
                 Chia sẻ bài đăng:
-                <Share2 onClick={handleShare} size={18} className="text-gray-95 hover:cursor-pointer" />
+                <Share2
+                  onClick={handleShare}
+                  size={18}
+                  className="text-gray-95 hover:cursor-pointer"
+                />
               </div>
             </div>
           </div>
           <div className="w-full flex flex-col items-start justify-center gap-2">
             <div className="flex items-center text-SubheadMd text-gray-95 gap-2">
               <Banknote className="text-gray-70" size={16} />
-              <div>{data && `${data?.data.minSalary} - ${data?.data.maxSalary}` || "Lương thỏa thuận"}</div>
+              <div>
+                {data && data.data.minSalary && data.data.maxSalary
+                  ? `${data?.data.minSalary} - ${data?.data.maxSalary}`
+                  : "Lương thỏa thuận"}
+              </div>
             </div>
             <div className="flex items-start text-BodyMd text-gray-95 gap-2">
               <MapPin className="text-gray-70 mt-1" size={16} />
-              <div>{data && data.data.location || "Không xác định"}</div>
+              <div>{(data && data.data.location) || "Không xác định"}</div>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2 w-full">
@@ -121,36 +127,41 @@ export default function Page() {
         /> */}
       </div>
       <div className="w-full flex flex-col gap-8 col-span-1 mt-16">
-        {randomNews && randomNews.data.filter((item) => item.type === "hiring").map((newsItem) => (
-          <div
-            key={newsItem.id}
-            className="h-[80px] w-full flex items-start justify-center gap-4"
-            onClick={() => handleRedirect(newsItem.id)}
-          >
-            <Image
-              src={newsItem.thumbnail ? newsItem.thumbnail : ""}
-              alt=""
-              width={108}
-              height={80}
-              className="h-full object-cover rounded-2xl"
-            />
-            <div className="flex-1 flex flex-col gap-2">
-              <time className="text-BodySm text-gray-70">
-                {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
-              </time>
+        {randomNews &&
+          randomNews.data
+            .filter((item) => item.type === "hiring")
+            .map((newsItem) => (
               <div
-                className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
-                dangerouslySetInnerHTML={{
-                  __html: (get(newsItem, "title", "") || "")
-                    .replace(/<[^>]+>/g, "")
-                    .trim()
-                    .slice(0, 50)
-                    .concat(get(newsItem, "title", "").length > 50 ? "..." : ""),
-                }}
-              ></div>
-            </div>
-          </div>
-        ))}
+                key={newsItem.id}
+                className="h-[80px] w-full flex items-start justify-center gap-4"
+                onClick={() => handleRedirect(newsItem.id)}
+              >
+                <Image
+                  src={newsItem.thumbnail ? newsItem.thumbnail : ""}
+                  alt=""
+                  width={108}
+                  height={80}
+                  className="h-full object-cover rounded-2xl"
+                />
+                <div className="flex-1 flex flex-col gap-2">
+                  <time className="text-BodySm text-gray-70">
+                    {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
+                  </time>
+                  <div
+                    className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+                    dangerouslySetInnerHTML={{
+                      __html: (get(newsItem, "title", "") || "")
+                        .replace(/<[^>]+>/g, "")
+                        .trim()
+                        .slice(0, 50)
+                        .concat(
+                          get(newsItem, "title", "").length > 50 ? "..." : ""
+                        ),
+                    }}
+                  ></div>
+                </div>
+              </div>
+            ))}
         <Image
           src="/image/home/banner-layout.png"
           alt="Default"

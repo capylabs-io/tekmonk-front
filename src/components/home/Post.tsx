@@ -28,7 +28,6 @@ import { CommonTag } from "../common/CommonTag";
 import { ROUTE } from "@/contants/router";
 import { ActionGuard } from "../common/ActionGuard";
 
-
 type Props = {
   data?: PostType | null;
   imageUrl: string;
@@ -168,14 +167,17 @@ export const Post = ({
               >
                 {taggedList[0]?.username}
               </div>
-              và{" "}
-              <div
-                className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
-                onClick={() => setTaggedUsersDialogOpen(true)}
-              >
-                {taggedList.length - 1} người khác.
-              </div>
-
+              {taggedList.length > 1 && (
+                <>
+                  và{" "}
+                  <div
+                    className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
+                    onClick={() => setTaggedUsersDialogOpen(true)}
+                  >
+                    {taggedList.length - 1} người khác.
+                  </div>
+                </>
+              )}
             </div>
           )}
           {isVerified && (
@@ -187,8 +189,6 @@ export const Post = ({
           )}
         </div>
         <div className="pl-10 mt-3">
-
-
           <div className="mt-3">
             {!isDetail ? (
               <p
@@ -309,7 +309,7 @@ export const Post = ({
                 </div>
                 <div className="flex items-center gap-x-1 font-bold text-gray-500">
                   <ActionGuard
-                    onAction={() => { }}
+                    onAction={() => {}}
                     actionName="bình luận"
                     className="cursor-pointer flex items-center justify-center"
                   >
@@ -347,7 +347,7 @@ export const Post = ({
             </div>
           </div>
         </div>
-      </div >
+      </div>
       <Dialog
         open={addStudentDialogOpen}
         onOpenChange={setAddStudentDialogOpen}

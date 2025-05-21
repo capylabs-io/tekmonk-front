@@ -8,6 +8,8 @@ import { VscProject } from "react-icons/vsc";
 import moment from "moment";
 import { CommonTag } from "../common/CommonTag";
 import { SplitRenderItem } from "../common/SplitRenderItem";
+import { ROUTE } from "@/contants/router";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 export type SearchResultType = "post" | "people" | "project" | "hashtag";
 
@@ -31,6 +33,7 @@ const TYPE_LABELS: Record<SearchResultType, string> = {
 };
 
 export const SearchResultItem = ({
+  id,
   type,
   title,
   imageUrl,
@@ -40,6 +43,7 @@ export const SearchResultItem = ({
   className,
   tags = "",
 }: SearchResultItemProps) => {
+  const router = useCustomRouter();
   const renderIcon = () => {
     switch (type) {
       case "post":
@@ -70,13 +74,20 @@ export const SearchResultItem = ({
       </div>
     </CommonTag>
   ));
-
+  const handleRedirect = (id: number) => {
+    if (type == "people") {
+      router.push(`${ROUTE.PROFILE}/${id}`);
+      return;
+    }
+    router.push(`${ROUTE.POST}/${id}`);
+  };
   return (
     <div
       className={classNames(
         "flex gap-4 p-4 mt-4 rounded-lg border border-gray-20 hover:bg-gray-05 cursor-pointer transition-colors",
         className
       )}
+      onClick={() => handleRedirect(Number(id))}
     >
       <div className="flex-shrink-0 items-center justify-center">
         {imageUrl ? (

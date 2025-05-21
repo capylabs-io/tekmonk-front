@@ -27,6 +27,7 @@ import { useState } from "react";
 import { Achievement } from "@/types/common-types";
 import { Mission } from "@/types/common-types";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { AnimationLoading } from "@/components/lottie/AnimationLoading";
 
 export default function Profile() {
   const { id } = useParams();
@@ -38,7 +39,7 @@ export default function Profile() {
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
 
-  const { data: myPosts } = useQuery({
+  const { data: myPosts, isLoading: isLoadingPosts } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: ["custom-posts"],
     queryFn: async () => {
@@ -69,7 +70,15 @@ export default function Profile() {
   const showAvatarModal = () => {
     show();
   };
-
+  if (isLoadingPosts) {
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
+        <div className="flex flex-col items-center">
+          <AnimationLoading className="w-[400px] h-[400px]" />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>

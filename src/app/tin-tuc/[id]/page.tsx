@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { CommonTag } from "@/components/common/CommonTag";
 import { CommonCard } from "@/components/common/CommonCard";
-import { Facebook, Linkedin } from "lucide-react";
+import { Facebook, Linkedin, Share2 } from "lucide-react";
 import { RelatedInfo } from "@/components/new/RelatedInfo";
 import { LandingFooter } from "@/components/new/NewsFooter";
 import { useParams } from "next/navigation";
@@ -14,9 +14,11 @@ import moment from "moment";
 import qs from "qs";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 export default function Page() {
   //get id from url
   const router = useCustomRouter();
+  const [success] = useSnackbarStore((state) => [state.success]);
 
   const handleRedirect = (id: number) => {
 
@@ -47,6 +49,11 @@ export default function Page() {
       }
     },
   });
+  const handleShare = () => {
+    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/tin-tuc/${id}`;
+    window.navigator.clipboard.writeText(url);
+    success("Tin tức ", "Đã copy link tin tức");
+  };
   if (isLoading) {
     return <Loading />;
   }
@@ -71,31 +78,14 @@ export default function Page() {
                   ))}
             </div>
             <div className="flex items-center justify-center gap-2">
-              <div className="text-BodySm text-gray-70 md:block hidden">
-                Chia sẻ bài đăng:{" "}
+              <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
+                Chia sẻ bài đăng:
+                <Share2
+                  onClick={handleShare}
+                  size={18}
+                  className="text-gray-95 hover:cursor-pointer"
+                />
               </div>
-              <CommonCard
-                size="small"
-                className="w-9 h-9 flex items-center justify-center"
-              >
-                <Facebook
-                  size={24}
-                  color="#ffffff"
-                  fill="#ffffff"
-                  className="bg-primary-70 rounded-[100%] p-1"
-                />
-              </CommonCard>
-              <CommonCard
-                size="small"
-                className="w-9 h-9 flex items-center justify-center"
-              >
-                <Linkedin
-                  size={24}
-                  color="#ffffff"
-                  fill="#ffffff"
-                  className="bg-primary-70 rounded-sm p-1"
-                />
-              </CommonCard>
             </div>
           </div>
           <div className="flex flex-col items-center gap-2 w-full">

@@ -52,8 +52,8 @@ export const getWaitList = async () => {
   return response.data;
 };
 
-export const findPost = async (id: number) => {
-  const response = await tekdojoAxios.get(`${BASE_URL}/posts/${id}`);
+export const findPost = async (id: number, query?: any) => {
+  const response = await tekdojoAxios.get(`${BASE_URL}/posts/${id}?${query}`);
   return response.data as PostType;
 };
 export const countPosts = async (query: string = "") => {

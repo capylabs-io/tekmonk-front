@@ -20,32 +20,40 @@ export const CommonRightSidebar = () => {
       return (
         <div className="flex flex-col gap-y-4 px-4 pb-8 col-span-3 overflow-auto max-h-screen hide-scrollbar">
           <SearchFilter />
-          <div className="rounded-xl border border-gray-200 ">
-            <div className="p-4 flex justify-between text-primary-900 items-center">
-              <span className="text-SubheadMd text-gray-95">ĐIỂM</span>
-              <div className="flex gap-x-1">
-                <span className="font-bold text-base">{userInfo?.point && userInfo?.point.toString() || "0"}</span>
-                <Image
-                  src="/image/PointIcon.png"
-                  alt="coin pic"
-                  width={24}
-                  height={24}
-                />
+          {userInfo?.id && (
+            <div className="rounded-xl border border-gray-200 ">
+              <div className="p-4 flex justify-between text-primary-900 items-center">
+                <span className="text-SubheadMd text-gray-95">ĐIỂM</span>
+                <div className="flex gap-x-1">
+                  <span className="font-bold text-base">
+                    {(userInfo?.point && userInfo?.point.toString()) || "0"}
+                  </span>
+                  <Image
+                    src="/image/PointIcon.png"
+                    alt="coin pic"
+                    width={24}
+                    height={24}
+                  />
+                </div>
+              </div>
+              <div className="p-4 flex justify-between text-primary-900 items-center  border-t border-gray-200 ">
+                <span className="text-SubheadMd text-gray-95 uppercase">
+                  TIỀN
+                </span>
+                <div className="flex gap-x-1">
+                  <span className="font-bold text-base">
+                    {(userInfo?.balance && userInfo?.balance.toString()) || "0"}
+                  </span>
+                  <Image
+                    src="/image/home/coin.png"
+                    alt="coin pic"
+                    width={24}
+                    height={24}
+                  />
+                </div>
               </div>
             </div>
-            <div className="p-4 flex justify-between text-primary-900 items-center  border-t border-gray-200 ">
-              <span className="text-SubheadMd text-gray-95 uppercase">TIỀN</span>
-              <div className="flex gap-x-1">
-                <span className="font-bold text-base">{userInfo?.balance && userInfo?.balance.toString() || '0'}</span>
-                <Image
-                  src="/image/home/coin.png"
-                  alt="coin pic"
-                  width={24}
-                  height={24}
-                />
-              </div>
-            </div>
-          </div>
+          )}
           <div className="flex flex-col gap-y-1">
             <div className="flex justify-between items-center px-4">
               <div className="text-SubheadMd text-gray-95 uppercase ">

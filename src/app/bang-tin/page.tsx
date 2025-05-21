@@ -29,7 +29,10 @@ const Home = () => {
   //set for contest page
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [postType, setPostType] = useState<PostTypeEnum>(PostTypeEnum.POST);
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const {
     data: currentPageData,
     isLoading,
@@ -48,7 +51,6 @@ const Home = () => {
     setTabValue(value);
     setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
     setTypeModal(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
-
   };
   const [show, setTypeModal] = useProfileStore((state) => [
     state.show,
@@ -96,7 +98,7 @@ const Home = () => {
           <AnimationLoading className="w-[400px] h-[400px]" />
         </div>
       </div>
-    )
+    );
   }
   return (
     <>
@@ -113,7 +115,11 @@ const Home = () => {
           )
         }
       </div> */}
-      <Tabs onValueChange={handleTabChange} defaultValue="all" className="w-full">
+      <Tabs
+        onValueChange={handleTabChange}
+        defaultValue="all"
+        className="w-full"
+      >
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="all">Tất cả</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>
@@ -129,12 +135,12 @@ const Home = () => {
                   transition={{
                     duration: 0.4,
                     delay: index * 0.1,
-                    ease: "easeOut"
+                    ease: "easeOut",
                   }}
-                // whileHover={{
-                //   scale: 1.01,
-                //   transition: { duration: 0.2 }
-                // }}
+                  // whileHover={{
+                  //   scale: 1.01,
+                  //   transition: { duration: 0.2 }
+                  // }}
                 >
                   <div className="p-4 relative">
                     <div className="text-sm text-gray-500 absolute top-7 right-4">
@@ -184,8 +190,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}
@@ -201,12 +207,12 @@ const Home = () => {
                   transition={{
                     duration: 0.4,
                     delay: index * 0.1,
-                    ease: "easeOut"
+                    ease: "easeOut",
                   }}
-                // whileHover={{
-                //   scale: 1.01,
-                //   transition: { duration: 0.2 }
-                // }}
+                  // whileHover={{
+                  //   scale: 1.01,
+                  //   transition: { duration: 0.2 }
+                  // }}
                 >
                   <div className="px-8 relative">
                     <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -255,8 +261,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}

@@ -35,7 +35,6 @@ export default function Event() {
   const [searchQuery, setSearchQuery] = useState("");
   const [textSearch, setTextSearch] = useState("");
 
-
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["event", currentPage, sortOrder], // include textSearch in the query key
     queryFn: async () => {
@@ -86,7 +85,7 @@ export default function Event() {
               handleSearch();
             }
           }}
-        // onSearch={handleSearch}
+          // onSearch={handleSearch}
         />
         <div className="flex items-center gap-1">
           <div className="text-BodySm text-gray-70">Hiển thị theo:</div>
@@ -120,77 +119,81 @@ export default function Event() {
           </Select>
         </div>
       </div>
-      <div className='mt-4 text-gray-50 text-SubheadMd text-start w-full'>
-        Tìm thấy <span className='text-primary-95'>{data?.data && data?.data?.length || 0}</span> kết quả phù hợp với từ khoá: <span className='text-primary-95'>&quot;{textSearch}&quot;</span>
+      <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
+        Tìm thấy{" "}
+        <span className="text-primary-95">
+          {(data?.data && data?.data?.length) || 0}
+        </span>{" "}
+        kết quả phù hợp với từ khoá:{" "}
+        <span className="text-primary-95">&quot;{textSearch}&quot;</span>
       </div>
       {/* show item grid here */}
-      {
-        isLoading ?
-          <div className="w-full flex flex-col items-center justify-center">
-            <Loading />
-          </div>
-          :
-          <div className="w-full gap-6 grid grid-cols-3">
-            {data && data.data && data.data.length > 0 ?
-              data.data?.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch"
-                    onClick={() => handleRedirectDetail(item.id)}
-                  >
-                    <Image
-                      alt=""
-                      src={item.thumbnail ? item.thumbnail : ""}
-                      width={411}
-                      height={220}
-                      className="w-full h-[220px] object-cover"
-                    />
-                    <div className="w-full flex flex-col gap-2 flex-grow">
-                      <div className="flex items-start gap-2 justify-start">
-                        {item.tags?.split(",").map((tag, tagIndex) => {
-                          return (
-                            <CommonTag key={tagIndex} className="tag-class">
-                              {tag}
-                            </CommonTag>
-                          );
-                        })}
-                      </div>
-                      <div
-                        className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow"
-                        dangerouslySetInnerHTML={{
-                          __html: (get(item, "title", "") || "")
-                            .replace(/<[^>]+>/g, "")
-                            .trim()
-                            .slice(0, 50)
-                            .concat(
-                              get(item, "title", "").length > 30 ? "..." : ""
-                            ),
-                        }}
-                      ></div>
-                      <div className="text-BodySm text-gray-95">
-                        {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
-                      </div>
+      {isLoading ? (
+        <div className="w-full flex flex-col items-center justify-center">
+          <Loading />
+        </div>
+      ) : (
+        <div className="w-full gap-6 grid grid-cols-3">
+          {data && data.data && data.data.length > 0 ? (
+            data.data?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch cursor-pointer"
+                  onClick={() => handleRedirectDetail(item.id)}
+                >
+                  <Image
+                    alt=""
+                    src={item.thumbnail ? item.thumbnail : ""}
+                    width={411}
+                    height={220}
+                    className="w-full h-[220px] object-cover rounded-2xl"
+                  />
+                  <div className="w-full flex flex-col gap-2 flex-grow">
+                    <div className="flex items-start gap-2 justify-start">
+                      {item.tags?.split(",").map((tag, tagIndex) => {
+                        return (
+                          <CommonTag key={tagIndex} className="tag-class">
+                            {tag}
+                          </CommonTag>
+                        );
+                      })}
+                    </div>
+                    <div
+                      className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow"
+                      dangerouslySetInnerHTML={{
+                        __html: (get(item, "title", "") || "")
+                          .replace(/<[^>]+>/g, "")
+                          .trim()
+                          .slice(0, 50)
+                          .concat(
+                            get(item, "title", "").length > 30 ? "..." : ""
+                          ),
+                      }}
+                    ></div>
+                    <div className="text-BodySm text-gray-95">
+                      {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
                     </div>
                   </div>
-                );
-              })
-              :
-              <div className="w-full flex flex-col items-center justify-center">
-                <Image
-                  alt="empty-state"
-                  src="/image/empty-data-image.png"
-                  width={300}
-                  height={200}
-                />
-                <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
-                <div className="text-BodyMd text-gray-70">
-                  Chúng tôi sẽ sớm cập nhật thông tin mới
                 </div>
+              );
+            })
+          ) : (
+            <div className="w-full flex flex-col items-center justify-center">
+              <Image
+                alt="empty-state"
+                src="/image/empty-data-image.png"
+                width={300}
+                height={200}
+              />
+              <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
+              <div className="text-BodyMd text-gray-70">
+                Chúng tôi sẽ sớm cập nhật thông tin mới
               </div>
-            }
-          </div>
-      }
+            </div>
+          )}
+        </div>
+      )}
       <div className=" w-full flex justify-center">
         <CommonPagination
           showDetails={false}
@@ -203,10 +206,13 @@ export default function Event() {
         />
       </div>
     </div>
-
-  )
+  );
   return (
-    <div className={classNames("w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16")}>
+    <div
+      className={classNames(
+        "w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16"
+      )}
+    >
       <BannerCard className="w-full rounded-3xl h-[500px]">
         <div className="flex flex-col items-center gap-2">
           <div className="text-DisplayMd text-gray-10">Sự kiện của TekMonk</div>

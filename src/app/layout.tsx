@@ -14,6 +14,10 @@ import {
 
 import TopLoader from "nextjs-toploader";
 import Providers from "./providers";
+import {
+  METADATA_SHARE_TEXT,
+  METADATA_SHARE_TITLE,
+} from "@/contants/metadata/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,8 +36,8 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://olympiad.tekmonk.edu.vn"),
-  title: SHARE_TITLE,
-  description: SHARE_TEXT,
+  title: METADATA_SHARE_TITLE,
+  description: METADATA_SHARE_TEXT,
   icons: {
     icon: "/favicon.ico?v=4",
   },
@@ -41,9 +45,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     url: process.env.NEXT_PUBLIC_BASE_URL,
-    title: SHARE_TITLE,
-    description: SHARE_TEXT,
-    siteName: SHARE_TITLE,
+    title: METADATA_SHARE_TITLE,
+    description: METADATA_SHARE_TEXT,
+    siteName: METADATA_SHARE_TITLE,
     images: [
       {
         url: CONTEST_SHARE_IMAGE_LINK,

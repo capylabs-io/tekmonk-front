@@ -258,7 +258,7 @@ export type TNews = {
   isDealt?: boolean;
   maxSalary?: string;
   minSalary?: string;
-  recruitmentNumber?: string;
+  recruitmentNumber?: number;
   status: string;
 };
 

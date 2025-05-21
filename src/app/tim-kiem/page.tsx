@@ -12,6 +12,7 @@ import { ReqCustomGetUsers } from "@/requests/user";
 import qs from "qs";
 import { get } from "lodash";
 import { User } from "@/types/common-types";
+import { AnimationLoading } from "@/components/lottie/AnimationLoading";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -214,8 +215,10 @@ export default function SearchPage() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary-60" />
+        <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
+          <div className="flex flex-col items-center">
+            <AnimationLoading className="w-[400px] h-[400px]" />
+          </div>
         </div>
       );
     }

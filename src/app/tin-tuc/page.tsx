@@ -32,38 +32,44 @@ export default function News() {
   };
 
   // use query
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch: refetchNews } =
-    useInfiniteQuery({
-      refetchOnWindowFocus: false,
-      queryKey: ["news", searchValue],
-      queryFn: async ({ pageParam = 1 }) => {
-        try {
-          const queryString = qs.stringify({
-            pagination: {
-              page: pageParam,
-              pageSize: 4,
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch: refetchNews,
+  } = useInfiniteQuery({
+    refetchOnWindowFocus: false,
+    queryKey: ["news", searchValue],
+    queryFn: async ({ pageParam = 1 }) => {
+      try {
+        const queryString = qs.stringify({
+          pagination: {
+            page: pageParam,
+            pageSize: 4,
+          },
+          filters: {
+            type: "news",
+            status: "public",
+            title: {
+              $contains: searchValue,
             },
-            filters: {
-              type: "news",
-              status: "public",
-              title: {
-                $contains: searchValue,
-              },
-            },
-            populate: "*",
-          });
-          return await ReqGetAllNews(queryString);
-        } catch (error) {
-          return Promise.reject(error);
-        }
-      },
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        return lastPage.meta?.pagination.pageCount
-          ? allPages.length + 1
-          : undefined;
-      },
-    });
+          },
+          populate: "*",
+        });
+        return await ReqGetAllNews(queryString);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.meta?.pagination.pageCount
+        ? allPages.length + 1
+        : undefined;
+    },
+  });
 
   const { data: randomNews, isLoading: isLoadingRandomNews } = useQuery({
     queryKey: ["news/random"],
@@ -76,47 +82,62 @@ export default function News() {
     },
   });
 
-
   const handleSearchNews = (value: string) => {
     setSearchValue(value);
     refetchNews();
   };
   return (
     <>
-      <div className={classNames("w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto", !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh-64px-372px)]")}>
-        {isSearch ? <SearchNewContent onBack={() => {
-          setIsSearch(false);
-          handleSearchNews('')
-        }} value={searchValue} onSearch={handleSearchNews} data={data?.pages.flatMap((page) => page.data) || []} /> :
+      <div
+        className={classNames(
+          "w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto",
+          !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh)]"
+        )}
+      >
+        {isSearch ? (
+          <SearchNewContent
+            onBack={() => {
+              setIsSearch(false);
+              handleSearchNews("");
+            }}
+            value={searchValue}
+            onSearch={handleSearchNews}
+            data={data?.pages.flatMap((page) => page.data) || []}
+          />
+        ) : (
           <>
             <div className="lg:col-span-2 col-span-3">
-              {
-                randomNews?.data && randomNews?.data?.length > 0 ?
-                  <>
-                    <ShowCarouselItemsComponent data={randomNews?.data || []} />
-                    <div className="w-full h-[1px] bg-gray-20 my-6"></div>
-                    <FeaturedNewsComponent
-                      data={(data ? data.pages.flatMap((page) => page.data) : []) || []}
-                      onLoadMore={handleLoadMoreContentt}
-                      isFetchingNextPage={isFetchingNextPage}
+              {randomNews?.data && randomNews?.data?.length > 0 ? (
+                <>
+                  <ShowCarouselItemsComponent data={randomNews?.data || []} />
+                  <div className="w-full h-[1px] bg-gray-20 my-6"></div>
+                  <FeaturedNewsComponent
+                    data={
+                      (data ? data.pages.flatMap((page) => page.data) : []) ||
+                      []
+                    }
+                    onLoadMore={handleLoadMoreContentt}
+                    isFetchingNextPage={isFetchingNextPage}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="w-full h-full flex flex-col items-center justify-center">
+                    <Image
+                      alt="empty-state"
+                      src="/image/empty-data-image.png"
+                      width={300}
+                      height={200}
                     />
-                  </> :
-                  <>
-                    <div className="w-full h-full flex flex-col items-center justify-center">
-                      <Image
-                        alt="empty-state"
-                        src="/image/empty-data-image.png"
-                        width={300}
-                        height={200}
-                      />
-                      <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
-                      <div className="text-BodyMd text-gray-70">
-                        Chúng tôi sẽ sớm cập nhật thông tin mới
-                      </div>
+                    <div className="text-BodyLg text-gray-95">
+                      Không có dữ liệu
                     </div>
-                  </>
-              }
-
+                    <div className="text-BodyMd text-gray-70">
+                      Chúng tôi sẽ sớm cập nhật thông tin mới
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="col-span-1 flex-col gap-8 lg:flex hidden">
               <Input
@@ -132,10 +153,9 @@ export default function News() {
                   }
                 }}
               />
-              {
-                randomNews?.data && randomNews?.data?.length > 0 &&
+              {randomNews?.data && randomNews?.data?.length > 0 && (
                 <SuggestComponent data={randomNews?.data || []} />
-              }
+              )}
               <Image
                 src="/image/home/banner-layout.png"
                 alt="Default"
@@ -145,7 +165,7 @@ export default function News() {
               />
             </div>
           </>
-        }
+        )}
       </div>
     </>
   );
@@ -226,10 +246,11 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
         {data.map((article, index) => (
           <button
             key={article.id}
-            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${index === carouselIndex
-              ? "bg-primary-60"
-              : "bg-primary-30 hover:cursor-pointer"
-              }`}
+            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              index === carouselIndex
+                ? "bg-primary-60"
+                : "bg-primary-30 hover:cursor-pointer"
+            }`}
             onClick={() => {
               setCarouselIndex(index);
               api?.scrollTo(index);
@@ -301,7 +322,7 @@ const FeaturedNewsComponent = ({
             <>
               <div
                 key={newsItem.id}
-                className="h-[220px] w-full flex items-center gap-2 justify-center"
+                className="h-[220px] w-full flex items-center gap-2 justify-center cursor-pointer"
                 onClick={() => handleRedirect(newsItem.id)}
               >
                 <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
@@ -349,7 +370,6 @@ const FeaturedNewsComponent = ({
                 />
               </div>
               <div className="w-full h-[1px] bg-gray-20 my-4"></div>
-
             </>
           ))}
         {data && data.length === 0 && (
@@ -368,18 +388,20 @@ const FeaturedNewsComponent = ({
         )}
       </div>
 
-      {/* {isFetchingNextPage ? (
+      {isFetchingNextPage ? (
         <div className="text-center">Loading . . .</div>
       ) : (
-        data && data.length > 0 &&
-        <CommonCard
-          size="medium"
-          className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
-          onClick={onLoadMore}
-        >
-          Xem thêm
-        </CommonCard>
-      )} */}
+        data &&
+        data.length > 0 && (
+          <CommonCard
+            size="medium"
+            className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
+            onClick={onLoadMore}
+          >
+            Xem thêm
+          </CommonCard>
+        )
+      )}
     </div>
   );
 };
@@ -394,7 +416,7 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
       {data.map((newsItem) => (
         <div
           key={newsItem.id}
-          className="h-[80px] w-full flex items-start justify-center gap-4"
+          className="h-[80px] w-full flex items-start justify-center gap-4 cursor-pointer"
           onClick={() => handleRedirect(newsItem.id)}
         >
           <Image

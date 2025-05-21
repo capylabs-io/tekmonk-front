@@ -17,6 +17,7 @@ import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { AuthGuard } from "@/components/hoc/auth-guard";
 import qs from "qs";
 import { User } from "@/types/common-types";
+import { AnimationLoading } from "@/components/lottie/AnimationLoading";
 // Thêm kiểu cho window.FB
 declare global {
   interface Window {
@@ -148,7 +149,13 @@ export default function Page({ params }: { params: { id: number } }) {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
+        <div className="flex flex-col items-center">
+          <AnimationLoading className="w-[400px] h-[400px]" />
+        </div>
+      </div>
+    );
   }
 
   if (postData?.isVerified !== PostVerificationType.ACCEPTED) {
@@ -178,8 +185,17 @@ export default function Page({ params }: { params: { id: number } }) {
             ...postData,
             id: postData?.id || 0,
             tags: postData?.tags || "",
-            tagged_users: get(postData, "tagged_users.data", []).map((user: User) => { return { ...get(user, "attributes", {}), id: get(user, "id") } }) as User[],
-            postedBy: get(postData, "postedBy.data") ? { ...get(postData, "postedBy.data.attributes", {}), id: get(postData, "postedBy.data.id") } as unknown as User : null,
+            tagged_users: get(postData, "tagged_users.data", []).map(
+              (user: User) => {
+                return { ...get(user, "attributes", {}), id: get(user, "id") };
+              }
+            ) as User[],
+            postedBy: get(postData, "postedBy.data")
+              ? ({
+                  ...get(postData, "postedBy.data.attributes", {}),
+                  id: get(postData, "postedBy.data.id"),
+                } as unknown as User)
+              : null,
           }}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"
           thumbnailUrl={get(postData, "thumbnail") || ""}
@@ -196,16 +212,18 @@ export default function Page({ params }: { params: { id: number } }) {
               IV
             </span>
           }
-          taggedUsers={get(postData, "tagged_users.data", []).map((user: User) => { return { ...get(user, "attributes", {}), id: get(user, "id") } }) as User[]}
+          taggedUsers={
+            get(postData, "tagged_users.data", []).map((user: User) => {
+              return { ...get(user, "attributes", {}), id: get(user, "id") };
+            }) as User[]
+          }
           postContent={get(postData, "content", "")}
           postName={get(postData, "name", "")}
           createdAt={moment(get(postData, "createdAt", ""))
             .format("DD/MM/YYYY")
             .toString()}
           likedCount={get(postData, "likeCount", 0).toString() || "0"}
-          commentCount={
-            get(postData, "commentCount", 0).toString() || "0"
-          }
+          commentCount={get(postData, "commentCount", 0).toString() || "0"}
           isDetail={true}
           onLikedPostClick={handleLikedPostClick}
         />
