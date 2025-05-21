@@ -4,7 +4,7 @@ import Image from "next/image";
 import classNames from "classnames";
 
 type Props = {
-  point: string;
+  point?: string;
   customClassName?: string;
 };
 const BASE_CLASS =

@@ -19,6 +19,7 @@ import { useCustomRouter } from "../common/router/CustomRouter";
 import { useQuery } from "@tanstack/react-query";
 import { ClaimedItem } from "@/types/claimed-item";
 import { Copy, CheckCircle } from "lucide-react";
+import { ActionGuard } from "../common/ActionGuard";
 type Props = {
   itemData: ShopItem;
   isShowing: boolean;
@@ -198,8 +199,8 @@ export const ItemModal = ({
   };
 
   const handleBuy = () => {
-    onBuy(quantity);
     handleOnclose();
+    onBuy(quantity);
   };
 
   const goToInventory = () => {
@@ -282,7 +283,14 @@ export const ItemModal = ({
               <CommonButton variant="secondary" onClick={handleOnclose}>
                 Thoát
               </CommonButton>
-              <CommonButton onClick={handleBuy}>Mua vật phẩm</CommonButton>
+              <ActionGuard
+                onAction={() => {
+                  handleBuy()
+                }}
+                actionName="Mua vật phẩm"
+              >
+                <CommonButton >Mua vật phẩm</CommonButton>
+              </ActionGuard>
             </div>
           </DialogFooter>
         </DialogContent>

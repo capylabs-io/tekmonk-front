@@ -8,6 +8,10 @@ import {
   useShopInventoryStore,
   TabOptions,
 } from "@/store/switch-shop-inventory";
+import { AuthGuard } from "@/components/hoc/auth-guard";
+import { CardAnimationLoading } from "@/components/lottie/CardAnimationLoading";
+import { useEffect, useState } from "react";
+import { useLoadingStore } from "@/store/LoadingStore";
 
 // Tab data
 const TABS: TabItem[] = [
@@ -26,7 +30,22 @@ export default function Shop() {
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId as TabOptions);
   };
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
+  }, []);
 
+  if (isLoading) {
+    return (
+      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
+        <div className="flex flex-col items-center">
+          <CardAnimationLoading className="w-[400px] h-[400px]" />
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="w-full">
       <div className="w-full mx-auto overflow-hidden">
@@ -37,12 +56,14 @@ export default function Shop() {
         </div>
 
         {/* Tab Navigation */}
-        <TabNavigation
-          tabs={TABS}
-          activeTabId={activeTab}
-          onTabChange={handleTabChange}
-        />
-
+        {
+          userInfo?.id &&
+          <TabNavigation
+            tabs={TABS}
+            activeTabId={activeTab}
+            onTabChange={handleTabChange}
+          />
+        }
         {/* Tab Content */}
         {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>

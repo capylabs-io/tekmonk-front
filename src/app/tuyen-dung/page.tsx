@@ -20,7 +20,7 @@ import {
 import { ROUTE } from "@/contants/router";
 import Image from "next/image";
 import { useState } from "react";
-import { Banknote } from "lucide-react";
+import { Banknote, Users } from "lucide-react";
 import { ReqGetAllNews } from "@/requests/news";
 import Loading from "../loading";
 import { get } from "lodash";
@@ -131,13 +131,13 @@ export default function Hiring() {
             <Loading />
           </div>
           :
-          <div className="w-full gap-6 flex flex-wrap">
+          <div className="w-full gap-6 grid grid-cols-3">
             {data?.data && data?.data?.length > 0 ?
               data.data.map((item, index) => {
                 return (
                   <div
                     key={index}
-                    className="w-[411px] max-h-[411px] flex flex-col items-center gap-4 self-stretch"
+                    className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch"
                     onClick={() => handleRedirectDetail(item.id)}
                   >
                     <Image
@@ -148,15 +148,6 @@ export default function Hiring() {
                       className="w-full h-[220px] object-cover"
                     />
                     <div className="w-full flex flex-col gap-2 flex-grow">
-                      <div className="flex items-start gap-2 justify-start">
-                        {item.tags?.split(",").map((tag, tagIndex) => {
-                          return (
-                            <CommonTag key={tagIndex} className="tag-class">
-                              {tag}
-                            </CommonTag>
-                          );
-                        })}
-                      </div>
                       <div
                         className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow"
                         dangerouslySetInnerHTML={{
@@ -171,8 +162,22 @@ export default function Hiring() {
                       ></div>
                       <div className="text-BodySm text-gray-95 flex gap-2 items-center">
                         <Banknote className="text-gray-70" size={16} />
-                        <div>Mức lương: {item.salary}</div>
+                        <div>Mức lương: {`${item.minSalary} - ${item.maxSalary}` || "Lương thỏa thuận"}</div>
                       </div>
+                      <div className="text-BodySm text-gray-95 flex gap-2 items-center">
+                        <Users className="text-gray-70" size={16} />
+                        <div>Số lượng tuyển dụng: {item.recruitmentNumber || "Không xác định"}</div>
+                      </div>
+                      <div className="flex items-start gap-2 justify-start">
+                        {item.tags?.split(",").map((tag, tagIndex) => {
+                          return (
+                            <CommonTag key={tagIndex} className="tag-class">
+                              {tag}
+                            </CommonTag>
+                          );
+                        })}
+                      </div>
+
                     </div>
                   </div>
                 );

@@ -11,6 +11,7 @@ import Image from "next/image";
 import { get } from "lodash";
 import { CommonCard } from "../common/CommonCard";
 import CommonPagination from "../admin/common-pagination";
+import { useState } from "react";
 
 type CertificateDialogProps = {
   open: boolean;
@@ -33,6 +34,8 @@ export const CertificateDialog = ({
   onPageChange,
   onItemsPerPageChange,
 }: CertificateDialogProps) => {
+  // const [certificateHistorySelected, setCertificateHistorySelected] = useState<CertificateHistory | null>(null);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto bg-white">
@@ -44,6 +47,9 @@ export const CertificateDialog = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {data.map((certificate) => (
               <CommonCard
+                // onClick={() => {
+                //   setCertificateHistorySelected(certificate);
+                // }}
                 key={certificate.id}
                 className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-2"
               >

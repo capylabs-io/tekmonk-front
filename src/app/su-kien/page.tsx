@@ -130,13 +130,13 @@ export default function Event() {
             <Loading />
           </div>
           :
-          <div className="w-full gap-6 flex flex-wrap">
+          <div className="w-full gap-6 grid grid-cols-3">
             {data && data.data && data.data.length > 0 ?
               data.data?.map((item, index) => {
                 return (
                   <div
                     key={index}
-                    className="w-[411px] max-h-[400px] flex flex-col items-center gap-4 self-stretch"
+                    className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch"
                     onClick={() => handleRedirectDetail(item.id)}
                   >
                     <Image

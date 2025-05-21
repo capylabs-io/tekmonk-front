@@ -77,17 +77,19 @@ export const LeaderboardTable = ({
   ];
 
   return (
-    <CommonTable
-      data={data}
-      columns={columns}
-      page={page}
-      totalPage={totalPages}
-      totalDocs={totalDocs}
-      docsPerPage={10}
-      onPageChange={onPageChange}
-      onPageSizeChange={onPageSizeChange}
-      isLoading={isLoading}
-      customTableClassname="mt-6"
-    />
+    <div className="p-4 w-full">
+      <CommonTable
+        data={data}
+        columns={columns}
+        page={page}
+        totalPage={totalPages}
+        totalDocs={totalDocs}
+        docsPerPage={10}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        isLoading={isLoading}
+        customTableClassname="mt-6"
+      />
+    </div>
   );
 };

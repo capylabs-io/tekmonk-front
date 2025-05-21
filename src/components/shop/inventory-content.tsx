@@ -18,6 +18,7 @@ import { ReqGetClaimedItems } from "@/requests/claimed-item";
 import { CardItem } from "@/components/shop/card-item";
 import { ClaimedItem } from "@/types/claimed-item";
 import { BillCard } from "@/components/shop/BillCard";
+import { AuthGuard } from "../hoc/auth-guard";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -112,21 +113,19 @@ export const InventoryContent = () => {
       {/* Tabs */}
       <div className="flex border-b border-gray-20 mb-6 px-4">
         <button
-          className={`py-3 px-6 font-medium text-base ${
-            activeTab === "items"
-              ? "border-b-4 border-primary-40 text-primary-95"
-              : "text-gray-50"
-          }`}
+          className={`py-3 px-6 font-medium text-base ${activeTab === "items"
+            ? "border-b-4 border-primary-40 text-primary-95"
+            : "text-gray-50"
+            }`}
           onClick={() => setActiveTab("items")}
         >
           Vật phẩm đã sở hữu
         </button>
         <button
-          className={`py-3 px-6 font-medium text-base ${
-            activeTab === "claimed"
-              ? "border-b-4 border-primary-40 text-primary-95"
-              : "text-gray-50"
-          }`}
+          className={`py-3 px-6 font-medium text-base ${activeTab === "claimed"
+            ? "border-b-4 border-primary-40 text-primary-95"
+            : "text-gray-50"
+            }`}
           onClick={() => setActiveTab("claimed")}
         >
           Mã quy đổi vật phẩm
@@ -162,8 +161,8 @@ export const InventoryContent = () => {
         {activeTab === "claimed" && (
           <div className="mt-2">
             {claimedItems &&
-            claimedItems.data &&
-            claimedItems.data.length > 0 ? (
+              claimedItems.data &&
+              claimedItems.data.length > 0 ? (
               <div className="px-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {claimedItems.data.map((item, index: number) => (
                   <BillCard key={index} item={item} />

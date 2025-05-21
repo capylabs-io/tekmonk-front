@@ -26,6 +26,8 @@ import { useCustomRouter } from "../common/router/CustomRouter";
 import { useMemo } from "react";
 import { CommonTag } from "../common/CommonTag";
 import { ROUTE } from "@/contants/router";
+import { ActionGuard } from "../common/ActionGuard";
+
 
 type Props = {
   data?: PostType | null;
@@ -93,11 +95,12 @@ export const Post = ({
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const [taggedUsersDialogOpen, setTaggedUsersDialogOpen] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const taggedList = useMemo(() => {
     return taggedUsers?.filter(
-      (user) => user.id.toString() !== userInfo?.id.toString()
+      (user) => user.id.toString() !== data?.postedBy?.id.toString()
     );
-  }, [taggedUsers, userInfo]);
+  }, [taggedUsers, data]);
   // Tự động chọn người dùng đã được tag khi mở dialog tag
   useEffect(() => {
     if (addStudentDialogOpen && taggedUsers && taggedUsers.length > 0) {
@@ -146,7 +149,7 @@ export const Post = ({
           isAllowClickDetail && handleClickPostCard(e);
         }}
       >
-        <div className="flex items-center mt-8 w-full gap-2">
+        <div className="flex items-center w-full gap-2">
           <ProfileInfoBox
             imageUrl={imageUrl}
             userName={userName}
@@ -172,17 +175,7 @@ export const Post = ({
               >
                 {taggedList.length - 1} người khác.
               </div>
-              <div className="ml-1">
-                {data?.type === PostTypeEnum.PROJECT ? (
-                  <div>
-                    <span className="font-medium">Dự án</span>
-                  </div>
-                ) : (
-                  <div>
-                    <span className="font-medium">Bài viết</span>
-                  </div>
-                )}
-              </div>
+
             </div>
           )}
           {isVerified && (
@@ -194,14 +187,7 @@ export const Post = ({
           )}
         </div>
         <div className="pl-10 mt-3">
-          {!isVerified && (
-            <div
-              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat`}
-              style={{
-                backgroundImage: `url(${thumbnailUrl})`,
-              }}
-            ></div>
-          )}
+
 
           <div className="mt-3">
             {!isDetail ? (
@@ -247,14 +233,46 @@ export const Post = ({
                 </button>
               )}
             </div>
+            {!isVerified && (
+              <div
+                className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat relative mt-2`}
+                style={{
+                  backgroundImage: `url(${thumbnailUrl})`,
+                }}
+              >
+                <div className="absolute right-4 top-4">
+                  {data?.type === PostTypeEnum.PROJECT ? (
+                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                      <span className="font-medium">Dự án</span>
+                    </div>
+                  ) : (
+                    <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                      <span className="font-medium">Bài viết</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           {isVerified && (
             <div
-              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3`}
+              className={`w-full h-[300px] rounded-xl bg-center bg-cover bg-no-repeat mt-3 relative`}
               style={{
                 backgroundImage: `url(${thumbnailUrl})`,
               }}
-            ></div>
+            >
+              <div className="absolute right-4 top-4">
+                {data?.type === PostTypeEnum.PROJECT ? (
+                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                    <span className="font-medium">Dự án</span>
+                  </div>
+                ) : (
+                  <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
+                    <span className="font-medium">Bài viết</span>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
@@ -262,35 +280,43 @@ export const Post = ({
                 <div
                   className={classNames("flex items-center gap-x-1 font-bold ")}
                 >
-                  <button
-                    onClick={() => {
-                      data && onLikedPostClick?.(data);
-                    }}
+                  <ActionGuard
+                    onAction={() => data && onLikedPostClick?.(data)}
+                    actionName="thích bài viết"
+                    className="cursor-pointer flex items-center justify-center "
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill={data?.isLiked ? "#ef4444" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={classNames(
-                        "cursor-pointer",
-                        data?.isLiked ? "text-red-500" : ""
-                      )}
-                    >
-                      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                    </svg>
-                  </button>
+                    <button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill={data?.isLiked ? "#ef4444" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={classNames(
+                          "cursor-pointer",
+                          data?.isLiked ? "text-red-500" : ""
+                        )}
+                      >
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                      </svg>
+                    </button>
+                  </ActionGuard>
                   <span>{likedCount}</span>
                 </div>
                 <div className="flex items-center gap-x-1 font-bold text-gray-500">
-                  <button>
-                    <MessageCircle size={20} />
-                  </button>
+                  <ActionGuard
+                    onAction={() => { }}
+                    actionName="bình luận"
+                    className="cursor-pointer flex items-center justify-center"
+                  >
+                    <button>
+                      <MessageCircle size={20} />
+                    </button>
+                  </ActionGuard>
                   <span>{commentCount}</span>
                 </div>
               </div>
@@ -321,7 +347,7 @@ export const Post = ({
             </div>
           </div>
         </div>
-      </div>
+      </div >
       <Dialog
         open={addStudentDialogOpen}
         onOpenChange={setAddStudentDialogOpen}

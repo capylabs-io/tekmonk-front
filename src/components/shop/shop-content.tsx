@@ -3,12 +3,16 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { GetCategories } from "@/requests/category";
 import { CategoryBar } from "./category-bar";
+import { useEffect, useState } from "react";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { CardAnimationLoading } from "../lottie/CardAnimationLoading";
 
 export const ShopContent = () => {
   const { data: categories } = useQuery({
     queryKey: ["categories"],
     queryFn: () => GetCategories(),
   });
+  
   return (
     <div className="w-full">
       <div className="w-full px-4">

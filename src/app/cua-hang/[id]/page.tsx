@@ -131,7 +131,7 @@ export default function ShopItemDetail() {
         </div>
       </div>
 
-      <div className="container mx-auto py-6 px-4 flex-1">
+      <div className="container mx-auto p-6 flex-1">
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center">
           {data?.data.map((item, index) => (
             <CardItem

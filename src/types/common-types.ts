@@ -255,7 +255,10 @@ export type TNews = {
   isActived: boolean;
   priority: boolean;
   totalRead?: number;
-  salary?: string;
+  isDealt?: boolean;
+  maxSalary?: string;
+  minSalary?: string;
+  recruitmentNumber?: string;
   status: string;
 };
 

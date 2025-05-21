@@ -10,6 +10,7 @@ import qs from "qs";
 import { PostComment } from "@/types/common-types";
 import { StrapiResponse } from "@/types/strapi-types";
 import { containsForbiddenWords } from "@/validation/validate-forbiden-word";
+import { ActionGuard } from "../common/ActionGuard";
 
 type Props = {
   imageUrl?: string;
@@ -122,7 +123,10 @@ export const PostCommentContent = ({
 
   return (
     <div className="space-y-5 h-full overflow-y-auto">
-      <div className="flex w-full cursor-pointer items-center gap-2">
+      <ActionGuard
+        actionName="Thêm bình luận"
+        className="flex w-full cursor-pointer items-center gap-2"
+      >
         <div
           className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
           style={{
@@ -146,7 +150,7 @@ export const PostCommentContent = ({
             <Send size={20} />
           </Button>
         </div>
-      </div>
+      </ActionGuard>
       <div className="space-y-5">
         {listComment?.data?.map((item: PostComment, index: number) => (
           <CommentCard
