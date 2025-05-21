@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { FileUpload } from "../file-upload/file-upload";
 export const CreatePostModal = () => {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
@@ -46,7 +47,7 @@ export const CreatePostModal = () => {
     defaultValues: {
       name: "",
       url: "",
-      image: null,
+      image: [],
       tags: "",
       content: "",
     },
@@ -105,18 +106,23 @@ export const CreatePostModal = () => {
       appendFormData(formData, data);
       formData.append("isVerified", PostVerificationType.PENDING);
       if (data.image) {
-        formData.append("image", data.image);
+        data.image.forEach((file) => {
+          console.log("file", file);
+          formData.append("images", file);
+        });
       }
       formData.append(
         "type",
         type === PostTypeEnum.PROJECT ? PostTypeEnum.PROJECT : PostTypeEnum.POST
       );
 
+      console.log("formData", formData.get("images"));
+
       const res = await uploadPost(formData);
       if (res) {
         showSuccess("Thành công", "Tạo bài viết thành công");
-        reset();
-        hide();
+        // reset();
+        // hide();
       }
     } catch (error) {
       console.log("error", error);
@@ -132,7 +138,7 @@ export const CreatePostModal = () => {
     isShowing && (
       <TooltipProvider>
         <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
-          <div className="relative mx-auto w-[688px] flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto custom-scrollbar">
+          <div className="relative mx-auto xl:w-[80vw] w-[688px] flex flex-col h-[80%] rounded-3xl bg-white overflow-hidden">
             <button
               type="button"
               onClick={hide}
@@ -151,140 +157,126 @@ export const CreatePostModal = () => {
             </div>
             <hr className="border-t border-gray-200" />
             <FormProvider {...method}>
-              <div className="p-6 space-y-5 grow">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-60 text-SubheadMd">Tiêu đề</span>
-                  <div className="flex flex-col w-[424px]">
-                    <Controller
-                      control={control}
-                      name="name"
-                      render={({ field: { value, onChange } }) => (
-                        <Input
-                          value={value}
-                          onChange={(e) => onChange(e)}
-                          type="text"
-                          placeholder="Nhập thông tin"
-                          customClassNames="max-w-[424px]"
-                          customInputClassNames="text-sm"
-                        />
+              <div className="overflow-y-auto !grid xl:!grid-cols-2 !grid-cols-1 max-xl:custom-scrollbar">
+                <div className="p-6 space-y-5 grow xl:overflow-y-auto xl:custom-scrollbar">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-60 text-SubheadMd">Tiêu đề</span>
+                    <div className="flex flex-col w-[424px]">
+                      <Controller
+                        control={control}
+                        name="name"
+                        render={({ field: { value, onChange } }) => (
+                          <Input
+                            value={value}
+                            onChange={(e) => onChange(e)}
+                            type="text"
+                            placeholder="Nhập thông tin"
+                            customClassNames="max-w-[424px]"
+                            customInputClassNames="text-sm"
+                          />
+                        )}
+                      />
+                      {errors.name && (
+                        <span className="text-red-500 text-xs mt-1">
+                          {errors.name.message}
+                        </span>
                       )}
-                    />
-                    {errors.name && (
-                      <span className="text-red-500 text-xs mt-1">
-                        {errors.name.message}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-60">
-                    <div className="flex flex-col gap-y-1">
-                      <div className="text-SubheadMd">Đường dẫn website</div>
-                      <div className="text-BodyMd">(không bắt buộc)</div>
                     </div>
-                  </span>
-                  <div className="flex flex-col w-[424px]">
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-60">
+                      <div className="flex flex-col gap-y-1">
+                        <div className="text-SubheadMd">Đường dẫn website</div>
+                        <div className="text-BodyMd">(không bắt buộc)</div>
+                      </div>
+                    </span>
+                    <div className="flex flex-col w-[424px]">
+                      <Controller
+                        control={control}
+                        name="url"
+                        render={({ field: { value, onChange } }) => (
+                          <Input
+                            value={value}
+                            onChange={onChange}
+                            type="text"
+                            placeholder="Nhập thông tin"
+                            customClassNames="max-w-[424px]"
+                            customInputClassNames="text-sm"
+                          />
+                        )}
+                      />
+                      {errors.url && (
+                        <span className="text-red-500 text-xs mt-1">
+                          {errors.url.message}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-start text-sm">
+                    <span className="text-gray-60 text-SubheadMd flex items-center">
+                      Tags{" "}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Info
+                            size={16}
+                            className={`ml-1`}
+                            color={`${"#9A1595"}`}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent
+                          side="right"
+                          align="start"
+                          className="max-w-[200px]"
+                        >
+                          <p>Vui lòng nhập tag và ấn Enter</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </span>
                     <Controller
                       control={control}
-                      name="url"
-                      render={({ field: { value, onChange } }) => (
-                        <Input
-                          value={value}
-                          onChange={onChange}
-                          type="text"
-                          placeholder="Nhập thông tin"
-                          customClassNames="max-w-[424px]"
-                          customInputClassNames="text-sm"
-                        />
+                      name="tags"
+                      render={({ field: { value, onChange }, fieldState }) => (
+                        <div className="w-[424px]">
+                          <InputTags
+                            value={value}
+                            error={fieldState?.error?.message}
+                            onValueChange={(tagsString) => {
+                              onChange(tagsString);
+                            }}
+                            customInputClassNames="text-sm"
+                          />
+                        </div>
                       )}
                     />
-                    {errors.url && (
-                      <span className="text-red-500 text-xs mt-1">
-                        {errors.url.message}
-                      </span>
-                    )}
                   </div>
-                </div>
-                <div className="flex justify-between items-start text-sm">
-                  <span className="text-gray-60 text-SubheadMd flex items-center">
-                    Tags{" "}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Info
-                          size={16}
-                          className={`ml-1`}
-                          color={`${"#9A1595"}`}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="right"
-                        align="start"
-                        className="max-w-[200px]"
-                      >
-                        <p>Vui lòng nhập tag và ấn Enter</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </span>
-                  <Controller
-                    control={control}
-                    name="tags"
-                    render={({ field: { value, onChange }, fieldState }) => (
-                      <div className="w-[424px]">
-                        <InputTags
-                          value={value}
-                          error={fieldState?.error?.message}
-                          onValueChange={(tagsString) => {
-                            onChange(tagsString);
-                          }}
-                          customInputClassNames="text-sm"
-                        />
-                      </div>
-                    )}
-                  />
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-60">Hình ảnh</span>
-                  <div className="flex flex-col w-[424px]">
-                    <InputFileUpdload
-                      value={getValues("image")}
-                      onChange={handleImageUpload}
-                      customClassNames="max-w-[424px]"
-                      customInputClassNames="text-sm"
-                      contentImageUpload={
-                        <>
-                          <div className="rounded-full p-5 w-max mx-auto flex items-center justify-center relative bg-gray-20">
-                            <ImagePlus
-                              size={20}
-                              className="absolute text-gray-50"
-                            />
-                          </div>
-                          <div className="mt-2 text-gray-70 text-SubheadSm">
-                            Tải lên ảnh/video
-                          </div>
-                          <p className="text-gray-70 !text-xs font-normal">
-                            Hoặc kéo và thả
-                          </p>
-                        </>
-                      }
+                  <div className="flex flex-col gap-y-2 justify-between text-sm">
+                    <span className="text-gray-60">Hình ảnh</span>
+                    {/* Chnage with multiple files upload here */}
+                    <FileUpload
+                      maxFiles={10}
+                      maxSizeInMB={5}
+                      acceptedFileTypes={[
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp",
+                      ]}
+                      onFilesChange={(files: File[]) => {
+                        setValue("image", files);
+                      }}
                     />
-                    {errors.image && (
-                      <span className="text-red-500 text-xs mt-1">
-                        {errors.image.message}
-                      </span>
-                    )}
                   </div>
                 </div>
 
-                <div className="flex justify-between text-sm">
+                <div className="flex flex-col gap-y-2 text-sm p-6">
                   <span className="text-gray-60">Nội dung</span>
-                  <div className="flex flex-col w-[424px]">
+                  <div className="flex flex-col w-full h-full">
                     <Controller
                       control={control}
                       name="content"
                       render={({ field: { value, onChange }, fieldState }) => (
                         <ReactQuill
                           theme="snow"
-                          className="w-[424px] rounded-xl border border-grey-300 bg-grey-50 outline-none !text-[20px] h-[400px] transition-all ease-linear overflow-y-auto"
+                          className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none !text-[20px] xl:h-full h-[400px] transition-all ease-linear overflow-y-auto"
                           value={value}
                           onChange={onChange}
                           placeholder="Viết vài dòng giới thiệu tổng quan dự án"

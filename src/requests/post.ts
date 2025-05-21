@@ -40,6 +40,18 @@ export const uploadPost = async (data: any) => {
   return response.data;
 };
 
+export const joinWaitList = async (data: any) => {
+  const response = await tekdojoAxios.post(`${BASE_URL}/join-waitlist`, {
+    data,
+  });
+  return response.data;
+};
+
+export const getWaitList = async () => {
+  const response = await tekdojoAxios.get(`${BASE_URL}/get-waitlist`);
+  return response.data;
+};
+
 export const findPost = async (id: number) => {
   const response = await tekdojoAxios.get(`${BASE_URL}/posts/${id}`);
   return response.data as PostType;
