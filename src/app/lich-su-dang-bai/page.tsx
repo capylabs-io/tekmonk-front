@@ -17,6 +17,8 @@ import { useInView } from "react-intersection-observer";
 import { User } from "@/types/common-types";
 import { useInfiniteLatestPost } from "@/hooks/use-post";
 import { Clock, XCircle } from "lucide-react";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -98,13 +100,11 @@ const HistoryPage = () => {
 
   const renderPostList = () => {
     if (isLoading) {
-      return <div className="p-8 text-center">Truy xuất dữ liệu...</div>;
+      return <CommonLoading />;
     }
 
     if (flattenedPosts.length === 0) {
-      return (
-        <div className="p-8 text-center mx-auto">Không có bài viết nào</div>
-      );
+      return <CommonEmptyState />;
     }
 
     return (
@@ -156,8 +156,8 @@ const HistoryPage = () => {
           {isFetchingNextPage
             ? "Đang tải thêm bài viết..."
             : !hasNextPage && flattenedPosts.length > 0
-            ? ""
-            : ""}
+              ? ""
+              : ""}
         </div>
       </>
     );
@@ -174,11 +174,11 @@ const HistoryPage = () => {
         onValueChange={handleTabChange}
       >
         <TabsList className="w-full border-b border-gray-200">
-          <TabsTrigger value={PostVerificationType.ACCEPTED}>
+          <TabsTrigger value={PostVerificationType.ACCEPTED }>
             Bài đã được chấp nhận
           </TabsTrigger>
           <TabsTrigger value={PostVerificationType.PENDING}>
-            Bài đang chờ duyệt
+            Bài đang chờ duyệt ({get(currentPageData, "meta.pagination.total") || 0})
           </TabsTrigger>
           <TabsTrigger value={PostVerificationType.DENIED}>
             Bài đã bị từ chối

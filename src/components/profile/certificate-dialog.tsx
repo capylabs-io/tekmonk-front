@@ -12,6 +12,7 @@ import { get } from "lodash";
 import { CommonCard } from "../common/CommonCard";
 import CommonPagination from "../admin/common-pagination";
 import { useState } from "react";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 
 type CertificateDialogProps = {
   open: boolean;
@@ -81,9 +82,10 @@ export const CertificateDialog = ({
             ))}
           </div>
         ) : (
-          <div className="text-center py-8">
-            <p className="text-gray-500">Chưa có chứng chỉ nào</p>
-          </div>
+          <CommonEmptyState />
+          // <div className="text-center py-8">
+          //   <p className="text-gray-500">Chưa có chứng chỉ nào</p>
+          // </div>
         )}
         <CommonPagination
           showDetails={false}

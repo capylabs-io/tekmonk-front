@@ -26,6 +26,7 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
+import { CommonEmptyState } from "./CommonEmptyState";
 // import { LoadingSpinner } from '@/components/common/Loading';
 type Props = {
   data: any[];
@@ -434,9 +435,7 @@ export const CommonTable = ({
           </table>
         </ReactTableScroll>
         {isLoading != undefined && !isLoading && isEmpty && (
-          <div className="my-12 flex items-center justify-center">
-            <span className="text-lg text-gray-500">Không có dữ liệu</span>
-          </div>
+          <CommonEmptyState />
         )}
       </div>
       {!disableFooter &&

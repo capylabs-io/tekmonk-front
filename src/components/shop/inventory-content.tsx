@@ -19,6 +19,7 @@ import { CardItem } from "@/components/shop/card-item";
 import { ClaimedItem } from "@/types/claimed-item";
 import { BillCard } from "@/components/shop/BillCard";
 import { AuthGuard } from "../hoc/auth-guard";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -150,9 +151,10 @@ export const InventoryContent = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-10 rounded-lg">
-                <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
-              </div>
+              <CommonEmptyState />
+              // <div className="text-center py-10 rounded-lg">
+              //   <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
+              // </div>
             )}
           </div>
         )}
@@ -169,9 +171,10 @@ export const InventoryContent = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-10 rounded-lg">
-                <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
-              </div>
+              <CommonEmptyState />
+              // <div className="text-center py-10 rounded-lg">
+              //   <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
+              // </div>
             )}
           </div>
         )}

@@ -33,6 +33,7 @@ import qs from "qs";
 import { useState } from "react";
 import Image from "next/image";
 import CommonPagination from "@/components/admin/common-pagination";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 
 // Filter dropdown component
 const AchievementFilter = ({
@@ -184,9 +185,7 @@ export default function AchievementPage() {
             </div>
           </>
         ) : (
-          <div className="text-center w-full py-10">
-            <p className="text-gray-500">Không có thành tựu nào</p>
-          </div>
+          <CommonEmptyState />
         )}
       </div>
     );

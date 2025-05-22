@@ -25,6 +25,7 @@ import Loading from "../loading";
 import { get, set } from "lodash";
 import moment from "moment";
 import classNames from "classnames";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 const PAGE_SIZE = 9;
 
 export default function Event() {
@@ -180,18 +181,19 @@ export default function Event() {
               );
             })
           ) : (
-            <div className="w-full flex flex-col items-center justify-center">
-              <Image
-                alt="empty-state"
-                src="/image/empty-data-image.png"
-                width={300}
-                height={200}
-              />
-              <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
-              <div className="text-BodyMd text-gray-70">
-                Chúng tôi sẽ sớm cập nhật thông tin mới
-              </div>
-            </div>
+            <CommonEmptyState />
+            // <div className="w-full flex flex-col items-center justify-center">
+            //   <Image
+            //     alt="empty-state"
+            //     src="/image/empty-data-image.png"
+            //     width={300}
+            //     height={200}
+            //   />
+            //   <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
+            //   <div className="text-BodyMd text-gray-70">
+            //     Chúng tôi sẽ sớm cập nhật thông tin mới
+            //   </div>
+            // </div>
           )}
         </div>
       )}

@@ -28,6 +28,7 @@ import { Achievement } from "@/types/common-types";
 import { Mission } from "@/types/common-types";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { CommonLoading } from "@/components/common/CommonLoading";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 
 export default function Profile() {
   const { id } = useParams();
@@ -201,6 +202,7 @@ export default function Profile() {
                 )}
               </>
             ))}
+          {myPosts?.data.length === 0 && <CommonEmptyState />}
         </TabsContent>
       </Tabs>
     </div>

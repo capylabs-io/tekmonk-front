@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useUserStore } from "@/store/UserStore";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 const TOTAL_ACHIEVEMENTS = 9;
 
 export const AchievementProfile = ({ id }: { id: number }) => {
@@ -72,14 +73,12 @@ export const AchievementProfile = ({ id }: { id: number }) => {
 
   if (!achievements?.data || achievements.data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg">
-        <h3 className="text-lg font-medium text-gray-700 mb-1">
-          Chưa có thành tích nào
-        </h3>
-        <p className="text-sm text-gray-500 text-center max-w-md">
-          Hoàn thành nhiệm vụ và tiếp tục học các khóa học để nhận thành tích
-        </p>
-      </div>
+      <CommonEmptyState />
+      // <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg">
+      //   <p className="text-sm text-gray-500 text-center max-w-md">
+      //     Hoàn thành nhiệm vụ và tiếp tục học các khóa học để nhận thành tích
+      //   </p>
+      // </div>
     );
   }
 
