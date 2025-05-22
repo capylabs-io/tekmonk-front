@@ -46,7 +46,7 @@ export default function Layout({
           </div>
         }
         mainContent={
-          <div className="col-span-6 py-5 overflow-y-auto overflow-x-hidden">
+          <div className="col-span-6 pb-5 pt-1 overflow-y-auto overflow-x-hidden">
             {children}
           </div>
         }

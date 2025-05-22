@@ -13,12 +13,11 @@ import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useUserStore } from "@/store/UserStore";
 import { useEffect, useState } from "react";
-import { useCountPosts, useInfiniteLatestPost } from "@/hooks/use-post";
+import { useInfiniteLatestPost } from "@/hooks/use-post";
 import { useInView } from "react-intersection-observer";
 import { useProfileStore } from "@/store/ProfileStore";
 import { User } from "@/types/common-types";
 import { motion } from "framer-motion";
-import { Loading } from "@/components/common/Loading";
 import { AnimationLoading } from "@/components/lottie/AnimationLoading";
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -56,10 +55,6 @@ const Home = () => {
     state.show,
     state.setTypeModal,
   ]);
-  const handleOpenModal = () => {
-    setTypeModal(PostTypeEnum.PROJECT);
-    show();
-  };
   const handleLikedPostClick = async (data: PostType) => {
     try {
       showLoading();
@@ -159,7 +154,7 @@ const Home = () => {
                         "User"
                       }
                       taggedUsers={get(item, "tagged_users", []) as User[]}
-                      specialName={get(item, "postedBy.skills", "")}
+                      specialName={get(item, "postedBy.specialName", "")}
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))
@@ -230,7 +225,7 @@ const Home = () => {
                         userInfo?.username ||
                         "User"
                       }
-                      specialName={get(item, "postedBy.skills", "")}
+                      specialName={get(item, "postedBy.specialName", "")}
                       postContent={get(item, "content", "")}
                       postName={get(item, "name", "")}
                       createdAt={moment(get(item, "createdAt", ""))

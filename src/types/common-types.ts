@@ -53,6 +53,7 @@ export type User = {
   data: any | null;
   balance: number;
   point: number;
+  specialName: string | null;
   totalPrice: number;
   user_role?: UserRole;
   imageURL?: string;

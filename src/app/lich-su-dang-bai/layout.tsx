@@ -18,47 +18,49 @@ export default function Layout({
   const router = useCustomRouter();
   return (
     <>
-      <CommonLayout
-        leftSidebar={
-          <div className="h-full flex flex-col px-4 py-5 col-span-2 overflow-hidden">
-            <div
-              className="cursor-pointer"
-              onClick={() => router.push(ROUTE.NEWS_FEED)}
-            >
-              <Image
-                src="/image/app-logo.png"
-                alt="app logo"
-                width={159}
-                height={32}
-                className="ml-1.5 xl:block hidden"
-              />
-              <Image
-                src="/Logo.png"
-                alt="app logo"
-                width={34}
-                height={32}
-                className="ml-1.5 xl:hidden block"
-              />
+      <AuthGuard>
+        <CommonLayout
+          leftSidebar={
+            <div className="h-full flex flex-col px-4 py-5 col-span-2 overflow-hidden">
+              <div
+                className="cursor-pointer"
+                onClick={() => router.push(ROUTE.NEWS_FEED)}
+              >
+                <Image
+                  src="/image/app-logo.png"
+                  alt="app logo"
+                  width={159}
+                  height={32}
+                  className="ml-1.5 xl:block hidden"
+                />
+                <Image
+                  src="/Logo.png"
+                  alt="app logo"
+                  width={34}
+                  height={32}
+                  className="ml-1.5 xl:hidden block"
+                />
+              </div>
+              <div className="flex flex-col mt-4 grow">
+                <MenuLayout customClassName="" />
+                <NavigationInfo />
+              </div>
             </div>
-            <div className="flex flex-col mt-4 grow">
-              <MenuLayout customClassName="" />
-              <NavigationInfo />
+          }
+          mainContent={
+            <div className="col-span-6 py-5 overflow-y-auto overflow-x-hidden">
+              <AuthGuard>{children}</AuthGuard>
             </div>
-          </div>
-        }
-        mainContent={
-          <div className="col-span-6 py-5 overflow-y-auto overflow-x-hidden">
-            <AuthGuard>{children}</AuthGuard>
-          </div>
-        }
-        rightSidebar={
-          <>
-            <CommonRightSidebar />
-          </>
-        }
-      />
-      <CreatePostModal />
-      <AvatarConfigModal />
+          }
+          rightSidebar={
+            <>
+              <CommonRightSidebar />
+            </>
+          }
+        />
+        <CreatePostModal />
+        <AvatarConfigModal />
+      </AuthGuard>
     </>
   );
 }
