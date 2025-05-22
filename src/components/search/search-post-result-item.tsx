@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { PostType, PostVerificationType } from "@/types";
 import { useInfiniteLatestPost } from "@/hooks/use-post";
 import classNames from "classnames";
+import { CommonLoading } from "../common/CommonLoading";
 
 type Props = {
   searchData: string;
@@ -41,7 +42,7 @@ export const SearchPostResultItem = ({
   }, [data, searchData]);
 
   if (isLoading) {
-    return <div className="p-4">Đang tải bài viết...</div>;
+    return <CommonLoading />;
   }
 
   if (posts.length === 0) {

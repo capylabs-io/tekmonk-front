@@ -368,7 +368,7 @@ export const Post = ({
 
                       {/* Type indicator */}
                       {index === 0 && (
-                        <div className="absolute right-4 top-4">
+                        <div className="absolute left-4 top-4">
                           {data?.type === PostTypeEnum.PROJECT ? (
                             <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
                               <span className="font-medium">Dự án</span>

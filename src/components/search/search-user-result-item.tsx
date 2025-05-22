@@ -10,6 +10,7 @@ import { useInfiniteSearchUsers } from "@/hooks/use-user-query";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { FILTER_CATEGORY_ENUM } from "@/contants/search/filter-category";
+import { CommonLoading } from "../common/CommonLoading";
 
 type Props = {
   queryParam: string;
@@ -56,7 +57,7 @@ export const SearchUserResultItem = ({
   };
 
   if (isLoading) {
-    return <div className="p-4">Đang tải người dùng...</div>;
+    return <CommonLoading />;
   }
 
   if (users.length === 0) {
