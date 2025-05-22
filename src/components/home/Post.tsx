@@ -29,8 +29,9 @@ import { ROUTE } from "@/contants/router";
 import { ActionGuard } from "../common/ActionGuard";
 import { motion } from "framer-motion";
 import { PostImageGallery } from "./post-detail";
+import { useQueryClient } from "@tanstack/react-query";
 
-type Props = {
+export type PostProps = {
   data?: PostType | null;
   imageUrl: string;
   thumbnailUrl: string;
@@ -80,7 +81,7 @@ export const Post = ({
   postTags,
   onUpdatePost,
   isDetail,
-}: Props) => {
+}: PostProps) => {
   const router = useCustomRouter();
   const handleClickPostCard = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -94,6 +95,7 @@ export const Post = ({
     state.hide,
   ]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const queryClient = useQueryClient();
   const { success, error } = useSnackbarStore();
   const [addStudentDialogOpen, setAddStudentDialogOpen] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
@@ -194,6 +196,9 @@ export const Post = ({
       });
       if (res) {
         success("Thành công", "Đã tag người dùng");
+        queryClient.invalidateQueries({
+          queryKey: ["infinite-latest-post"],
+        });
       }
     } catch (err) {
       console.log("error", err);
@@ -269,38 +274,19 @@ export const Post = ({
           isAllowClickDetail && handleClickPostCard(e);
         }}
       >
-        <div className="flex items-center w-full gap-2">
+        <div className="flex items-start w-full gap-2">
           <ProfileInfoBox
+            userId={get(data, "postedBy.id", 0)}
             imageUrl={imageUrl}
             userName={userName}
             userRank={userRank}
             specialName={specialName}
             onClick={() =>
-              router.push(`/ho-so/${get(data, "postedBy.id", "")}`)
+              router.push(`${ROUTE.PROFILE}/${get(data, "postedBy.id", "")}`)
             }
+            taggedUsers={taggedUsers}
           />
-          {taggedList && taggedList?.length > 0 && (
-            <div className="flex items-center gap-1">
-              cùng với
-              <div
-                className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
-                onClick={() => router.push(`/ho-so/${taggedList[0]?.id}`)}
-              >
-                {taggedList[0]?.username}
-              </div>
-              {taggedList.length > 1 && (
-                <>
-                  và{" "}
-                  <div
-                    className="text-primary-70 hover:text-primary-80 font-medium hover:underline"
-                    onClick={() => setTaggedUsersDialogOpen(true)}
-                  >
-                    {taggedList.length - 1} người khác.
-                  </div>
-                </>
-              )}
-            </div>
-          )}
+
           {isVerified && (
             <div className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs">
               <span className="px-2 py-1">
@@ -370,6 +356,7 @@ export const Post = ({
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: index * 0.1 }}
+                      onClick={() => handleOpenGallery(index)}
                     >
                       <Image
                         src={imageUrl}
@@ -377,7 +364,6 @@ export const Post = ({
                         width={300}
                         height={300}
                         className="w-full h-full object-cover"
-                        onClick={() => handleOpenGallery(index)}
                       />
 
                       {/* Type indicator */}
@@ -586,62 +572,6 @@ export const Post = ({
                   Tag
                 </CommonButton>
               </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog
-        open={taggedUsersDialogOpen}
-        onOpenChange={setTaggedUsersDialogOpen}
-      >
-        <DialogContent className="w-[680px] bg-white">
-          <DialogHeader className="px-4">
-            <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
-              Người dùng được tag
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="p-4">
-            <div className="max-h-[400px] overflow-y-auto">
-              {taggedUsers &&
-                taggedUsers.slice(1).map((user, index) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center gap-2 py-2 border-b border-gray-200 last:border-0"
-                  >
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                      <Image
-                        src={"/image/home/profile-pic.png"}
-                        alt={user.username || "User"}
-                        width={40}
-                        height={40}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p
-                        className="font-medium text-gray-800 hover:text-primary-70 hover:underline cursor-pointer"
-                        onClick={() => {
-                          router.push(`/ho-so/${user.id}`);
-                          setTaggedUsersDialogOpen(false);
-                        }}
-                      >
-                        {user.username}
-                      </p>
-                      <p className="text-xs text-gray-500">{user.username}</p>
-                    </div>
-                  </div>
-                ))}
-            </div>
-
-            <div className="flex justify-end mt-4">
-              <Button
-                onClick={() => setTaggedUsersDialogOpen(false)}
-                className="bg-primary-70 hover:bg-primary-80 text-white"
-              >
-                Đóng
-              </Button>
             </div>
           </div>
         </DialogContent>

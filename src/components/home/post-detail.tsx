@@ -7,11 +7,12 @@ import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { CommonTag } from "../common/CommonTag";
 import { cn } from "@/lib/utils";
-import router from "next/router";
 import { PostCommentContent } from "./PostCommentContent";
 import { PostType, PostTypeEnum } from "@/types/posts";
 import { ProfileInfoBox } from "./ProfileInfoBox";
 import { get } from "lodash";
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
 interface PostImageGalleryProps {
   open: boolean;
   data: PostType;
@@ -57,6 +58,7 @@ export const PostImageGallery = ({
   postId,
   onUpdateComment,
 }: PostImageGalleryProps) => {
+  const router = useCustomRouter();
   const [isDetail, setIsDetail] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
@@ -135,7 +137,9 @@ export const PostImageGallery = ({
                       userName={userName}
                       specialName={specialName}
                       onClick={() =>
-                        router.push(`/ho-so/${get(data, "postedBy.id", "")}`)
+                        router.push(
+                          `${ROUTE.PROFILE}/${get(data, "postedBy.id", "")}`
+                        )
                       }
                     />
                   </div>

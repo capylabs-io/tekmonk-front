@@ -2,10 +2,11 @@
 
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Search, X, Clock, Trash2 } from "lucide-react";
 import classNames from "classnames";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { useSearchHistoryStore } from "@/store/search-history-store";
 
 type Suggestion = {
   id: number;
@@ -13,13 +14,11 @@ type Suggestion = {
   type: "recent" | "popular";
 };
 
-// Mock data for search suggestions
-const MOCK_SUGGESTIONS: Suggestion[] = [
-  { id: 1, text: "React hooks tutorial", type: "popular" },
-  { id: 2, text: "NextJS 13 features", type: "popular" },
-  { id: 3, text: "Tailwind CSS tricks", type: "recent" },
-  { id: 4, text: "TypeScript best practices", type: "recent" },
-  { id: 5, text: "Frontend optimization", type: "popular" },
+// Mock data for popular suggestions
+const POPULAR_SUGGESTIONS: Suggestion[] = [
+  { id: 1, text: "Trại hè 2025", type: "popular" },
+  { id: 2, text: "Lập trình game", type: "popular" },
+  { id: 3, text: "Lập trình web", type: "popular" },
 ];
 
 type SearchHeaderProps = {
@@ -37,17 +36,41 @@ export const SearchHeader = ({ className }: SearchHeaderProps) => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
 
+  // Get search history from store
+  const {
+    searchHistory,
+    addSearchHistory,
+    removeSearchHistory,
+    clearSearchHistory,
+  } = useSearchHistoryStore();
+
   // Filter suggestions based on search query
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setSuggestions(MOCK_SUGGESTIONS);
+      // Show history and popular suggestions when no query
+      const historyItems = searchHistory.map((text, index) => ({
+        id: -1 - index, // Negative IDs for history items
+        text,
+        type: "recent" as const,
+      }));
+
+      setSuggestions([...historyItems, ...POPULAR_SUGGESTIONS]);
     } else {
-      const filtered = MOCK_SUGGESTIONS.filter((item) =>
+      // Filter both history and popular suggestions
+      const filtered = [
+        ...searchHistory.map((text, index) => ({
+          id: -1 - index,
+          text,
+          type: "recent" as const,
+        })),
+        ...POPULAR_SUGGESTIONS,
+      ].filter((item) =>
         item.text.toLowerCase().includes(searchQuery.toLowerCase())
       );
+
       setSuggestions(filtered);
     }
-  }, [searchQuery]);
+  }, [searchQuery, searchHistory]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -69,6 +92,9 @@ export const SearchHeader = ({ className }: SearchHeaderProps) => {
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      // Add to search history
+      addSearchHistory(searchQuery.trim());
+
       router.push(
         `${ROUTE.SEARCH}?q=${encodeURIComponent(
           searchQuery
@@ -80,12 +106,26 @@ export const SearchHeader = ({ className }: SearchHeaderProps) => {
 
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion);
+
+    // Add to search history
+    addSearchHistory(suggestion);
+
     router.push(
       `${ROUTE.SEARCH}?q=${encodeURIComponent(
         suggestion
       )}&filter=${initialFilter}`
     );
     setIsFocused(false);
+  };
+
+  const handleRemoveHistory = (e: React.MouseEvent, text: string) => {
+    e.stopPropagation(); // Prevent triggering the parent click handler
+    removeSearchHistory(text);
+  };
+
+  const handleClearAllHistory = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the parent click handler
+    clearSearchHistory();
   };
 
   const clearSearch = () => {
@@ -130,31 +170,64 @@ export const SearchHeader = ({ className }: SearchHeaderProps) => {
         <div className="absolute z-10 mt-1 w-full max-w-2xl left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg border border-gray-100 max-h-96 overflow-y-auto">
           {suggestions.length > 0 ? (
             <div className="py-2">
-              <div className="px-4 py-2 text-sm font-medium text-gray-500">
-                {searchQuery ? "Kết quả tìm kiếm" : "Gợi ý tìm kiếm"}
-              </div>
-              <ul>
-                {suggestions.map((suggestion) => (
-                  <li
-                    key={suggestion.id}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
-                    onClick={() => handleSuggestionClick(suggestion.text)}
-                  >
-                    <Search className="h-4 w-4 text-gray-400 mr-3" />
-                    <span>{suggestion.text}</span>
-                    {suggestion.type === "recent" && (
-                      <span className="ml-auto text-xs text-gray-400">
-                        Gần đây
-                      </span>
-                    )}
-                    {suggestion.type === "popular" && (
-                      <span className="ml-auto text-xs text-gray-400">
-                        Phổ biến
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              {/* Search History Section */}
+              {searchHistory.length > 0 && (
+                <div>
+                  <div className="px-4 py-2 flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-500">
+                      Lịch sử tìm kiếm
+                    </span>
+                    <button
+                      onClick={handleClearAllHistory}
+                      className="text-xs text-red-500 hover:text-red-700 flex items-center"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" />
+                      Xóa tất cả
+                    </button>
+                  </div>
+                  <ul>
+                    {searchHistory.map((text, index) => (
+                      <li
+                        key={`history-${index}`}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
+                        onClick={() => handleSuggestionClick(text)}
+                      >
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 text-gray-400 mr-3" />
+                          <span>{text}</span>
+                        </div>
+                        <button
+                          onClick={(e) => handleRemoveHistory(e, text)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Popular Suggestions Section */}
+              {POPULAR_SUGGESTIONS.length > 0 && (
+                <div>
+                  <div className="px-4 py-2 text-sm font-medium text-gray-500">
+                    Phổ biến
+                  </div>
+                  <ul>
+                    {POPULAR_SUGGESTIONS.map((suggestion) => (
+                      <li
+                        key={suggestion.id}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                        onClick={() => handleSuggestionClick(suggestion.text)}
+                      >
+                        <Search className="h-4 w-4 text-gray-400 mr-3" />
+                        <span>{suggestion.text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ) : (
             <div className="py-6 text-center text-gray-500">
