@@ -97,6 +97,7 @@ export const CommonRightSidebar = () => {
             }
             likedCount="134"
             projectCount="5"
+            userId={userInfo?.id || 0}
           />
           <AuthorProjectsCard projects={[]} />
         </>

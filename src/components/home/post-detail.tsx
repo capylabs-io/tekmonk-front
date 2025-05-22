@@ -141,6 +141,7 @@ export const PostImageGallery = ({
                           `${ROUTE.PROFILE}/${get(data, "postedBy.id", "")}`
                         )
                       }
+                      userId={get(data, "postedBy.id", 0)}
                     />
                   </div>
                   <div className="">

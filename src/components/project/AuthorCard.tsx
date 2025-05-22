@@ -13,6 +13,7 @@ type Props = {
   likedCount: string;
   projectCount: string;
   customClassName?: string;
+  userId: number;
 };
 const BASE_CLASS =
   "rounded-xl border border-gray-200 py-4 flex flex-col text-primary-900";
@@ -24,6 +25,7 @@ export const AuthorCard = ({
   likedCount,
   projectCount,
   customClassName,
+  userId,
 }: Props) => {
   return (
     <div className={classNames(BASE_CLASS, customClassName)}>
@@ -40,6 +42,7 @@ export const AuthorCard = ({
           userName={userName}
           userRank={userRank}
           specialName={specialName}
+          userId={userId}
         />
         <div className="flex w-full mt-4 gap-x-4">
           <div className="w-full">
