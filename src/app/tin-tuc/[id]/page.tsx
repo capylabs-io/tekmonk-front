@@ -15,6 +15,7 @@ import qs from "qs";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import Share from "@/components/common/Share";
 export default function Page() {
   //get id from url
   const router = useCustomRouter();
@@ -49,11 +50,6 @@ export default function Page() {
       }
     },
   });
-  const handleShare = () => {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/tin-tuc/${id}`;
-    window.navigator.clipboard.writeText(url);
-    success("Tin tức ", "Đã copy link tin tức");
-  };
   if (isLoading) {
     return <Loading />;
   }
@@ -79,11 +75,16 @@ export default function Page() {
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
-                Chia sẻ bài đăng:
-                <Share2
-                  onClick={handleShare}
-                  size={18}
-                  className="text-gray-95 hover:cursor-pointer"
+                <Share
+                  url={`${process.env.NEXT_PUBLIC_BASE_URL}/tin-tuc/${data?.id}`}
+                  title={data?.title}
+                  description={
+                    data?.content
+                      ?.replace(/<[^>]*>?/gm, "")
+                      .substring(0, 200) || ""
+                  }
+                  hashtags={data?.tags?.split(",") || []}
+                  image={data?.thumbnail || ""}
                 />
               </div>
             </div>
@@ -119,6 +120,9 @@ export default function Page() {
         /> */}
       </div>
       <div className="flex flex-col gap-4 col-span-1 mt-16">
+        <div className="text-HeadingSm text-[#320130]">
+          Tin tức khác
+        </div>
         {randomNews && randomNews.data.map((newsItem) => (
           <div
             key={newsItem.id}
@@ -128,7 +132,7 @@ export default function Page() {
             <Image
               src={newsItem.thumbnail ? newsItem.thumbnail : ""}
               alt=""
-              width= {108}
+              width={108}
               height={80}
               className="h-full object-cover rounded-2xl"
             />

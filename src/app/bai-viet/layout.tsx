@@ -34,7 +34,7 @@ export default function Layout({
     <>
       <CommonLayout
         leftSidebar={
-          <div className="h-full flex flex-col px-10 py-5 col-span-2 overflow-hidden">
+          <div className="h-full flex flex-col px-4 py-5 col-span-2 overflow-hidden">
             <div
               className="cursor-pointer"
               onClick={() => router.push(ROUTE.NEWS_FEED)}

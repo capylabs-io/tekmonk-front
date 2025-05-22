@@ -3,15 +3,12 @@ import { ShopContent } from "@/components/shop/shop-content";
 import { InventoryContent } from "@/components/shop/inventory-content";
 import { TabNavigation, TabItem } from "@/components/common/TabNavigation";
 import { useUserStore } from "@/store/UserStore";
-import Image from "next/image";
 import {
   useShopInventoryStore,
   TabOptions,
 } from "@/store/switch-shop-inventory";
-import { AuthGuard } from "@/components/hoc/auth-guard";
-import { CardAnimationLoading } from "@/components/lottie/CardAnimationLoading";
 import { useEffect, useState } from "react";
-import { useLoadingStore } from "@/store/LoadingStore";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 // Tab data
 const TABS: TabItem[] = [
@@ -38,13 +35,7 @@ export default function Shop() {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
-        <div className="flex flex-col items-center">
-          <CardAnimationLoading className="w-[400px] h-[400px]" />
-        </div>
-      </div>
-    )
+    return <CommonLoading />;
   }
   return (
     <div className="w-full">

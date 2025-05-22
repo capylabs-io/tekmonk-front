@@ -240,7 +240,7 @@ export const Post = ({
                   backgroundImage: `url(${thumbnailUrl})`,
                 }}
               >
-                <div className="absolute right-4 top-4">
+                <div className="absolute left-4 top-4">
                   {data?.type === PostTypeEnum.PROJECT ? (
                     <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
                       <span className="font-medium">Dự án</span>
@@ -261,7 +261,7 @@ export const Post = ({
                 backgroundImage: `url(${thumbnailUrl})`,
               }}
             >
-              <div className="absolute right-4 top-4">
+              <div className="absolute left-4 top-4">
                 {data?.type === PostTypeEnum.PROJECT ? (
                   <div className="bg-primary-70 text-white px-2 py-1 rounded-md">
                     <span className="font-medium">Dự án</span>
@@ -309,7 +309,7 @@ export const Post = ({
                 </div>
                 <div className="flex items-center gap-x-1 font-bold text-gray-500">
                   <ActionGuard
-                    onAction={() => {}}
+                    onAction={() => { }}
                     actionName="bình luận"
                     className="cursor-pointer flex items-center justify-center"
                   >
@@ -353,13 +353,13 @@ export const Post = ({
         onOpenChange={setAddStudentDialogOpen}
       >
         <DialogContent className="w-[680px] bg-white">
-          <DialogHeader className="px-4">
+          <DialogHeader>
             <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
               Tag người dùng
             </DialogTitle>
           </DialogHeader>
 
-          <div className="p-4">
+          <div>
             {data?.postedBy?.id && (
               <ListStudentRemainingSelect
                 selectedStudents={selectedStudents}

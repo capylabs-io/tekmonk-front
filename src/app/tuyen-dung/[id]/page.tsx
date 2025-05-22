@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import moment from "moment";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { ROUTE } from "@/contants/router";
+import Share from "@/components/common/Share";
 export default function Page() {
   const router = useCustomRouter();
   const [success] = useSnackbarStore((state) => [state.success]);
@@ -37,11 +38,6 @@ export default function Page() {
       }
     },
   });
-  const handleShare = () => {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/tuyen-dung/${id}`;
-    window.navigator.clipboard.writeText(url);
-    success("Tuyển dụng ", "Đã copy link tuyển dụng");
-  };
   const handleRedirect = (id: number) => {
     router.push(`${ROUTE.HIRING}/${id}`);
   };
@@ -72,11 +68,16 @@ export default function Page() {
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
-                Chia sẻ bài đăng:
-                <Share2
-                  onClick={handleShare}
-                  size={18}
-                  className="text-gray-95 hover:cursor-pointer"
+                <Share
+                  url={`${process.env.NEXT_PUBLIC_BASE_URL}/tuyen-dung/${data?.data.id}`}
+                  title={data?.data.title}
+                  description={
+                    data?.data.content
+                      ?.replace(/<[^>]*>?/gm, "")
+                      .substring(0, 200) || ""
+                  }
+                  hashtags={data?.data.tags?.split(",") || []}
+                  image={data?.data.thumbnail || ""}
                 />
               </div>
             </div>
@@ -127,6 +128,9 @@ export default function Page() {
         /> */}
       </div>
       <div className="w-full flex flex-col gap-8 col-span-1 mt-16">
+        <div className="text-HeadingSm text-[#320130]">
+          Tin tức tuyển dụng khác
+        </div>
         {randomNews &&
           randomNews.data
             .filter((item) => item.type === "hiring")

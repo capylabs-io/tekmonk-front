@@ -18,8 +18,7 @@ import { useInView } from "react-intersection-observer";
 import { useProfileStore } from "@/store/ProfileStore";
 import { User } from "@/types/common-types";
 import { motion } from "framer-motion";
-import { Loading } from "@/components/common/Loading";
-import { AnimationLoading } from "@/components/lottie/AnimationLoading";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -92,13 +91,7 @@ const Home = () => {
   //   }
   // }, [isLoading, showLoading, hideLoading]);
   if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
-        <div className="flex flex-col items-center">
-          <AnimationLoading className="w-[400px] h-[400px]" />
-        </div>
-      </div>
-    );
+    return <CommonLoading />;
   }
   return (
     <>
@@ -137,10 +130,10 @@ const Home = () => {
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                  // whileHover={{
-                  //   scale: 1.01,
-                  //   transition: { duration: 0.2 }
-                  // }}
+                // whileHover={{
+                //   scale: 1.01,
+                //   transition: { duration: 0.2 }
+                // }}
                 >
                   <div className="p-4 relative">
                     <div className="text-sm text-gray-500 absolute top-7 right-4">
@@ -190,8 +183,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
+                    ? ""
+                    : ""}
               </motion.div>
             </>
           )}
@@ -209,10 +202,10 @@ const Home = () => {
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                  // whileHover={{
-                  //   scale: 1.01,
-                  //   transition: { duration: 0.2 }
-                  // }}
+                // whileHover={{
+                //   scale: 1.01,
+                //   transition: { duration: 0.2 }
+                // }}
                 >
                   <div className="px-8 relative">
                     <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -261,8 +254,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
+                    ? ""
+                    : ""}
               </motion.div>
             </>
           )}

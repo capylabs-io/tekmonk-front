@@ -51,9 +51,10 @@ export const SearchNewContent = ({ data, value, onSearch, onBack }: Props) => {
         />
 
       </div>
-      <div className='mt-4 text-gray-50 text-SubheadMd'>
+      {textSearch !== '' && <div className='mt-4 text-gray-50 text-SubheadMd'>
         Tìm thấy <span className='text-primary-95'>{data?.length}</span> kết quả phù hợp với từ khoá: <span className='text-primary-95'>&quot;{textSearch}&quot;</span>
       </div>
+      }
       <div className="flex flex-col gap-4 mt-4">
         {data &&
           data.map((newsItem) => (
@@ -71,25 +72,21 @@ export const SearchNewContent = ({ data, value, onSearch, onBack }: Props) => {
                   </div>
                   <div className="flex flex-col gap-2 flex-grow">
                     <div
-                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                      className="text-HeadingSm text-gray-95 max-h-16 w-full line-clamp-2"
                       dangerouslySetInnerHTML={{
                         __html: (get(newsItem, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
                           .trim()
-                          .slice(0, 80)
-                          .concat(
-                            get(newsItem, "title", "").length > 100 ? "..." : ""
-                          ),
                       }}
                     ></div>
 
                     <div
-                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden"
+                      className="text-BodyMd text-gray-95 max-h-12 line-clamp-3"
                       dangerouslySetInnerHTML={{
                         __html:
                           get(newsItem, "content", "")
                             .replace(/<[^>]+>/g, "")
-                            .substring(0, 200) + "...",
+                            .trim()
                       }}
                     ></div>
                   </div>

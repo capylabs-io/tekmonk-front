@@ -21,6 +21,7 @@ import { get } from "lodash";
 import moment from "moment";
 import { SearchNewContent } from "@/components/news/SearchNewContent";
 import classNames from "classnames";
+import { CommonLoading } from "@/components/common/CommonLoading";
 export default function News() {
   //use state
   const [isSearch, setIsSearch] = useState(false);
@@ -31,7 +32,7 @@ export default function News() {
     }
   };
 
-  // use query
+  // use query 
   const {
     data,
     isLoading,
@@ -86,24 +87,46 @@ export default function News() {
     setSearchValue(value);
     refetchNews();
   };
+  if (isLoading) {
+    return <CommonLoading />;
+  }
   return (
     <>
       <div
         className={classNames(
           "w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto",
-          !isSearch ? "min-h-[calc(100vh-100px)]" : "h-[calc(100vh)]"
+          !isSearch ? "min-h-[calc(100vh-100px)]" : "h-max"
         )}
       >
         {isSearch ? (
-          <SearchNewContent
-            onBack={() => {
-              setIsSearch(false);
-              handleSearchNews("");
-            }}
-            value={searchValue}
-            onSearch={handleSearchNews}
-            data={data?.pages.flatMap((page) => page.data) || []}
-          />
+          <>
+            <div className="lg:col-span-2 col-span-3">
+              <SearchNewContent
+                onBack={() => {
+                  setIsSearch(false);
+                  handleSearchNews("");
+                }}
+                value={searchValue}
+                onSearch={handleSearchNews}
+                data={data?.pages.flatMap((page) => page.data) || []}
+              />
+            </div>
+            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
+              <div className="text-HeadingSm text-[#320130]">
+                Tin tức liên quan
+              </div>
+              {randomNews?.data && randomNews?.data?.length > 0 && (
+                <SuggestComponent data={randomNews?.data || []} />
+              )}
+              <Image
+                src="/image/home/banner-layout.png"
+                alt="Default"
+                width={220}
+                height={350}
+                className="w-full object-cover rounded-2xl"
+              />
+            </div>
+          </>
         ) : (
           <>
             <div className="lg:col-span-2 col-span-3">
@@ -246,11 +269,10 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
         {data.map((article, index) => (
           <button
             key={article.id}
-            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
-              index === carouselIndex
-                ? "bg-primary-60"
-                : "bg-primary-30 hover:cursor-pointer"
-            }`}
+            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${index === carouselIndex
+              ? "bg-primary-60"
+              : "bg-primary-30 hover:cursor-pointer"
+              }`}
             onClick={() => {
               setCarouselIndex(index);
               api?.scrollTo(index);
@@ -392,7 +414,7 @@ const FeaturedNewsComponent = ({
         <div className="text-center">Loading . . .</div>
       ) : (
         data &&
-        data.length > 0 && (
+        data.length > 4 && (
           <CommonCard
             size="medium"
             className="w-[122px] h-12 flex items-center justify-center text-SubheadMd text-primary-95 mx-auto mt-2"
@@ -431,13 +453,11 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
               {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
             </time>
             <div
-              className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+              className="text-SubheadMd text-gray-95 line-clamp-2 overflow-hidden"
               dangerouslySetInnerHTML={{
                 __html: (get(newsItem, "title", "") || "")
                   .replace(/<[^>]+>/g, "")
                   .trim()
-                  .slice(0, 50)
-                  .concat(get(newsItem, "title", "").length > 50 ? "..." : ""),
               }}
             ></div>
           </div>

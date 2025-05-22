@@ -27,7 +27,7 @@ import { useState } from "react";
 import { Achievement } from "@/types/common-types";
 import { Mission } from "@/types/common-types";
 import { useSnackbarStore } from "@/store/SnackbarStore";
-import { AnimationLoading } from "@/components/lottie/AnimationLoading";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 export default function Profile() {
   const { id } = useParams();
@@ -71,13 +71,7 @@ export default function Profile() {
     show();
   };
   if (isLoadingPosts) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
-        <div className="flex flex-col items-center">
-          <AnimationLoading className="w-[400px] h-[400px]" />
-        </div>
-      </div>
-    );
+    return <CommonLoading />;
   }
   return (
     <div className="w-full">

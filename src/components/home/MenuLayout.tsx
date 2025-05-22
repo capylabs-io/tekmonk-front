@@ -19,7 +19,7 @@ import { useUserStore } from "@/store/UserStore";
 type Props = {
   customClassName?: string;
 };
-const BASE_CLASS = "grow";
+const BASE_CLASS = "grow gap-2 flex flex-col";
 export const MenuLayout = ({ customClassName }: Props) => {
   const [isConnected] = useUserStore((state) => [state.isConnected]);
   return (
