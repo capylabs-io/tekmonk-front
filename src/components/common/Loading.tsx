@@ -22,7 +22,7 @@ export function Loading() {
         /> */}
         {content && (
           <div className="text-white/80 mt-4 text-base font-medium">
-            {content}
+            {content || "Đang tải..."}
           </div>
         )}
       </div>

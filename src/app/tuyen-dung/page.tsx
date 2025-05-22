@@ -87,7 +87,7 @@ export default function Hiring() {
               handleSearch();
             }
           }}
-          // onSearch={handleSearch}
+        // onSearch={handleSearch}
         />
         <div className="flex items-center gap-1">
           <div className="text-BodySm text-gray-70">Hiển thị theo:</div>
@@ -120,7 +120,7 @@ export default function Hiring() {
           </Select>
         </div>
       </div>
-      <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
+      {textSearch !== '' && <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
         Tìm thấy{" "}
         <span className="text-primary-95">
           {(data?.data && data?.data?.length) || 0}
@@ -128,6 +128,7 @@ export default function Hiring() {
         kết quả phù hợp với từ khoá:{" "}
         <span className="text-primary-95">&quot;{textSearch}&quot;</span>
       </div>
+      }
       {/* show item grid here */}
       {isLoading ? (
         <div className="w-full flex flex-col items-center justify-center">
@@ -215,7 +216,7 @@ export default function Hiring() {
           currentPage={currentPage}
           itemsPerPage={PAGE_SIZE}
           onPageChange={(page) => setCurrentPage(page)}
-          onItemsPerPageChange={() => {}}
+          onItemsPerPageChange={() => { }}
           className="max-w-[444px]"
         />
       </div>
@@ -227,7 +228,7 @@ export default function Hiring() {
         "w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16"
       )}
     >
-      <BannerCard className="w-full rounded-3xl h-[500px]" isHiring>
+      <BannerCard className="w-full rounded-3xl h-[500px]" type="hiring">
         <div className="flex flex-col items-center gap-6 z-10">
           <div className="text-DisplayMd text-gray-10">
             Tuyển dụng tại TekMonk
@@ -236,9 +237,6 @@ export default function Hiring() {
             Cùng nhau gieo mầm công nghệ – Nơi bạn truyền cảm hứng cho thế hệ
             lập trình viên tương lai!
           </div>
-          {/* <CommonButton className="h-10 text-white md:block hidden">
-            Liên hệ
-          </CommonButton> */}
         </div>
       </BannerCard>
       {hiringContent}

@@ -17,7 +17,7 @@ import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { AuthGuard } from "@/components/hoc/auth-guard";
 import qs from "qs";
 import { User } from "@/types/common-types";
-import { AnimationLoading } from "@/components/lottie/AnimationLoading";
+import { CommonLoading } from "@/components/common/CommonLoading";
 // Thêm kiểu cho window.FB
 declare global {
   interface Window {
@@ -149,15 +149,8 @@ export default function Page({ params }: { params: { id: number } }) {
   };
 
   if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
-        <div className="flex flex-col items-center">
-          <AnimationLoading className="w-[400px] h-[400px]" />
-        </div>
-      </div>
-    );
+    return <CommonLoading />;
   }
-
   if (postData?.isVerified !== PostVerificationType.ACCEPTED) {
     return <div>Bài viết đang chờ duyệt</div>;
   }
@@ -192,9 +185,9 @@ export default function Page({ params }: { params: { id: number } }) {
             ) as User[],
             postedBy: get(postData, "postedBy.data")
               ? ({
-                  ...get(postData, "postedBy.data.attributes", {}),
-                  id: get(postData, "postedBy.data.id"),
-                } as unknown as User)
+                ...get(postData, "postedBy.data.attributes", {}),
+                id: get(postData, "postedBy.data.id"),
+              } as unknown as User)
               : null,
           }}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"

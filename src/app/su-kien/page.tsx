@@ -85,7 +85,7 @@ export default function Event() {
               handleSearch();
             }
           }}
-          // onSearch={handleSearch}
+        // onSearch={handleSearch}
         />
         <div className="flex items-center gap-1">
           <div className="text-BodySm text-gray-70">Hiển thị theo:</div>
@@ -119,7 +119,7 @@ export default function Event() {
           </Select>
         </div>
       </div>
-      <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
+      {textSearch !== '' && <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
         Tìm thấy{" "}
         <span className="text-primary-95">
           {(data?.data && data?.data?.length) || 0}
@@ -127,6 +127,7 @@ export default function Event() {
         kết quả phù hợp với từ khoá:{" "}
         <span className="text-primary-95">&quot;{textSearch}&quot;</span>
       </div>
+      }
       {/* show item grid here */}
       {isLoading ? (
         <div className="w-full flex flex-col items-center justify-center">
@@ -172,7 +173,7 @@ export default function Event() {
                       }}
                     ></div>
                     <div className="text-BodySm text-gray-95">
-                      {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
+                      Thời gian sự kiện: {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
                     </div>
                   </div>
                 </div>
@@ -213,7 +214,7 @@ export default function Event() {
         "w-full container mx-auto flex flex-col items-center gap-8 py-7 mt-16"
       )}
     >
-      <BannerCard className="w-full rounded-3xl h-[500px]">
+      <BannerCard className="w-full rounded-3xl h-[500px]" type="event">
         <div className="flex flex-col items-center gap-2">
           <div className="text-DisplayMd text-gray-10">Sự kiện của TekMonk</div>
           <div className="text-center text-SubheadLg text-gray-10 max-w-[560px]">

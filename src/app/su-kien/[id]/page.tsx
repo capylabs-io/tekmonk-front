@@ -15,6 +15,21 @@ import moment from "moment";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import Share from "@/components/common/Share";
+
+const translateDayOfWeek = (day: string): string => {
+  const translations: { [key: string]: string } = {
+    Monday: "Thứ 2",
+    Tuesday: "Thứ 3",
+    Wednesday: "Thứ 4",
+    Thursday: "Thứ 5",
+    Friday: "Thứ 6",
+    Saturday: "Thứ 7",
+    Sunday: "Chủ nhật"
+  };
+  return translations[day] || day;
+};
+
 export default function Page() {
   const router = useCustomRouter();
   const { id } = useParams();
@@ -38,11 +53,6 @@ export default function Page() {
       }
     },
   });
-  const handleShare = () => {
-    const url = `${process.env.NEXT_PUBLIC_BASE_URL}/su-kien/${id}`;
-    window.navigator.clipboard.writeText(url);
-    success("Sự kiện ", "Đã copy link sự kiện");
-  };
   const handleRedirect = (id: number) => {
     router.push(`${ROUTE.EVENTS}/${id}`);
   };
@@ -62,9 +72,9 @@ export default function Page() {
               className="w-full h-[360px] object-cover rounded-2xl"
             />
             <CalendarCard
-              day="03"
-              month="12"
-              week="Chủ nhật"
+              day={moment(news?.startTime).format("DD")}
+              month={moment(news?.startTime).format("MM")}
+              week={translateDayOfWeek(moment(news?.startTime).format("dddd"))}
               className="absolute right-2 top-2"
             />
           </div>
@@ -79,11 +89,16 @@ export default function Page() {
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
-                Chia sẻ bài đăng:
-                <Share2
-                  onClick={handleShare}
-                  size={18}
-                  className="text-gray-95 hover:cursor-pointer"
+                <Share
+                  url={`${process.env.NEXT_PUBLIC_BASE_URL}/su-kien/${news?.id}`}
+                  title={news?.title}
+                  description={
+                    news?.content
+                      ?.replace(/<[^>]*>?/gm, "")
+                      .substring(0, 200) || ""
+                  }
+                  hashtags={news?.tags?.split(",") || []}
+                  image={news?.thumbnail || ""}
                 />
               </div>
             </div>
@@ -123,6 +138,9 @@ export default function Page() {
         </div>
       </div>
       <div className="w-full flex flex-col gap-8 col-span-1 mt-16">
+        <div className="text-HeadingSm text-[#320130]">
+          Sự kiện khác
+        </div>
         {randomNews &&
           randomNews.data
             .filter((item) => item.type === "event")

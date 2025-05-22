@@ -23,30 +23,47 @@ export const useUserRanking = ({
   page,
   pageSize,
   type = UserRankingType.TOTAL_PRICE,
+  searchValue,
 }: {
   id?: number;
   page: number;
   pageSize: number;
   type: UserRankingType;
+  searchValue?: string;
 }) => {
   return useQuery({
-    queryKey: ["user-ranking", id, page, pageSize, type],
+    queryKey: ["user-ranking", id, page, pageSize, type, searchValue],
     queryFn: async () => {
-      /**
-       * totalPrice = true,
-        point = false,
-        post = false,
-        project = false,
-       */
-
       let queryString = qs.stringify({
         page: page,
         pageSize: pageSize,
+        searchValue: searchValue,
       });
 
       if (id) {
         queryString += `&id=${id}`;
       }
+      queryString += `&${type}=true`;
+
+      return await ReqGetUserRanking(queryString);
+    },
+    refetchOnWindowFocus: false,
+  });
+};
+
+export const useTopThreeRanking = ({
+  type = UserRankingType.TOTAL_PRICE,
+}: {
+  type: UserRankingType;
+}) => {
+  return useQuery({
+    queryKey: ["top-three-ranking", type],
+    queryFn: async () => {
+      let queryString = qs.stringify({
+        page: 1,
+        pageSize: 3,
+      });
+
       queryString += `&${type}=true`;
 
       return await ReqGetUserRanking(queryString);

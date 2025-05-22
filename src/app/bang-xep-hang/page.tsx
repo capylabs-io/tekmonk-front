@@ -9,7 +9,7 @@ import {
 import { LeadeboardContent } from "@/components/leaderboard/LeadeboardContent";
 import { UserRankingType } from "@/types/users";
 import { useLoadingStore } from "@/store/LoadingStore";
-import { AnimationLoading } from "@/components/lottie/AnimationLoading";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 const Leaderboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -20,13 +20,7 @@ const Leaderboard: React.FC = () => {
     }, 3000)
   }, []);
   if (isLoading) {
-    return (
-      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
-        <div className="flex flex-col items-center">
-          <AnimationLoading className="w-[400px] h-[400px]" />
-        </div>
-      </div>
-    )
+    return <CommonLoading />;
   }
   return (
     <div className="w-full">

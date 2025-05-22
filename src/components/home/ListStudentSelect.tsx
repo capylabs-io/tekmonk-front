@@ -70,14 +70,15 @@ export const ListStudentRemainingSelect = ({
   const filteredStudents = useMemo(() => {
     return get(studentList, "data", [])
       ? get(studentList, "data", [])?.filter((student: User) =>
-          student.username.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        student.username.toLowerCase().includes(searchQuery.toLowerCase())
+      )
       : [];
   }, [studentList, searchQuery]);
   return (
     <div>
       <div className="space-y-2">
-        <div className="flex flex-wrap gap-2 rounded-md min-h-[48px]">
+        {selectedStudents.length > 0 && <div className="flex flex-wrap gap-2 rounded-md h-max my-2">
+          <div className="text-gray-500 !text-sm">Người dùng đã chọn:</div>
           {selectedStudents.map((selectedId) => {
             const student =
               get(studentList, "data?", []) &&
@@ -101,7 +102,7 @@ export const ListStudentRemainingSelect = ({
               </CommonTag>
             ) : null;
           })}
-        </div>
+        </div>}
 
         <div className="relative">
           <Input

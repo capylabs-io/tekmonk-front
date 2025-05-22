@@ -1,7 +1,7 @@
 import { LeaderboardTopUserCard } from "./LeaderboardTopUserCard";
 import { LeaderboardTable } from "./LeaderboardTable";
 import { get } from "lodash";
-import { useUserRanking } from "@/hooks/user-query";
+import { useTopThreeRanking, useUserRanking } from "@/hooks/user-query";
 import { useUserStore } from "@/store/UserStore";
 import { useState } from "react";
 import { UserRankingType } from "@/types/users";
@@ -17,13 +17,18 @@ export const LeadeboardContent = ({
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
+  const [searchValue, setSearchValue] = useState("");
   const { data: userRankingData, isLoading } = useUserRanking({
     page,
     pageSize,
     id: userInfo?.id,
     type: type,
+    searchValue: searchValue,
   });
+  const { data: topThreeRankingData, isLoading: isTopThreeRankingLoading } =
+    useTopThreeRanking({
+      type: type,
+    });
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -32,6 +37,11 @@ export const LeadeboardContent = ({
   const handlePageSizeChange = (newPageSize: number) => {
     setPageSize(newPageSize);
     setPage(1); // Reset to first page when changing page size
+  };
+
+  const handleSearch = (searchValue: string) => {
+    setSearchValue(searchValue);
+    setPage(1);
   };
 
   return (
@@ -45,9 +55,11 @@ export const LeadeboardContent = ({
           <LeaderboardTopUserCard
             customClassNames="mt-4"
             rank="second"
-            name={userRankingData?.data[1]?.user?.username ?? ""}
-            specialName={get(userRankingData?.data[1]?.user, "username", "không có")}
-            score={userRankingData?.data[1]?.count.toString() ?? "0"}
+            name={topThreeRankingData?.data[1]?.user?.username ?? ""}
+            specialName={
+              topThreeRankingData?.data[1]?.user?.username ?? "không có"
+            }
+            score={topThreeRankingData?.data[1]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[1]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user1.png')]"
@@ -63,9 +75,11 @@ export const LeadeboardContent = ({
           <LeaderboardTopUserCard
             customClassNames="mb-4"
             rank="first"
-            name={userRankingData?.data[0]?.user?.username ?? ""}
-            specialName={userRankingData?.data[0]?.user?.username ?? "không có"}
-            score={userRankingData?.data[0]?.count.toString() ?? "0"}
+            name={topThreeRankingData?.data[0]?.user?.username ?? ""}
+            specialName={
+              topThreeRankingData?.data[0]?.user?.username ?? "không có"
+            }
+            score={topThreeRankingData?.data[0]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[0]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user3.png')]"
@@ -101,6 +115,7 @@ export const LeadeboardContent = ({
         onPageSizeChange={handlePageSizeChange}
         isLoading={isLoading}
         countText={countText}
+        onSearch={handleSearch}
       />
     </div>
   );

@@ -4,6 +4,8 @@ import Image from "next/image";
 import { CommonTable } from "../common/CommonTable";
 import { UserRankingProps } from "@/types/users";
 import { useCustomRouter } from "../common/router/CustomRouter";
+import { Input } from "../common/Input";
+import { useState } from "react";
 
 type Props = {
   data: UserRankingProps[];
@@ -12,6 +14,7 @@ type Props = {
   page?: number;
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
+  onSearch?: (searchValue: string) => void;
   isLoading?: boolean;
   countText: string;
 };
@@ -23,10 +26,13 @@ export const LeaderboardTable = ({
   page = 1,
   onPageChange,
   onPageSizeChange,
+  onSearch,
   isLoading,
   countText = "ĐIỂM SỐ",
 }: Props) => {
   const router = useCustomRouter();
+  const [searchValue, setSearchValue] = useState("");
+
   const columns = [
     {
       id: "rank",
@@ -78,6 +84,18 @@ export const LeaderboardTable = ({
 
   return (
     <div className="p-4 w-full">
+      <Input
+        type="text"
+        placeholder="Tìm kiếm article theo từ khoá"
+        isSearch={true}
+        value={searchValue}
+        onChange={setSearchValue}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSearch?.(searchValue);
+          }
+        }}
+      />
       <CommonTable
         data={data}
         columns={columns}

@@ -535,13 +535,13 @@ export const Post = ({
         onOpenChange={setAddStudentDialogOpen}
       >
         <DialogContent className="w-[680px] bg-white">
-          <DialogHeader className="px-4">
+          <DialogHeader>
             <DialogTitle className="text-HeadingSm font-semibold text-gray-95">
               Tag người dùng
             </DialogTitle>
           </DialogHeader>
 
-          <div className="p-4">
+          <div>
             {data?.postedBy?.id && (
               <ListStudentRemainingSelect
                 selectedStudents={selectedStudents}
