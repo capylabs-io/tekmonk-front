@@ -22,6 +22,7 @@ import moment from "moment";
 import { SearchNewContent } from "@/components/news/SearchNewContent";
 import classNames from "classnames";
 import { CommonLoading } from "@/components/common/CommonLoading";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 export default function News() {
   //use state
   const [isSearch, setIsSearch] = useState(false);
@@ -395,18 +396,7 @@ const FeaturedNewsComponent = ({
             </>
           ))}
         {data && data.length === 0 && (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <Image
-              alt="empty-state"
-              src="/image/empty-data-image.png"
-              width={300}
-              height={200}
-            />
-            <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
-            <div className="text-BodyMd text-gray-70">
-              Chúng tôi sẽ sớm cập nhật thông tin mới
-            </div>
-          </div>
+          <CommonEmptyState />
         )}
       </div>
 

@@ -18,6 +18,7 @@ import { CardItem } from "@/components/shop/card-item";
 import Image from "next/image";
 import { ClaimedItem } from "@/types/claimed-item";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 export default function ShopItemDetail() {
   const router = useCustomRouter();
   const { id } = useParams();
@@ -147,7 +148,7 @@ export default function ShopItemDetail() {
             />
           ))}
         </div>
-
+        {data?.data.length === 0 && <CommonEmptyState />}
         {totalPages > 1 && (
           <div className="mt-8 flex justify-center">
             <Pagination

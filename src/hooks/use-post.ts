@@ -35,7 +35,6 @@ export const useInfiniteLatestPost = ({
           { encodeValuesOnly: true }
         );
         const result = await getListPostCustom(queryString);
-
         return result;
       } catch (error) {
         console.error("Error fetching posts:", error);

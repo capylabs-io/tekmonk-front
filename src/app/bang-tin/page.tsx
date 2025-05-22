@@ -19,6 +19,7 @@ import { useProfileStore } from "@/store/ProfileStore";
 import { User } from "@/types/common-types";
 import { motion } from "framer-motion";
 import { CommonLoading } from "@/components/common/CommonLoading";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -130,10 +131,6 @@ const Home = () => {
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                // whileHover={{
-                //   scale: 1.01,
-                //   transition: { duration: 0.2 }
-                // }}
                 >
                   <div className="p-4 relative">
                     <div className="text-sm text-gray-500 absolute top-7 right-4">
@@ -171,8 +168,7 @@ const Home = () => {
                   )}
                 </motion.div>
               ))}
-
-              {/* Loading indicator and intersection observer target */}
+              {flattenedPosts.length === 0 && <CommonEmptyState />}
               <motion.div
                 ref={ref}
                 className="p-4 text-center"
@@ -242,7 +238,7 @@ const Home = () => {
                   )}
                 </motion.div>
               ))}
-
+              {flattenedPosts.length === 0 && <CommonEmptyState />}
               {/* Loading indicator and intersection observer target */}
               <motion.div
                 ref={ref}

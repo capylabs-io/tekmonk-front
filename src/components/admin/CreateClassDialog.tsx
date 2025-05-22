@@ -27,6 +27,7 @@ import { ReqCreateClassSession } from "@/requests/class-session";
 import { AddStudentToClass } from "./add-student-to-class";
 import DateRangePicker from "@/components/common/date-picker/DatePicker";
 import { Course } from "@/types/common-types";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 
 interface CreateClassDialogProps {
   open: boolean;
@@ -339,9 +340,7 @@ export function CreateClassDialog({
                               .toLowerCase()
                               .includes(teacherSearchQuery.toLowerCase())
                           ).length === 0 ? (
-                            <div className="py-6 text-center text-sm text-gray-500">
-                              Không tìm thấy giảng viên
-                            </div>
+                            <CommonEmptyState />
                           ) : (
                             <div className="py-2">
                               {teacherList?.data

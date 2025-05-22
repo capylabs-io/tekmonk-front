@@ -31,11 +31,6 @@ declare global {
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useCustomRouter();
-  // const [currentPost, setCurrentPost] = useState<PostType>();
-  const [hideLoading, showLoading] = useLoadingStore((state) => [
-    state.hide,
-    state.show,
-  ]);
   const [showError] = useSnackbarStore((state) => [state.error]);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
 
@@ -64,6 +59,15 @@ export default function Page({ params }: { params: { id: number } }) {
   // Thêm Facebook Open Graph script
   useEffect(() => {
     if (postData) {
+      const postedById = get(postData, "postedBy.data.id");
+      if (
+        (postData.isVerified === PostVerificationType.PENDING ||
+          postData.isVerified === PostVerificationType.DENIED) &&
+        postedById !== userInfo?.id
+      ) {
+        showError("Lỗi", "Bạn không có quyền xem bài viết này");
+        router.back();
+      }
       // Tạo hoặc cập nhật meta tags
       const updateMetaTags = () => {
         // Facebook / Open Graph

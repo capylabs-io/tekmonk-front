@@ -9,6 +9,7 @@ import qs from "qs";
 import { Input } from "../common/Input";
 import { get } from "lodash";
 import { User } from "@/types/common-types";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 type Props = {
   selectedStudents: string[];
   setSelectedStudents: (students: any) => void;
@@ -138,6 +139,7 @@ export const ListStudentRemainingSelect = ({
               </div>
             ))}
           </div>
+          {filteredStudents.length === 0 && <CommonEmptyState />}
           {studentList?.meta && (
             <div className="border-t bg-white">
               <StudentTablePagination

@@ -10,6 +10,7 @@ import { Achievement } from "@/types/common-types";
 import { MissionCard } from "./MissionCard";
 import CommonPagination from "../admin/common-pagination";
 import { AchievementHistory } from "@/types/achievement-history";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 type AchievementHistoryDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -46,17 +47,18 @@ export const AchievementHistoryDialog = ({
               <MissionCard
                 key={`${mission.achievement?.id}-${index}`}
                 data={mission.achievement as Achievement}
-                onClick={() => {}}
+                onClick={() => { }}
                 isShowButtonClaim={false}
               />
             ))}
           </div>
         ) : (
-          <div className="text-center py-8">
-            <p className="text-gray-500">
-              Chưa có nhiệm vụ nào có thể đạt được
-            </p>
-          </div>
+          <CommonEmptyState />
+          // <div className="text-center py-8">
+          //   <p className="text-gray-500">
+          //     Chưa có thành tựu nào có thể đạt được
+          //   </p>
+          // </div>
         )}
         <CommonPagination
           showDetails={false}
