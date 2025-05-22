@@ -71,3 +71,24 @@ export const useTopThreeRanking = ({
     refetchOnWindowFocus: false,
   });
 };
+
+export const useBulkUserRanking = ({
+  type = UserRankingType.TOTAL_PRICE,
+}: {
+  type: UserRankingType;
+}) => {
+  return useQuery({
+    queryKey: ["bulk-user-ranking", type],
+    queryFn: async () => {
+      let queryString = qs.stringify({
+        page: 1,
+        pageSize: 100, // Fetch 100 users at once
+      });
+
+      queryString += `&${type}=true`;
+
+      return await ReqGetUserRanking(queryString);
+    },
+    refetchOnWindowFocus: false,
+  });
+};

@@ -5,7 +5,8 @@ import { CommonTable } from "../common/CommonTable";
 import { UserRankingProps } from "@/types/users";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { Input } from "../common/Input";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { get } from "lodash";
 
 type Props = {
   data: UserRankingProps[];
@@ -17,6 +18,29 @@ type Props = {
   onSearch?: (searchValue: string) => void;
   isLoading?: boolean;
   countText: string;
+};
+
+// Medal component for top 3 ranks
+const RankMedal = ({ rank }: { rank: number }) => {
+  if (rank === 1) {
+    return (
+      <span className="text-xl" title="Hạng nhất">
+        🥇
+      </span>
+    ); // Gold
+  } else if (rank === 2) {
+    return (
+      <span className="text-xl" title="Hạng nhì">
+        🥈
+      </span>
+    ); // Silver
+  } else if (rank === 3) {
+    return (
+      <span className="text-xl" title="Hạng ba">
+        🥉
+      </span>
+    ); // Bronze
+  }
 };
 
 export const LeaderboardTable = ({
@@ -32,53 +56,102 @@ export const LeaderboardTable = ({
 }: Props) => {
   const router = useCustomRouter();
   const [searchValue, setSearchValue] = useState("");
+  const pageSize = 10; // Assuming a fixed page size of 10
+
+  // Debounce the search to avoid excessive filtering operations
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      if (onSearch) {
+        onSearch(searchValue);
+      }
+    }, 300); // 300ms debounce time
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [searchValue, onSearch]);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
 
   const columns = [
     {
       id: "rank",
       header: "THỨ HẠNG",
-      cell: ({ row }: any) => <span>{(page - 1) * 10 + row.index + 1}</span>,
+      cell: ({ row }: any) => {
+        // Use the original rank if available, otherwise fall back to calculated rank
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+
+        return (
+          <div className="flex items-center gap-2">
+            <span className={rank <= 3 ? "font-bold" : ""}>{rank}</span>
+          </div>
+        );
+      },
       size: 200,
     },
     {
       id: "account",
       header: "TÀI KHOẢN",
-      cell: ({ row }: any) => (
-        <div
-          className="flex gap-x-2 items-center"
-          onClick={() => {
-            router.push(`/ho-so/${row.original?.user.id}`);
-          }}
-        >
-          <Image
-            src="/image/gem/diamond-gem.png"
-            alt="gem pic"
-            width={20}
-            height={20}
-          />
-          <Image
-            src="/image/leaderboard/user1.png"
-            alt="avatar pic"
-            width={26}
-            height={26}
-            className="rounded-full"
-          />
-          <div className="text-SubheadSm !font-medium">
-            {row.original?.user.username}
+      cell: ({ row }: any) => {
+        // Get the rank to determine which icon to show
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+
+        return (
+          <div
+            className="flex gap-x-2 items-center cursor-pointer"
+            onClick={() => {
+              router.push(`/ho-so/${row.original?.user.id}`);
+            }}
+          >
+            <div className="flex-shrink-0 w-6 flex justify-center">
+              <RankMedal rank={rank} />
+            </div>
+            <Image
+              src="/image/leaderboard/user1.png"
+              alt="avatar pic"
+              width={26}
+              height={26}
+              className="rounded-full"
+            />
+            <div
+              className={`text-SubheadSm !font-medium ${
+                rank <= 3 ? "font-bold" : ""
+              }`}
+            >
+              {row.original?.user.username}
+              {rank === 1 && <span className="ml-2 text-yellow-500">👑</span>}
+            </div>
           </div>
-        </div>
-      ),
+        );
+      },
       size: 400,
     },
     {
-      id: "email",
-      header: "Email",
-      cell: ({ row }: any) => row.original?.user.email,
+      id: "specialName",
+      header: "Biệt hiệu",
+      cell: ({ row }: any) => {
+        const specialName = get(row, "original.user.specialName");
+        return specialName === null || specialName === undefined
+          ? "Thường dân"
+          : specialName;
+      },
     },
     {
       id: "score",
       header: countText,
-      cell: ({ row }: any) => row.original?.count.toString(),
+      cell: ({ row }: any) => {
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+        return (
+          <span className={rank <= 3 ? "font-bold" : ""}>
+            {row.original?.count.toString()}
+          </span>
+        );
+      },
     },
   ];
 
@@ -86,15 +159,10 @@ export const LeaderboardTable = ({
     <div className="p-4 w-full">
       <Input
         type="text"
-        placeholder="Tìm kiếm article theo từ khoá"
+        placeholder="Tìm kiếm người dùng theo tên hoặc email"
         isSearch={true}
         value={searchValue}
-        onChange={setSearchValue}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            onSearch?.(searchValue);
-          }
-        }}
+        onChange={handleSearchChange}
       />
       <CommonTable
         data={data}
@@ -102,7 +170,7 @@ export const LeaderboardTable = ({
         page={page}
         totalPage={totalPages}
         totalDocs={totalDocs}
-        docsPerPage={10}
+        docsPerPage={pageSize}
         onPageChange={onPageChange}
         onPageSizeChange={onPageSizeChange}
         isLoading={isLoading}
