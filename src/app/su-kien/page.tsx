@@ -37,7 +37,7 @@ export default function Event() {
   const [textSearch, setTextSearch] = useState("");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["event", currentPage, sortOrder], // include textSearch in the query key
+    queryKey: ["event", currentPage, sortOrder, textSearch], // include textSearch in the query key
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -49,9 +49,18 @@ export default function Event() {
             type: "event",
             status: "public",
             ...(searchQuery && {
-              title: {
-                $contains: searchQuery, // filter by textSearch if it exists
-              },
+              $or: [
+                {
+                  title: {
+                    $contains: searchQuery, // filter by textSearch if it exists
+                  },
+                },
+                {
+                  tags: {
+                    $contains: searchQuery, // filter by textSearch if it exists
+                  },
+                },
+              ],
             }),
           },
           sort: [{ createdAt: sortOrder === "asc" ? "desc" : "asc" }],
@@ -141,39 +150,39 @@ export default function Event() {
               return (
                 <div
                   key={index}
-                  className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch cursor-pointer"
-                  onClick={() => handleRedirectDetail(item.id)}
+                  className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch"
                 >
                   <Image
                     alt=""
                     src={item.thumbnail ? item.thumbnail : ""}
                     width={411}
                     height={220}
-                    className="w-full h-[220px] object-cover rounded-2xl"
+                    className="w-full h-[220px] object-cover rounded-2xl hover:cursor-pointer"
+                    onClick={() => handleRedirectDetail(item.id)}
                   />
                   <div className="w-full flex flex-col gap-2 flex-grow">
                     <div className="flex items-start gap-2 justify-start">
                       {item.tags?.split(",").map((tag, tagIndex) => {
                         return (
-                          <CommonTag key={tagIndex} className="tag-class">
+                          <CommonTag key={tagIndex} className="tag-class" onClick={() => {
+                            setTextSearch(tag);
+                            setSearchQuery(tag);
+                          }}>
                             {tag}
                           </CommonTag>
                         );
                       })}
                     </div>
                     <div
-                      className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow"
+                      className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirectDetail(item.id)}
                       dangerouslySetInnerHTML={{
                         __html: (get(item, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
                           .trim()
-                          .slice(0, 50)
-                          .concat(
-                            get(item, "title", "").length > 30 ? "..." : ""
-                          ),
                       }}
                     ></div>
-                    <div className="text-BodySm text-gray-95">
+                    <div className="text-BodySm text-gray-95 hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
                       Thời gian sự kiện: {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
                     </div>
                   </div>
@@ -181,7 +190,9 @@ export default function Event() {
               );
             })
           ) : (
-            <CommonEmptyState />
+            <div className="col-span-3">
+              <CommonEmptyState />
+            </div>
             // <div className="w-full flex flex-col items-center justify-center">
             //   <Image
             //     alt="empty-state"

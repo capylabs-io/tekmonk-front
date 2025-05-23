@@ -96,7 +96,6 @@ const Home = () => {
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Flatten posts from all pages
   const flattenedPosts =
     currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
 

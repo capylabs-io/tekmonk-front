@@ -11,6 +11,7 @@ import { useCustomRouter } from '../common/router/CustomRouter';
 import { ROUTE } from '@/contants/router';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { CommonEmptyState } from '../common/CommonEmptyState';
 type Props = {
   data: TNews[]
   value: string
@@ -62,31 +63,38 @@ export const SearchNewContent = ({ data, value, onSearch, onBack }: Props) => {
               <div
                 key={newsItem.id}
                 className="h-[220px] w-full flex items-center gap-2 justify-center"
-                onClick={() => handleRedirect(newsItem.id)}
               >
                 <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
                   <div className="flex gap-2">
                     {newsItem.tags?.split(",").map((tag, index) => (
-                      <CommonTag key={index}>{tag.trim()}</CommonTag>
+                      <CommonTag onClick={() => {
+                        onSearch(tag.trim())
+                      }} key={index}>{tag.trim()}</CommonTag>
                     ))}
                   </div>
                   <div className="flex flex-col gap-2 flex-grow">
                     <div
-                      className="text-HeadingSm text-gray-95 max-h-16 w-full line-clamp-2"
+                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html: (get(newsItem, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
                           .trim()
+                          .slice(0, 80)
+                          .concat(
+                            get(newsItem, "title", "").length > 100 ? "..." : ""
+                          ),
                       }}
                     ></div>
 
                     <div
-                      className="text-BodyMd text-gray-95 max-h-12 line-clamp-3"
+                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden hover:cursor-pointer"
+                      onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html:
                           get(newsItem, "content", "")
                             .replace(/<[^>]+>/g, "")
-                            .trim()
+                            .substring(0, 200) + "...",
                       }}
                     ></div>
                   </div>
@@ -101,13 +109,15 @@ export const SearchNewContent = ({ data, value, onSearch, onBack }: Props) => {
                   alt=""
                   width={200}
                   height={200}
-                  className="h-[200px] object-cover rounded-2xl"
+                  className="h-[200px] object-cover rounded-2xl hover:cursor-pointer"
                 />
               </div>
               <div className="w-full h-[1px] bg-gray-20 my-4"></div>
-
             </>
           ))}
+        {data && data.length === 0 && (
+          <CommonEmptyState />
+        )}
       </div>
     </div>
   )

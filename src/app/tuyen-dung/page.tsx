@@ -38,7 +38,7 @@ export default function Hiring() {
   const [textSearch, setTextSearch] = useState("");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["hiring", currentPage, sortOrder], // include searchQuery in the query key
+    queryKey: ["hiring", currentPage, sortOrder, textSearch], // include searchQuery in the query key
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -50,9 +50,18 @@ export default function Hiring() {
             type: "hiring",
             status: "public",
             ...(searchQuery && {
-              title: {
-                $contains: searchQuery, // filter by textSearch if it exists
-              },
+              $or: [
+                {
+                  title: {
+                    $contains: searchQuery, // filter by textSearch if it exists
+                  },
+                },
+                {
+                  tags: {
+                    $contains: searchQuery, // filter by textSearch if it exists
+                  },
+                },
+              ],
             }),
           },
           sort: [{ createdAt: sortOrder === "asc" ? "desc" : "asc" }],
@@ -69,8 +78,8 @@ export default function Hiring() {
     router.push(`${ROUTE.HIRING}/${id}`);
   };
 
-  const handleSearch = () => {
-    setTextSearch(searchQuery);
+  const handleSearch = (value?: string) => {
+    setTextSearch(value || searchQuery);
     refetch();
   };
   const hiringContent = (
@@ -142,30 +151,27 @@ export default function Hiring() {
               return (
                 <div
                   key={index}
-                  className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch cursor-pointer"
-                  onClick={() => handleRedirectDetail(item.id)}
+                  className="w-full max-h-[411px] flex flex-col items-center gap-4 self-stretch"
                 >
                   <Image
                     alt=""
                     src={item.thumbnail ? item.thumbnail : ""}
                     width={411}
                     height={220}
-                    className="w-full h-[220px] object-cover rounded-2xl"
+                    className="w-full h-[220px] object-cover rounded-2xl hover:cursor-pointer"
+                    onClick={() => handleRedirectDetail(item.id)}
                   />
                   <div className="w-full flex flex-col gap-2 flex-grow">
                     <div
-                      className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow"
+                      className="text-HeadingSm text-gray-95 line-clamp-2 w-full overflow-hidden text-ellipsis flex-grow hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirectDetail(item.id)}
                       dangerouslySetInnerHTML={{
                         __html: (get(item, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
                           .trim()
-                          .slice(0, 50)
-                          .concat(
-                            get(item, "title", "").length > 30 ? "..." : ""
-                          ),
                       }}
                     ></div>
-                    <div className="text-BodySm text-gray-95 flex gap-2 items-center">
+                    <div className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
                       <Banknote className="text-gray-70" size={16} />
                       <div>
                         Mức lương:{" "}
@@ -174,7 +180,7 @@ export default function Hiring() {
                           : "Lương thỏa thuận"}
                       </div>
                     </div>
-                    <div className="text-BodySm text-gray-95 flex gap-2 items-center">
+                    <div className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
                       <Users className="text-gray-70" size={16} />
                       <div>
                         Số lượng tuyển dụng:{" "}
@@ -184,7 +190,10 @@ export default function Hiring() {
                     <div className="flex items-start gap-2 justify-start">
                       {item.tags?.split(",").map((tag, tagIndex) => {
                         return (
-                          <CommonTag key={tagIndex} className="tag-class">
+                          <CommonTag key={tagIndex} className="tag-class" onClick={() => {
+                            setTextSearch(tag);
+                            setSearchQuery(tag);
+                          }}>
                             {tag}
                           </CommonTag>
                         );
@@ -195,7 +204,9 @@ export default function Hiring() {
               );
             })
           ) : (
-            <CommonEmptyState />
+            <div className="col-span-3">
+              <CommonEmptyState />
+            </div>
           )}
         </div>
       )}

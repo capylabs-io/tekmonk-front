@@ -148,6 +148,8 @@ export type Achievement = {
 export type AchievementHistory = {
   id: number;
   achievement?: Achievement;
+  isClaimed?: boolean;
+  user?: User;
   createdAt: string;
   updatedAt: string;
 };
