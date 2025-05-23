@@ -22,6 +22,7 @@ type Actions = {
   isConnected: () => boolean;
   setRefreshToken: (refreshToken: string) => void;
   setJwt: (jwt: string) => void;
+  isUpdated: () => boolean;
 };
 
 // Khởi tạo giá trị mặc định cho state
@@ -86,6 +87,12 @@ export const useUserStore = create<State & Actions>()(
       },
       setJwt: (jwt) => {
         set({ jwt: jwt });
+      },
+      isUpdated: () => {
+        const user = get().userInfo;
+        if (!user) return false;
+        if (!user.studentAddress || !user.parentEmail || !user.parentName || !user.phoneNumber) return false;
+        return true;
       },
     }),
     { name: "userStore" }

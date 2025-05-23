@@ -21,7 +21,10 @@ export default function Login() {
     password: "",
   });
 
-  const [login] = useUserStore((state) => [state.login]);
+  const [login, isUpdated] = useUserStore((state) => [
+    state.login,
+    state.isUpdated,
+  ]);
 
   const [isShowing, show, hide] = useLoadingStore((state) => [
     state.isShowing,

@@ -20,6 +20,9 @@ import { User } from "@/types/common-types";
 import { motion } from "framer-motion";
 import { CommonLoading } from "@/components/common/CommonLoading";
 import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { ProfileUpdateReminder } from "@/components/notification/ProfileUpdateReminder";
+import { UpdateInfoDialog } from "@/components/profile/UpdateInfoDialog";
+import { useSnackbarStore } from "@/store/SnackbarStore";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -27,12 +30,16 @@ const Home = () => {
   const { ref, inView } = useInView();
 
   //set for contest page
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [userInfo, isUpdated] = useUserStore((state) => [
+    state.userInfo,
+    state.isUpdated,
+  ]);
   const [postType, setPostType] = useState<PostTypeEnum>(PostTypeEnum.POST);
   const [showLoading, hideLoading] = useLoadingStore((state) => [
     state.show,
     state.hide,
   ]);
+  const [success] = useSnackbarStore((state) => [state.success]);
   const {
     data: currentPageData,
     isLoading,
@@ -47,6 +54,8 @@ const Home = () => {
     isVerified: PostVerificationType.ACCEPTED,
   });
   const [tabValue, setTabValue] = useState<string>("all");
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+
   const handleTabChange = (value: string) => {
     setTabValue(value);
     setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
@@ -70,6 +79,17 @@ const Home = () => {
     }
   };
 
+  const handleOpenUpdateDialog = () => {
+    setUpdateDialogOpen(true);
+  };
+
+  const handleUpdateDialogClose = (updated: boolean) => {
+    setUpdateDialogOpen(false);
+    if (updated) {
+      success("Thành công", "Thông tin cá nhân đã được cập nhật");
+    }
+  };
+
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -80,31 +100,11 @@ const Home = () => {
   const flattenedPosts =
     currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
 
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     showLoading();
-  //   } else {
-  //     hideLoading();
-  //   }
-  // }, [isLoading, showLoading, hideLoading]);
   if (isLoading) {
     return <CommonLoading />;
   }
   return (
     <>
-      {/* <div className="flex justify-end items-center px-8">
-        {
-          tabValue === "project" && (
-            <CommonButton
-              variant="secondary"
-              className="w-full !rounded-3xl h-12"
-              onClick={handleOpenModal}
-            >
-              Đăng dự án
-            </CommonButton>
-          )
-        }
-      </div> */}
       <Tabs
         onValueChange={handleTabChange}
         defaultValue="all"
@@ -194,10 +194,6 @@ const Home = () => {
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                  // whileHover={{
-                  //   scale: 1.01,
-                  //   transition: { duration: 0.2 }
-                  // }}
                 >
                   <div className="px-8 relative">
                     <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -235,7 +231,6 @@ const Home = () => {
                 </motion.div>
               ))}
               {flattenedPosts.length === 0 && <CommonEmptyState />}
-              {/* Loading indicator and intersection observer target */}
               <motion.div
                 ref={ref}
                 className="p-4 text-center"
@@ -253,6 +248,15 @@ const Home = () => {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Profile Update Reminder Dialog */}
+      <ProfileUpdateReminder onUpdateClick={handleOpenUpdateDialog} />
+
+      {/* Update Information Dialog */}
+      <UpdateInfoDialog
+        open={updateDialogOpen}
+        onOpenChange={handleUpdateDialogClose}
+      />
     </>
   );
 };

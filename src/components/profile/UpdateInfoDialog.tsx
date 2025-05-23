@@ -28,14 +28,14 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface UpdateInfoDialogProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: (updated: boolean) => void;
 }
 
 export const UpdateInfoDialog = ({
   open,
   onOpenChange,
 }: UpdateInfoDialogProps) => {
-  const [user] = useUserStore((state) => [state.userInfo]);
+  const [user, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
   const [isShowing, show, hide] = useLoadingStore((state) => [
     state.isShowing,
     state.show,
@@ -97,22 +97,30 @@ export const UpdateInfoDialog = ({
       // Call the API to update user profile
       await updateUserProfile(userData);
 
+      // Refresh user data to update the isUpdated status
+      await getMe();
+
       // Invalidate queries to refresh user data
       if (user?.id) {
         queryClient.invalidateQueries({ queryKey: ["user", user.id] });
       }
 
-      success("Thành công!", "Cập nhật thông tin thành công");
-      onOpenChange(false); // Close dialog after successful update
+      // Close dialog and notify parent component of successful update
+      onOpenChange(true);
     } catch (err) {
       error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin");
+      onOpenChange(false);
     } finally {
       hide();
     }
   });
 
+  const handleClose = () => {
+    onOpenChange(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gray-900">

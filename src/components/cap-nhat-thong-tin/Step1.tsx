@@ -20,7 +20,7 @@ export const UpdateInfoStep1 = () => {
       <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
         <div className="">
           <Label className="text-gray-950 text-SubheadSm">
-            Họ tên <span className="text-red-500">*</span>
+            Tên đầy đủ <span className="text-red-500">*</span>
           </Label>
           <Controller
             control={control}
@@ -76,7 +76,7 @@ export const UpdateInfoStep1 = () => {
             )}
           />
         </div>
-        <div className="mt-2">
+        <div className="">
           <Label className=" text-gray-950 text-SubheadSm">
             Ngày sinh<span className="text-red-500">*</span>
           </Label>
@@ -88,7 +88,7 @@ export const UpdateInfoStep1 = () => {
                 <DatePicker
                   className={`w-full rounded-xl border ${
                     fieldState.error ? "border-red-500" : "border-grey-300"
-                  } border-grey-300 bg-grey-50 p-2 outline-none min-h-[53.5px] text-lg focus-visible:outline-none`}
+                  } border-grey-300 bg-grey-50 px-2 outline-none min-h-[51.5px] mt-2 !font-light focus-visible:outline-none`}
                   onChange={onChange}
                   format="dd/MM/yyyy"
                   value={value}

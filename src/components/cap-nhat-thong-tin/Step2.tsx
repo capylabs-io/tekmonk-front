@@ -81,13 +81,6 @@ export const UpdateInfoStep2 = () => {
                   />
                 )}
               />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Ẩn" : "Hiện"}
-              </button>
             </div>
           </div>
           <div className="relative">
@@ -110,13 +103,6 @@ export const UpdateInfoStep2 = () => {
                   />
                 )}
               />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? "Ẩn" : "Hiện"}
-              </button>
             </div>
           </div>
         </div>
