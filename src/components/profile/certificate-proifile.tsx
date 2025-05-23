@@ -51,16 +51,16 @@ export const CertificateProfile = ({ id }: { id: number }) => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6 mt-4">
         {[1, 2, 3, 4].map((item) => (
           <div
             key={item}
             className="rounded-xl border border-gray-200 p-4 h-[120px] bg-white shadow-sm"
           >
-            <Skeleton className="h-6 w-3/4 mb-4" />
+            <Skeleton className="h-6 w-full mb-4 bg-gray-200" />
             <div className="flex items-center">
-              <Skeleton className="w-12 h-12 rounded-full mr-3" />
-              <Skeleton className="h-4 w-1/2" />
+              <Skeleton className="w-12 h-12 rounded-full mr-3 bg-gray-200" />
+              <Skeleton className="h-4 w-1/2 bg-gray-200" />
             </div>
           </div>
         ))}

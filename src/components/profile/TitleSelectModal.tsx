@@ -28,10 +28,9 @@ export function TitleSelectModal({ open, onOpenChange, currentTitle, onSave }: T
   const [saving, setSaving] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(30);
-  const [filterValue, setFilterValue] = useState<string>(StatusFilter.ALL);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const { data, isLoading } = useQuery({
-    queryKey: ["achievement-history-user", page, pageSize, filterValue],
+    queryKey: ["achievement-history-user", page, pageSize, userInfo],
     queryFn: async () => {
       try {
         const queryString = qs.stringify({
@@ -40,15 +39,14 @@ export function TitleSelectModal({ open, onOpenChange, currentTitle, onSave }: T
             page: page,
             pageSize: pageSize
           },
-          filter: {
+          filters: {
             user: {
-              id: {
-                $eq: userInfo?.id
-              }
-            }
-          }
+              id: userInfo?.id,
+            },
+          },
         });
         const res = await ReqGetAchievementHistory(queryString);
+        console.log("achievement history ", res);
         return res;
       } catch (err) {
         console.log("Error ", err);
@@ -70,7 +68,6 @@ export function TitleSelectModal({ open, onOpenChange, currentTitle, onSave }: T
     await onSave(selectedTitle);
     setSaving(false);
     setSearchTitle("");
-
   };
 
   return open && (
