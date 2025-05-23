@@ -65,7 +65,7 @@ export const Input = ({
               alt="search icon"
               width={24}
               height={10}
-              className="cursor-pointer"
+              className="cursor-pointer mr-2"
               onClick={onSearch}
             />
           )}

@@ -60,9 +60,9 @@ export const CertificateDialog = ({
                   width={100}
                   height={100}
                   className="object-contain"
-                  onError={(e) => {
-                    e.currentTarget.src = "/image/placeholder.png";
-                  }}
+                // onError={(e) => {
+                //   e.currentTarget.src = "/image/placeholder.png";
+                // }}
                 />
                 <div className="flex flex-col items-start justify-between h-full w-full text-gray-500 text-sm">
                   <div className="text-SubheadSm text-gray-95">

@@ -107,9 +107,9 @@ export const AchievementProfile = ({ id }: { id: number }) => {
                   width={80}
                   height={80}
                   className="object-contain mx-auto"
-                  onError={(e) => {
-                    e.currentTarget.src = "/image/placeholder.png";
-                  }}
+                // onError={(e) => {
+                //   e.currentTarget.src = "/image/placeholder.png";
+                // }}
                 />
               </div>
               <h3 className="text-center mt-2 text-gray-95 text-SubheadXs truncate w-full overflow-hidden whitespace-nowrap">

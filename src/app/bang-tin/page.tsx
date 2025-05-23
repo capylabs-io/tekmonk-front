@@ -80,35 +80,14 @@ const Home = () => {
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Flatten posts from all pages
   const flattenedPosts =
     currentPageData?.pages?.flatMap((page) => page?.data || []) || [];
 
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     showLoading();
-  //   } else {
-  //     hideLoading();
-  //   }
-  // }, [isLoading, showLoading, hideLoading]);
   if (isLoading) {
     return <CommonLoading />;
   }
   return (
     <>
-      {/* <div className="flex justify-end items-center px-8">
-        {
-          tabValue === "project" && (
-            <CommonButton
-              variant="secondary"
-              className="w-full !rounded-3xl h-12"
-              onClick={handleOpenModal}
-            >
-              Đăng dự án
-            </CommonButton>
-          )
-        }
-      </div> */}
       <Tabs
         onValueChange={handleTabChange}
         defaultValue="all"

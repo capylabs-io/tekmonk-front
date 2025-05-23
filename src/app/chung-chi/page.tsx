@@ -95,9 +95,9 @@ export default function CertificatePage() {
                 "certificate.certificatePdfConfig.backgroundUrl",
                 ""
               );
-              if (imgUrl == null) {
-                imgUrl = "/image/placeholder.png";
-              }
+              // if (imgUrl == null) {
+              //   imgUrl = "/image/placeholder.png";
+              // }
               return (
                 <CommonCard
                   onClick={() => {
@@ -185,22 +185,22 @@ export default function CertificatePage() {
                         certificateHistorySelected?.certificate
                           .certificatePdfConfig?.fields
                           ? certificateHistorySelected?.certificate.certificatePdfConfig?.fields.map(
-                              (field: CertificatePdfFieldConfig) => ({
-                                id: String(field.id || Date.now()),
-                                label: field.label || "",
-                                value: field.value || "",
-                                htmlContent: field.value || "",
-                                position: {
-                                  x: field.positionX || 0,
-                                  y: field.positionY || 0,
-                                },
-                                fontSize: Number(field.fontSize) || 18,
-                                fontWeight: field.fontWeight || "normal",
-                                color: field.color || "#000000",
-                                fontFamily: field.fontFamily || "Roboto",
-                                textAlign: field.textAlign || "center",
-                              })
-                            )
+                            (field: CertificatePdfFieldConfig) => ({
+                              id: String(field.id || Date.now()),
+                              label: field.label || "",
+                              value: field.value || "",
+                              htmlContent: field.value || "",
+                              position: {
+                                x: field.positionX || 0,
+                                y: field.positionY || 0,
+                              },
+                              fontSize: Number(field.fontSize) || 18,
+                              fontWeight: field.fontWeight || "normal",
+                              color: field.color || "#000000",
+                              fontFamily: field.fontFamily || "Roboto",
+                              textAlign: field.textAlign || "center",
+                            })
+                          )
                           : []
                       }
                       initialBackgroundImage={

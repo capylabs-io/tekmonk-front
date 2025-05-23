@@ -19,10 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { StatusFilter } from "@/contants/misison/status-filter";
-import {
-  ReqClaimAchievement,
-  ReqGetAllAchievementsInfo,
-} from "@/requests/achievement";
 import { ReqClaimMission, ReqGetMissionInfo } from "@/requests/mission";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";

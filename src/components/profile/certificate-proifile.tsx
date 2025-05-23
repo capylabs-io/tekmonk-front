@@ -93,9 +93,9 @@ export const CertificateProfile = ({ id }: { id: number }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {certificates.data.map((certificate) => {
             let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
-            if (imgUrl == null) {
-              imgUrl = "/image/placeholder.png";
-            }
+            // if (imgUrl == null) {
+            //   imgUrl = "/image/placeholder.png";
+            // }
             return (
               <CommonCard
                 key={certificate.id}

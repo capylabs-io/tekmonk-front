@@ -54,9 +54,18 @@ export default function News() {
           filters: {
             type: "news",
             status: "public",
-            title: {
-              $contains: searchValue,
-            },
+            $or: [
+              {
+                title: {
+                  $contains: searchValue,
+                },
+              },
+              {
+                tags: {
+                  $contains: searchValue,
+                },
+              },
+            ],
           },
           populate: "*",
         });
@@ -140,6 +149,10 @@ export default function News() {
                       (data ? data.pages.flatMap((page) => page.data) : []) ||
                       []
                     }
+                    handleSearchNews={(value) => {
+                      setIsSearch(true);
+                      handleSearchNews(value);
+                    }}
                     onLoadMore={handleLoadMoreContentt}
                     isFetchingNextPage={isFetchingNextPage}
                   />
@@ -292,10 +305,12 @@ const FeaturedNewsComponent = ({
   data,
   onLoadMore,
   isFetchingNextPage,
+  handleSearchNews,
 }: {
   data: TNews[];
   onLoadMore: () => void;
   isFetchingNextPage: boolean;
+  handleSearchNews: (value: string) => void;
 }) => {
   const router = useCustomRouter();
   const handleRedirect = (id: number) => {
@@ -345,18 +360,20 @@ const FeaturedNewsComponent = ({
             <>
               <div
                 key={newsItem.id}
-                className="h-[220px] w-full flex items-center gap-2 justify-center cursor-pointer"
-                onClick={() => handleRedirect(newsItem.id)}
+                className="h-[220px] w-full flex items-center gap-2 justify-center"
               >
                 <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
                   <div className="flex gap-2">
                     {newsItem.tags?.split(",").map((tag, index) => (
-                      <CommonTag key={index}>{tag.trim()}</CommonTag>
+                      <CommonTag onClick={() => {
+                        handleSearchNews(tag.trim())
+                      }} key={index}>{tag.trim()}</CommonTag>
                     ))}
                   </div>
                   <div className="flex flex-col gap-2 flex-grow">
                     <div
-                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden"
+                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html: (get(newsItem, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
@@ -369,7 +386,8 @@ const FeaturedNewsComponent = ({
                     ></div>
 
                     <div
-                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden"
+                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden hover:cursor-pointer"
+                      onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html:
                           get(newsItem, "content", "")
@@ -389,7 +407,7 @@ const FeaturedNewsComponent = ({
                   alt=""
                   width={200}
                   height={200}
-                  className="h-[200px] object-cover rounded-2xl"
+                  className="h-[200px] object-cover rounded-2xl hover:cursor-pointer"
                 />
               </div>
               <div className="w-full h-[1px] bg-gray-20 my-4"></div>

@@ -19,7 +19,7 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Settings, Share2 } from "lucide-react";
+import { Edit, Edit2, Settings, Share2 } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -29,16 +29,21 @@ import { Mission } from "@/types/common-types";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { CommonLoading } from "@/components/common/CommonLoading";
 import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { TitleSelectModal } from "@/components/profile/TitleSelectModal";
+import { ReqUpdateUser } from "@/requests/user";
+import Image from "next/image";
 
 export default function Profile() {
   const { id } = useParams();
   const router = useCustomRouter();
   const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
-  const { data: guestInfor } = useGetUserQueryById(id as string);
+  const { data: guestInfor, refetch: refetchUserInfo } = useGetUserQueryById(id as string);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
+  const [showTitleModal, setShowTitleModal] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const { data: myPosts, isLoading: isLoadingPosts } = useQuery({
     refetchOnWindowFocus: false,
@@ -71,6 +76,24 @@ export default function Profile() {
   const showAvatarModal = () => {
     show();
   };
+
+  const handleOpenTitleModal = () => setShowTitleModal(true);
+
+  const handleSaveTitle = async (title: string) => {
+    setSaving(true);
+    try {
+      await ReqUpdateUser(guestInfor?.id?.toString(), { specialName: title });
+      success("Hồ sơ cá nhân ", "Cập nhật danh hiệu thành công");
+      setShowTitleModal(false);
+      queryClient.invalidateQueries({ queryKey: ["custom-posts"] });
+    } catch (error) {
+      console.log("Error ", error);
+    } finally {
+      setSaving(false);
+      refetchUserInfo()
+    }
+  };
+
   if (isLoadingPosts) {
     return <CommonLoading />;
   }
@@ -95,6 +118,16 @@ export default function Profile() {
           <div className="text-base text-primary-950">
             {get(guestInfor, "specialName")}
           </div>
+          <Button
+            outlined
+            className="border-2 border-primary-60 !bg-primary-10 rounded-lg !px-2 !py-1 text-sm flex items-center mt-2"
+            onClick={handleOpenTitleModal}
+          >
+            <div>
+              Chỉnh sửa danh hiệu
+            </div>
+            <Edit size={16} className="text-primary-600 ml-2" />
+          </Button>
         </div>
         <div className="flex gap-x-2">
           {/* <Button outlined className="text-primary-900 text-sm border">
@@ -105,18 +138,19 @@ export default function Profile() {
             <>
               <Button
                 outlined
-                className="border border-gray-95 rounded-lg !p-3"
-                onClick={handleShareProfile}
-              >
-                <Share2 size={24} className="text-gray-95" />
-              </Button>
-              <Button
-                outlined
-                className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+                className="border-2 border-primary-60 !bg-primary-10 rounded-lg w-10 h-10"
                 onClick={showAvatarModal}
               >
                 <Settings size={24} className="text-primary-600" />
               </Button>
+              <Button
+                outlined
+                className="border-2 border-gray-30 rounded-lg  h-10 w-10"
+                onClick={handleShareProfile}
+              >
+                <Share2 size={24} className="text-primary-600" />
+              </Button>
+
             </>
           )}
         </div>
@@ -205,6 +239,12 @@ export default function Profile() {
           {myPosts?.data.length === 0 && <CommonEmptyState />}
         </TabsContent>
       </Tabs>
+      <TitleSelectModal
+        open={showTitleModal}
+        onOpenChange={setShowTitleModal}
+        currentTitle={guestInfor?.specialName || ""}
+        onSave={handleSaveTitle}
+      />
     </div>
   );
 }
