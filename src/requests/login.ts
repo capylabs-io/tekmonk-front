@@ -24,7 +24,7 @@ export const ReqRegister = async (body: any) => {
   return response.data;
 };
 export const getMe = async () => {
-  const response = await tekdojoAxios.get(`${BASE_URL}/users/me`);
+  const response = await tekdojoAxios.get(`${BASE_URL}/users/me?populate=*`);
   return response.data;
 };
 

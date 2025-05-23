@@ -12,6 +12,7 @@ type State = {
   candidateNumber: string | null;
   codeCombatId: string | null;
   isSubmitted: boolean;
+  isUpdated: boolean | null;
 };
 
 type Actions = {
@@ -22,7 +23,7 @@ type Actions = {
   isConnected: () => boolean;
   setRefreshToken: (refreshToken: string) => void;
   setJwt: (jwt: string) => void;
-  isUpdated: () => boolean;
+  setIsUpdated: (data: boolean) => void;
 };
 
 // Khởi tạo giá trị mặc định cho state
@@ -34,6 +35,7 @@ const defaultStates: State = {
   candidateNumber: null,
   codeCombatId: null,
   isSubmitted: false,
+  isUpdated: null,
 };
 
 // Tạo store sử dụng Zustand
@@ -88,11 +90,8 @@ export const useUserStore = create<State & Actions>()(
       setJwt: (jwt) => {
         set({ jwt: jwt });
       },
-      isUpdated: () => {
-        const user = get().userInfo;
-        if (!user) return false;
-        if (!user.studentAddress || !user.parentEmail || !user.parentName || !user.phoneNumber) return false;
-        return true;
+      setIsUpdated: (data: boolean) => {
+        set({ isUpdated: data });
       },
     }),
     { name: "userStore" }

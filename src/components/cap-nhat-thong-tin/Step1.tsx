@@ -59,7 +59,9 @@ export const UpdateInfoStep1 = () => {
           />
         </div>
         <div className="">
-          <Label className="text-gray-950 text-SubheadSm">Địa chỉ</Label>
+          <Label className="text-gray-950 text-SubheadSm">
+            Địa chỉ<span className="text-red-500">*</span>
+          </Label>
           <Controller
             control={control}
             name="stepOne.studentAddress"

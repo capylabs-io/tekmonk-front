@@ -42,7 +42,10 @@ export const ReqGetUserRanking = async (query: string = "") => {
 
 export const updateUserProfile = async (userData: any) => {
   try {
-    const response = await tekdojoAxios.put("/users/profile", userData);
+    const response = await tekdojoAxios.put(
+      "/custom-user/update-profile",
+      userData
+    );
     return response.data;
   } catch (error) {
     throw error;

@@ -13,6 +13,8 @@ import { CheckCircle2, Edit, Gift, Medal, Star, Trophy } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "../common/button/Button";
 import { CommonButton } from "../common/button/CommonButton";
+import { ReqGetAchievementHistory } from "@/requests/achievement-history";
+import qs from "qs";
 
 interface ProfileUpdateReminderProps {
   onUpdateClick: () => void;
@@ -21,15 +23,46 @@ interface ProfileUpdateReminderProps {
 export const ProfileUpdateReminder = ({
   onUpdateClick,
 }: ProfileUpdateReminderProps) => {
-  const [isUpdated] = useUserStore((state) => [state.isUpdated]);
+  const [isUpdated, isConnected, userInfo, setIsUpdated] = useUserStore(
+    (state) => [
+      state.isUpdated,
+      state.isConnected,
+      state.userInfo,
+      state.setIsUpdated,
+    ]
+  );
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    // Open dialog if user profile is not updated
-    if (isUpdated() === false) {
+  const handleGetAchievementHistory = async () => {
+    if (!userInfo) return;
+    if (isUpdated == false) {
       setOpen(true);
+      return;
     }
-  }, [isUpdated]);
+    if (isUpdated == true) {
+      setOpen(false);
+      return;
+    }
+    const queryString = qs.stringify({
+      filters: {
+        user: {
+          id: userInfo.id,
+        },
+      },
+      populate: ["user"],
+    });
+    const achievementHistory = await ReqGetAchievementHistory(queryString);
+    if (achievementHistory.data.length > 0) {
+      setIsUpdated(true);
+      setOpen(false);
+    } else {
+      setOpen(true);
+      setIsUpdated(false);
+    }
+  };
+  useEffect(() => {
+    handleGetAchievementHistory();
+  }, [isUpdated, isConnected]);
 
   const handleUpdateClick = () => {
     setOpen(false);

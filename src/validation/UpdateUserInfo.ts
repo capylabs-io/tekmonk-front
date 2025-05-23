@@ -10,7 +10,7 @@ const UpdateInfoStep1Schema = z.object({
   schoolName: z
     .string({ required_error: "Trường học là bắt buộc" })
     .min(1, "Trường học là bắt buộc"),
-  studentAddress: z.string().optional(),
+  studentAddress: z.string().min(1, "Địa chỉ là bắt buộc"),
   dateOfBirth: z.date({ required_error: "Ngày sinh là bắt buộc" }),
   className: z
     .string({ required_error: "Tên lớp học là bắt buộc" })

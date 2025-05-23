@@ -25,6 +25,7 @@ import {
 } from "@/validation/UpdateUserInfo";
 import { updateUserProfile } from "@/requests/user";
 import { useQueryClient } from "@tanstack/react-query";
+import { last } from "lodash";
 
 interface UpdateInfoDialogProps {
   open: boolean;
@@ -35,7 +36,12 @@ export const UpdateInfoDialog = ({
   open,
   onOpenChange,
 }: UpdateInfoDialogProps) => {
-  const [user, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
+  const [user, getMe, setIsUpdated] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+    state.setIsUpdated,
+  ]);
+
   const [isShowing, show, hide] = useLoadingStore((state) => [
     state.isShowing,
     state.show,
@@ -53,13 +59,13 @@ export const UpdateInfoDialog = ({
     defaultValues: {
       stepOne: {
         fullName: user?.fullName || "",
-        schoolName: user?.userProfiles?.schoolName || "",
+        schoolName: last(user?.user_profiles)?.schoolName || "",
         studentAddress: user?.studentAddress || "",
         dateOfBirth: user?.dateOfBirth
           ? new Date(user.dateOfBirth)
           : new Date(),
-        className: user?.className || "",
-        schoolAddress: user?.userProfiles?.schoolAddress || "",
+        className: last(user?.user_profiles)?.className || "",
+        schoolAddress: last(user?.user_profiles)?.schoolAddress || "",
         parentName: user?.parentName || "",
         parentPhoneNumber: user?.parentPhoneNumber || "",
         parentEmail: user?.parentEmail || "",
@@ -100,13 +106,9 @@ export const UpdateInfoDialog = ({
       // Refresh user data to update the isUpdated status
       await getMe();
 
-      // Invalidate queries to refresh user data
-      if (user?.id) {
-        queryClient.invalidateQueries({ queryKey: ["user", user.id] });
-      }
-
       // Close dialog and notify parent component of successful update
       onOpenChange(true);
+      setIsUpdated(true);
     } catch (err) {
       error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin");
       onOpenChange(false);

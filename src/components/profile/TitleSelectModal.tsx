@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/common/Input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CommonCard } from "@/components/common/CommonCard";
 import {
-  ReqGetAchievementHistory,
-  ReqGetAllAchievementsInfo,
+  ReqGetAchievementHistory
 } from "@/requests/achievement";
 import Image from "next/image";
-import { Achievement } from "@/types/common-types";
-import { Button } from "@/components/common/button/Button";
 import Loading from "@/app/loading";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { StatusFilter } from "@/contants/misison/status-filter";
+import { useQuery } from "@tanstack/react-query";
 import qs from "qs";
 import { CommonEmptyState } from "../common/CommonEmptyState";
 import { useUserStore } from "@/store/UserStore";
@@ -84,7 +73,7 @@ export function TitleSelectModal({
   };
 
   return (
-    open && (
+    open && ( 
       <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
         <div
           className="max-w-[480px] w-full rounded-2xl bg-gray-00 p-6 border-2 border-gray-30"

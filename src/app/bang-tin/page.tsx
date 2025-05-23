@@ -30,9 +30,10 @@ const Home = () => {
   const { ref, inView } = useInView();
 
   //set for contest page
-  const [userInfo, isUpdated] = useUserStore((state) => [
+  const [userInfo, isUpdated, isConnected] = useUserStore((state) => [
     state.userInfo,
     state.isUpdated,
+    state.isConnected,
   ]);
   const [postType, setPostType] = useState<PostTypeEnum>(PostTypeEnum.POST);
   const [showLoading, hideLoading] = useLoadingStore((state) => [
@@ -80,6 +81,9 @@ const Home = () => {
   };
 
   const handleOpenUpdateDialog = () => {
+    if (!isConnected() || isUpdated) {
+      return;
+    }
     setUpdateDialogOpen(true);
   };
 
