@@ -39,7 +39,9 @@ export default function Profile() {
   const { id } = useParams();
   const router = useCustomRouter();
   const [show, hide] = useUserAvatarStore((state) => [state.show, state.hide]);
-  const { data: guestInfor, refetch: refetchUserInfo } = useGetUserQueryById(id as string);
+  const { data: guestInfor, refetch: refetchUserInfo } = useGetUserQueryById(
+    id as string
+  );
   const [userInfo] = useUserStore((state) => [state.userInfo]);
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
@@ -97,7 +99,7 @@ export default function Profile() {
       console.log("Error ", error);
     } finally {
       setSaving(false);
-      refetchUserInfo()
+      refetchUserInfo();
     }
   };
 
@@ -130,9 +132,7 @@ export default function Profile() {
             className="border-2 border-primary-60 !bg-primary-10 rounded-lg !px-2 !py-1 text-sm flex items-center mt-2"
             onClick={handleOpenTitleModal}
           >
-            <div>
-              Chỉnh sửa danh hiệu
-            </div>
+            <div>Chỉnh sửa danh hiệu</div>
             <Edit size={16} className="text-primary-600 ml-2" />
           </CommonButton>
         </div>
@@ -152,7 +152,7 @@ export default function Profile() {
               </CommonButton>
               <CommonButton
                 outlined
-                className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+                className="border-2 w-10 border-primary-60 !bg-primary-10 rounded-lg h-10"
                 onClick={openUpdateDialog}
               >
                 <Edit size={24} className="text-primary-600" />
@@ -164,7 +164,6 @@ export default function Profile() {
               >
                 <Share2 size={24} className="text-primary-600" />
               </CommonButton>
-
             </>
           )}
         </div>
@@ -258,7 +257,7 @@ export default function Profile() {
       <UpdateInfoDialog
         open={updateDialogOpen}
         onOpenChange={setUpdateDialogOpen}
-        />
+      />
       <TitleSelectModal
         open={showTitleModal}
         onOpenChange={setShowTitleModal}
