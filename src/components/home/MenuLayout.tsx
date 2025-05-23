@@ -30,13 +30,13 @@ export const MenuLayout = ({ customClassName }: Props) => {
         iconElement={<Home size={20} />}
         url="/bang-tin"
       />
-      {/* <MenuCard
+      <MenuCard
         active={usePathname() === "/thong-bao"}
         title="Thông báo"
         iconElement={<Bell size={20} />}
         url="/thong-bao"
         hidden={!isConnected()}
-      /> */}
+      />
       <MenuCard
         title="Nhiệm vụ"
         active={usePathname().includes("/nhiem-vu")}
