@@ -79,16 +79,18 @@ export const MissionCardContent = ({
       {/* Add a subtle highlight overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary-50/0 to-primary-50/0 hover:from-primary-50/10 hover:to-primary-50/5 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
 
-      <Image
-        src={data.imageUrl || ""}
-        alt={data.title || "mission"}
-        width={80}
-        height={80}
-        className={cn(
-          "object-contain h-1/2 relative z-10",
-          cardState === CardState.IN_PROGRESS && "opacity-50 brightness-50"
-        )}
-      />
+      <div className="w-[90px] h-[90px] flex items-center justify-center">
+        <Image
+          src={data.imageUrl || ""}
+          alt={data.title || "mission"}
+          width={80}
+          height={80}
+          className={cn(
+            "object-contain h-full relative z-10",
+            cardState === CardState.IN_PROGRESS && "opacity-50 brightness-50"
+          )}
+        />
+      </div>
 
       <div className="flex flex-col items-center p-0 w-full gap-0 flex-none self-stretch relative z-10">
         <h3 className="text-SubheadSm font-medium text-center text-gray-95 w-full h-[40px] overflow-hidden text-ellipsis text-wrap">
