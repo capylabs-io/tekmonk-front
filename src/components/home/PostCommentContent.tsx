@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Send } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Send, Smile } from "lucide-react";
 import { CommentCard } from "./CommentCard";
 import { Button } from "../common/button/Button";
 import { addCommentPost } from "@/requests/post";
@@ -11,6 +11,11 @@ import { containsForbiddenWords } from "@/validation/validate-forbiden-word";
 import { ActionGuard } from "../common/ActionGuard";
 import { useInView } from "react-intersection-observer";
 import { useInfiniteComment } from "@/hooks/use-comment";
+import dynamic from "next/dynamic";
+import data from "@emoji-mart/data";
+
+// Dynamically import emoji picker to avoid SSR issues
+const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false });
 
 type Props = {
   imageUrl?: string;
@@ -18,39 +23,14 @@ type Props = {
   onUpdateComment?: () => void;
 };
 
-// const mockMessages = [
-//   {
-//     name: 'Long',
-//     username: 'Bá Vưong Học Đưòng',
-//     time: Date.now(),
-//     content: 'quá hay!!!',
-//     interact: {
-//       numberOflike: 23,
-//       numberOfMessage: 10,
-//       numberOfShare: 124,
-//       numberOfView: 123,
-//     },
-//   },
-//   {
-//     name: 'Hải',
-//     username: 'Bá Vưong Học Đưòng',
-//     time: Date.now(),
-//     content: 'Hay!!!!',
-//     interact: {
-//       numberOflike: 23,
-//       numberOfMessage: 10,
-//       numberOfShare: 124,
-//       numberOfView: 123,
-//     },
-//   },
-// ];
-
 export const PostCommentContent = ({
   imageUrl,
   postId,
   onUpdateComment,
 }: Props) => {
   const [text, setText] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
   const { ref, inView } = useInView();
   const { success, error } = useSnackbarStore();
   const [showLoading, hideLoading] = useLoadingStore((state) => [
@@ -76,6 +56,23 @@ export const PostCommentContent = ({
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSend = async () => {
     try {
@@ -103,11 +100,16 @@ export const PostCommentContent = ({
     }
   };
 
+  const handleEmojiSelect = (emoji: any) => {
+    setText((prev) => prev + emoji.native);
+    setShowEmojiPicker(false);
+  };
+
   return (
-    <div className="space-y-5 h-full overflow-y-auto">
+    <div className=" space-y-5 h-full">
       <ActionGuard
         actionName="Thêm bình luận"
-        className="flex w-full cursor-pointer items-center gap-2"
+        className="flex w-full cursor-pointer items-start gap-2"
       >
         <div
           className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
@@ -117,20 +119,61 @@ export const PostCommentContent = ({
             width: 40,
           }}
         ></div>
-        <div className="flex h-14 w-full items-center justify-center gap-1 rounded-lg border border-gray-300 px-3">
-          <textarea
-            value={text}
-            placeholder="Viết bình luận"
-            className="text-black h-10 min-w-0 flex-1 resize-none rounded-md bg-transparent px-3 py-2 outline-none"
-            onChange={(e) => setText(e.target.value)}
-          />
-          <Button
-            className="!rounded-lg"
-            onClick={handleSend}
-            disabled={text.length === 0}
-          >
-            <Send size={20} />
-          </Button>
+        <div className="w-full flex flex-col items-center bg-[#f0f2f5] rounded-lg px-2 py-1">
+          <div className="relative flex h-auto w-full items-center justify-center">
+            <textarea
+              value={text}
+              placeholder="Viết bình luận"
+              className="text-black min-h-10 min-w-0 flex-1 resize-none rounded-md bg-transparent px-3 pt-2 outline-none placeholder:text-gray-40"
+              onChange={(e) => {
+                setText(e.target.value);
+                // Auto resize the textarea
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              onFocus={(e) => {
+                // Set initial height when focused
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              rows={1}
+            />
+
+            {/* Emoji picker */}
+            {showEmojiPicker && (
+              <div
+                ref={emojiPickerRef}
+                className="absolute left-0 bottom-14 z-[999]"
+              >
+                <Picker
+                  data={data}
+                  onEmojiSelect={handleEmojiSelect}
+                  theme="light"
+                  previewPosition="none"
+                  skinTonePosition="none"
+                  searchPosition="top"
+                  set="native"
+                  maxFrequentRows={0}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex items-center justify-between gap-2 w-full">
+            <button
+              className="rounded-full h-9 w-9 hover:bg-gray-100 items-center justify-center flex"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            >
+              <Smile size={18} className="text-gray-500" />
+            </button>
+
+            <Button
+              className="!rounded-lg p-0 h-8 w-10"
+              onClick={handleSend}
+              disabled={text.length === 0}
+            >
+              <Send size={18} />
+            </Button>
+          </div>
         </div>
       </ActionGuard>
       <div className="space-y-5">

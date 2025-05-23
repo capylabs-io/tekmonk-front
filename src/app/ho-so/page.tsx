@@ -1,5 +1,6 @@
 "use client";
 
+import { CommonLoading } from "@/components/common/CommonLoading";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useSnackbarStore } from "@/store/SnackbarStore";
@@ -19,5 +20,5 @@ export default function ProfilePage() {
     }
     router.push(ROUTE.PROFILE + `/${userId}`);
   }, [router, userInfo, warn]);
-  return <>Loading ... </>;
+  return <CommonLoading />;
 }

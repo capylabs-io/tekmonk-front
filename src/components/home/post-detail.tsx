@@ -60,7 +60,6 @@ export const PostImageGallery = ({
 }: PostImageGalleryProps) => {
   const router = useCustomRouter();
   const [isDetail, setIsDetail] = useState(false);
-  const [showComments, setShowComments] = useState(false);
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -70,10 +69,6 @@ export const PostImageGallery = ({
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     onIndexChange(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
-  };
-
-  const handleCommentClick = () => {
-    setShowComments(!showComments);
   };
 
   return (
@@ -162,7 +157,9 @@ export const PostImageGallery = ({
               )}
 
               {createdAt && (
-                <div className="text-sm text-gray-500 ml-auto">{createdAt}</div>
+                <div className="text-sm text-gray-500 ml-auto mb-4">
+                  {createdAt}
+                </div>
               )}
 
               {/* Post tags */}
@@ -214,7 +211,7 @@ export const PostImageGallery = ({
 
               {/* Post stats */}
               {(likedCount || commentCount) && (
-                <div className="flex items-center gap-4 py-3 border-t border-gray-200">
+                <div className="flex items-center gap-4 py-3 border-gray-200">
                   {likedCount && (
                     <div className="flex items-center gap-1 text-gray-600">
                       <svg
@@ -247,9 +244,9 @@ export const PostImageGallery = ({
               )}
 
               {/* Comments section */}
-              <div className="mt-4 pt-4">
+              <div className="pt-4">
                 <h3 className="font-semibold mb-3">Bình luận</h3>
-                <div className="h-full overflow-y-auto pr-2">
+                <div className="h-full pr-2">
                   <PostCommentContent
                     postId={postId}
                     onUpdateComment={onUpdateComment}
