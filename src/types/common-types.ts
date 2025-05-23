@@ -56,6 +56,7 @@ export type User = {
   specialName: string | null;
   totalPrice: number;
   user_role?: UserRole;
+  userProfiles?: UserProfile;
   imageURL?: string;
 };
 

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { CommonLoading } from "../common/CommonLoading";
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const router = useCustomRouter();
@@ -19,5 +20,5 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     warn("Chú ý", "Vui lòng đăng nhập để tiếp tục");
     router.push(ROUTE.LOGIN);
   }, []);
-  return isAuthenticated ? children : <div>Loading...</div>;
+  return isAuthenticated ? children : <CommonLoading />;
 };

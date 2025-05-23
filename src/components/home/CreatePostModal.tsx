@@ -1,11 +1,10 @@
 "use client";
 
 import { useProfileStore } from "@/store/ProfileStore";
-import { ImagePlus, Info, X } from "lucide-react";
+import { Info, X } from "lucide-react";
 import { useMemo } from "react";
 import { Input } from "../common/Input";
 import { Button } from "../common/button/Button";
-import { InputFileUpdload } from "../common/InputFileUpload";
 import { InputTags } from "@/components/contest/InputTags";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -23,6 +22,13 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { FileUpload } from "../file-upload/file-upload";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 export const CreatePostModal = () => {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
@@ -46,7 +52,7 @@ export const CreatePostModal = () => {
     mode: "onChange",
     defaultValues: {
       name: "",
-      url: "",
+      type: "normal",
       image: [],
       tags: "",
       content: "",
@@ -107,17 +113,9 @@ export const CreatePostModal = () => {
       formData.append("isVerified", PostVerificationType.PENDING);
       if (data.image) {
         data.image.forEach((file) => {
-          console.log("file", file);
           formData.append("images", file);
         });
       }
-      formData.append(
-        "type",
-        type === PostTypeEnum.PROJECT ? PostTypeEnum.PROJECT : PostTypeEnum.POST
-      );
-
-      console.log("formData", formData.get("images"));
-
       const res = await uploadPost(formData);
       if (res) {
         showSuccess(
@@ -134,9 +132,7 @@ export const CreatePostModal = () => {
       hideLoading();
     }
   };
-  const handleImageUpload = (file: File | null) => {
-    if (file) setValue("image", file as any);
-  };
+
   return (
     isShowing && (
       <TooltipProvider>
@@ -152,10 +148,10 @@ export const CreatePostModal = () => {
 
             <div className="w-full text-start p-6">
               <div className="text-HeadingSm font-bold text-gray-95">
-                {type === PostTypeEnum.PROJECT ? "Đăng dự án" : "Đăng bài viết"}
+                Đăng bài viết
               </div>
               <div className="text-BodyMd text-gray-60">
-                Khoe ngay dự án mới của mình cho các đồng môn nhé!{" "}
+                Đăng bài viết của bạn để chia sẻ với cộng đồng!
               </div>
             </div>
             <hr className="border-t border-gray-200" />
@@ -189,28 +185,45 @@ export const CreatePostModal = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-60">
                       <div className="flex flex-col gap-y-1">
-                        <div className="text-SubheadMd">Đường dẫn website</div>
-                        <div className="text-BodyMd">(không bắt buộc)</div>
+                        <div className="text-SubheadMd">Loại bài viết</div>
                       </div>
                     </span>
-                    <div className="flex flex-col w-[424px]">
+                    <div className="flex flex-col w-[424px] text-sm">
                       <Controller
                         control={control}
-                        name="url"
+                        name="type"
                         render={({ field: { value, onChange } }) => (
-                          <Input
-                            value={value}
-                            onChange={onChange}
-                            type="text"
-                            placeholder="Nhập thông tin"
-                            customClassNames="max-w-[424px]"
-                            customInputClassNames="text-sm"
-                          />
+                          <Select
+                            value={value || "normal"}
+                            onValueChange={onChange}
+                            defaultValue="normal"
+                          >
+                            <SelectTrigger className="w-full h-12 px-3 py-2 rounded-lg border border-gray-300 text-BodyMd">
+                              <SelectValue
+                                placeholder="Chọn loại bài viết"
+                                className="text-BodyMd"
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem
+                                value="normal"
+                                className="text-BodyMd cursor-pointer"
+                              >
+                                Bài viết thường
+                              </SelectItem>
+                              <SelectItem
+                                value="project"
+                                className="text-BodyMd cursor-pointer"
+                              >
+                                Dự án
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         )}
                       />
-                      {errors.url && (
+                      {errors.type && (
                         <span className="text-red-500 text-xs mt-1">
-                          {errors.url.message}
+                          {errors.type.message}
                         </span>
                       )}
                     </div>
@@ -316,11 +329,7 @@ export const CreatePostModal = () => {
                 }}
                 onClick={method.handleSubmit(handleCreatePost)}
               >
-                <div className="!text-sm !font-normal">
-                  {type === PostTypeEnum.PROJECT
-                    ? "Đăng dự án"
-                    : "Đăng bài viết"}
-                </div>
+                <div className="!text-sm !font-normal">Đăng bài viết</div>
               </Button>
             </div>
           </div>

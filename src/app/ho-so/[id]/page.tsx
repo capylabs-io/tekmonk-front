@@ -1,5 +1,6 @@
 "use client";
-import { Button } from "@/components/common/button/Button";
+import { Button as CommonButton } from "@/components/common/button/Button";
+import { Button } from "@/components/ui/button";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import {
   Tabs,
@@ -19,7 +20,7 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Settings, Share2 } from "lucide-react";
+import { Settings, Share2, Edit } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -29,6 +30,7 @@ import { Mission } from "@/types/common-types";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { CommonLoading } from "@/components/common/CommonLoading";
 import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { UpdateInfoDialog } from "@/components/profile/UpdateInfoDialog";
 
 export default function Profile() {
   const { id } = useParams();
@@ -39,6 +41,7 @@ export default function Profile() {
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
   const { data: myPosts, isLoading: isLoadingPosts } = useQuery({
     refetchOnWindowFocus: false,
@@ -71,6 +74,11 @@ export default function Profile() {
   const showAvatarModal = () => {
     show();
   };
+
+  const openUpdateDialog = () => {
+    setUpdateDialogOpen(true);
+  };
+
   if (isLoadingPosts) {
     return <CommonLoading />;
   }
@@ -103,20 +111,27 @@ export default function Profile() {
 
           {userInfo && userInfo.id === guestInfor?.id && (
             <>
-              <Button
+              <CommonButton
                 outlined
                 className="border border-gray-95 rounded-lg !p-3"
                 onClick={handleShareProfile}
               >
                 <Share2 size={24} className="text-gray-95" />
-              </Button>
-              <Button
+              </CommonButton>
+              <CommonButton
+                outlined
+                className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
+                onClick={openUpdateDialog}
+              >
+                <Edit size={24} className="text-primary-600" />
+              </CommonButton>
+              <CommonButton
                 outlined
                 className="border border-primary-60 !bg-primary-10 rounded-lg !p-3"
                 onClick={showAvatarModal}
               >
                 <Settings size={24} className="text-primary-600" />
-              </Button>
+              </CommonButton>
             </>
           )}
         </div>
@@ -205,6 +220,12 @@ export default function Profile() {
           {myPosts?.data.length === 0 && <CommonEmptyState />}
         </TabsContent>
       </Tabs>
+
+      {/* Update Information Dialog */}
+      <UpdateInfoDialog
+        open={updateDialogOpen}
+        onOpenChange={setUpdateDialogOpen}
+      />
     </div>
   );
 }

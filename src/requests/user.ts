@@ -39,3 +39,12 @@ export const ReqGetUserRanking = async (query: string = "") => {
   );
   return response.data as StrapiResponse<UserRankingProps[]>;
 };
+
+export const updateUserProfile = async (userData: any) => {
+  try {
+    const response = await tekdojoAxios.put("/users/profile", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

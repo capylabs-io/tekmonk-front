@@ -21,7 +21,7 @@ export const profileFormSchema = z.object({
     .max(100, "Tiêu đề dự án không được vượt quá 100 ký tự"),
 
   // URL is optional but must be a valid URL if provided
-  url: z.string().url("Đường dẫn không hợp lệ").optional().or(z.literal("")),
+  type: z.enum(["normal", "project"]).default("normal"),
 
   // Image is optional but must be valid if provided
   image: z

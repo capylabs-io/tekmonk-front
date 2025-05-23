@@ -175,8 +175,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}
@@ -194,10 +194,10 @@ const Home = () => {
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                // whileHover={{
-                //   scale: 1.01,
-                //   transition: { duration: 0.2 }
-                // }}
+                  // whileHover={{
+                  //   scale: 1.01,
+                  //   transition: { duration: 0.2 }
+                  // }}
                 >
                   <div className="px-8 relative">
                     <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -246,8 +246,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}

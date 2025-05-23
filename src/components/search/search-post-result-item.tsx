@@ -33,6 +33,7 @@ export const SearchPostResultItem = ({
       searchTerm: searchData,
       isVerified: PostVerificationType.ACCEPTED,
     });
+  console.log("data", data);
 
   useEffect(() => {
     if (data) {

@@ -33,6 +33,10 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
     router.push(ROUTE.HISTORY);
   };
 
+  const handleRedirectToProfile = () => {
+    router.push(`${ROUTE.PROFILE}/${userInfo?.id}`);
+  };
+
   return (
     <div className="flex items-center mt-8 w-full xl:justify-between justify-center relative">
       <div className="flex items-center gap-x-2 cursor-pointer hover:text-primary-600">
@@ -60,7 +64,10 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
         </DialogTrigger>
         <DialogContent className=" z-[999] absolute -translate-x-1/2 bottom-[50px] left-1/2 rounded-lg pl-4 bg-white shadow-md flex gap-2 items-center">
           <div>
-            <div className="flex items-center gap-x-2 text-gray-600 hover:text-primary-600">
+            <div
+              className="flex items-center gap-x-2 text-gray-600 hover:text-primary-600"
+              onClick={handleRedirectToProfile}
+            >
               <User size={18} className="" />
               <button className="w-max  font-normal p-4 pl-2">
                 Thay đổi thông tin cá nhân
