@@ -20,6 +20,8 @@ import { ClaimedItem } from "@/types/claimed-item";
 import { BillCard } from "@/components/shop/BillCard";
 import { AuthGuard } from "../hoc/auth-guard";
 import { CommonEmptyState } from "../common/CommonEmptyState";
+import { BannerCard } from "../new/BannerCard";
+import { motion } from "framer-motion";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -93,22 +95,18 @@ export const InventoryContent = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full px-4">
-        <div className="w-full px-4 flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
-          <div className="text-white">
-            <div className={`text-[28px] leading-[44px]`}>KHO ĐỒ CỦA TÔI</div>
-            <div className="text-bodyMd mt-5">
-              Quản lý và sử dụng các vật phẩm bạn đã sở hữu
+      <div className="w-full p-4">
+        <BannerCard className="w-full rounded-3xl h-[250px]" type="shop">
+          <div className="flex flex-col items-center gap-6 z-10 max-w-[300px] text-center">
+            <div className="text-HeadingMd text-gray-10">
+              Làm nhiệm vụ
+              Thu thập điểm
+            </div>
+            <div className="text-center text-SubheadSm text-gray-10">
+              Tuỳ chỉnh hồ sơ cá nhân cùng với các vật phẩm trong cửa hàng
             </div>
           </div>
-          <Image
-            src="/image/recruitment/recruitment-pic.png"
-            alt="left banner"
-            className=""
-            width={222}
-            height={200}
-          />
-        </div>
+        </BannerCard>
       </div>
 
       {/* Tabs */}
@@ -141,13 +139,29 @@ export const InventoryContent = () => {
             {myItems && myItems.data.length > 0 ? (
               <div className="px-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
                 {myItems.data.map((item, index) => (
-                  <CardItem
+                  <motion.div
                     key={index}
-                    image={item.shop_item.image || "/placeholder-image.jpg"}
-                    name={item.shop_item.name || ""}
-                    price={item.shop_item.price || 0}
-                    onClick={() => handleItemClick(item)}
-                  />
+                    className="hover:cursor-pointer py-2"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: "easeOut"
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <CardItem
+                      image={item.shop_item.image || "/placeholder-image.jpg"}
+                      name={item.shop_item.name || ""}
+                      price={item.shop_item.price || 0}
+                      onClick={() => handleItemClick(item)}
+                    />
+                  </motion.div>
+
                 ))}
               </div>
             ) : (
@@ -167,7 +181,23 @@ export const InventoryContent = () => {
               claimedItems.data.length > 0 ? (
               <div className="px-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {claimedItems.data.map((item, index: number) => (
-                  <BillCard key={index} item={item} />
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: "easeOut"
+                    }}
+                    className="hover:cursor-pointer py-2"
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.2 }
+                    }}
+                  >
+                    <BillCard item={item} />
+                  </motion.div>
                 ))}
               </div>
             ) : (

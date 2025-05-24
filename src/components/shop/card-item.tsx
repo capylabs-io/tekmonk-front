@@ -48,14 +48,17 @@ export const CardItem = ({
             />
             <span className="text-SubheadXs text-grey-70">{price}</span>
           </div>
-
-          {quantity !== undefined && quantity <= 0 ? (
-            <div className="text-SubheadXs text-[#B52224]">Hết hàng</div>
-          ) : (
-            <div className="text-SubheadXs text-gray-60">
-              SL: {quantity}
-            </div>
-          )}
+          {
+            quantity && quantity <= 0 ? (
+              <div className="text-SubheadXs text-[#B52224]">Hết hàng</div>
+            ) : quantity && quantity > 0 ? (
+              <div className="text-SubheadXs text-gray-60">
+                SL: {quantity}
+              </div>
+            ) :
+              <>
+              </>
+          }
         </div>
       </div>
     </div>

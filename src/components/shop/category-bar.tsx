@@ -103,7 +103,7 @@ export const CategoryBar = ({
     }
   }, [data]);
   return (
-    <div className={cn("p-4", !isShow && "hidden")}>
+    <div className={cn("px-4", !isShow && "hidden")}>
       <ShopItemCarousel
         items={data?.data || []}
         title={categoryName}

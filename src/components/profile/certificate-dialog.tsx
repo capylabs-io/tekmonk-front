@@ -36,6 +36,7 @@ export const CertificateDialog = ({
   onItemsPerPageChange,
 }: CertificateDialogProps) => {
   // const [certificateHistorySelected, setCertificateHistorySelected] = useState<CertificateHistory | null>(null);
+  console.log('data', data);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,40 +47,42 @@ export const CertificateDialog = ({
 
         {data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {data.map((certificate) => (
-              <CommonCard
-                // onClick={() => {
-                //   setCertificateHistorySelected(certificate);
-                // }}
-                key={certificate.id}
-                className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-[88px] flex items-center gap-2"
-              >
-                <Image
-                  src={get(certificate, "certificate.certificatePdfConfig.backgroundUrl") || ""}
-                  alt={certificate.certificate?.name || "Certificate"}
-                  width={100}
-                  height={100}
-                  className="object-contain"
-                // onError={(e) => {
-                //   e.currentTarget.src = "/image/placeholder.png";
-                // }}
-                />
-                <div className="flex flex-col items-start justify-between h-full w-full text-gray-500 text-sm">
-                  <div className="text-SubheadSm text-gray-95">
-                    {certificate.certificate?.name ||
-                      "Lập trình Python - Lớp Nâng Cao"}
+            {data.map((certificate) => {
+              let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
+              if (imgUrl == null || imgUrl == "") {
+                imgUrl = "/image/app-logox5.png";
+              }
+              return (
+                <CommonCard
+                  key={certificate.id}
+                  className="rounded-xl border border-gray-200 p-4 bg-white shadow-sm h-max flex items-center gap-3"
+                >
+                  <Image
+                    src={imgUrl}
+                    alt="Python"
+                    width={100}
+                    height={100}
+                    className="object-contain"
+                  />
+                  <div className="flex flex-col items-start justify-between h-full w-full text-gray-500 text-sm">
+                    <div className="text-SubheadSm text-gray-95">
+                      {get(certificate, "certificate.name", "")}
+                    </div>
+                    <div className="text-BodyXs text-gray-600">
+                      Tên khoá học: <span className="text-gray-95 font-medium">{get(certificate, "certificate.course.name", "")}</span>
+                    </div>
+                    <div className="flex items-center text-BodyXs text-gray-600">
+                      <span className="mr-1">Hoàn thành:</span>
+                      <span className="">
+                        {certificate.createdAt
+                          ? formatDate(certificate.createdAt)
+                          : "1/2025"}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center text-BodyXs text-gray-600">
-                    <span className="mr-1">Hoàn thành:</span>
-                    <span className="">
-                      {certificate.createdAt
-                        ? formatDate(certificate.createdAt)
-                        : "1/2025"}
-                    </span>
-                  </div>
-                </div>
-              </CommonCard>
-            ))}
+                </CommonCard>
+              );
+            })}
           </div>
         ) : (
           <CommonEmptyState />

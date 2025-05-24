@@ -13,17 +13,20 @@ export const ShopContent = () => {
 
   return (
     <div className="w-full">
-      <BannerCard className="w-full rounded-3xl h-[250px]" type="shop">
-        <div className="flex flex-col items-center gap-6 z-10 max-w-[300px] text-center">
-          <div className="text-HeadingMd text-gray-10">
-            Làm nhiệm vụ
-            Thu thập điểm
+      <div className="w-full p-4">
+        <BannerCard className="w-full rounded-3xl h-[250px]" type="shop">
+          <div className="flex flex-col items-center gap-6 z-10 max-w-[300px] text-center">
+            <div className="text-HeadingMd text-gray-10">
+              Làm nhiệm vụ
+              Thu thập điểm
+            </div>
+            <div className="text-center text-SubheadSm text-gray-10">
+              Tuỳ chỉnh hồ sơ cá nhân cùng với các vật phẩm trong cửa hàng
+            </div>
           </div>
-          <div className="text-center text-SubheadSm text-gray-10">
-            Tuỳ chỉnh hồ sơ cá nhân cùng với các vật phẩm trong cửa hàng
-          </div>
-        </div>
-      </BannerCard>
+        </BannerCard>
+      </div>
+
       {/* <div className="w-full px-4">
         <div className="px-4 w-full flex items-center justify-center gap-x-4 relative bg-[url('/image/recruitment/recruitment-banner.png')] bg-no-repeat bg-center h-[256px] mt-4 max-sm:px-12 sm:px-12 max-lg:px-0 rounded-3xl">
           <div className="text-white">
