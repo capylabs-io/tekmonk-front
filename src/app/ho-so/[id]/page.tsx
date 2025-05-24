@@ -10,7 +10,7 @@ import {
 } from "@/components/common/Tabs";
 import { Post } from "@/components/home/Post";
 import { AchievementProfile } from "@/components/profile/achievement-profile";
-import { CertificateProfile } from "@/components/profile/certificate-proifile";
+import { CertificateProfile } from "@/components/profile/certificate-profile";
 import { MissionProgress } from "@/components/profile/mission-progress";
 import { UserStat } from "@/components/profile/UserStat";
 import { useGetUserQueryById } from "@/hooks/use-user-query";

@@ -97,8 +97,8 @@ export const MissionProgress = ({ id }: { id: number }) => {
           <Image
             src={missions?.data[0]?.imageUrl == "" || missions?.data[0]?.imageUrl == null ? "/image/app-logox2.png" : missions?.data[0]?.imageUrl}
             alt="Mission"
-            width={80}
-            height={80}
+            width={100}
+            height={100}
             className="object-contain flex-none border border-gray-200 rounded-md"
           />
 

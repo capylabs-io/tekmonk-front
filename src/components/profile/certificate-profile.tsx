@@ -93,9 +93,9 @@ export const CertificateProfile = ({ id }: { id: number }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {certificates.data.map((certificate) => {
             let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
-            // if (imgUrl == null) {
-            //   imgUrl = "/image/placeholder.png";
-            // }
+            if (imgUrl == null) {
+              imgUrl = "/image/app-logox5.png";
+            }
             return (
               <CommonCard
                 key={certificate.id}
@@ -133,8 +133,8 @@ export const CertificateProfile = ({ id }: { id: number }) => {
       <CertificateDialog
         open={showCertificateDialog}
         onOpenChange={setShowCertificateDialog}
-        data={certificateHistory?.data || []}
-        totalItems={certificateHistory?.meta.pagination.total || 0}
+        data={certificates?.data || []}
+        totalItems={certificates?.meta.pagination.total || 0}
         currentPage={page}
         itemsPerPage={itemsPerPage}
         onPageChange={(page) => setPage(page)}

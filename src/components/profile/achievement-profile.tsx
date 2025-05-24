@@ -94,18 +94,18 @@ export const AchievementProfile = ({ id }: { id: number }) => {
         </div>
       </div>
       <div className="flex flex-col gap-4 mt-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           {achievements.data.map((achievement) => (
             <CommonCard
               key={achievement.id}
               className="flex flex-col items-center p-4 w-[160px] h-[140px]"
             >
-              <div className="relative w-[100px] h-[100px]">
+              <div className="relative w-[100px] h-[100px] flex items-center justify-center">
                 <Image
-                  src={achievement.achievement?.imageUrl || ""}
+                  src={achievement.achievement?.imageUrl == "" || achievement.achievement?.imageUrl == null ? "/image/app-logox4.png" : achievement.achievement?.imageUrl}
                   alt={achievement.achievement?.title || "Achievement"}
-                  width={80}
-                  height={80}
+                  width={100}
+                  height={100}
                   className="object-contain mx-auto"
                 // onError={(e) => {
                 //   e.currentTarget.src = "/image/placeholder.png";
