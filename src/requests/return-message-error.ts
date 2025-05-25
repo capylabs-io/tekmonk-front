@@ -13,7 +13,7 @@ export const HandleReturnMessgaeErrorAxios = (error: any) => {
     if (data.error.message == "unknown") {
       return "Lỗi không xác định";
     }
-    return "Tài khoản hoặc email đã tồn tại";
+    return data.error.message;
   } else if (error.request) {
     return "Không thể kết nối đến server";
   } else {
@@ -35,7 +35,6 @@ export const HandleReturnMessgaeErrorLogin = (error: any) => {
     return "Lỗi không xác định";
   }
 };
-
 
 /**
  * app_001: username

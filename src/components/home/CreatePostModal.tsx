@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { HandleReturnMessgaeErrorAxios } from "@/requests/return-message-error";
 
 export const CreatePostModal = () => {
   const ReactQuill = useMemo(
@@ -150,7 +151,9 @@ export const CreatePostModal = () => {
       }
     } catch (error) {
       console.log("error", error);
-      showError("Thất bại", "Tạo bài viết Thất bại");
+      const errorMessage = HandleReturnMessgaeErrorAxios(error);
+      console.log("errorMessage", errorMessage);
+      showError("Thất bại", errorMessage);
     } finally {
       hideLoading();
     }
