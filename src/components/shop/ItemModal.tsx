@@ -212,72 +212,96 @@ export const ItemModal = ({
   return (
     <>
       <Dialog open={isShowing} onOpenChange={handleOnclose}>
-        <DialogContent className="w-[440px] rounded-3xl bg-white p-6 overflow-hidden">
+        <DialogContent className="w-[520px] rounded-3xl bg-white p-6 overflow-hidden">
           <DialogHeader>
-            <DialogTitle className="text-HeadingSm text-gray-95">
+            <DialogTitle className="text-HeadingSm text-gray-95 text-center mb-4">
               Thông tin vật phẩm
             </DialogTitle>
           </DialogHeader>
 
-          <Image
-            src={
-              get(itemData, "image", "") !== null
-                ? get(itemData, "image", "")
-                : ""
-            }
-            height={200}
-            width={200}
-            alt="test"
-            className="rounded-xl mx-auto"
-          />
-
-          <div className="flex flex-col gap-y-2">
-            <div className="text-SubheadMd flex items-center gap-x-2">
-              <div className="text-gray-60">Tên:</div>
-              <div className="text-gray-95 max-w-[400px]">{itemData.name}</div>
-            </div>
-            <div className="text-SubheadMd flex items-center gap-x-2">
-              <div className="text-gray-60">Loại:</div>
-              <div className="text-gray-95">{itemData.category?.name}</div>
-            </div>
-            <div className="text-SubheadMd flex items-center gap-x-2">
-              <div className="text-gray-60">Giá:</div>
-              <div className="text-gray-95 flex items-center gap-x-2">
-                {itemData.price}{" "}
+          <div className="flex flex-col gap-6">
+            {/* Image and Basic Info Section */}
+            <div className="flex gap-6">
+              <div className="flex-shrink-0">
                 <Image
-                  src="/image/home/coin.png"
-                  alt="coin"
-                  width={20}
-                  height={20}
+                  src={
+                    get(itemData, "image", "") !== null
+                      ? get(itemData, "image", "")
+                      : ""
+                  }
+                  height={160}
+                  width={160}
+                  alt="test"
+                  className="rounded-xl object-cover"
                 />
               </div>
+
+              <div className="flex-1 flex flex-col gap-3">
+                <div className="text-SubheadMd">
+                  <div className="text-gray-60 text-sm mb-1">Tên vật phẩm</div>
+                  <div className="text-gray-95 font-medium">
+                    {itemData.name}
+                  </div>
+                </div>
+
+                <div className="text-SubheadMd">
+                  <div className="text-gray-60 text-sm mb-1">Loại</div>
+                  <div className="text-gray-95">{itemData.category?.name}</div>
+                </div>
+
+                <div className="text-SubheadMd">
+                  <div className="text-gray-60 text-sm mb-1">
+                    Số lượng trong kho
+                  </div>
+                  <div className="text-gray-95">{itemData.quantity}</div>
+                </div>
+              </div>
             </div>
-            <div className="text-SubheadMd flex items-center gap-x-2">
-              <div className="text-gray-60">Số lượng trong kho:</div>
-              <div className="text-gray-95">{itemData.quantity}</div>
+
+            {/* Price and Purchase Section */}
+            <div className="border-t pt-4">
+              <div className="text-SubheadMd mb-4">
+                <div className="text-gray-60 text-sm mb-2">Giá</div>
+                <div className="text-gray-95 flex items-center gap-2 text-lg font-semibold">
+                  {itemData.price}
+                  <Image
+                    src="/image/home/coin.png"
+                    alt="coin"
+                    width={24}
+                    height={24}
+                  />
+                </div>
+              </div>
+
+              {itemData.type === ShopItemEnum.STATIONERY && (
+                <div className="space-y-4">
+                  <QuantityInput
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                    currentQuantity={itemData.quantity}
+                  />
+
+                  <div className="bg-gray-10 rounded-lg p-4">
+                    <div className="text-SubheadMd flex items-center justify-between">
+                      <span className="text-gray-60">Tổng tiền:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-95 font-bold text-lg">
+                          {totalPrice}
+                        </span>
+                        <Image
+                          src="/image/home/coin.png"
+                          alt="coin"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-          {itemData.type === ShopItemEnum.STATIONERY ? (
-            <>
-              <QuantityInput
-                quantity={quantity}
-                setQuantity={setQuantity}
-                currentQuantity={itemData.quantity}
-              />
-              <div className="text-SubheadMd flex items-center gap-x-2">
-                <div className="text-gray-60">Tổng tiền:</div>
-                <div className="text-gray-95 font-semibold">{totalPrice}</div>
-                <Image
-                  src="/image/home/coin.png"
-                  alt="coin"
-                  width={20}
-                  height={20}
-                />
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
+
           <DialogFooter className="flex justify-between items-center w-full mt-4">
             <div className="w-full items-center justify-between flex">
               <CommonButton variant="secondary" onClick={handleOnclose}>
@@ -285,11 +309,11 @@ export const ItemModal = ({
               </CommonButton>
               <ActionGuard
                 onAction={() => {
-                  handleBuy()
+                  handleBuy();
                 }}
                 actionName="Mua vật phẩm"
               >
-                <CommonButton >Mua vật phẩm</CommonButton>
+                <CommonButton>Mua vật phẩm</CommonButton>
               </ActionGuard>
             </div>
           </DialogFooter>

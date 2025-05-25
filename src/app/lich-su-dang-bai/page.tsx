@@ -56,19 +56,87 @@ const HistoryPage = () => {
   );
 
   const {
-    data: currentPageData,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    refetch,
+    data: acceptedPostsData,
+    isLoading: isLoadingAccepted,
+    fetchNextPage: fetchNextPageAccepted,
+    hasNextPage: hasNextPageAccepted,
+    isFetchingNextPage: isFetchingNextPageAccepted,
+    refetch: refetchAccepted,
   } = useInfiniteLatestPost({
     page: DEFAULT_PAGE,
     limit: DEFAULT_PAGE_SIZE,
-    isVerified: postStatus,
-    type: PostTypeEnum.POST,
+    isVerified: PostVerificationType.ACCEPTED,
     authorId: userInfo?.id,
   });
+
+  const {
+    data: pendingPostsData,
+    isLoading: isLoadingPending,
+    fetchNextPage: fetchNextPagePending,
+    hasNextPage: hasNextPagePending,
+    isFetchingNextPage: isFetchingNextPagePending,
+    refetch: refetchPending,
+  } = useInfiniteLatestPost({
+    page: DEFAULT_PAGE,
+    limit: DEFAULT_PAGE_SIZE,
+    isVerified: PostVerificationType.PENDING,
+    authorId: userInfo?.id,
+  });
+
+  const {
+    data: deniedPostsData,
+    isLoading: isLoadingDenied,
+    fetchNextPage: fetchNextPageDenied,
+    hasNextPage: hasNextPageDenied,
+    isFetchingNextPage: isFetchingNextPageDenied,
+    refetch: refetchDenied,
+  } = useInfiniteLatestPost({
+    page: DEFAULT_PAGE,
+    limit: DEFAULT_PAGE_SIZE,
+    isVerified: PostVerificationType.DENIED,
+    authorId: userInfo?.id,
+  });
+
+  const getCurrentData = () => {
+    switch (postStatus) {
+      case PostVerificationType.ACCEPTED:
+        return {
+          data: acceptedPostsData,
+          isLoading: isLoadingAccepted,
+          fetchNextPage: fetchNextPageAccepted,
+          hasNextPage: hasNextPageAccepted,
+          isFetchingNextPage: isFetchingNextPageAccepted,
+          refetch: refetchAccepted,
+        };
+      case PostVerificationType.PENDING:
+        return {
+          data: pendingPostsData,
+          isLoading: isLoadingPending,
+          fetchNextPage: fetchNextPagePending,
+          hasNextPage: hasNextPagePending,
+          isFetchingNextPage: isFetchingNextPagePending,
+          refetch: refetchPending,
+        };
+      case PostVerificationType.DENIED:
+        return {
+          data: deniedPostsData,
+          isLoading: isLoadingDenied,
+          fetchNextPage: fetchNextPageDenied,
+          hasNextPage: hasNextPageDenied,
+          isFetchingNextPage: isFetchingNextPageDenied,
+          refetch: refetchDenied,
+        };
+      default:
+        return {
+          data: acceptedPostsData,
+          isLoading: isLoadingAccepted,
+          fetchNextPage: fetchNextPageAccepted,
+          hasNextPage: hasNextPageAccepted,
+          isFetchingNextPage: isFetchingNextPageAccepted,
+          refetch: refetchAccepted,
+        };
+    }
+  };
 
   const handleTabChange = (value: string) => {
     setPostStatus(value as PostVerificationType);
@@ -80,6 +148,9 @@ const HistoryPage = () => {
       await likePost({
         postId: get(data, "id"),
       });
+
+      // Refetch based on current tab
+      const { refetch } = getCurrentData();
       refetch();
     } catch (error) {
       console.log("error", error);
@@ -89,10 +160,25 @@ const HistoryPage = () => {
   };
 
   useEffect(() => {
+    const { hasNextPage, fetchNextPage, isFetchingNextPage } = getCurrentData();
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [
+    inView,
+    postStatus,
+    acceptedPostsData,
+    pendingPostsData,
+    deniedPostsData,
+  ]);
+
+  // Get current data based on selected tab
+  const {
+    data: currentPageData,
+    isLoading,
+    hasNextPage,
+    isFetchingNextPage,
+  } = getCurrentData();
 
   // Flatten posts from all pages
   const flattenedPosts =
@@ -142,7 +228,10 @@ const HistoryPage = () => {
                 likedCount={get(item, "likeCount", 0).toString() || "0"}
                 commentCount={get(item, "commentCount", 0).toString() || "0"}
                 onLikedPostClick={handleLikedPostClick}
-                onUpdatePost={refetch}
+                onUpdatePost={() => {
+                  const { refetch } = getCurrentData();
+                  refetch();
+                }}
               />
             </div>
             {index !== flattenedPosts.length - 1 && (
@@ -156,12 +245,25 @@ const HistoryPage = () => {
           {isFetchingNextPage
             ? "Đang tải thêm bài viết..."
             : !hasNextPage && flattenedPosts.length > 0
-              ? ""
-              : ""}
+            ? ""
+            : ""}
         </div>
       </>
     );
   };
+
+  // Get total counts for each tab
+  const pendingTotal = get(
+    pendingPostsData,
+    "pages[0].meta.pagination.total",
+    0
+  );
+  const deniedTotal = get(deniedPostsData, "pages[0].meta.pagination.total", 0);
+  const acceptedTotal = get(
+    acceptedPostsData,
+    "pages[0].meta.pagination.total",
+    0
+  );
 
   return (
     <div className="container mx-auto">
@@ -174,14 +276,14 @@ const HistoryPage = () => {
         onValueChange={handleTabChange}
       >
         <TabsList className="w-full border-b border-gray-200">
-          <TabsTrigger value={PostVerificationType.ACCEPTED }>
-            Bài đã được chấp nhận
+          <TabsTrigger value={PostVerificationType.ACCEPTED}>
+            Bài đã được chấp nhận ({acceptedTotal})
           </TabsTrigger>
           <TabsTrigger value={PostVerificationType.PENDING}>
-            Bài đang chờ duyệt ({get(currentPageData, "meta.pagination.total") || 0})
+            Bài đang chờ duyệt ({pendingTotal})
           </TabsTrigger>
           <TabsTrigger value={PostVerificationType.DENIED}>
-            Bài đã bị từ chối
+            Bài đã bị từ chối ({deniedTotal})
           </TabsTrigger>
         </TabsList>
 

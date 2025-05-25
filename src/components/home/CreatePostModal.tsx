@@ -22,6 +22,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { FileUpload } from "../file-upload/file-upload";
+import { ZipFileUpload } from "../file-upload/zip-file-upload";
 import {
   Select,
   SelectContent,
@@ -29,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+
 export const CreatePostModal = () => {
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
@@ -56,8 +58,14 @@ export const CreatePostModal = () => {
       image: [],
       tags: "",
       content: "",
+      projectFile: undefined,
+      projectLink: "",
     },
   });
+
+  // Watch the type field to conditionally render project fields
+  const postType = method.watch("type");
+
   const modules = {
     toolbar: [
       [{ list: "ordered" }, { list: "bullet" }],
@@ -86,13 +94,16 @@ export const CreatePostModal = () => {
   } = method;
   const appendFormData = (formData: FormData, data: any, parentKey = "") => {
     Object.entries(data).forEach(([key, value]) => {
-      if (
-        value === null ||
-        value === undefined ||
-        value === "" ||
-        value instanceof File
-      )
-        return; // Skip empty values
+      // Skip null, undefined, empty strings, but not Files
+      if (value === null || value === undefined || value === "") {
+        return;
+      }
+
+      // Skip File objects here as they need special handling
+      if (value instanceof File) {
+        return;
+      }
+
       const newKey = parentKey ? `${parentKey}[${key}]` : key;
       if (
         typeof value === "object" &&
@@ -116,13 +127,25 @@ export const CreatePostModal = () => {
           formData.append("images", file);
         });
       }
+      // Handle project file for project type posts
+      if (data.type === "project" && data.projectFile) {
+        formData.append("projectFile", data.projectFile);
+      }
       const res = await uploadPost(formData);
       if (res) {
         showSuccess(
           "Thành công",
           "Đăng tải bài viết thành công, vui lòng chờ duyệt"
         );
-        reset();
+        reset({
+          name: "",
+          type: "normal",
+          image: [],
+          tags: "",
+          content: "",
+          projectFile: undefined,
+          projectLink: "",
+        });
         hide();
       }
     } catch (error) {
@@ -265,6 +288,57 @@ export const CreatePostModal = () => {
                       )}
                     />
                   </div>
+
+                  {/* Project-specific fields - only show when type is "project" */}
+                  {postType === "project" && (
+                    <>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-60 text-SubheadMd">
+                          Link dự án
+                        </span>
+                        <div className="flex flex-col w-[424px]">
+                          <Controller
+                            control={control}
+                            name="projectLink"
+                            render={({ field: { value, onChange } }) => (
+                              <Input
+                                value={value || ""}
+                                onChange={(e) => onChange(e)}
+                                type="url"
+                                placeholder="https://github.com/username/project"
+                                customClassNames="max-w-[424px]"
+                                customInputClassNames="text-sm"
+                              />
+                            )}
+                          />
+                          {errors.projectLink && (
+                            <span className="text-red-500 text-xs mt-1">
+                              {errors.projectLink.message}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-y-2 justify-between text-sm">
+                        <span className="text-gray-60">Tệp dự án (ZIP)</span>
+                        <Controller
+                          control={control}
+                          name="projectFile"
+                          render={({
+                            field: { value, onChange },
+                            fieldState,
+                          }) => (
+                            <ZipFileUpload
+                              value={value || null}
+                              onChange={onChange}
+                              error={fieldState?.error?.message}
+                            />
+                          )}
+                        />
+                      </div>
+                    </>
+                  )}
+
                   <div className="flex flex-col gap-y-2 justify-between text-sm">
                     <span className="text-gray-60">Hình ảnh</span>
                     {/* Chnage with multiple files upload here */}

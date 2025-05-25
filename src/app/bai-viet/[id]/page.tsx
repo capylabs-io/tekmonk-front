@@ -189,9 +189,9 @@ export default function Page({ params }: { params: { id: number } }) {
             ) as User[],
             postedBy: get(postData, "postedBy.data")
               ? ({
-                ...get(postData, "postedBy.data.attributes", {}),
-                id: get(postData, "postedBy.data.id"),
-              } as unknown as User)
+                  ...get(postData, "postedBy.data.attributes", {}),
+                  id: get(postData, "postedBy.data.id"),
+                } as unknown as User)
               : null,
           }}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"
@@ -201,14 +201,11 @@ export default function Page({ params }: { params: { id: number } }) {
             userInfo?.username ||
             "User"
           }
-          specialName={get(postData, "postedBy.skills", "")}
-          userRank={
-            <span
-              className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-            >
-              IV
-            </span>
-          }
+          specialName={get(
+            postData,
+            "postedBy.data.attributes.specialName",
+            ""
+          )}
           taggedUsers={
             get(postData, "tagged_users.data", []).map((user: User) => {
               return { ...get(user, "attributes", {}), id: get(user, "id") };

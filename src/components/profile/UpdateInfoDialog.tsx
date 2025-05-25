@@ -4,18 +4,17 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UpdateInfoStep1 } from "@/components/cap-nhat-thong-tin/Step1";
-import { UpdateInfoStep2 } from "@/components/cap-nhat-thong-tin/Step2";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/UserStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useSnackbarStore } from "@/store/SnackbarStore";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogClose,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
@@ -26,6 +25,10 @@ import {
 import { updateUserProfile } from "@/requests/user";
 import { useQueryClient } from "@tanstack/react-query";
 import { last } from "lodash";
+import { handleConfettiClick } from "@/contants/confetti";
+import { AchievementLottie } from "@/components/lottie/achievement";
+import { CheckCircle2 } from "lucide-react";
+import { CommonButton } from "../common/button/CommonButton";
 
 interface UpdateInfoDialogProps {
   open: boolean;
@@ -36,6 +39,8 @@ export const UpdateInfoDialog = ({
   open,
   onOpenChange,
 }: UpdateInfoDialogProps) => {
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
   const [user, getMe, setIsUpdated] = useUserStore((state) => [
     state.userInfo,
     state.getMe,
@@ -106,8 +111,11 @@ export const UpdateInfoDialog = ({
       // Refresh user data to update the isUpdated status
       await getMe();
 
-      // Close dialog and notify parent component of successful update
-      onOpenChange(true);
+      // Show success dialog and trigger confetti
+      setShowSuccessDialog(true);
+      handleConfettiClick();
+
+      // Update the user store
       setIsUpdated(true);
     } catch (err) {
       error("Lỗi", "Có lỗi xảy ra khi cập nhật thông tin");
@@ -121,47 +129,86 @@ export const UpdateInfoDialog = ({
     onOpenChange(false);
   };
 
+  const handleSuccessDialogClose = () => {
+    setShowSuccessDialog(false);
+    onOpenChange(true);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-gray-900">
-            Cập nhật thông tin cá nhân
-          </DialogTitle>
-        </DialogHeader>
+    <>
+      <Dialog open={open && !showSuccessDialog} onOpenChange={handleClose}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-gray-900">
+              Cập nhật thông tin cá nhân
+            </DialogTitle>
+          </DialogHeader>
 
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <Tabs defaultValue="personal" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="personal">Thông tin cá nhân</TabsTrigger>
-                <TabsTrigger value="account">Thông tin tài khoản</TabsTrigger>
-              </TabsList>
-              <TabsContent value="personal" className="mt-6">
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="mt-6">
                 <UpdateInfoStep1 />
-              </TabsContent>
-              <TabsContent value="account" className="mt-6">
-                <UpdateInfoStep2 />
-              </TabsContent>
-            </Tabs>
+              </div>
 
-            <div className="flex justify-end gap-4">
-              <DialogClose asChild>
-                <Button type="button" variant="outline">
-                  Hủy
+              <div className="flex justify-end gap-4">
+                <DialogClose asChild>
+                  <Button type="button" variant="outline">
+                    Hủy
+                  </Button>
+                </DialogClose>
+                <Button
+                  type="submit"
+                  className="bg-primary-600 hover:bg-primary-700 text-white"
+                  disabled={isShowing || !methods.formState.isValid}
+                >
+                  {isShowing ? "Đang cập nhật..." : "Cập nhật thông tin"}
                 </Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                className="bg-primary-600 hover:bg-primary-700 text-white"
-                disabled={isShowing || !methods.formState.isValid}
-              >
-                {isShowing ? "Đang cập nhật..." : "Cập nhật thông tin"}
-              </Button>
+              </div>
+            </form>
+          </FormProvider>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader className="pb-2">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary-100 mb-4">
+              <AchievementLottie className="h-16 w-16" />
             </div>
-          </form>
-        </FormProvider>
-      </DialogContent>
-    </Dialog>
+            <DialogTitle className="text-xl font-semibold text-gray-900 text-center">
+              Chúc mừng! 🎉
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 text-center">
+              Bạn đã cập nhật thông tin cá nhân thành công!
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-3">
+            <div className="flex items-start gap-3 p-4 rounded-md border">
+              <CheckCircle2 className="h-5 w-5 text-primary-600 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium">
+                  Thông tin đã được cập nhật
+                </p>
+                <p className="text-primary-600 text-sm">
+                  Bạn đã nhận được 100 điểm kinh nghiệm và mở khóa huy hiệu đặc
+                  biệt!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center pt-2">
+            <CommonButton
+              onClick={handleSuccessDialogClose}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              Tuyệt vời!
+            </CommonButton>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

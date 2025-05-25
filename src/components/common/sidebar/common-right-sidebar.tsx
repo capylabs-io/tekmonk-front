@@ -72,13 +72,13 @@ export const CommonRightSidebar = () => {
               <EventList />
             </div>
           </div>
-          <Image
+          {/* <Image
             src="/image/home/banner-layout.png"
             alt="Banner"
             width={300}
             height={300}
             className="w-full rounded-2xl object-contain"
-          />
+          /> */}
         </div>
       );
     default:

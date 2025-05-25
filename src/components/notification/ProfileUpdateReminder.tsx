@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { Button } from "../common/button/Button";
 import { CommonButton } from "../common/button/CommonButton";
 import { ReqGetAchievementHistory } from "@/requests/achievement-history";
+import { AchievementLottie } from "../lottie/achievement";
 import qs from "qs";
 
 interface ProfileUpdateReminderProps {
@@ -77,8 +78,8 @@ export const ProfileUpdateReminder = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md bg-white">
         <DialogHeader className="pb-2">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 mb-2">
-            <Trophy className="h-6 w-6 text-amber-600" />
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-2">
+            <AchievementLottie className="h-full w-full" />
           </div>
           <DialogTitle className="text-xl font-semibold text-gray-900 text-center">
             Nhiệm vụ đặc biệt

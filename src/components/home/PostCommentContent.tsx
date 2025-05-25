@@ -21,12 +21,14 @@ type Props = {
   imageUrl?: string;
   postId?: number;
   onUpdateComment?: () => void;
+  maxWords?: number; // Maximum number of words allowed
 };
 
 export const PostCommentContent = ({
   imageUrl,
   postId,
   onUpdateComment,
+  maxWords = 100, // Default limit of 100 words
 }: Props) => {
   const [text, setText] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -49,6 +51,24 @@ export const PostCommentContent = ({
     limit: 2,
     postId: postId,
   });
+
+  // Function to count words (excluding emojis)
+  const countWords = (text: string): number => {
+    if (!text.trim()) return 0;
+
+    // Simple approach: split by whitespace and filter out empty strings
+    // This will count emojis as words, but it's a simpler and more reliable approach
+    const words = text
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
+    return words.length;
+  };
+
+  // Get current word count
+  const currentWordCount = countWords(text);
+  const isOverLimit = currentWordCount > maxWords;
+  const isAtLimit = currentWordCount === maxWords;
 
   // Load more comments when the user scrolls to the bottom
   useEffect(() => {
@@ -74,17 +94,48 @@ export const PostCommentContent = ({
     };
   }, []);
 
+  const handleTextChange = (newText: string) => {
+    // Check if adding this text would exceed the word limit
+    const newWordCount = countWords(newText);
+
+    if (newWordCount <= maxWords) {
+      setText(newText);
+    } else {
+      // If over limit, show warning but don't update text
+      error("Giới hạn từ", `Bình luận không được vượt quá ${maxWords} từ`);
+    }
+  };
+
   const handleSend = async () => {
     try {
       showLoading();
-      if (containsForbiddenWords(text)) {
-        error("Lỗi", "Nội dung bình luận không hợp lệ");
+
+      // Validate text is not empty
+      if (!text.trim()) {
+        error("Lỗi", "Nội dung bình luận không được để trống");
         return;
       }
+
+      // Check word limit
+      if (isOverLimit) {
+        error("Giới hạn từ", `Bình luận không được vượt quá ${maxWords} từ`);
+        return;
+      }
+
+      // Check for forbidden words
+      if (containsForbiddenWords(text)) {
+        error(
+          "Nội dung không phù hợp",
+          "Bình luận chứa từ ngữ không được phép"
+        );
+        return;
+      }
+
       const res = await addCommentPost({
         content: text,
         postId: Number(postId),
       });
+
       if (res) {
         success("Thành công", "Đã thêm bình luận");
         setText("");
@@ -94,14 +145,15 @@ export const PostCommentContent = ({
       error("Lỗi", "Đã xảy ra lỗi khi thêm bình luận");
     } finally {
       hideLoading();
-      setText("");
       refetchListPostComment();
       onUpdateComment?.();
     }
   };
 
   const handleEmojiSelect = (emoji: any) => {
-    setText((prev) => prev + emoji.native);
+    const newText = text + emoji.native;
+    // Emojis don't count towards word limit, so we can add them freely
+    setText(newText);
     setShowEmojiPicker(false);
   };
 
@@ -123,10 +175,10 @@ export const PostCommentContent = ({
           <div className="relative flex h-auto w-full items-center justify-center">
             <textarea
               value={text}
-              placeholder="Viết bình luận"
+              placeholder={`Viết bình luận (tối đa ${maxWords} từ)`}
               className="text-black min-h-10 min-w-0 flex-1 resize-none rounded-md bg-transparent px-3 pt-2 outline-none placeholder:text-gray-40"
               onChange={(e) => {
-                setText(e.target.value);
+                handleTextChange(e.target.value);
                 // Auto resize the textarea
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -158,18 +210,35 @@ export const PostCommentContent = ({
               </div>
             )}
           </div>
+
+          {/* Word count and controls */}
           <div className="flex items-center justify-between gap-2 w-full">
-            <button
-              className="rounded-full h-9 w-9 hover:bg-gray-100 items-center justify-center flex"
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            >
-              <Smile size={18} className="text-gray-500" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                className="rounded-full h-9 w-9 hover:bg-gray-100 items-center justify-center flex"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                <Smile size={18} className="text-gray-500" />
+              </button>
+
+              {/* Word count indicator */}
+              <span
+                className={`text-xs ${
+                  isOverLimit
+                    ? "text-red-500"
+                    : isAtLimit
+                    ? "text-yellow-500"
+                    : "text-gray-500"
+                }`}
+              >
+                {currentWordCount}/{maxWords}
+              </span>
+            </div>
 
             <Button
               className="!rounded-lg p-0 h-8 w-10"
               onClick={handleSend}
-              disabled={text.length === 0}
+              disabled={text.length === 0 || isOverLimit}
             >
               <Send size={18} />
             </Button>

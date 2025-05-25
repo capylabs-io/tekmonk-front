@@ -118,11 +118,6 @@ export default function Profile() {
             <span className="text-xl font-bold text-primary-950">
               {guestInfor?.username}
             </span>
-            <span
-              className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-            >
-              {get(guestInfor, "userRank")}
-            </span>
           </div>
           <div className="text-base text-primary-950">
             {get(guestInfor, "specialName")}
@@ -143,13 +138,13 @@ export default function Profile() {
 
           {userInfo && userInfo.id === guestInfor?.id && (
             <>
-              <CommonButton
+              {/* <CommonButton
                 outlined
                 className="border-2 border-primary-60 !bg-primary-10 rounded-lg w-10 h-10"
                 onClick={showAvatarModal}
               >
                 <Settings size={24} className="text-primary-600" />
-              </CommonButton>
+              </CommonButton> */}
               <CommonButton
                 outlined
                 className="border-2 w-10 border-primary-60 !bg-primary-10 rounded-lg h-10"
@@ -225,14 +220,7 @@ export default function Profile() {
                     imageUrl="bg-[url('/image/home/profile-pic.png')]"
                     thumbnailUrl={get(item, "thumbnail") || ""}
                     userName={guestInfor?.username || "User"}
-                    specialName={get(item, "postedBy.skills", "")}
-                    userRank={
-                      <span
-                        className={`bg-[url('/image/user/silver-rank.png')] bg-no-repeat h-6 w-6 flex flex-col items-center justify-center text-xs`}
-                      >
-                        IV
-                      </span>
-                    }
+                    specialName={get(item, "postedBy.specialName", "")}
                     postContent={get(item, "content", "")}
                     postName={get(item, "name", "")}
                     createdAt={moment(get(item, "createdAt", ""))
