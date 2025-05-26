@@ -18,6 +18,8 @@ export type PostType = {
   images?: {
     url: string;
   }[];
+  projectFile?: string;
+  projectLink?: string;
   type?: PostTypeEnum;
 };
 

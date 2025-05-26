@@ -30,6 +30,7 @@ import { ActionGuard } from "../common/ActionGuard";
 import { motion } from "framer-motion";
 import { PostImageGallery } from "./post-detail";
 import { useQueryClient } from "@tanstack/react-query";
+import { ProjectResources } from "./ProjectResources";
 
 export type PostProps = {
   data?: PostType | null;
@@ -472,6 +473,11 @@ export const Post = ({
               )}
             </div>
           </div>
+          {/* Project Resources */}
+          <ProjectResources
+            projectFile={data?.projectFile}
+            projectLink={data?.projectLink}
+          />
 
           {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
           {showCommentInput && isDetail && (

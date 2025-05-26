@@ -34,10 +34,23 @@ export const getListPostCustom = async (query?: any) => {
 export const uploadPost = async (data: any) => {
   const response = await tekdojoAxios.post(`${BASE_URL}/posts`, data, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
   return response.data;
+};
+
+export const uploadFile = async (data: any) => {
+  const response = await tekdojoAxios.post(
+    `${BASE_URL}/posts/upload-file`,
+    data,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return response.data as string;
 };
 
 export const joinWaitList = async (data: any) => {
