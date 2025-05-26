@@ -1,9 +1,14 @@
+"use client";
 import classNames from "classnames";
-import { Check, Dot, MoreHorizontal } from "lucide-react";
-import React from "react";
-import { NotificationStatus, TNotification } from "@/types/notification";
+import { Check } from "lucide-react";
+import {
+  NotificationStatus,
+  NotificationType,
+  TNotification,
+} from "@/types/notification";
 import { formatDistanceToNow } from "date-fns";
 import { vi } from "date-fns/locale";
+import { LikeCommentNotification } from "./LikeCommentNotification";
 
 type Props = {
   notification: TNotification;
@@ -12,6 +17,13 @@ type Props = {
 
 export const NotiCard = ({ notification, onClick }: Props) => {
   const { isRead, actor, type, createdAt, status } = notification;
+
+  // Use specialized component for like and comment notifications
+  if (type === NotificationType.LIKE || type === NotificationType.COMMENT) {
+    return (
+      <LikeCommentNotification notification={notification} onClick={onClick} />
+    );
+  }
 
   const handleClick = () => {
     // if already read, do nothing
@@ -24,21 +36,17 @@ export const NotiCard = ({ notification, onClick }: Props) => {
 
   const getNotificationTitle = () => {
     switch (type) {
-      case "postCreated":
+      case NotificationType.POST_CREATED:
         return "đã tạo thành công bài viết của bạn";
-      case "postAccepted":
+      case NotificationType.POST_ACCEPTED:
         return "bài viết của bạn đã được chấp thuận";
-      case "postDenied":
+      case NotificationType.POST_DENIED:
         return "bài viết của bạn đã bị từ chối";
-      case "like":
-        return "đã thích bài viết của bạn";
-      case "comment":
-        return "đã bình luận bài viết của bạn";
-      case "achievement":
+      case NotificationType.ACHIEVEMENT:
         return "bạn đã đạt được thành tích mới";
-      case "mission":
+      case NotificationType.MISSION:
         return "bạn có nhiệm vụ mới";
-      case "exchangeItems":
+      case NotificationType.EXCHANGE_ITEMS:
         return "giao dịch đã được xử lý";
       default:
         return "có thông báo mới";

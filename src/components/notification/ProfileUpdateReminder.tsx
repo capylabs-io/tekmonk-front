@@ -9,9 +9,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useUserStore } from "@/store/UserStore";
-import { CheckCircle2, Edit, Gift, Medal, Star, Trophy } from "lucide-react";
+import { Edit, Gift, Medal, Star } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Button } from "../common/button/Button";
 import { CommonButton } from "../common/button/CommonButton";
 import { ReqGetAchievementHistory } from "@/requests/achievement-history";
 import { AchievementLottie } from "../lottie/achievement";
@@ -78,9 +77,7 @@ export const ProfileUpdateReminder = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-md bg-white">
         <DialogHeader className="pb-2">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 mb-2">
-            <AchievementLottie className="h-full w-full" />
-          </div>
+          <AchievementLottie className="h-32 aspect-auto w-32 mx-auto bg-amber-100 rounded-full" />
           <DialogTitle className="text-xl font-semibold text-gray-900 text-center">
             Nhiệm vụ đặc biệt
           </DialogTitle>
