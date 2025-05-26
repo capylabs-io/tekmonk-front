@@ -133,12 +133,13 @@ export const UploadProgressModal: React.FC<UploadProgressModalProps> = ({
             {items.map((item) => (
               <div
                 key={item.id}
-                ref={(el) => (itemRefs.current[item.id] = el)}
-                className={`border rounded-lg p-4 transition-all duration-300 ${
-                  item.status === "uploading"
-                    ? "border-blue-300 bg-blue-50 shadow-md"
-                    : "border-gray-200"
-                }`}
+                ref={(el) => {
+                  itemRefs.current[item.id] = el;
+                }}
+                className={`border rounded-lg p-4 transition-all duration-300 ${item.status === "uploading"
+                  ? "border-blue-300 bg-blue-50 shadow-md"
+                  : "border-gray-200"
+                  }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-3">
