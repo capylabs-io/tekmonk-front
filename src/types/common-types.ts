@@ -311,6 +311,7 @@ export type ClassSessionDetail = {
   id: number;
   class_session?: ClassSession;
   student?: User;
+  class?: Class;
   attendance: boolean;
   discuss: boolean;
   homeworkDone: boolean;

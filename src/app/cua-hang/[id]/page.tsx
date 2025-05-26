@@ -163,6 +163,7 @@ export default function ShopItemDetail() {
 
         {itemData && (
           <ItemModal
+            userInfo={userInfo}
             itemData={itemData}
             claimedItem={claimedItem}
             isShowing={openModal}

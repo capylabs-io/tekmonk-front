@@ -49,7 +49,6 @@ export function TitleSelectModal({
           },
         });
         const res = await ReqGetAchievementHistory(queryString);
-        console.log("achievement history ", res);
         return res;
       } catch (err) {
         console.log("Error ", err);
@@ -73,7 +72,7 @@ export function TitleSelectModal({
   };
 
   return (
-    open && ( 
+    open && (
       <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
         <div
           className="max-w-[480px] w-full rounded-2xl bg-gray-00 p-6 border-2 border-gray-30"

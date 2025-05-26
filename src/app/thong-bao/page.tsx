@@ -16,6 +16,9 @@ import { useUserStore } from "@/store/UserStore";
 import { TNotification } from "@/types/notification";
 import { Button } from "@/components/common/button/Button";
 import { RefreshCw } from "lucide-react";
+import { EmptyState } from "@/components/lottie/EmptyState";
+import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { CommonLoading } from "@/components/common/CommonLoading";
 
 export default function Notification() {
   const userInfo = useUserStore((state) => state.userInfo);
@@ -83,8 +86,8 @@ export default function Notification() {
 
     if (notifications.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-8 text-gray-500">
-          <p>Không có thông báo nào</p>
+        <div className="flex flex-col items-center justify-center py-8 ">
+          <CommonEmptyState />
         </div>
       );
     }
@@ -120,8 +123,7 @@ export default function Notification() {
             >
               {isFetchingNextPage ? (
                 <>
-                  <RefreshCw className="h-4 w-4 animate-spin" />
-                  Đang tải...
+                  <CommonLoading />
                 </>
               ) : (
                 "Tải thêm"

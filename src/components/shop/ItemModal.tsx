@@ -20,7 +20,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ClaimedItem } from "@/types/claimed-item";
 import { Copy, CheckCircle } from "lucide-react";
 import { ActionGuard } from "../common/ActionGuard";
+import { User } from "@/types/common-types";
 type Props = {
+  userInfo?: User | null;
   itemData: ShopItem;
   isShowing: boolean;
   claimedItem?: ClaimedItem;
@@ -187,6 +189,7 @@ export const ItemModal = ({
   showSuccessDialog,
   setShowSuccessDialog,
   claimedItem,
+  userInfo,
 }: Props) => {
   const [quantity, setQuantity] = useState(1);
   const totalPrice = itemData.price ? itemData.price * quantity : 1 * quantity;
@@ -283,10 +286,48 @@ export const ItemModal = ({
 
                   <div className="bg-gray-10 rounded-lg p-4">
                     <div className="text-SubheadMd flex items-center justify-between">
-                      <span className="text-gray-60">Tổng tiền:</span>
+                      <span className="text-gray-60">Tiền trong tài khoản:</span>
                       <div className="flex items-center gap-2">
                         <span className="text-gray-95 font-bold text-lg">
-                          {totalPrice}
+                          {
+                            Number(userInfo?.balance) - totalPrice > 0
+                              ? Number(userInfo?.balance)
+                              : 0
+                          }
+                        </span>
+                        <Image
+                          src="/image/home/coin.png"
+                          alt="coin"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                    <div className="text-SubheadMd flex items-center justify-between">
+                      <span className="text-gray-60">Tổng tiền phải trả:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-lg text-red-500">
+                          {
+                            -  totalPrice
+                          }
+                        </span>
+                        <Image
+                          src="/image/home/coin.png"
+                          alt="coin"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
+                    </div>
+                    <div className="text-SubheadMd flex items-center justify-between">
+                      <span className="text-gray-60">Số tiền còn lại:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-gray-95 font-bold text-lg">
+                          {
+                            Number(userInfo?.balance) - totalPrice > 0
+                              ? Number(userInfo?.balance) - totalPrice
+                              : 0
+                          }
                         </span>
                         <Image
                           src="/image/home/coin.png"
