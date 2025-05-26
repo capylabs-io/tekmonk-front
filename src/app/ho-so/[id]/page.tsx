@@ -34,6 +34,7 @@ import { UpdateInfoDialog } from "@/components/profile/UpdateInfoDialog";
 import { TitleSelectModal } from "@/components/profile/TitleSelectModal";
 import { ReqUpdateUser } from "@/requests/user";
 import Image from "next/image";
+import { StudentClass } from "@/components/profile/student-class";
 
 export default function Profile() {
   const { id } = useParams();
@@ -173,6 +174,8 @@ export default function Profile() {
             <div className="text-primary-900">THÔNG SỐ CHUNG</div>
             <UserStat id={guestInfor?.id} />
           </div>
+          <hr className="border-t border-gray-200 my-4" />
+          <StudentClass id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />
           <MissionProgress id={guestInfor?.id} />
           <hr className="border-t border-gray-200 my-4" />

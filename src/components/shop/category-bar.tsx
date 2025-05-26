@@ -116,6 +116,7 @@ export const CategoryBar = ({
 
       {itemData && (
         <ItemModal
+          userInfo={userInfo}
           itemData={itemData}
           isShowing={openModal}
           close={() => setOpenModal(false)}
