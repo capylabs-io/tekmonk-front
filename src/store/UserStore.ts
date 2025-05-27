@@ -1,6 +1,5 @@
-import tekdojoAxios from "@/requests/axios.config";
-import { postLogin, getMe, postRegister } from "@/requests/login";
-import { Certificate, ContestGroupStage, User } from "@/types/common-types";
+import { postLogin, getMe, ReqRegister } from "@/requests/login";
+import { Certificate, User } from "@/types/common-types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -13,6 +12,7 @@ type State = {
   candidateNumber: string | null;
   codeCombatId: string | null;
   isSubmitted: boolean;
+  isUpdated: boolean | null;
 };
 
 type Actions = {
@@ -23,6 +23,7 @@ type Actions = {
   isConnected: () => boolean;
   setRefreshToken: (refreshToken: string) => void;
   setJwt: (jwt: string) => void;
+  setIsUpdated: (data: boolean) => void;
 };
 
 // Khởi tạo giá trị mặc định cho state
@@ -34,6 +35,7 @@ const defaultStates: State = {
   candidateNumber: null,
   codeCombatId: null,
   isSubmitted: false,
+  isUpdated: null,
 };
 
 // Tạo store sử dụng Zustand
@@ -51,14 +53,11 @@ export const useUserStore = create<State & Actions>()(
           jwt: response.jwt,
           refreshToken: response.refreshToken,
           userInfo: response.user,
-          candidateNumber: response?.candidateNumber,
-          codeCombatId: response?.codeCombatId,
-          isSubmitted: response?.isSubmitted,
         });
         return response.user;
       },
       register: async (body) => {
-        const response = await postRegister(body);
+        const response = await ReqRegister(body);
         if (!response) {
           return;
         }
@@ -90,6 +89,9 @@ export const useUserStore = create<State & Actions>()(
       },
       setJwt: (jwt) => {
         set({ jwt: jwt });
+      },
+      setIsUpdated: (data: boolean) => {
+        set({ isUpdated: data });
       },
     }),
     { name: "userStore" }

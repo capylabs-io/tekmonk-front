@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { CardContest } from "../common/CardContest";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/store/UserStore";
 import { Link as LinkToScroll } from "react-scroll";
@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { CONTEST_QUESTION_AND_ANSWER } from "@/contants/contest/tekmonk";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 type StateTime = {
   started: boolean;
@@ -25,7 +26,7 @@ type StateTime = {
 };
 
 const Clock = ({ contestData }: { contestData: Contest }) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   //ENV
   const is_show_full = process.env.NEXT_PUBLIC_SHOW_FULL_CONTEST == "true";
 
@@ -135,8 +136,7 @@ const Clock = ({ contestData }: { contestData: Contest }) => {
             groupStage && <GroupStageDialog groupStageData={groupStage} />
           )} */}
           {groupStage && <GroupStageDialog groupStageData={groupStage} />}
-          
-          
+
           <LinkToScroll to="rules" smooth={true} duration={500}>
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] border border-gray-200 shadow-custom-gray text-SubheadLg 

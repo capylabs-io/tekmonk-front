@@ -1,30 +1,32 @@
-import React, { forwardRef, useMemo } from 'react'
-import { Controller } from 'react-hook-form'
-import { Input } from '@/components/contest/Input'
-import 'react-quill/dist/quill.snow.css'
-import dynamic from 'next/dynamic'
-import { Info } from 'lucide-react'
+import React, { forwardRef, useMemo } from "react";
+import { Controller } from "react-hook-form";
+import "react-quill/dist/quill.snow.css";
+import dynamic from "next/dynamic";
+import { Info } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
-} from '../ui/tooltip'
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { Input } from "../common/Input";
 
 type Props = {
-  title: string
-  value?: string
-  type: 'text' | 'text-area'
-  customInputClassNames?: string
-  customClassNames?: string
-  error?: string // Added error prop
-  placeholder?: string
-  name?: string
-  control?: any // Added control prop for react-hook-form
-  isRequired?: boolean
-  isTooltip?: boolean
-  tooltipContent?: string
-}
+  title: string;
+  value?: string;
+  type: "text" | "text-area";
+  customInputClassNames?: string;
+  customClassNames?: string;
+  error?: string;
+  placeholder?: string;
+  name?: string;
+  control?: any;
+  isRequired?: boolean;
+  isTooltip?: boolean;
+  tooltipContent?: string;
+  onChange?: (e: any) => void;
+  props?: any;
+};
 
 export const InputField = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
@@ -34,43 +36,45 @@ export const InputField = forwardRef<
     {
       title,
       value,
-      error, // Added error handling
-      type = 'text',
-      control, // Use control from react-hook-form
+      error,
+      type = "text",
+      control,
       placeholder,
       isRequired,
-      name = '',
+      name = "",
       customInputClassNames,
       customClassNames,
       isTooltip = false,
-      tooltipContent
+      tooltipContent,
+      onChange,
+      ...props
     },
-    ref // Forwarded ref
+    ref
   ) => {
     const ReactQuill = useMemo(
-      () => dynamic(() => import('react-quill'), { ssr: false }),
+      () => dynamic(() => import("react-quill"), { ssr: false }),
       []
-    )
+    );
 
     const modules = {
       toolbar: [
-        [{ list: 'ordered' }, { list: 'bullet' }], // Hỗ trợ bullet và numbered lists
-        ['bold', 'italic', 'underline'],
+        [{ list: "ordered" }, { list: "bullet" }], // Hỗ trợ bullet và numbered lists
+        ["bold", "italic", "underline"],
         [{ header: [1, 2, 3, false] }],
-        ['link', 'image']
-      ]
-    }
+        ["link", "image"],
+      ],
+    };
     const formats = [
-      'list', // Bao gồm cả 'ordered' và 'bullet'
-      'bullet',
-      'ordered',
-      'bold',
-      'italic',
-      'underline',
-      'header',
-      'link',
-      'image'
-    ]
+      "list", // Bao gồm cả 'ordered' và 'bullet'
+      "bullet",
+      "ordered",
+      "bold",
+      "italic",
+      "underline",
+      "header",
+      "link",
+      "image",
+    ];
 
     return (
       <TooltipProvider>
@@ -79,7 +83,7 @@ export const InputField = forwardRef<
         >
           <label
             htmlFor={name}
-            className="text-SubheadSm text-primary-950 w-1/4 flex item-center gap-x-1"
+            className="text-SubheadSm text-gray-60 w-1/4 flex item-center gap-x-1"
           >
             {title}
             {isTooltip ? (
@@ -89,7 +93,7 @@ export const InputField = forwardRef<
                     <Info
                       size={14}
                       className={`mt-0.5`}
-                      color={`${isRequired ? '#f70000' : '#0000f7'}`}
+                      color={`${isRequired ? "#f70000" : "#0000f7"}`}
                     />
                   </TooltipTrigger>
                   <TooltipContent
@@ -103,7 +107,7 @@ export const InputField = forwardRef<
               </>
             ) : (
               <>
-                <span className="text-red-500">{isRequired ? ' *' : ''}</span>{' '}
+                <span className="text-red-500">{isRequired ? " *" : ""}</span>{" "}
               </>
             )}
           </label>
@@ -113,10 +117,10 @@ export const InputField = forwardRef<
                 name={name}
                 control={control}
                 render={({ field }) =>
-                  type === 'text-area' ? (
+                  type === "text-area" ? (
                     <ReactQuill
                       theme="snow"
-                      value={field.value || value || ''}
+                      value={field.value || value || ""}
                       className="w-full rounded-xl border border-grey-300 bg-grey-50 outline-none min-h-[200px]"
                       onChange={field.onChange}
                       placeholder={placeholder}
@@ -129,21 +133,22 @@ export const InputField = forwardRef<
                       type={type}
                       value={value}
                       placeholder={placeholder}
-                      customInputClassNames={`${customInputClassNames} placeholder:text-base text-[14px]`}
-                      customClassNames={`h-10 flex items-center !text-base ${customInputClassNames}`}
+                      customInputClassNames={`${customInputClassNames}`}
+                      customClassNames={`h-10 flex items-center ${customInputClassNames}`}
                     />
                   )
                 }
               />
-            ) : type === 'text-area' ? (
+            ) : type === "text-area" ? (
               <ReactQuill
                 theme="snow"
                 className="w-full rounded-xl bg-grey-50 outline-none !text-[20px] min-h-[200px] transition-all ease-linear"
                 value={value}
-                onChange={() => {}} // Handle value change as needed
+                onChange={onChange} // Handle value change as needed
                 placeholder={placeholder}
                 modules={modules}
                 formats={formats}
+                {...props}
               />
             ) : (
               <Input
@@ -152,6 +157,8 @@ export const InputField = forwardRef<
                 placeholder={placeholder}
                 customInputClassNames={`${customInputClassNames}`}
                 customClassNames={`h-10 flex items-center !text-SubheadSm ${customInputClassNames}`}
+                onChange={onChange}
+                {...props}
               />
             )}
             {/* Display error message */}
@@ -159,9 +166,9 @@ export const InputField = forwardRef<
           </div>
         </div>
       </TooltipProvider>
-    )
+    );
   }
-)
+);
 
 // Add displayName for better debugging in React DevTools
-InputField.displayName = 'InputField'
+InputField.displayName = "InputField";

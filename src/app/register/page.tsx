@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/common/Input";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { useUserStore } from "@/store/UserStore";
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,6 +11,7 @@ import { get } from "lodash";
 import { Loading } from "@/components/common/Loading";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { RadioGroup } from "@/components/common/RadioGroup";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -27,7 +28,7 @@ export default function Login() {
     state.hide,
   ]);
 
-  const router = useRouter();
+  const router = useCustomRouter();
 
   const handleChangeUsername = (username: string) => {
     setUser((prevState) => ({
@@ -91,7 +92,7 @@ export default function Login() {
             </svg>
             <div
               className="text-primary-700 font-semibold text-base hover:cursor-pointer"
-              onClick={() => router.push("/login")}
+              onClick={() => router.push("/dang-nhap")}
             >
               Quay lại
             </div>

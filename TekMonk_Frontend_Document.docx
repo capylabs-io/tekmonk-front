@@ -1,0 +1,234 @@
+TÀI LIỆU TỔNG HỢP TEKMONK FRONTEND
+
+1. TỔNG QUAN VỀ DỰ ÁN
+
+TekMonk Frontend là một ứng dụng web được phát triển bằng Next.js 14, TypeScript và TailwindCSS. Dự án này có vẻ như là một nền tảng giáo dục và tổ chức cuộc thi CNTT, với nhiều chức năng khác nhau như quản lý người dùng, cuộc thi lập trình, bài viết, cửa hàng, v.v.
+
+Công nghệ sử dụng:
+• Framework chính: Next.js 14
+• Ngôn ngữ lập trình: TypeScript
+• CSS Framework: TailwindCSS
+• Quản lý state: Zustand
+• Form handling: React Hook Form
+• UI Components: Radix UI, Shadcn UI
+• API Requests: Axios
+• Data fetching: TanStack Query (React Query)
+• Validation: Zod, Yup
+• Các thư viện UI khác: Framer Motion, Embla Carousel, React-Toastify
+
+2. CẤU TRÚC DỰ ÁN
+
+Dự án sử dụng cấu trúc thư mục theo quy ước của Next.js App Router:
+
+src/
+├── app/               # Các trang và route của ứng dụng
+├── assets/            # Tài nguyên như hình ảnh, font chữ
+├── components/        # Các thành phần UI, được chia theo chức năng
+├── contants/          # Các hằng số, cấu hình
+├── hooks/             # React hooks tùy chỉnh
+├── lib/               # Thư viện và utility functions
+├── mock/              # Dữ liệu mẫu
+├── requests/          # Các hàm gọi API
+├── store/             # State management với Zustand
+├── types/             # Type definitions
+├── validation/        # Schema validation
+└── fonts.ts           # Cấu hình font chữ
+
+3. CÁC CHỨC NĂNG CHÍNH
+
+3.1. Quản lý người dùng
+
+Mô tả: Hệ thống quản lý người dùng cung cấp các chức năng đăng ký, đăng nhập, quản lý thông tin cá nhân và quản lý quyền.
+
+Các luồng chính:
+• Đăng ký tài khoản: Người dùng điền thông tin cá nhân, xác thực email
+• Đăng nhập: Xác thực người dùng, quản lý JWT token và refresh token
+• Quên mật khẩu: Khôi phục tài khoản thông qua email
+• Chỉnh sửa hồ sơ: Cập nhật thông tin cá nhân
+• Quản lý avatar: Tùy chỉnh avatar người dùng
+
+File liên quan:
+• src/app/dang-ky/ - Trang đăng ký
+• src/app/dang-nhap/ - Trang đăng nhập
+• src/app/quen-mat-khau/ - Trang quên mật khẩu
+• src/app/doi-mat-khau-moi/ - Trang đổi mật khẩu mới
+• src/store/UserStore.ts - Quản lý state người dùng
+• src/store/UserAvatarStore.ts - Quản lý avatar người dùng
+• src/requests/login.ts - API đăng nhập, đăng ký
+• src/requests/forgot-password.ts - API quên mật khẩu
+
+3.2. Hệ thống cuộc thi (Contest)
+
+Mô tả: Hệ thống tổ chức và quản lý các cuộc thi lập trình, các thí sinh có thể đăng ký tham gia, nộp bài và xem kết quả.
+
+Các luồng chính:
+• Xem danh sách cuộc thi: Hiển thị các cuộc thi hiện có
+• Đăng ký tham gia: Thí sinh đăng ký tham gia cuộc thi
+• Nộp bài dự thi: Thí sinh nộp bài dự thi
+• Xem kết quả: Hiển thị kết quả cuộc thi
+• Bảng xếp hạng: Hiển thị bảng xếp hạng cuộc thi
+
+File liên quan:
+• src/app/list-contest/ - Trang danh sách cuộc thi
+• src/components/contest/ - Các component liên quan đến cuộc thi
+• src/components/register-contest/ - Các component đăng ký cuộc thi
+• src/components/all-contest-entries/ - Các component hiển thị bài dự thi
+• src/store/ContestRegisterStore.ts - Quản lý state đăng ký cuộc thi
+• src/requests/contest.ts - API cuộc thi
+• src/requests/contest-register.ts - API đăng ký cuộc thi
+• src/requests/contestSubmit.ts - API nộp bài dự thi
+
+3.3. Hệ thống nhiệm vụ (Mission)
+
+Mô tả: Hệ thống quản lý các nhiệm vụ, người dùng có thể xem và thực hiện các nhiệm vụ để kiếm điểm.
+
+Các luồng chính:
+• Xem danh sách nhiệm vụ: Hiển thị các nhiệm vụ hiện có
+• Thực hiện nhiệm vụ: Người dùng thực hiện nhiệm vụ
+• Xác nhận hoàn thành: Hệ thống xác nhận hoàn thành nhiệm vụ
+• Nhận thưởng: Người dùng nhận thưởng sau khi hoàn thành nhiệm vụ
+
+File liên quan:
+• src/app/nhiem-vu/ - Trang nhiệm vụ
+• src/components/mission/ - Các component liên quan đến nhiệm vụ
+• src/requests/mission.ts - API nhiệm vụ
+
+3.4. Hệ thống cửa hàng (Shop)
+
+Mô tả: Hệ thống cửa hàng cho phép người dùng mua và đổi vật phẩm bằng điểm số.
+
+Các luồng chính:
+• Xem danh sách vật phẩm: Hiển thị các vật phẩm trong cửa hàng
+• Mua vật phẩm: Người dùng mua vật phẩm bằng điểm
+• Xem kho đồ: Người dùng xem các vật phẩm đã mua
+• Sử dụng vật phẩm: Người dùng sử dụng vật phẩm đã mua
+
+File liên quan:
+• src/app/cua-hang/ - Trang cửa hàng
+• src/app/kho-do-cua-toi/ - Trang kho đồ cá nhân
+• src/components/shop/ - Các component liên quan đến cửa hàng
+• src/requests/shopItem.ts - API vật phẩm cửa hàng
+• src/requests/shop-item-user.ts - API quản lý vật phẩm của người dùng
+• src/requests/claimed-item.ts - API vật phẩm đã đổi
+
+3.5. Hệ thống tin tức và bài viết
+
+Mô tả: Hệ thống quản lý tin tức và bài viết, hiển thị các thông tin mới nhất.
+
+Các luồng chính:
+• Xem danh sách tin tức: Hiển thị các tin tức mới nhất
+• Xem chi tiết bài viết: Hiển thị nội dung chi tiết bài viết
+• Tìm kiếm bài viết: Tìm kiếm bài viết theo từ khóa
+• Đăng bài viết: (Dành cho admin) Đăng bài viết mới
+
+File liên quan:
+• src/app/tin-tuc/ - Trang tin tức
+• src/app/bai-viet/ - Trang chi tiết bài viết
+• src/components/new/ - Các component liên quan đến tin tức
+• src/store/PostStore.ts - Quản lý state bài viết
+• src/requests/post.ts - API bài viết
+• src/requests/news.ts - API tin tức
+
+3.6. Hệ thống sự kiện (Event)
+
+Mô tả: Hệ thống quản lý các sự kiện, người dùng có thể xem và đăng ký tham gia sự kiện.
+
+Các luồng chính:
+• Xem danh sách sự kiện: Hiển thị các sự kiện sắp diễn ra
+• Xem chi tiết sự kiện: Hiển thị thông tin chi tiết về sự kiện
+• Đăng ký tham gia: Người dùng đăng ký tham gia sự kiện
+
+File liên quan:
+• src/app/su-kien/ - Trang sự kiện
+• src/components/event/ - Các component liên quan đến sự kiện
+
+3.7. Hệ thống tuyển dụng (Recruitment)
+
+Mô tả: Hệ thống quản lý thông tin tuyển dụng, người dùng có thể xem và ứng tuyển vào các vị trí.
+
+Các luồng chính:
+• Xem danh sách việc làm: Hiển thị các công việc đang tuyển
+• Xem chi tiết việc làm: Hiển thị thông tin chi tiết về công việc
+• Ứng tuyển: Người dùng ứng tuyển vào vị trí
+
+File liên quan:
+• src/app/tuyen-dung/ - Trang tuyển dụng
+• src/app/recruitment/ - Trang tuyển dụng (phiên bản tiếng Anh)
+• src/components/recruitment/ - Các component liên quan đến tuyển dụng
+
+3.8. Hệ thống chứng chỉ (Certificate)
+
+Mô tả: Hệ thống quản lý chứng chỉ, người dùng có thể xem và chia sẻ chứng chỉ của mình.
+
+Các luồng chính:
+• Xem danh sách chứng chỉ: Hiển thị các chứng chỉ đã đạt được
+• Xem chi tiết chứng chỉ: Hiển thị thông tin chi tiết về chứng chỉ
+• Chia sẻ chứng chỉ: Người dùng chia sẻ chứng chỉ lên mạng xã hội
+
+File liên quan:
+• src/components/certificate/ - Các component liên quan đến chứng chỉ
+• src/requests/certificate.ts - API chứng chỉ
+
+3.9. Hệ thống bảng xếp hạng (Leaderboard)
+
+Mô tả: Hệ thống quản lý bảng xếp hạng, hiển thị thứ hạng của người dùng.
+
+Các luồng chính:
+• Xem bảng xếp hạng: Hiển thị bảng xếp hạng người dùng
+• Xem chi tiết thành tích: Hiển thị thông tin chi tiết về thành tích
+
+File liên quan:
+• src/app/bang-xep-hang/ - Trang bảng xếp hạng
+• src/components/leaderboard/ - Các component liên quan đến bảng xếp hạng
+
+3.10. Hệ thống thành tựu (Achievement)
+
+Mô tả: Hệ thống quản lý thành tựu, người dùng có thể xem các thành tựu đã đạt được.
+
+Các luồng chính:
+• Xem danh sách thành tựu: Hiển thị các thành tựu đã đạt được
+• Xem chi tiết thành tựu: Hiển thị thông tin chi tiết về thành tựu
+
+File liên quan:
+• src/components/achievement/ - Các component liên quan đến thành tựu
+• src/requests/achievement.ts - API thành tựu
+
+3.11. Hệ thống thông báo (Notification)
+
+Mô tả: Hệ thống quản lý thông báo, hiển thị các thông báo cho người dùng.
+
+Các luồng chính:
+• Xem danh sách thông báo: Hiển thị các thông báo mới nhất
+• Đánh dấu đã đọc: Người dùng đánh dấu thông báo đã đọc
+
+File liên quan:
+• src/app/thong-bao/ - Trang thông báo
+• src/components/notification/ - Các component liên quan đến thông báo
+
+4. CÁC UTILITY VÀ THÀNH PHẦN PHỤ TRỢ
+
+4.1. Xử lý API và Authentication
+
+• Axios Config: Cấu hình axios với interceptors để xử lý token và refresh token
+• Authentication: Quản lý JWT token và refresh token
+• Error Handling: Xử lý lỗi từ API
+
+4.2. UI Components
+
+• UI Kit: Các component UI cơ bản được tái sử dụng trong dự án
+• Layout: Các component layout chung cho toàn ứng dụng
+• Loading: Hiển thị trạng thái loading
+• Snackbar: Hiển thị thông báo
+
+4.3. State Management
+
+• Zustand: Quản lý state toàn cục
+• User Store: Quản lý thông tin người dùng
+• Post Store: Quản lý bài viết
+• Contest Register Store: Quản lý đăng ký cuộc thi
+
+5. TỔNG KẾT
+
+TekMonk Frontend là một ứng dụng web hiện đại với nhiều chức năng phong phú, phục vụ nhu cầu của một nền tảng giáo dục và tổ chức cuộc thi CNTT. Dự án sử dụng các công nghệ mới nhất như Next.js 14, TypeScript, và TailwindCSS, cùng với các thư viện hiện đại như Zustand, React Query, và Radix UI.
+
+Các chức năng chính của dự án bao gồm quản lý người dùng, tổ chức cuộc thi, quản lý nhiệm vụ, cửa hàng, tin tức, sự kiện, tuyển dụng, chứng chỉ, bảng xếp hạng, thành tựu và thông báo. Mỗi chức năng đều được thiết kế với các luồng công việc rõ ràng và giao diện người dùng thân thiện. 

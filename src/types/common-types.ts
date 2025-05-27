@@ -1,5 +1,6 @@
-import { BackgroundCard } from "@/components/shop/BackgroundCard";
-import { LeaderboardTable } from "./../components/leaderboard/LeaderboardTable";
+import { PostType } from "./posts";
+import { ShopItem } from "./shop";
+
 export type Event = {
   title: string;
   day: string;
@@ -26,31 +27,37 @@ type UserProfile = {
 };
 
 export type User = {
-  specialName: string;
-  imageURL: string;
-  id: string;
+  id: number;
   username: string;
   email: string;
-  provider?: string;
-  confirmed?: string;
-  blocked?: string;
-  metadata?: string;
-  skills?: string[];
-  currentTitle?: string;
-  description?: string;
-  role: {
-    name: string;
-  };
-  userProfiles?: UserProfile[] | UserProfile | any;
-  phoneNumber?: string;
-  parentName?: string;
-  parentPhoneNumber?: string;
-  fullName?: string;
-  user_role?: UserRole[] | UserRole | any;
-  data?: {
-    contestId?: string;
-    isAccountForFinalRound?: boolean;
-  }
+  provider: string;
+  password?: string;
+  resetPasswordToken: string | null;
+  confirmationToken: string | null;
+  confirmed: boolean;
+  blocked: boolean;
+  metadata: any | null;
+  skills: any | null;
+  currentTitle: string | null;
+  dateOfBirth: string | null;
+  phoneNumber: string | null;
+  parentName: string | null;
+  parentPhoneNumber: string | null;
+  fullName: string | null;
+  studentAddress: string | null;
+  className: string | null;
+  parentEmail: string | null;
+  resetPasswordExpires: string | null;
+  createdAt: string;
+  updatedAt: string;
+  data: any | null;
+  balance: number;
+  point: number;
+  specialName: string | null;
+  totalPrice: number;
+  user_role?: UserRole;
+  user_profiles?: UserProfile[];
+  imageURL?: string;
 };
 
 export type TListCourse = {
@@ -58,7 +65,7 @@ export type TListCourse = {
   courseInstanceId: string;
   name: string;
   slugs: string[];
-}
+};
 
 export type ContestGroupStage = {
   id?: string;
@@ -82,6 +89,7 @@ export interface Certificate {
   author: string;
   createdAt: string;
 }
+
 export type Project = {
   name: string;
   author: User;
@@ -119,8 +127,31 @@ export type EventDetail = {
 };
 
 export type Achievement = {
-  name: string;
-  imageUrl: string;
+  id: number;
+  historyId?: number;
+  isClaim?: boolean;
+  imageUrl?: string;
+  description: string | null;
+  metadata?: any | null;
+  createdAt?: string;
+  updatedAt?: string;
+  title: string;
+  module?: string;
+  type: string;
+  reward: number;
+  requiredQuantity: number;
+  points: number;
+  actionType: string;
+  currentProgress?: number;
+};
+
+export type AchievementHistory = {
+  id: number;
+  achievement?: Achievement;
+  isClaimed?: boolean;
+  user?: User;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type Notification = {
@@ -208,7 +239,130 @@ export type TimeLeft = {
 
 export type TProgressResult = {
   name: string;
-  listSlug: {name: string, playtime: number}[],
+  listSlug: { name: string; playtime: number }[];
   currentLevel: number;
   totalLevel: number;
+};
+
+export type TNews = {
+  id: number;
+  title: string;
+  thumbnail: string;
+  content: string;
+  startTime: string;
+  endTime: string;
+  location?: string;
+  type: string;
+  tags: string;
+  metadata?: object;
+  createdAt?: string;
+  isActived: boolean;
+  priority: boolean;
+  totalRead?: number;
+  isDealt?: boolean;
+  maxSalary?: string;
+  minSalary?: string;
+  recruitmentNumber?: number;
+  status: string;
+};
+
+export type Class = {
+  id: number;
+  name: string;
+  code: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  createdAt: string;
+  updatedAt: string;
+  teacher?: User;
+  course?: Course;
+  enrollmentCount?: number;
+};
+
+export type ClassSession = {
+  id: number;
+  title: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  class?: Class;
+};
+
+export type EnRollment = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  student?: User;
+  class?: Class;
+};
+
+export type Course = {
+  id: number;
+  code: string;
+  name: string;
+  numberSession: number;
+  description?: string;
+};
+
+export type ClassSessionDetail = {
+  id: number;
+  class_session?: ClassSession;
+  student?: User;
+  class?: Class;
+  attendance: boolean;
+  discuss: boolean;
+  homeworkDone: boolean;
+  workSpeed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export enum CategoryCode {
+  AVATAR = "AVATAR",
+  BACKGROUND = "BACKGROUND",
+}
+
+export type Category = {
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+};
+
+export type ShopItemUser = {
+  id: number;
+  user?: User;
+  shop_item: ShopItem;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PostComment = {
+  id: number;
+  content: string;
+  post: PostType;
+  commentedBy: User;
+  createdAt: string;
+  updatedAt: string;
+};
+export type Mission = {
+  id: number;
+  historyId?: number;
+  isClaim?: boolean;
+  imageUrl?: string;
+  title: string;
+  description: string;
+  type: string;
+  actionType: string;
+  module?: string;
+  reward: number;
+  requiredQuantity: number;
+  points: number;
+  metadata?: any | null;
+  createdAt?: string;
+  updatedAt?: string;
+  currentProgress?: number;
 };

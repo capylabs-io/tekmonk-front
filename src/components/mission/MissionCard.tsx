@@ -1,70 +1,61 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { Button } from "../common/Button";
-import { Check } from "lucide-react";
+import { CommonCard } from "../common/CommonCard";
+import { cn } from "@/lib/utils";
+import { Achievement, Mission } from "@/types/common-types";
+import { handleConfettiClick } from "@/contants/confetti";
+import { CardState } from "./types";
+import { getCardState } from "./utils";
+import MissionCardContent from "./MissionCardContent";
 
 type Props = {
-  missionName: string;
-  missionDescription: string;
-  imageUrl: string;
-  score: string;
-  status: string;
-  onClick?: () => void;
+  data: Mission | Achievement;
+  onClick: (id: number) => void;
+  isShowButtonClaim?: boolean;
 };
+
 export const MissionCard = ({
-  missionName,
-  missionDescription,
-  imageUrl,
-  score,
-  status,
+  data,
   onClick,
+  isShowButtonClaim = true,
 }: Props) => {
-  const [missionStatus, setMissionStatus] = useState("inprogress");
+  // Get the card state
+  const cardState = getCardState(data);
   const handleMissionOnClick = () => {
-    setMissionStatus((prev) =>
-      prev === "inprogress"
-        ? "complete"
-        : prev === "complete"
-        ? "claimded"
-        : "inprogress"
-    );
+    handleConfettiClick();
+    // Only allow clicking if the mission is completed but not claimed
+    if (cardState === CardState.COMPLETED && onClick) {
+      if (!data.historyId) {
+        return;
+      }
+      onClick(data.historyId);
+    }
   };
+
   return (
-    <div className="flex flex-col items-center justify-center w-[200px] text-center">
-      <Image
-        src={imageUrl || ""}
-        alt="mission"
-        width={120}
-        height={120}
-        className="mt-5"
-      />
-
-      <span className="text-xs mt-2 text-gray-800">{missionName}</span>
-      <span className="text-xs mt-2 text-gray-600">{missionDescription}</span>
-
-      {missionStatus === "inprogress" ? (
-        <Button
-          onClick={handleMissionOnClick}
-          size="small"
-          urlIcon="/image/home/coin.png"
-          outlined
-          className="mt-2 text-sm"
+    <div className="relative group isolate w-full">
+      <div className="transition-transform duration-300 hover:scale-[1.02] w-full">
+        <CommonCard
+          isActive={
+            cardState === CardState.IN_PROGRESS ||
+            cardState === CardState.CLAIMED
+          }
+          className={cn(
+            "flex flex-col items-center justify-center w-full h-max p-4 gap-2 !bg-white border-2 border-gray-20",
+            "!cursor-default rounded-2xl transition-all duration-200",
+            cardState === CardState.COMPLETED &&
+              "hover:border-primary-60 cursor-pointer hover:shadow-md"
+          )}
         >
-          {score}
-        </Button>
-      ) : missionStatus === "complete" ? (
-        <Button onClick={handleMissionOnClick} className="mt-2 text-xs">
-          Nhận thưởng
-        </Button>
-      ) : (
-        <Button
-          onClick={handleMissionOnClick}
-          className="!bg-green-50 !text-green-400 mt-2 text-xs"
-        >
-          <Check size={14} className="mr-2" /> Đã nhận
-        </Button>
-      )}
+          <MissionCardContent
+            data={data}
+            cardState={cardState}
+            handleMissionOnClick={handleMissionOnClick}
+            isShowButtonClaim={isShowButtonClaim}
+          />
+        </CommonCard>
+      </div>
     </div>
   );
 };
+
+export default MissionCard;

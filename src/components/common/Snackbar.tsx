@@ -12,7 +12,7 @@ import React, { useEffect } from "react";
 import { SnackbarTypes, useSnackbarStore } from "@/store/SnackbarStore";
 
 const BASE_CLASSES =
-  "inset-x-0 mx-auto w-fit rounded-md p-4 hs-removing:translate-x-10 hs-removing:opacity-0 fixed z-50 transition-all duration-1000 ease-in-out";
+  "inset-x-0 mx-auto w-fit rounded-md p-4 hs-removing:translate-x-10 hs-removing:opacity-0 fixed z-[99] transition-all duration-1000 ease-in-out";
 
 export const Snackbar: React.FC = () => {
   const [isShowing, message, title, type, isLastMessage, close] =

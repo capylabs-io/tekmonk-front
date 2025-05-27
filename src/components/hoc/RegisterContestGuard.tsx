@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getContest } from "@/requests/contest";
 import { get } from "lodash";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 const RegisterContestGuard = (WrappedComponent: React.FC) => {
   const Comp: React.FC = () => {
-    const router = useRouter();
+    const router = useCustomRouter();
     const [canRegister, setCanRegister] = useState<boolean | null>(null);
 
     const fetchContest = async () => {

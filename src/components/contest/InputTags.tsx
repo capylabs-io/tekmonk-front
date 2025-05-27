@@ -1,131 +1,123 @@
-'use client'
+"use client";
 
-import { KeyboardEvent, useEffect, useState } from 'react'
-import { Info, X } from 'lucide-react'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from '../ui/tooltip'
+import { type KeyboardEvent, useEffect, useState } from "react";
+import { X } from "lucide-react";
+import { TooltipProvider } from "../ui/tooltip";
+import classNames from "classnames";
 
 type Props = {
-  customClassNames?: string
-  error?: string // Added error prop
-  placeholder?: string
-  name?: string
-  isRequired?: boolean
-  isTooltip?: boolean
-  tooltipContent?: string
-  value?: string
-  onValueChange?: (value: string) => void
-}
+  customClassNames?: string;
+  customInputClassNames?: string;
+  error?: string; // Added error prop
+  placeholder?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
+};
+
 export const InputTags = ({
-  error, // Added error handling
-  placeholder,
-  isRequired,
-  name = '',
+  error,
   customClassNames,
-  isTooltip = false,
-  tooltipContent,
+  placeholder,
+  customInputClassNames,
   value,
-  onValueChange
+  onValueChange,
 }: Props) => {
-  const [tags, setTags] = useState<string[]>([])
-  const [inputValue, setInputValue] = useState('')
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && inputValue.trim() !== '') {
-      e.preventDefault()
-      if (!tags.includes(inputValue.trim())) {
-        setTags([...tags, inputValue.trim()])
-
-        setInputValue('')
-      }
-    }
-  }
-
-  const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove))
-  }
+  const [tags, setTags] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    handleOnChange()
-  }, [tags])
+    // Initialize tags from the value prop
+    if (value) {
+      const initialTags = value
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "");
+      setTags(initialTags);
+    }
+  }, [value]);
 
-  const handleOnChange = () => {
-    // tách bởi dấu phấy và dấu cách
-    const tagsString = tags.join(', ')
-    onValueChange && onValueChange(tagsString)
-  }
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && inputValue.trim() !== "") {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Split input by spaces to create multiple tags
+      const inputTags = inputValue
+        .split(" ")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "");
+
+      // Add each new tag if it doesn't already exist
+      const newTags = [...tags];
+      let tagsAdded = false;
+
+      inputTags.forEach((tag) => {
+        if (!newTags.includes(tag)) {
+          newTags.push(tag);
+          tagsAdded = true;
+        }
+      });
+
+      if (tagsAdded) {
+        setTags(newTags);
+        setInputValue("");
+        onValueChange && onValueChange(newTags.join(", "));
+      }
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    const newTags = tags.filter((tag) => tag !== tagToRemove);
+    setTags(newTags);
+    onValueChange && onValueChange(newTags.join(", "));
+  };
+
   return (
     <TooltipProvider>
       <div className="space-y-1.5 w-full">
-        <div className="relative block sm:flex w-full items-start">
-          <div className="w-full sm:w-1/4 flex text-primary-950 text-SubheadSm items-center">
-            <div>Tags</div>
-            {isTooltip ? (
-              <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Info
-                      size={16}
-                      className={`ml-1`}
-                      color={`${isRequired ? '#DC58C8' : '#0000f7'}`}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="right"
-                    align="start"
-                    className="max-w-[200px]"
+        <div className="relative block sm:flex justify-between  w-full items-start">
+          <div className="w-full flex flex-col items-end gap-2">
+            <div
+              className={classNames(
+                "min-h-[3rem] w-full rounded-xl border border-grey-300 bg-grey-50 px-3 py-2 text-sm",
+                customClassNames
+              )}
+            >
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                className={classNames(
+                  "flex-1 bg-transparent min-w-[120px] w-full text-BodyMd outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-gray-70 placeholder:text-BodyMd",
+                  customInputClassNames
+                )}
+                placeholder={placeholder || "Nhập tags, cách nhau bởi dấu phẩy"}
+              />
+            </div>
+            <div className="flex flex-wrap gap-2 w-full">
+              {tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="inline-flex items-center bg-gray-20 text-gray-95 rounded-md text-BodyXs"
+                >
+                  <span className="px-2 py-1">{tag}</span>
+                  <button
+                    onClick={() => removeTag(tag)}
+                    className="px-2 py-1 rounded-r-md border-l border-gray-200 transition-colors"
                   >
-                    <p>{tooltipContent}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </>
-            ) : (
-              <>
-                <span className="text-red-500">{isRequired ? ' *' : ''}</span>{' '}
-              </>
-            )}
-          </div>
-
-          <div className="w-full flex-wrap">
-            <div className="min-h-[3rem] w-full rounded-xl border border-input bg-gray-50 px-3 py-2 text-sm">
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <div
-                    key={index}
-                    className="inline-flex items-center bg-gray-100 text-gray-800 rounded-md text-sm"
-                  >
-                    <span className="px-2 py-1">{tag}</span>
-                    <button
-                      onClick={() => removeTag(tag)}
-                      className="px-2 py-1 hover:bg-gray-200 rounded-r-md border-l border-gray-200 transition-colors"
-                    >
-                      <X className="h-3 w-3" />
-                      <span className="sr-only">Remove {tag}</span>
-                    </button>
-                  </div>
-                ))}
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent min-w-[120px] w-full text-base font-normal outline-none bg-grey-50 border-grey-300 mt-1 placeholder:text-base"
-                  placeholder={tags.length === 0 ? 'Nhập tags ...' : ''}
-                />
-              </div>
+                    <X className="h-3 w-3 hover:text-primary-20" />
+                    <span className="sr-only">Remove {tag}</span>
+                  </button>
+                </div>
+              ))}
             </div>
             {error && (
               <div className="text-red-500 text-xs min-h-[48px]">{error}</div>
             )}
-            <div className={`text-[14px] mt-1`}>
-              Tags được phân cách bằng nút Enter
-            </div>
           </div>
         </div>
       </div>
     </TooltipProvider>
-  )
-}
+  );
+};

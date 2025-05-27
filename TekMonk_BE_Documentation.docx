@@ -1,0 +1,194 @@
+TÀI LIỆU TỔNG QUAN VỀ DỰ ÁN TEKMONK BACKEND
+
+1. GIỚI THIỆU
+
+Dự án TekMonk Backend là một ứng dụng được xây dựng trên nền tảng Strapi (v4.20.5), một headless CMS mạnh mẽ cho phép xây dựng API một cách nhanh chóng. Dự án sử dụng TypeScript để phát triển và PostgreSQL làm cơ sở dữ liệu chính.
+
+2. CÔNG NGHỆ SỬ DỤNG
+
+- Framework: Strapi v4.20.5
+- Ngôn ngữ lập trình: TypeScript
+- Cơ sở dữ liệu: PostgreSQL
+- Cache và Queue: Redis (thông qua BullMQ và ioredis)
+- Email: Sử dụng nhiều nhà cung cấp như Mailgun, SendGrid, Mailchimp
+- Lưu trữ file: AWS S3
+- Container: Docker
+
+3. CẤU TRÚC DỰ ÁN
+
+Dự án được tổ chức theo cấu trúc tiêu chuẩn của Strapi với một số thư mục chính:
+
+- /src/api: Chứa tất cả các API endpoint
+- /src/extensions: Chứa các phần mở rộng cho Strapi
+- /src/lib: Chứa các thư viện và hàm tiện ích
+- /src/middlewares: Chứa các middleware
+- /src/utils: Chứa các hàm tiện ích
+- /config: Chứa cấu hình cho dự án
+
+4. CÁC API VÀ CHỨC NĂNG CHÍNH
+
+A. QUẢN LÝ NGƯỜI DÙNG
+
+API: custom-auth, custom-forgot-password, user-profile, user-role
+
+Chức năng:
+- Đăng nhập/Đăng ký tùy chỉnh
+- Quên mật khẩu
+- Quản lý hồ sơ người dùng
+- Phân quyền người dùng (TEACHER, STUDENT, CLASSMANAGEMENT, MODERATOR)
+
+Flow đăng nhập:
+1. Người dùng gửi email/username và mật khẩu
+2. Hệ thống kiểm tra thông tin đăng nhập
+3. Nếu hợp lệ, hệ thống tạo JWT token và refresh token
+4. Trả về token cùng với thông tin người dùng
+
+Flow đăng ký:
+1. Người dùng gửi thông tin đăng ký (email, username, password)
+2. Hệ thống kiểm tra email và username đã tồn tại chưa
+3. Tạo tài khoản mới với vai trò mặc định
+4. Gửi email xác nhận nếu cấu hình yêu cầu
+
+B. QUẢN LÝ KHÓA HỌC
+
+API: course, course-mission, enrollment, class, class-session, class-session-student-detail
+
+Chức năng:
+- Tạo và quản lý khóa học
+- Đăng ký khóa học
+- Quản lý lớp học
+- Quản lý buổi học
+- Theo dõi chi tiết tham gia của học viên
+
+Flow đăng ký khóa học:
+1. Người dùng chọn khóa học muốn đăng ký
+2. Hệ thống tạo bản ghi enrollment liên kết giữa người dùng và khóa học
+3. Cập nhật trạng thái và thông tin liên quan
+
+C. QUẢN LÝ NHIỆM VỤ VÀ THÀNH TỰU
+
+API: mission, mission-progress, mission-history, achievement, achievement-progress, achievement-history
+
+Chức năng:
+- Tạo và quản lý nhiệm vụ
+- Theo dõi tiến độ nhiệm vụ của người dùng
+- Lưu lịch sử hoàn thành nhiệm vụ
+- Quản lý thành tựu
+- Theo dõi tiến độ đạt thành tựu
+- Lưu lịch sử đạt thành tựu
+
+Flow hoàn thành nhiệm vụ:
+1. Người dùng thực hiện nhiệm vụ
+2. Hệ thống cập nhật mission-progress
+3. Khi hoàn thành, hệ thống tạo bản ghi trong mission-history
+4. Kiểm tra và cập nhật các thành tựu liên quan
+
+D. QUẢN LÝ CỬA HÀNG VÀ VẬT PHẨM
+
+API: shop-item, shop-item-user, claimed-item
+
+Chức năng:
+- Quản lý vật phẩm trong cửa hàng
+- Theo dõi vật phẩm của người dùng
+- Quản lý vật phẩm đã nhận
+
+Flow mua/nhận vật phẩm:
+1. Người dùng chọn vật phẩm muốn mua/nhận
+2. Hệ thống kiểm tra điều kiện (điểm, tiền, v.v.)
+3. Cập nhật shop-item-user để liên kết vật phẩm với người dùng
+4. Lưu thông tin claimed-item nếu cần
+
+E. QUẢN LÝ CHỨNG CHỈ
+
+API: certificate, certificate-history, certificate-pdf-config, certificate-pdf-field-config
+
+Chức năng:
+- Tạo và quản lý chứng chỉ
+- Lưu lịch sử cấp chứng chỉ
+- Cấu hình PDF chứng chỉ
+- Quản lý các trường trong PDF chứng chỉ
+
+Flow cấp chứng chỉ:
+1. Hệ thống kiểm tra điều kiện cấp chứng chỉ
+2. Tạo chứng chỉ dựa trên cấu hình
+3. Tạo PDF chứng chỉ
+4. Lưu lịch sử cấp chứng chỉ
+5. Gửi email thông báo (nếu có)
+
+F. QUẢN LÝ CUỘC THI
+
+API: contest, contest-submission, contest-group-stage, contest-entry, contest-category
+
+Chức năng:
+- Tạo và quản lý cuộc thi
+- Quản lý bài dự thi
+- Quản lý các giai đoạn của cuộc thi
+- Quản lý đăng ký tham gia cuộc thi
+- Phân loại cuộc thi
+
+Flow tham gia cuộc thi:
+1. Người dùng đăng ký tham gia cuộc thi
+2. Hệ thống tạo contest-entry
+3. Người dùng nộp bài dự thi (contest-submission)
+4. Hệ thống quản lý các giai đoạn của cuộc thi
+
+G. QUẢN LÝ BÀI VIẾT VÀ TƯƠNG TÁC
+
+API: post, comment, like, new
+
+Chức năng:
+- Tạo và quản lý bài viết
+- Quản lý bình luận
+- Quản lý lượt thích
+- Quản lý tin tức
+
+Flow tương tác với bài viết:
+1. Người dùng xem bài viết
+2. Người dùng có thể bình luận hoặc thích bài viết
+3. Hệ thống lưu thông tin tương tác
+4. Cập nhật số lượng tương tác cho bài viết
+
+H. TÍCH HỢP BÊN THỨ BA
+
+API: third-party, upload
+
+Chức năng:
+- Tích hợp với các dịch vụ bên thứ ba
+- Tải lên và quản lý file
+
+5. CƠ SỞ DỮ LIỆU
+
+Dự án sử dụng PostgreSQL làm cơ sở dữ liệu chính với cấu hình SSL. Các kết nối được quản lý thông qua pool với số lượng kết nối tối thiểu là 2 và tối đa là 10.
+
+6. HỆ THỐNG QUEUE
+
+Dự án sử dụng BullMQ và Redis để quản lý các tác vụ nền và queue. Điều này cho phép xử lý bất đồng bộ các tác vụ như gửi email, tạo PDF, v.v.
+
+7. LƯU TRỮ FILE
+
+Dự án sử dụng AWS S3 để lưu trữ file, được cấu hình thông qua provider @strapi/provider-upload-aws-s3.
+
+8. GỬI EMAIL
+
+Dự án hỗ trợ nhiều nhà cung cấp dịch vụ email:
+- Mailgun (thông qua @strapi/provider-email-mailgun)
+- SendGrid (thông qua @strapi/provider-email-sendgrid)
+- Mailchimp Transactional
+- Mandrill API
+
+9. BẢO MẬT
+
+Dự án sử dụng JWT cho xác thực API với cả access token và refresh token. Mật khẩu được mã hóa bằng bcrypt. Các biện pháp bảo mật khác bao gồm:
+- Xác thực email
+- Khóa tài khoản
+- Quản lý phiên đăng nhập
+- Mã hóa dữ liệu nhạy cảm bằng crypto-js
+
+10. SEED DATA
+
+Dự án bao gồm các script seed để khởi tạo dữ liệu mẫu cho:
+- Thành tựu (achievements)
+- Nhiệm vụ (missions)
+- Vai trò người dùng (user roles)
+
+Các script này được chạy khi ứng dụng khởi động thông qua hàm bootstrap trong src/index.ts. 

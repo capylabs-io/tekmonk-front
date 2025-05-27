@@ -1,12 +1,13 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { ArrowRight } from "lucide-react";
 import { LandingCard } from "@/components/landing/LandingCard";
 import { useRouter } from "next/navigation";
 import { Dela_Gothic_One } from "next/font/google";
 import localFont from "next/font/local";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 const delaGothicOne = localFont({
   src: "../.././assets/fonts/DelaGothicOne-Regular.ttf",
@@ -16,7 +17,7 @@ const delaGothicOne = localFont({
 });
 
 function Landing() {
-  const router = useRouter();
+  const router = useCustomRouter();
   const handleOnClick = () => {
     router.push("/home");
   };
