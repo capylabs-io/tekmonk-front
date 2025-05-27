@@ -21,4 +21,5 @@ export const ROUTE = {
   SEARCH: "/tim-kiem",
   HISTORY: "/lich-su-dang-bai",
   POST: "/bai-viet",
+  SEARCH_NEWS: "/tin-tuc/tim-kiem",
 };

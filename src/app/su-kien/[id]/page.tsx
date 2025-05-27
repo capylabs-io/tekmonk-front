@@ -137,7 +137,7 @@ export default function Page() {
           <div className="w-full h-[1px] bg-gray-20"></div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-8 col-span-1 mt-16">
+      <div className="w-full flex flex-col gap-4 col-span-1 mt-16">
         <div className="text-HeadingSm text-[#320130]">
           Sự kiện khác
         </div>
@@ -162,15 +162,11 @@ export default function Page() {
                     {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
                   </time>
                   <div
-                    className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+                    className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden line-clamp-2"
                     dangerouslySetInnerHTML={{
                       __html: (get(newsItem, "title", "") || "")
                         .replace(/<[^>]+>/g, "")
                         .trim()
-                        .slice(0, 50)
-                        .concat(
-                          get(newsItem, "title", "").length > 50 ? "..." : ""
-                        ),
                     }}
                   ></div>
                 </div>

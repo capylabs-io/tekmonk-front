@@ -123,14 +123,16 @@ export default function Profile() {
           <div className="text-base text-primary-950">
             {get(guestInfor, "specialName")}
           </div>
-          <CommonButton
-            outlined
-            className="border-2 border-primary-60 !bg-primary-10 rounded-lg !px-2 !py-1 text-sm flex items-center mt-2"
-            onClick={handleOpenTitleModal}
-          >
-            <div>Chỉnh sửa danh hiệu</div>
-            <Edit size={16} className="text-primary-600 ml-2" />
-          </CommonButton>
+          {userInfo && userInfo.id === guestInfor?.id && (
+            <CommonButton
+              outlined
+              className="border-2 border-primary-60 !bg-primary-10 rounded-lg !px-2 !py-1 text-sm flex items-center mt-2"
+              onClick={handleOpenTitleModal}
+            >
+              <div>Chỉnh sửa danh hiệu</div>
+              <Edit size={16} className="text-primary-600 ml-2" />
+            </CommonButton>
+          )}
         </div>
         <div className="flex gap-x-2">
           {/* <Button outlined className="text-primary-900 text-sm border">

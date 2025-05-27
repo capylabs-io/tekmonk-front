@@ -84,7 +84,7 @@ export const EventList = () => {
     return duration >= hoursInMillis * 0.95; // Allow 5% tolerance
   };
 
-  return (
+  return data && data.data.length > 0 && (
     <div className="w-full rounded-2xl border border-gray-200 overflow-hidden">
       <div className="flex justify-between items-center p-4 border-b border-gray-200">
         <h3 className="text-SubheadMd text-gray-95">SỰ KIỆN</h3>
