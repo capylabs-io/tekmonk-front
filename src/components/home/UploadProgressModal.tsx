@@ -141,10 +141,10 @@ export const UploadProgressModal: React.FC<UploadProgressModalProps> = ({
                   : "border-gray-200"
                   }`}
               >
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-2 overflow-hidden px-2">
                   <div className="flex items-center space-x-3">
                     <StatusIcon status={item.status} />
-                    <div className="min-w-0 flex-1">
+                    <div className="w-full flex-1">
                       <p className="text-sm font-medium text-gray-900 truncate">
                         {item.name}
                       </p>

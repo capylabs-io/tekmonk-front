@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetCategories } from "@/requests/category";
 import { CategoryBar } from "./category-bar";
 import { BannerCard } from "../new/BannerCard";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 
 export const ShopContent = () => {
   const { data: categories } = useQuery({
@@ -55,6 +56,11 @@ export const ShopContent = () => {
           categoryName={category.name}
         />
       ))}
+      {
+        categories?.data?.length === 0 && (
+          <CommonEmptyState />
+        )
+      }
     </div>
   );
 };
