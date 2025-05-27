@@ -350,7 +350,7 @@ const AboutCourseComponent = () => {
                 className="-z-[1] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
               />
               <Image
-                src="/image/landing/about/Stat.png"
+                src="/image/landing/about/stat.png"
                 alt=""
                 width={330}
                 height={330}
