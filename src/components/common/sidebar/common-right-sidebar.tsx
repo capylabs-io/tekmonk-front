@@ -55,19 +55,7 @@ export const CommonRightSidebar = () => {
             </div>
           )}
           <div className="flex flex-col gap-y-1">
-            <div className="flex justify-between items-center px-4">
-              <div className="text-SubheadMd text-gray-95 uppercase ">
-                Tin tức
-              </div>
-              <div
-                className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
-                onClick={() => router.push(ROUTE.NEWS)}
-              >
-                Xem thêm
-              </div>
-            </div>
             <ShowSmallCarouselItems />
-
             <div className="mt-4">
               <EventList />
             </div>

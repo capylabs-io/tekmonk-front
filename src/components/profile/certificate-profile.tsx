@@ -10,6 +10,7 @@ import { CommonCard } from "../common/CommonCard";
 import { useState } from "react";
 import { useCertificateHistory } from "@/hooks/use-certificate-history";
 import { CertificateDialog } from "./certificate-dialog";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 
 const TOTAL_CERTIFICATES = 4;
 const PAGE = 1;
@@ -71,10 +72,8 @@ export const CertificateProfile = ({ id }: { id: number }) => {
   if (!certificates?.data || certificates.data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white">
-        <h3 className="text-lg font-medium text-gray-700 mb-1">
-          Chưa có chứng chỉ nào
-        </h3>
-        <p className="text-sm text-gray-500 text-center max-w-md">
+        <CommonEmptyState />
+        <p className="text-sm text-gray-500 text-center max-w-md mt-2">
           Hoàn thành khóa học để nhận chứng chỉ
         </p>
       </div>

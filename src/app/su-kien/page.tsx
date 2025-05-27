@@ -228,7 +228,7 @@ export default function Event() {
       )}
     >
       <BannerCard className="w-full rounded-3xl h-[500px]" type="event">
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 z-[1]">
           <div className="text-DisplayMd text-gray-10">Sự kiện của TekMonk</div>
           <div className="text-center text-SubheadLg text-gray-10 max-w-[560px]">
             Một sự kiện – Ngàn cảm hứng – Vững hành trang – Sáng tương lai!

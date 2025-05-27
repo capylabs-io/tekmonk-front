@@ -50,7 +50,7 @@ const IconShowBannerHiring = ({ type }: Props) => {
         src={backgroundText}
         width={type === "shop" ? 800 : 1000}
         height={300}
-        className="object-contain absolute -bottom-5 left-1/2 -translate-x-1/2 lg:block"
+        className="object-contain absolute -bottom-5 left-1/2 -translate-x-1/2 lg:block z-0"
       />
       <Image
         alt="icon-right"

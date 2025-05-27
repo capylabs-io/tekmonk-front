@@ -1,4 +1,3 @@
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ["class"],
@@ -7,6 +6,9 @@ module.exports = {
 		'./components/**/*.{ts,tsx}',
 		'./app/**/*.{ts,tsx}',
 		'./src/**/*.{ts,tsx}',
+		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/components/**/*.{js,ts,jsx,tsx,mdx}',
+		'./src/app/**/*.{js,ts,jsx,tsx,mdx}',
 	],
 	theme: {
 		container: {
@@ -133,7 +135,8 @@ module.exports = {
 				kanit: [
 					'var(--font-kanit)',
 					'sans-serif'
-				]
+				],
+				nunitoSans: ['var(--font-nunito-sans)'],
 			},
 			boxShadow: {
 				'custom-gray': '0px 4px 0px #EBE4EC',
