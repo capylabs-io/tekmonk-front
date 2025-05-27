@@ -5,7 +5,6 @@ const phoneRegex = /^(\+84|0)\d{9,10}$/;
 const UpdateInfoStep1Schema = z.object({
   fullName: z
     .string({ required_error: "Họ tên là bắt buộc" })
-    .min(5, "Họ tên phải có ít nhất 5 ký tự")
     .min(1, "Họ tên là bắt buộc"),
   schoolName: z
     .string({ required_error: "Trường học là bắt buộc" })
@@ -61,7 +60,7 @@ const UpdateInfoStep2Schema = z
 
 export const updateUserInfoSchema = z.object({
   stepOne: UpdateInfoStep1Schema,
-  stepTwo: UpdateInfoStep2Schema,
+  // stepTwo: UpdateInfoStep2Schema,
 });
 
 export type UpdateUserInfoSchema = z.infer<typeof updateUserInfoSchema>;
