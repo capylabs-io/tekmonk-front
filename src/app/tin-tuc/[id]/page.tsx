@@ -33,6 +33,9 @@ export default function Page() {
     queryFn: async () => {
       try {
         const res = await ReqGetNewsById(id as string);
+        if (res && res.data && res.data && get(res.data, "status", "") !== "public") {
+          router.push(ROUTE.NEWS);
+        }
         return res.data;
       } catch (error) {
         return Promise.reject(error);
@@ -70,7 +73,9 @@ export default function Page() {
                 data.tags
                   .split(",")
                   .map((tag, index) => (
-                    <CommonTag key={index}>{tag.trim()}</CommonTag>
+                    <CommonTag className="cursor-pointer" onClick={() => {
+                      router.push(`${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`)
+                    }} key={index}>{tag.trim()}</CommonTag>
                   ))}
             </div>
             <div className="flex items-center justify-center gap-2">
@@ -110,9 +115,6 @@ export default function Page() {
             ></div>
           </div>
         </div>
-        <div className="w-full flex flex-col items-center">
-          <div className="w-full h-[1px] bg-gray-20"></div>
-        </div>
         {/* <RelatedInfo
           type="news"
           data={get(randomNews, "data", [])}
@@ -141,13 +143,11 @@ export default function Page() {
                 {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
               </time>
               <div
-                className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden"
+                className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden line-clamp-2"
                 dangerouslySetInnerHTML={{
                   __html: (get(newsItem, "title", "") || "")
                     .replace(/<[^>]+>/g, "")
                     .trim()
-                    .slice(0, 50)
-                    .concat(get(newsItem, "title", "").length > 50 ? "..." : ""),
                 }}
               ></div>
             </div>

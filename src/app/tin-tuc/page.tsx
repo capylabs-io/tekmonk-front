@@ -19,15 +19,14 @@ import qs from "qs";
 import { ReqGetAllNews, ReqGetRamdomNews } from "@/requests/news";
 import { get } from "lodash";
 import moment from "moment";
-import { SearchNewContent } from "@/components/news/SearchNewContent";
 import classNames from "classnames";
 import { CommonLoading } from "@/components/common/CommonLoading";
 import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 export default function News() {
   //use state
-  const [isSearch, setIsSearch] = useState(false);
+  const router = useCustomRouter();
   const [searchValue, setSearchValue] = useState("");
-  const handleLoadMoreContentt = () => {
+  const handleLoadMoreContent = () => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
@@ -43,7 +42,7 @@ export default function News() {
     refetch: refetchNews,
   } = useInfiniteQuery({
     refetchOnWindowFocus: false,
-    queryKey: ["news", searchValue],
+    queryKey: ["news"],
     queryFn: async ({ pageParam = 1 }) => {
       try {
         const queryString = qs.stringify({
@@ -54,18 +53,6 @@ export default function News() {
           filters: {
             type: "news",
             status: "public",
-            $or: [
-              {
-                title: {
-                  $contains: searchValue,
-                },
-              },
-              {
-                tags: {
-                  $contains: searchValue,
-                },
-              },
-            ],
           },
           populate: "*",
         });
@@ -93,10 +80,6 @@ export default function News() {
     },
   });
 
-  const handleSearchNews = (value: string) => {
-    setSearchValue(value);
-    refetchNews();
-  };
   if (isLoading) {
     return <CommonLoading />;
   }
@@ -104,105 +87,67 @@ export default function News() {
     <>
       <div
         className={classNames(
-          "w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto",
-          !isSearch ? "min-h-[calc(100vh-100px)]" : "h-max"
+          "w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto min-h-[calc(100vh-100px)]"
         )}
       >
-        {isSearch ? (
-          <>
-            <div className="lg:col-span-2 col-span-3">
-              <SearchNewContent
-                onBack={() => {
-                  setIsSearch(false);
-                  handleSearchNews("");
-                }}
-                value={searchValue}
-                onSearch={handleSearchNews}
-                data={data?.pages.flatMap((page) => page.data) || []}
+
+        <div className="lg:col-span-2 col-span-3">
+          {randomNews?.data && randomNews?.data?.length > 0 ? (
+            <>
+              <ShowCarouselItemsComponent data={randomNews?.data || []} />
+              <div className="w-full h-[1px] bg-gray-20 my-6"></div>
+              <FeaturedNewsComponent
+                data={
+                  (data ? data.pages.flatMap((page) => page.data) : []) ||
+                  []
+                }
+                onLoadMore={handleLoadMoreContent}
+                isFetchingNextPage={isFetchingNextPage}
               />
-            </div>
-            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
-              <div className="text-HeadingSm text-[#320130]">
-                Tin tức liên quan
+            </>
+          ) : (
+            <>
+              <div className="w-full h-full flex flex-col items-center justify-center">
+                <Image
+                  alt="empty-state"
+                  src="/image/empty-data-image.png"
+                  width={300}
+                  height={200}
+                />
+                <div className="text-BodyLg text-gray-95">
+                  Không có dữ liệu
+                </div>
+                <div className="text-BodyMd text-gray-70">
+                  Chúng tôi sẽ sớm cập nhật thông tin mới
+                </div>
               </div>
-              {randomNews?.data && randomNews?.data?.length > 0 && (
-                <SuggestComponent data={randomNews?.data || []} />
-              )}
-              <Image
-                src="/image/home/banner-layout.png"
-                alt="Default"
-                width={220}
-                height={350}
-                className="w-full object-cover rounded-2xl"
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="lg:col-span-2 col-span-3">
-              {randomNews?.data && randomNews?.data?.length > 0 ? (
-                <>
-                  <ShowCarouselItemsComponent data={randomNews?.data || []} />
-                  <div className="w-full h-[1px] bg-gray-20 my-6"></div>
-                  <FeaturedNewsComponent
-                    data={
-                      (data ? data.pages.flatMap((page) => page.data) : []) ||
-                      []
-                    }
-                    handleSearchNews={(value) => {
-                      setIsSearch(true);
-                      handleSearchNews(value);
-                    }}
-                    onLoadMore={handleLoadMoreContentt}
-                    isFetchingNextPage={isFetchingNextPage}
-                  />
-                </>
-              ) : (
-                <>
-                  <div className="w-full h-full flex flex-col items-center justify-center">
-                    <Image
-                      alt="empty-state"
-                      src="/image/empty-data-image.png"
-                      width={300}
-                      height={200}
-                    />
-                    <div className="text-BodyLg text-gray-95">
-                      Không có dữ liệu
-                    </div>
-                    <div className="text-BodyMd text-gray-70">
-                      Chúng tôi sẽ sớm cập nhật thông tin mới
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="col-span-1 flex-col gap-8 lg:flex hidden">
-              <Input
-                type="text"
-                placeholder="Tìm kiếm article theo từ khoá"
-                isSearch={true}
-                value={searchValue}
-                onChange={setSearchValue}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    setIsSearch(true);
-                    refetchNews();
-                  }
-                }}
-              />
-              {randomNews?.data && randomNews?.data?.length > 0 && (
-                <SuggestComponent data={randomNews?.data || []} />
-              )}
-              <Image
-                src="/image/home/banner-layout.png"
-                alt="Default"
-                width={220}
-                height={350}
-                className="w-full object-cover rounded-2xl"
-              />
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
+        <div className="col-span-1 flex-col gap-8 lg:flex hidden">
+          <Input
+            type="text"
+            placeholder="Tìm kiếm article theo từ khoá"
+            isSearch={true}
+            value={searchValue}
+            onChange={setSearchValue}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                router.push(`${ROUTE.SEARCH_NEWS}?value=${searchValue}`)
+              }
+            }}
+          />
+          {randomNews?.data && randomNews?.data?.length > 0 && (
+            <SuggestComponent data={randomNews?.data || []} />
+          )}
+          <Image
+            src="/image/home/banner-layout.png"
+            alt="Default"
+            width={220}
+            height={350}
+            className="w-full object-cover rounded-2xl"
+          />
+        </div>
       </div>
     </>
   );
@@ -305,12 +250,10 @@ const FeaturedNewsComponent = ({
   data,
   onLoadMore,
   isFetchingNextPage,
-  handleSearchNews,
 }: {
   data: TNews[];
   onLoadMore: () => void;
   isFetchingNextPage: boolean;
-  handleSearchNews: (value: string) => void;
 }) => {
   const router = useCustomRouter();
   const handleRedirect = (id: number) => {
@@ -360,39 +303,34 @@ const FeaturedNewsComponent = ({
             <>
               <div
                 key={newsItem.id}
-                className="h-[220px] w-full flex items-center gap-2 justify-center"
+                className="h-[200px] w-full flex items-center gap-2 justify-center"
               >
                 <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
                   <div className="flex gap-2">
                     {newsItem.tags?.split(",").map((tag, index) => (
                       <CommonTag onClick={() => {
-                        handleSearchNews(tag.trim())
+                        router.push(`${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`)
                       }} key={index}>{tag.trim()}</CommonTag>
                     ))}
                   </div>
                   <div className="flex flex-col gap-2 flex-grow">
                     <div
-                      className="text-HeadingSm text-gray-95 max-h-16 w-full overflow-hidden hover:cursor-pointer hover:underline hover:text-primary-95"
+                      className="text-HeadingSm text-gray-95 max-h-16 w-full line-clamp-2 overflow-hidden hover:cursor-pointer hover:underline hover:text-primary-95"
                       onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html: (get(newsItem, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
                           .trim()
-                          .slice(0, 80)
-                          .concat(
-                            get(newsItem, "title", "").length > 100 ? "..." : ""
-                          ),
                       }}
                     ></div>
 
                     <div
-                      className="text-BodyMd text-gray-95 max-h-12 overflow-hidden hover:cursor-pointer"
+                      className="text-BodyMd text-gray-95 max-h-12 line-clamp-3 overflow-hidden hover:cursor-pointer"
                       onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
                         __html:
                           get(newsItem, "content", "")
                             .replace(/<[^>]+>/g, "")
-                            .substring(0, 200) + "...",
                       }}
                     ></div>
                   </div>
@@ -407,6 +345,7 @@ const FeaturedNewsComponent = ({
                   alt=""
                   width={200}
                   height={200}
+                  onClick={() => handleRedirect(newsItem.id)}
                   className="h-[200px] object-cover rounded-2xl hover:cursor-pointer"
                 />
               </div>
