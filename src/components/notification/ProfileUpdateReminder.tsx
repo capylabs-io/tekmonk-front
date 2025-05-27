@@ -48,8 +48,13 @@ export const ProfileUpdateReminder = ({
         user: {
           id: userInfo.id,
         },
+        achievement: {
+          actionType: {
+            $eq: "SpecialUpdate",
+          },
+        },
       },
-      populate: ["user"],
+      populate: ["user", "achievement"],
     });
     const achievementHistory = await ReqGetAchievementHistory(queryString);
     if (achievementHistory.data.length > 0) {

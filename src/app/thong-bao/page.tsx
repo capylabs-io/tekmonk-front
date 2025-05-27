@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Tabs,
   TabsContent,
@@ -20,6 +20,8 @@ import { RefreshCw } from "lucide-react";
 export default function Notification() {
   const userInfo = useUserStore((state) => state.userInfo);
   const readNotificationMutation = useReadNotification();
+  const [totalAllCount, setTotalAllCount] = useState(0);
+  const [totalUnreadCount, setTotalUnreadCount] = useState(0);
 
   // Fetch all notifications
   const {
@@ -48,6 +50,21 @@ export default function Notification() {
     pageSize: 10,
   });
 
+  // Update total counts when data changes
+  useEffect(() => {
+    if (allNotificationsData?.pages?.[0]?.meta?.pagination) {
+      setTotalAllCount(allNotificationsData.pages[0].meta.pagination.total);
+    }
+  }, [allNotificationsData]);
+
+  useEffect(() => {
+    if (unreadNotificationsData?.pages?.[0]?.meta?.pagination) {
+      setTotalUnreadCount(
+        unreadNotificationsData.pages[0].meta.pagination.total
+      );
+    }
+  }, [unreadNotificationsData]);
+
   // Flatten notifications from pages
   const allNotifications = useMemo(() => {
     return allNotificationsData?.pages?.flatMap((page) => page.data) || [];
@@ -60,6 +77,8 @@ export default function Notification() {
   const handleNotificationClick = async (notificationId: number) => {
     try {
       await readNotificationMutation.mutateAsync(notificationId);
+      // Update unread count after marking as read
+      setTotalUnreadCount((prev) => Math.max(0, prev - 1));
     } catch (error) {
       console.error("Failed to mark notification as read:", error);
     }
@@ -150,11 +169,9 @@ export default function Notification() {
 
       <Tabs defaultValue="all" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
-          <TabsTrigger value="all">
-            Tất cả ({allNotifications.length})
-          </TabsTrigger>
+          <TabsTrigger value="all">Tất cả ({totalAllCount})</TabsTrigger>
           <TabsTrigger value="unread">
-            Chưa đọc ({unreadNotifications.length})
+            Chưa đọc ({totalUnreadCount})
           </TabsTrigger>
         </TabsList>
 
