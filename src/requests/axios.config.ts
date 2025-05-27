@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const config: AxiosRequestConfig = {
   baseURL: BASE_URL,
-  timeout: 120000
+  timeout: 120000,
 };
 
 const tekdojoAxios = axios.create(config);
@@ -25,6 +25,8 @@ tekdojoAxios.interceptors.request.use(
     }
     return config;
   },
+  //check jwt expired
+  //send request refresh token
   (error: AxiosError) => {
     return Promise.reject(error);
   }
@@ -77,11 +79,8 @@ tekdojoAxios.interceptors.response.use(
       isRefreshing = true;
 
       return new Promise(async (resolve, reject) => {
-        const [setRefreshToken, setJwt, refreshToken] = useUserStore(
-          (state) => [state.setRefreshToken, state.setJwt, state.refreshToken]
-        );
         try {
-          const tokenRefresh = refreshToken; // Hoặc từ cookies
+          const tokenRefresh = useUserStore.getState().refreshToken; // Hoặc từ cookies
           if (!tokenRefresh) {
             throw new Error("Refresh token not available");
           }
@@ -89,7 +88,7 @@ tekdojoAxios.interceptors.response.use(
           const newTokens = await getNewToken(tokenRefresh); // Gọi API để làm mới token
           const { jwt } = newTokens.data;
 
-          setRefreshToken(tokenRefresh);
+          useUserStore.getState().setRefreshToken(tokenRefresh);
           tekdojoAxios.defaults.headers["Authorization"] = "Bearer " + jwt;
           originalRequest.headers["Authorization"] = "Bearer " + jwt;
 
@@ -97,7 +96,8 @@ tekdojoAxios.interceptors.response.use(
           resolve(tekdojoAxios(originalRequest));
         } catch (err) {
           processQueue(err, null);
-          setJwt(""); // Xóa token khỏi localStorage khi refresh token không hợp lệ
+          console.log("err jwt", err);
+          useUserStore.getState().setJwt(""); // Xóa token khỏi localStorage khi refresh token không hợp lệ
           reject(err);
         } finally {
           isRefreshing = false;

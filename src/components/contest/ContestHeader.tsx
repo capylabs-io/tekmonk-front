@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 const nunitoSans = Nunito_Sans({
   // weight: "600",
@@ -19,7 +20,7 @@ const nunitoSans = Nunito_Sans({
 });
 
 const ContestHeader = () => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isConnected = useUserStore((state) => state.isConnected);
   const [isClient, setIsClient] = useState(false);
@@ -39,7 +40,7 @@ const ContestHeader = () => {
 
   const handleLogout = () => {
     useUserStore.getState().clear();
-    router.push("/login");
+    router.push("/dang-nhap");
   };
 
   return (
@@ -95,7 +96,7 @@ const ContestHeader = () => {
                 {!isConnected() ? (
                   <div
                     className="cursor-pointer"
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push("/dang-nhap")}
                   >
                     Đăng nhập
                   </div>
@@ -138,9 +139,8 @@ const ContestHeader = () => {
 
             {/* Mobile Menu */}
             <div
-              className={`fixed flex flex-col justify-between z-30 right-0 w-2/3 h-full bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${
-                isMenuOpen ? "translate-x-0" : "translate-x-full"
-              }`}
+              className={`fixed flex flex-col justify-between z-30 right-0 w-2/3 h-full bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+                }`}
             >
               <ul className="flex flex-col items-center py-2 text-gray-950">
                 <li
@@ -152,14 +152,14 @@ const ContestHeader = () => {
 
                 <li
                   className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-                  // onClick={() => router.push("/contest")}
+                // onClick={() => router.push("/contest")}
                 >
                   Tổng hợp bài dự thi
                 </li>
                 {!isConnected() ? (
                   <li
                     className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-                    onClick={() => router.push("/login")}
+                    onClick={() => router.push("/dang-nhap")}
                   >
                     Đăng nhập
                   </li>

@@ -1,406 +1,595 @@
-// "use client";
-// import Image from "next/image";
-// import React, { useEffect } from "react";
-// import { Kanit, Dela_Gothic_One } from "next/font/google";
-// import { useRouter } from "next/navigation";
-// import { FunnelCard } from "@/components/funnel/FunnelCard";
-
-// const kanit = Kanit({ weight: "400", subsets: ["latin"] });
-// const delaGothicOne = Dela_Gothic_One({
-//   weight: "400",
-//   subsets: ["latin"],
-//   variable: "--font-delo",
-// });
-
-// export default function Landing() {
-//   const router = useRouter();
-//   // phụ huynh
-//   const handleCardClick = () => {
-//     window.open("https://tekmonk.edu.vn/");
-//   };
-//   //học viên
-//   const handleCard1Click = () => {
-//     router.push("/landing");
-//   };
-//   //giảng viên
-//   const handleCard2Click = () => {
-//     router.push("/landing");
-//   };
-//   //menu tuyển dụng
-//   const handleMenuClick = () => {
-//     router.push("/recruitment");
-//   };
-//   return (
-//     //mặc định chuyển hướng về trang contest
-//      1 != 1 ?
-//     <>
-//       <div className="h-screen relative">
-//         <nav className="w-full flex justify-between p-4">
-//           <Image
-//             src="/image/app-logo.png"
-//             alt="app logo"
-//             width={159}
-//             height={32}
-//           />
-//           <ul className="flex items-center gap-4">
-//             <li className="cursor-pointer hover:text-primary-600">
-//               <a href="https://tekmonk.edu.vn/category/san-pham-hoc-vien/">
-//                 Sản Phẩm
-//               </a>
-//             </li>
-//             <li
-//               className="cursor-pointer hover:text-primary-600"
-//               onClick={handleMenuClick}
-//             >
-//               Tuyển dụng
-//             </li>
-//             <li className="cursor-pointer hover:text-primary-600">
-//               <a href="https://tekmonk.edu.vn/gioi-thieu/">Về chúng tôi</a>
-//             </li>
-//           </ul>
-//         </nav>
-//         <div className="w-full relative flex justify-center max-h-[360px] z-20">
-//           <Image
-//             src="/image/home/left-banner-2.png"
-//             alt="left banner"
-//             className="absolute left-0 mt-16"
-//             width={350}
-//             height={350}
-//           />
-//           <Image
-//             src="/image/landing/right-banner-pic.png"
-//             alt="right banner"
-//             className="absolute right-0 mt-16"
-//             width={320}
-//             height={320}
-//           />
-//         </div>
-//         <div className="z-50 flex flex-col items-center text-center justify-center w-full mt-16">
-//           <div
-//             className={`mt-3 text-[58px] text-primary-950 font-bold ${kanit.className} w-2/5 leading-none`}
-//           >
-//             Vui chơi, sáng tạo và kết nối cộng đồng
-//           </div>
-//           <div className="text-xl text-gray-500 w-1/4 mt-6">
-//             Được tin dùng bởi hàng nghìn học sinh và phụ huynh của Tekmonk
-//           </div>
-//         </div>
-//         <div className="bg-cover w-full h-[400px] 2xl:h-[500px] bg-gradient-to-t from-[#E079D4]/80 to-[#EE94E5]/10 fixed -bottom-8 2xl:bottom-0 flex justify-center items-center gap-x-8 rounded-t-[50%] z-0 scale-105"></div>
-//         <Image
-//           src="/image/landing/left-stars.png"
-//           alt="coin"
-//           width={60}
-//           height={77}
-//           className="fixed top-24 left-[20%] scale-110"
-//         />
-//         <Image
-//           src="/image/landing/middle-stars.png"
-//           alt="coin"
-//           width={60}
-//           height={53}
-//           className="fixed top-16 left-[50%] scale-110"
-//         />
-//         <Image
-//           src="/image/landing/right-stars.png"
-//           alt="coin"
-//           width={120}
-//           height={114}
-//           className="fixed top-24 right-[18%] scale-110"
-//         />
-//         <Image
-//           src="/image/landing/coins-x15.png"
-//           alt="coin"
-//           width={160}
-//           height={160}
-//           className="fixed bottom-20 left-20 scale-110"
-//         />
-//         <Image
-//           src="/image/landing/fire-x15.png"
-//           alt="coin"
-//           width={160}
-//           height={160}
-//           className="fixed -bottom-16 right-20 rotate-[-10deg] scale-125"
-//         />
-//         <div className="w-full text-SubheadXl text-center mt-24 2xl:mt-60 text-primary-950">
-//           Bắt đầu với vai trò...
-//         </div>
-//         <div className="w-full flex justify-center items-center gap-x-8 z-20 mt-5">
-//           <FunnelCard
-//             title="Phụ huynh"
-//             imageUrl="/image/home/parent-icon.png"
-//             onClick={handleCardClick}
-//           />
-//           <FunnelCard
-//             title="Học viên"
-//             imageUrl="/image/home/student-icon.png"
-//             onClick={handleCard1Click}
-//           />
-//           <FunnelCard
-//             title="Giáo viên"
-//             imageUrl="/image/home/teacher-icon.png"
-//             onClick={handleCard2Click}
-//           />
-//         </div>
-//       </div>
-//     </>
-//     : router.push("/")
-//   );
-// }
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { CommonButton } from "@/components/common/button/CommonButton";
+import { Navbar } from "@/components/common/Navbar";
+import { ArrowRight, ChevronRight, Heart, MessageCircle } from "lucide-react";
 import Image from "next/image";
+import { Zap } from "lucide-react";
 import {
-  CardContest,
-  CardContestContent,
-} from "@/components/common/CardContest";
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
+import { Marquee } from "@/components/magicui/marquee";
 import { LAYERS } from "@/contants/layer";
-import Clock from "@/components/contest/Clock";
-import TypingAnimation from "@/components/ui/typing-animation";
-import BlurFade from "@/components/ui/blur-fade";
-import { shareOnMobile } from "react-mobile-share";
-import { getContest } from "@/requests/contest";
-import ContestLayout from "@/components/layout/ContestLayout";
-import { Share } from "lucide-react";
-import ContestRules from "@/components/contest/rules/ContestRules";
-import { Button } from "@/components/common/Button";
-import { IconDisPlay } from "@/components/contest/IconDisplay";
-import { AccordionContest } from "@/components/contest/rules/AccordionContest";
-import { Contest as TypeContest } from "@/types/common-types";
-import {
-  CONTEST_RULES_DETAILS,
-  SHARE_TEXT,
-  SHARE_TITLE,
-} from "@/contants/contest/tekmonk";
+import { BannerCard } from "@/components/new/BannerCard";
+import { LandingFooter } from "@/components/new/NewsFooter";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ROUTE } from "@/contants/router";
+import Link from "next/link";
+import { Button } from "@/components/common/button/Button";
+import GridPattern from "@/components/ui/grid-pattern";
+import { motion, AnimatePresence } from "framer-motion";
+import { ScrollAnimateIn } from "@/components/landing/ScrollAnimationContent";
 
-export default function Contest() {
-  // => use state
-  const [scrollY, setScrollY] = useState(0);
-  const [isClient, setIsClient] = useState<boolean>(false);
-  const [contestData, setContestData] = useState<TypeContest>();
+type TCourseSection = {
+  title: string;
+  description: string;
+  imageSrc?: string;
+  imageContent?: React.ReactNode;
+  iconSrc: string;
+  connectSrc: string;
+  state?: boolean;
+};
 
-  // => use store
+const listReview = [
+  "/image/landing/group-image-1.png",
+  "/image/landing/group-image-2.png",
+  "/image/landing/group-image-3.png",
+  "/image/landing/group-image-4.png",
+  "/image/landing/group-image-5.png",
+  "/image/landing/group-image-6.png",
+  "/image/landing/group-image-7.png",
+];
 
-  // => function handle
-  const fetchContestData = async () => {
-    try {
-      const res = await getContest();
-      if (res) {
-        setContestData(res);
-      }
-    } catch (error) {}
-  };
+const accordionData = [
+  {
+    title: "Sáng tạo",
+    content:
+      "Tại TekMonk, chúng tôi khuyến khích mọi người vượt ra ngoài vùng an toàn của mình để thử nghiệm những ý tưởng mới, dù là khác biệt và chưa từng có tiền lệ. Chúng tôi không ngừng cải tiến sản phẩm và dịch vụ để mang lại giá trị tốt nhất cho học viên, đối tác, nhà đầu tư và cộng đồng.",
+  },
+  {
+    title: "Dũng cảm",
+    content: "Content for Dũng cảm section...",
+  },
+  {
+    title: "Năng động",
+    content: "Content for Năng động section...",
+  },
+  {
+    title: "Tư duy",
+    content: "Content for Tư duy section...",
+  },
+];
 
-  const handleScrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleScroll = () => {
-    setScrollY(window.scrollY);
-  };
-
-  //use effect
-  useEffect(() => {
-    //call api
-    fetchContestData();
-
-    setIsClient(true);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  const Typing = useMemo(() => {
-    return (
-      <TypingAnimation
-        texts={["GIẢI VÔ ĐỊCH", "TEKMONK CODING OLYMPIAD"]}
-        className="text-primary-700 uppercase font font-dela text-5xl md:text-6xl lg:text-7xl max-[460px]:text-[40px]
-                      max-md:tracking-[0.02em] 
-                      max-md:!leading-[3rem]
-                      "
-      />
-    );
-  }, []);
-
+const CoreValueComponent = () => {
+  const listCoreValue = [
+    {
+      title: "Sáng tạo",
+      description: "Thúc đẩy tư duy đổi mới không ngừng, khuyến khích học viên và giáo viên ứng dụng công nghệ để tạo ra những giải pháp đột phá.",
+      imageSrc: "/image/landing/core-value-1.svg",
+    },
+    {
+      title: "Dũng cảm",
+      description: "Nuôi dưỡng tinh thần dũng cảm – dám nghĩ lớn, dám làm khác, không sợ thất bại để dẫn dắt hành trình đổi mới giáo dục công nghệ.",
+      imageSrc: "/image/landing/core-value-2.svg",
+    },
+    {
+      title: "Năng động",
+      description: "Chủ động thích nghi, linh hoạt thay đổi để tạo nên môi trường học tập hiện đại, sáng tạo và đầy năng lượng.",
+      imageSrc: "/image/landing/core-value-3.svg",
+    },
+    {
+      title: "Tư duy",
+      description: "Đề cao tư duy phản biện, học hỏi suốt đời và khả năng kết nối kiến thức với thực tiễn, nhằm trang bị cho học viên nền tảng vững chắc.",
+      imageSrc: "/image/landing/core-value-4.svg",
+    },
+  ];
   return (
-    isClient && (
-      <div className="relative overflow-hidden">
-        <div
-          className={`absolute w-[195%] h-full top-[480px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_2}]
-      bg-gradient-to-b from-[rgb(248,239,248)] to-[rgb(159,42,143)] rounded-t-[50%] 
-      max-mobile:w-[310%] max-mobile:top-[430px]
-      max-md:w-[260%] max-md:top-[400px]`}
-        ></div>
-        <div
-          className={`absolute w-[140%] h-full top-[480px] -translate-x-1/2 left-1/2 -z-[${LAYERS.BACKGROUND_1}]
-      bg-gradient-to-b from-[rgb(247,224,246)] to-[rgb(224,121,213)] rounded-t-[50%] 
-      max-mobile:w-[300%] max-mobile:top-[430px]
-      max-md:w-[230%] max-md:top-[400px]`}
-        ></div>
-        <ContestLayout>
-          <>
-            <div className="min-h-screen relative max-width-pc">
-              <div className="w-full mx-auto px-4 py-8 relative flex justify-center">
-                {/*  */}
-                <IconDisPlay />
-                {scrollY > 500 && (
-                  <div
-                    className="w-10 h-10 bg-white fixed bottom-3 right-5 z-[1000] cursor-pointer rounded-full"
-                    onClick={handleScrollToTop}
-                  >
-                    <Image
-                      src="/image/contest/scroll-top.png"
-                      alt="scroll-up"
-                      width={32}
-                      height={32}
-                      className="mx-auto mt-1"
-                    />
+    <ScrollAnimateIn
+      animation="fade-up"
+      className="w-full container mx-auto h-max flex flex-col items-center justify-center p-[80px]"
+      threshold={0.2}
+    >
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="flex flex-col items-center gap-2"
+        delay={0.1}
+      >
+        <div className="text-DisplayXs text-[#320130]">Giá trị cốt lõi</div>
+      </ScrollAnimateIn>
+      <ScrollAnimateIn
+        animation="stagger-fade"
+        className="mt-12 flex items-center justify-between w-full"
+        threshold={0.2}
+      >
+        {
+          listCoreValue.map((item, index) => (
+            <div
+              key={item.title + (index + 1)}
+              className="w-[296px] h-[232px] p-6 border-gray-30 border rounded-2xl flex flex-col items-center justify-center gap-2"
+            >
+              <Image
+                src={item.imageSrc}
+                alt=""
+                width={40}
+                height={40}
+              />
+              <div className="text-HeadingSm text-gray-95">{item.title}</div>
+              <div className="text-BodyMd text-gray-60">{item.description}</div>
+            </div>
+          ))
+        }
+      </ScrollAnimateIn>
+    </ScrollAnimateIn>
+  );
+};
+
+const CourseSection = ({
+  imageSrc,
+  imageContent,
+  iconSrc,
+  connectSrc,
+  title,
+  description,
+  state = true,
+}: TCourseSection) => {
+  return (
+    <ScrollAnimateIn
+      animation="fade-up"
+      className="w-full container mx-auto min-h-[512px] grid grid-cols-1 lg:grid-cols-2 items-center relative"
+      threshold={0.2}
+    >
+      {/* Text Section - Always First on Mobile */}
+      <div
+        className={cn(
+          "flex flex-col gap-4 mx-auto z-20 order-1",
+          state ? "lg:order-1" : "lg:order-2"
+        )}
+      >
+
+        <Image
+          src={iconSrc}
+          alt=""
+          width={64}
+          height={64}
+          className={cn(
+            "object-cover z-20 rounded-[100%]"
+          )}
+        />
+
+        <ScrollAnimateIn
+          animation="fade-up"
+          delay={0.4}
+          className="text-HeadingMd text-gray-95"
+        >
+          {title}
+        </ScrollAnimateIn>
+
+        <ScrollAnimateIn
+          animation="fade-up"
+          delay={0.5}
+
+          className="text-BodyLg text-gray-60"
+        >
+          {description}
+        </ScrollAnimateIn>
+      </div>
+
+      {/* Image Section - Ordered Dynamically */}
+      <ScrollAnimateIn
+        animation={state ? "slide-left" : "slide-right"}
+        delay={0.3}
+        className={cn(
+          "mx-auto z-20 order-2 ",
+          state ? "lg:order-2" : "lg:order-1"
+        )}
+      >
+        {
+          imageSrc && (
+            <Image
+              src={imageSrc}
+              alt=""
+              width={515}
+              height={320}
+              className="2xl:scale-110 hover:scale-125 transition-all duration-300 hover:cursor-pointer"
+            />
+          )
+        }
+        {imageContent}
+      </ScrollAnimateIn>
+
+      {/* Background Connection Image (Optional) */}
+      {connectSrc && (
+        <ScrollAnimateIn
+          animation="fade-up"
+          delay={0.8}
+          className="absolute  left-[30%] top-[70%] transform -translate-x-1/2 z-0 lg:block hidden"
+        >
+          <Image
+            alt=""
+            src={connectSrc}
+            width={527}
+            height={364}
+          />
+        </ScrollAnimateIn>
+      )}
+    </ScrollAnimateIn>
+  );
+};
+
+const AboutCourseComponent = () => {
+  return (
+    <ScrollAnimateIn
+      animation="fade-up"
+      className="w-full container mx-auto px-[80px] min-h-[2236px] flex flex-col items-center justify-start"
+      threshold={0.1}
+
+    >
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="text-DisplayXs text-[#320130] text-center"
+        delay={0.1}
+
+      >
+        Sự đặc biệt của khóa học
+      </ScrollAnimateIn>
+      <div className="flex-1 w-full flex flex-col items-center justify-start lg:gap-20 gap-14">
+        <CourseSection
+          imageContent={
+            <div className="relative h-[400px] w-[400px]">
+              <Image
+                src="/image/landing/about/reward-1.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-20 absolute right-2 top-40 -translate-y-1/2 hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[30px]"
+              />
+              <Image
+                src="/image/landing/about/vector.png"
+                alt=""
+                width={400}
+                height={400}
+                className="-z-[1] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              />
+              <Image
+                src="/image/landing/about/reward.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-10 absolute left-2 top-52 -translate-y-1/2 hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[-30px]"
+              />
+            </div>
+          }
+          iconSrc="/image/landing/course1.svg"
+          connectSrc="/image/landing/connect1.png"
+          title="Game hoá quá trình học tập"
+          description="Khóa học được thiết kế theo mô hình game hóa, biến mỗi bài học thành một hành trình khám phá hấp dẫn. Học viên sẽ “lên cấp”, mở khóa thử thách, tích lũy điểm thưởng và nhận phần quà khi hoàn thành nhiệm vụ."
+        />
+        <CourseSection
+          imageContent={
+            <div className="relative h-[400px] w-[400px]">
+              <Image
+                src="/image/landing/about/reward-3.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-10 absolute right-[-50px] bottom-[60px] hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[30px]"
+              />
+              <Image
+                src="/image/landing/about/vector-2.png"
+                alt=""
+                width={400}
+                height={400}
+                className="-z-[1] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              />
+              <Image
+                src="/image/landing/about/reward-2.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-10 absolute left-[-50px] bottom-[60px] hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[-30px]"
+              />
+              <Image
+                src="/image/landing/about/reward-4.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-20 absolute left-1/2 -translate-x-1/2 top-[140px] -translate-y-1/2 hover:cursor-pointer transition-all duration-300 hover:-translate-y-[30px]"
+              />
+            </div>
+          }
+          iconSrc="/image/landing/course2.svg"
+          connectSrc="/image/landing/connect2.png"
+          title="Bài giảng được thiết kế trực quan"
+          description="Bài giảng được thiết kế trực quan, sinh động, sử dụng đồ họa, video minh họa và mô phỏng tương tác để biến những khái niệm trừu tượng thành trải nghiệm dễ hiểu và dễ nhớ. Học viên không chỉ nghe và đọc, mà còn được “nhìn thấy” và “trải nghiệm” kiến thức"
+          state={false}
+        />
+        <CourseSection
+          imageContent={
+            <div className="relative h-[400px] w-[400px]">
+              <Image
+                src="/image/landing/about/post-2.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-20 absolute right-2 top-52 -translate-y-1/2 hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[30px]"
+              />
+              <Image
+                src="/image/landing/about/vector-1.png"
+                alt=""
+                width={400}
+                height={400}
+                className="-z-[1] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              />
+              <Image
+                src="/image/landing/about/post-1.png"
+                alt=""
+                width={218}
+                height={300}
+                className="z-10 absolute left-2 top-40 -translate-y-1/2 hover:cursor-pointer hover:scale-110 transition-all duration-300 hover:translate-x-[-30px]"
+              />
+            </div>
+          }
+          // imageSrc="/image/landing/course-road-3.png"
+          iconSrc="/image/landing/course3.svg"
+          connectSrc="/image/landing/connect3.png"
+          title="Thế giới quan độc đáo của từng học viên"
+          description="Khóa học được thiết kế để khuyến khích tư duy độc lập, thử nghiệm và sáng tạo, giúp học viên khám phá những cách tiếp cận mới mẻ, từ đó phát triển kỹ năng công nghệ mạnh mẽ và tư duy đổi mới không giới hạn."
+        />
+        <CourseSection
+          imageContent={
+            <div className="relative h-[400px] w-[400px]">
+              <Image
+                src="/image/landing/about/vector-3.png"
+                alt=""
+                width={400}
+                height={400}
+                className="-z-[1] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+              />
+              <Image
+                src="/image/landing/about/Stat.png"
+                alt=""
+                width={330}
+                height={330}
+                className="z-10 absolute left-[53%] -translate-x-1/2 top-1/2 -translate-y-1/2 hover:cursor-pointer hover:scale-110 transition-all duration-300"
+              />
+            </div>
+          }
+
+          iconSrc="/image/landing/course4.svg"
+          connectSrc=""
+          title="Đồng hành cùng con trong quá trình học"
+          description="Chúng tôi luôn đồng hành cùng con trong từng bước học, hỗ trợ và khích lệ để con phát huy tối đa khả năng của mình. Mỗi bài học là một cơ hội để con học hỏi, sáng tạo và vượt qua thử thách, với sự hướng dẫn tận tâm từ đội ngũ giảng viên."
+          state={false}
+        />
+      </div>
+    </ScrollAnimateIn>
+  );
+};
+
+const ImageIntroduce = () => {
+  return (
+    <ScrollAnimateIn
+      animation="fade-up"
+      className="w-full min-h-[912px] flex flex-col items-center justify-center gap-12 bg-[#F5F4F5]"
+      threshold={0.1}
+
+    >
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="text-DisplayXs text-[#320130] max-w-[579px] text-center"
+        delay={0.1}
+      >
+        Vì một thế hệ trẻ năng động với công nghệ
+      </ScrollAnimateIn>
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="w-full h-[512px] flex flex-col"
+        delay={0.3}
+
+      >
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-4">
+          <Marquee pauseOnHover className="[--duration:50s]">
+            {listReview.map((review, index) => (
+              <Image
+                key={index + review}
+                alt=""
+                src={review}
+                width={400}
+                height={248}
+                className="rounded-[8px] object-cover mx-4 shadow-md"
+              />
+            ))}
+          </Marquee>
+          <Marquee reverse pauseOnHover className="[--duration:70s]">
+            {listReview.map((review, index) => (
+              <Image
+                key={index + review}
+                alt=""
+                src={review}
+                width={400}
+                height={248}
+                className="rounded-[8px] object-cover mx-4 shadow-md"
+              />
+            ))}
+          </Marquee>
+        </div>
+      </ScrollAnimateIn>
+    </ScrollAnimateIn>
+  );
+};
+
+const ReviewFromCommunity = () => {
+  return (
+    <ScrollAnimateIn
+      animation="fade-up"
+      className="w-full min-h-[600px] flex flex-col items-center justify-center lg:gap-24 gap-10 relative"
+      threshold={0.1}
+
+    >
+      <GridPattern
+        className={cn(
+          "[mask-image:radial-gradient(200%_circle_at_center,white,transparent)]",
+          `absolute top-0 h-full z-[${LAYERS.BACKGROUND_1}]`
+        )}
+        width={40}
+        height={40}
+        strokeWidth={0.5}
+        strokeColor="#F5D0EF"
+        lineSpacing={3}
+      />
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="text-DisplayXs text-[#320130] text-center"
+        delay={0.1}
+      >
+        Lời khen ngợi từ cộng đồng
+      </ScrollAnimateIn>
+      <ScrollAnimateIn
+        animation="fade-up"
+        className="w-full z-0 bg-white"
+        delay={0.3}
+
+      >
+        <Marquee pauseOnHover className="[--duration:50s] w-full">
+          {listReview.map((review, index) => (
+            <div
+              key={index + review}
+              className="lg:w-[560px] w-[320px] h-[256px] border-[2px] border-gray-30 rounded-3xl flex flex-col "
+              style={{
+                boxShadow: "0px 8px 0px #DDD0DD",
+              }}
+            >
+              <div className="flex items-center gap-4 p-4">
+                <Image
+                  alt=""
+                  src="/image/profile/avatar-x2.png"
+                  width={48}
+                  height={48}
+                  className="rounded-[100%]"
+                />
+                <div className="flex flex-col gap-2">
+                  <div className="text-lg leading-[24px] font-medium">
+                    Chị Minh Tâm
                   </div>
-                )}
-                <div className="w-[884px] mt-4 relative">
-                  <div className="text-center mb-8 flex-col justify-center px-1">
-                    {Typing}
-
-                    <div className="mt-4 text-Subhead3Xl text-primary-950 max-[460px]:text-xl max-[460px]:!leading-[1.5rem]">
-                      Cuộc thi Lập trình cấp Quốc Gia đầu tiên dành cho học sinh
-                    </div>
-                  </div>
-                  {/* use later */}
-                  {/* <div
-                  className="w-full h-auto mt-[52px] sm:h-[150px] flex justify-center items-center gap-4 mx-auto 
-                              max-sm:h-[110px]"
-                >
-                  <CardContest className="w-[250px] max-sm:w-[200px] h-full flex flex-col items-center justify-center relative shadow-custom-gray bg-white">
-                    <div className=" text-SubheadMd max-sm:text-sm text-gray-500">
-                      Số thí sinh đăng ký
-                    </div>
-
-                    <NumberTicker
-                      value={1800}
-                      className="text-[40px] max-sm:text-[35px] font-normal text-primary-700 font-dela"
-                    />
-                  </CardContest>
-
-                  <CardContest className="w-[250px] max-sm:w-[200px] h-full flex flex-col items-center justify-center relative shadow-custom-gray bg-white">
-                    <div className=" text-SubheadMd max-sm:text-sm text-gray-500">
-                      Số bài dự thi
-                    </div>
-                    <NumberTicker
-                      value={50}
-                      className="text-[40px] max-sm:text-[35px] font-normal text-primary-700 font-dela"
-                    />
-                  </CardContest>
-                </div> */}
-
-                  <div className=" mt-0 p-0">
-                    <BlurFade delay={0.25 + 3 * 0.05} inView>
-                      {contestData && <Clock contestData={contestData} />}
-                    </BlurFade>
-                    <BlurFade delay={0.25 + 4 * 0.05} inView>
-                      <CardContest
-                        className={`mt-12 px-6 flex flex-col justify-center items-center min-[686px]:max-w-4xl mx-auto overflow-hidden shadow-custom-gray p-6 z-[${LAYERS.POST}]
-                      
-                      max-[685px]:w-[580px]
-                      max-[685px]:p-4
-                      
-                      max-mobile:w-[360px]
-                      max-mobile:p-1 
-                      max-mobile:rounded-lg
-                      
-                    `}
-                      >
-                        <CardContestContent className="p-0 w-full">
-                          <Image
-                            src="/image/contest/banner-landing.jpg"
-                            alt="Contest participants"
-                            width={800}
-                            height={400}
-                            className="w-full h-auto rounded-lg max-mobile:rounded-md"
-                          />
-
-                          <div className="p-6 w-full max-mobile:p-2">
-                            <div
-                              className="mt-2 flex w-full justify-center items-center gap-x-5 
-                            max-mobile:flex-col
-                            max-mobile:gap-y-3
-                            
-                            "
-                            >
-                              <Button
-                                className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px] "
-                                outlined={true}
-                                onClick={() =>
-                                  window.open(CONTEST_RULES_DETAILS, "_blank")
-                                }
-                              >
-                                Chi tiết thể lệ cuộc thi
-                              </Button>
-                              <Button
-                                className="border border-gray-300 !rounded-[3rem] shadow-custom-gray min-w-[200px]  "
-                                outlined={true}
-                                onClick={() =>
-                                  shareOnMobile({
-                                    text: SHARE_TEXT,
-                                    url: process.env.NEXT_PUBLIC_BASE_URL,
-                                    title: SHARE_TITLE,
-                                    // images: ["/image/contest/Frame-43.png"],
-                                  })
-                                }
-                              >
-                                Chia sẻ cuộc thi
-                                <Share className="ml-2" />
-                              </Button>
-                            </div>
-
-                            <div
-                              id="rules"
-                              className="mt-6 font-bold text-[32px] text-gray-950 text-center max-mobile:text-[24px] max-md:text-[28px]"
-                            >
-                              Thể lệ giải vô địch TEKMONK CODING OLYMPIAD
-                            </div>
-                            <div className="mt-10 text-gray-950 text-bodyLg max-mobile:text-base">
-                              <b>“Tekmonk Coding Olympiad”</b> là giải vô địch
-                              lập trình nằm trong khuôn khổ{" "}
-                              <b>
-                                cuộc thi Vô địch Quốc gia STEM, AI và Robotics
-                                2024 (VSAR)
-                              </b>{" "}
-                              do <b>báo Tiền Phong và báo Hoa Học Trò</b> tổ
-                              chức dưới sự chỉ đạo của{" "}
-                              <b>
-                                Trung ương Đoàn TNCS Hồ Chí Minh, Bộ Khoa học và
-                                Công nghệ, nằm trong hoạt động của ngày hội STEM
-                                quốc gia.
-                              </b>{" "}
-                              Với định hướng đẩy mạnh giáo dục STEM trong trường
-                              học phổ thông, Tekmonk Coding Olympiad không chỉ
-                              là một cuộc thi mà còn là sân chơi để các em phát
-                              triển tư duy logic và rèn luyện kỹ năng giải quyết
-                              vấn đề thực tiễn thông qua các nhiệm vụ thiết kế,
-                              lập trình. Không những vậy, sự kiện còn là cơ hội
-                              để các bạn giao lưu, học hỏi từ các chuyên gia đầu
-                              ngành và bạn bè quốc tế.
-                            </div>
-
-                            <div className=" mt-10 max-mobile:hidden">
-                              <ContestRules />
-                            </div>
-                            {/* for mobile  */}
-                            <div className="hidden max-mobile:block">
-                              <AccordionContest />
-                            </div>
-                          </div>
-                        </CardContestContent>
-                      </CardContest>
-                    </BlurFade>
+                  <div className="text-sm leading-[20px] font-normal text-gray-50">
+                    Mẹ cháu Gia Khang (10 tuổi)
                   </div>
                 </div>
               </div>
+              <div className="lg:p-4 px-4 text-gray-95 text-BodyMd text-ellipsis h-[120px]">
+                Tôi rất tin tưởng khi cho con học tại Tekmonk. Mặc dù sợ rằng con
+                sẽ chơi game và dùng máy tính vào mục đích ngoài học tập nhưng con
+                rất tự giác. Tôi thấy con thực sự đam mê với môn học này. Gia đình
+                không ép buộc con phải học ngành nào mà muốn tự con trải nghiệm.
+                Những gì học được ở Tekmonk là cơ hội để định hướng tương lai của
+                con.
+              </div>
             </div>
-          </>
-        </ContestLayout>
+          ))}
+        </Marquee>
+      </ScrollAnimateIn>
+    </ScrollAnimateIn>
+  );
+};
+
+// const BannerBottom = () => {
+//   return (
+//     <div className="overflow-hidden w-full h-[560px] relative">
+//       <div className="bg-[url('/image/contest/Frame-43.png')] h-full bg-cover bg-no-repeat flex flex-col items-center justify-center gap-9 overflow-hidden ">
+//         <div className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-50 mix-blend-multiply" />
+//         <div className="text-gray-10 sm:text-DisplayMd text-DisplayXs text-center max-w-[500px] z-10 p-2">
+//           Phát triển cùng chúng tôi
+//         </div>
+//         <div className="flex flex-col items-center gap-7 z-10">
+//           <CommonButton
+//             className="text-white border-[2px] w-[203px] h-[52px]"
+//             childrenClassName="flex items-center justify-center gap-2"
+//           >
+//             <Link href={ROUTE.HOME}>Khám phá ngay</Link>
+//             <ChevronRight size={24} color="#ffffff" className="mt-1" />
+//           </CommonButton>
+//         </div>
+//       </div>
+//       {/* Show icon, character here */}
+//     </div>
+//   );
+// };
+
+export default function Page() {
+  const router = useCustomRouter();
+  const handleRedirectMainPage = () => {
+    router.push(`${ROUTE.NEWS_FEED}`);
+  };
+
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-[calc(100vh-64px)] mt-16 flex flex-col items-center justify-center">
+        <div className="w-full flex">
+          <ScrollAnimateIn
+            animation="slide-right"
+            className="w-1/2 bg-primary-05 relative overflow-hidden flex flex-col items-center justify-center"
+            delay={0.2}
+          >
+            <Image
+              width={325}
+              height={319}
+              src="/image/landing/introduction-feature-2.png"
+              alt=""
+              className="object-cover absolute top-0 left-0"
+            />
+            <Image
+              width={325}
+              height={319}
+              src="/image/landing/introduction-feature-1.png"
+              alt=""
+              className="object-cover absolute bottom-0 right-0"
+            />
+            <ScrollAnimateIn
+              animation="fade-up"
+              className="z-20 w-[80%]"
+              delay={0.4}
+            >
+              <div className="lg:text-DisplayXl md:text-DisplayLg sm:text-DisplayMd text-DisplayXs p-2">
+                Vui chơi, sáng tạo
+                & kết nối cộng đồng
+              </div>
+              <div className="!font-normal md:text-HeadingSm text-HeadingXs text-gray-70 mt-4">
+                Được tin dùng bởi hơn 1 triệu phụ huynh & học sinh tại Việt Nam
+              </div>
+              <ScrollAnimateIn
+                animation="fade-up"
+                delay={0.6}
+              >
+                <Button
+                  className="text-white border-[2px] !w-max h-[52px] mt-8"
+                  onClick={handleRedirectMainPage}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    Khám phá ngay <ArrowRight size={24} color="#ffffff" />
+                  </div>
+                </Button>
+              </ScrollAnimateIn>
+            </ScrollAnimateIn>
+          </ScrollAnimateIn>
+          <ScrollAnimateIn
+            animation="slide-left"
+            className="w-1/2 h-[615px] bg-[url('/image/landing/introduction-image.png')] bg-cover bg-no-repeat bg-center"
+            delay={0.2}
+          >
+            <div className="w-full h-full" />
+          </ScrollAnimateIn>
+        </div>
+        <CoreValueComponent />
+        <AboutCourseComponent />
+        <ImageIntroduce />
+        <ReviewFromCommunity />
+        <LandingFooter />
       </div>
-    )
+    </>
   );
 }

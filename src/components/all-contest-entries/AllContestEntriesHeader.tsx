@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useCustomRouter } from "../common/router/CustomRouter";
 export default function AllContestEntriesHeader() {
-  const router = useRouter();
+  const router = useCustomRouter();
   return (
     <>
       <div className="h-16 w-full flex items-center justify-between pl-12 pr-12 border-b ">

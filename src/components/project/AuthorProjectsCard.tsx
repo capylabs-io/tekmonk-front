@@ -2,7 +2,7 @@
 import React, { ReactNode, useState } from "react";
 import Image from "next/image";
 import classNames from "classnames";
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { ArrowRight } from "lucide-react";
 import { Project } from "@/types/common-types";
 

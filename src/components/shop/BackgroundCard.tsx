@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from "@/components/common/Dialog";
 
-import { Button } from "../common/Button";
+import { Button } from "../common/button/Button";
 import { Label } from "../common/Label";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 export const BackgroundCard = ({
@@ -45,7 +45,7 @@ export const BackgroundCard = ({
             alt="avatar pic"
             width={170}
             height={100}
-            className="rounded-xl"
+            className="rounded-xl max-h-[100px] max-w-[170px] object-cover"
           />
           <div className="w-full mt-2 text-sm text-black truncate text-left">
             {title}

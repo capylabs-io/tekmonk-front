@@ -1,125 +1,181 @@
-import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/common/Table";
-import Image from "next/image";
+"use client";
 import { MoreHorizontal } from "lucide-react";
-import classNames from "classnames";
-import { LeaderboardData } from "@/types/common-types";
-import { Pagination } from "../common/Pagination";
+import Image from "next/image";
+import { CommonTable } from "../common/CommonTable";
+import { UserRankingProps } from "@/types/users";
+import { useCustomRouter } from "../common/router/CustomRouter";
+import { Input } from "../common/Input";
+import { useState, useEffect, useCallback } from "react";
 import { get } from "lodash";
+
 type Props = {
-  data: LeaderboardData[];
+  data: UserRankingProps[];
+  totalDocs?: number;
+  totalPages?: number;
+  page?: number;
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  onSearch?: (searchValue: string) => void;
+  isLoading?: boolean;
+  countText: string;
 };
-export const LeaderboardTable = ({ data }: Props) => {
-  const handleNextPage = () => {};
-  const handlePrevPage = () => {};
-  const handlePageClick = () => {};
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[200px] text-center">THỨ HẠNG</TableHead>
-          <TableHead className="w-[400px] text-center">TÀI KHOẢN</TableHead>
-          <TableHead className="text-center">TƯỚC VỊ</TableHead>
-          <TableHead className="text-center">ĐIỂM SỐ</TableHead>
-          <TableHead className="text-center"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((row, index) => {
-          return (
-            <TableRow
-              key={row?.user.username}
-              className={classNames((index + 1) % 2 !== 0 && "bg-gray-50")}
-            >
-              <TableCell className="font-medium text-center">
-                {index + 1}
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-x-2 items-center">
-                  <div className="h-4 w-4">
-                    <Image
-                      src="/image/gem/diamond-gem.png"
-                      alt="gem pic"
-                      width={16}
-                      height={16}
-                    />
-                  </div>
-                  <Image
-                    src="/image/leaderboard/user1.png"
-                    alt="avatar pic"
-                    width={26}
-                    height={26}
-                    className="rounded-full"
-                  />
-                  <div className="text-SubheadSm !font-medium">
-                    {row?.user.username}
-                  </div>
-                  <div className="text-gray-500">
-                    @{get(row?.user, "twitterName")}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="text-center">
-                {row?.user.specialName}
-              </TableCell>
-              <TableCell className="text-center">9500</TableCell>
-              <TableCell className="text-center">
-                <MoreHorizontal size={20} />
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-      <TableRow className="h-[80px] flex items-center">
-        <Pagination
-          customClassName="mx-auto"
-          currentPage={1}
-          totalPages={2}
-          onClickNextPage={handleNextPage}
-          onClickPrevPage={handlePrevPage}
-          onPageClick={handlePageClick}
-        />
-      </TableRow>
-      {/* your rank display if you are not in the top 10 */}
-      <TableBody className="bg-primary-100">
-        <TableRow className="">
-          <TableCell className="font-medium text-center">108</TableCell>
-          <TableCell>
-            <div className="flex gap-x-2 items-center">
-              <div className="h-4 w-4">
-                <Image
-                  src="/image/gem/bronze-gem.png"
-                  alt="gem pic"
-                  width={16}
-                  height={16}
-                />
-              </div>
-              <Image
-                src="/image/leaderboard/user1.png"
-                alt="avatar pic"
-                width={26}
-                height={26}
-                className="rounded-full"
-              />
-              <div className="text-SubheadSm !font-medium">Andy Nguyễn</div>
-              <div className="text-gray-500">@andyng(you)</div>
+
+// Medal component for top 3 ranks
+const RankMedal = ({ rank }: { rank: number }) => {
+  if (rank === 1) {
+    return (
+      <span className="text-xl" title="Hạng nhất">
+        🥇
+      </span>
+    ); // Gold
+  } else if (rank === 2) {
+    return (
+      <span className="text-xl" title="Hạng nhì">
+        🥈
+      </span>
+    ); // Silver
+  } else if (rank === 3) {
+    return (
+      <span className="text-xl" title="Hạng ba">
+        🥉
+      </span>
+    ); // Bronze
+  }
+};
+
+export const LeaderboardTable = ({
+  data,
+  totalDocs = 0,
+  totalPages = 1,
+  page = 1,
+  onPageChange,
+  onPageSizeChange,
+  onSearch,
+  isLoading,
+  countText = "ĐIỂM SỐ",
+}: Props) => {
+  const router = useCustomRouter();
+  const [searchValue, setSearchValue] = useState("");
+  const pageSize = 10; // Assuming a fixed page size of 10
+
+  // Debounce the search to avoid excessive filtering operations
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      if (onSearch) {
+        onSearch(searchValue);
+      }
+    }, 300); // 300ms debounce time
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [searchValue, onSearch]);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
+
+  const columns = [
+    {
+      id: "rank",
+      header: "THỨ HẠNG",
+      cell: ({ row }: any) => {
+        // Use the original rank if available, otherwise fall back to calculated rank
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+
+        return (
+          <div className="flex items-center gap-2">
+            <span className={rank <= 3 ? "font-bold" : ""}>{rank}</span>
+          </div>
+        );
+      },
+      size: 200,
+    },
+    {
+      id: "account",
+      header: "TÀI KHOẢN",
+      cell: ({ row }: any) => {
+        // Get the rank to determine which icon to show
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+
+        return (
+          <div
+            className="flex gap-x-2 items-center cursor-pointer"
+            onClick={() => {
+              router.push(`/ho-so/${row.original?.user.id}`);
+            }}
+          >
+            <div className="flex-shrink-0 w-6 flex justify-center">
+              <RankMedal rank={rank} />
             </div>
-          </TableCell>
-          <TableCell className="text-center">Gà con</TableCell>
-          <TableCell className="text-center">100</TableCell>
-          <TableCell className="text-center">
-            <MoreHorizontal size={20} />
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+            <Image
+              src="/image/leaderboard/user1.png"
+              alt="avatar pic"
+              width={26}
+              height={26}
+              className="rounded-full"
+            />
+            <div
+              className={`text-SubheadSm !font-medium ${
+                rank <= 3 ? "font-bold" : ""
+              }`}
+            >
+              {row.original?.user.username}
+              {rank === 1 && <span className="ml-2 text-yellow-500">👑</span>}
+            </div>
+          </div>
+        );
+      },
+      size: 400,
+    },
+    {
+      id: "specialName",
+      header: "Biệt hiệu",
+      cell: ({ row }: any) => {
+        const specialName = get(row, "original.user.specialName");
+        return specialName === null || specialName === undefined
+          ? "Thường dân"
+          : specialName;
+      },
+    },
+    {
+      id: "score",
+      header: countText,
+      cell: ({ row }: any) => {
+        const originalRank = row.original?.originalRank;
+        const rank = originalRank || (page - 1) * pageSize + row.index + 1;
+        return (
+          <span className={rank <= 3 ? "font-bold" : ""}>
+            {row.original?.count.toString()}
+          </span>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className="p-4 w-full">
+      <Input
+        type="text"
+        placeholder="Tìm kiếm người dùng theo tên hoặc email"
+        isSearch={true}
+        value={searchValue}
+        onChange={handleSearchChange}
+      />
+      <CommonTable
+        data={data}
+        columns={columns}
+        page={page}
+        totalPage={totalPages}
+        totalDocs={totalDocs}
+        docsPerPage={pageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        isLoading={isLoading}
+        customTableClassname="mt-6"
+      />
+    </div>
   );
 };
