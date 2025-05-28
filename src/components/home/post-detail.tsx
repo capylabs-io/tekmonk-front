@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ChevronLeft, ChevronRight, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { CommonTag } from "../common/CommonTag";
 import { cn } from "@/lib/utils";
