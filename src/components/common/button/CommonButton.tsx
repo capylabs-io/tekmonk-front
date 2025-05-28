@@ -8,6 +8,7 @@ interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   childrenClassName?: string;
   wrapperClassName?: string;
   disabled?: boolean;
+  onClick?: () => void;
 }
 
 export const CommonButton = ({
@@ -17,6 +18,7 @@ export const CommonButton = ({
   variant = "primary",
   disabled,
   children,
+  onClick,
   ...props
 }: ButtonProps) => {
   return (
@@ -38,6 +40,7 @@ export const CommonButton = ({
         },
         wrapperClassName
       )}
+      onClick={onClick}
     >
       <button
         type="button"

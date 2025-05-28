@@ -458,19 +458,17 @@ export const Post = ({
                     <Tag className="h-4 w-4" />
                     <span className="text-sm">Tag người khác</span>
                   </div>
-                  <Share
-                    url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
-                    title={postName}
-                    description={
-                      postContent
-                        ?.replace(/<[^>]*>?/gm, "")
-                        .substring(0, 200) || ""
-                    }
-                    hashtags={["tekmonk"]}
-                    image={thumbnailUrl || ""}
-                  />
                 </>
               )}
+              <Share
+                url={`${process.env.NEXT_PUBLIC_BASE_URL}/bai-viet/${data?.id}`}
+                title={postName}
+                description={
+                  postContent?.replace(/<[^>]*>?/gm, "").substring(0, 200) || ""
+                }
+                hashtags={["tekmonk"]}
+                image={thumbnailUrl || ""}
+              />
             </div>
           </div>
           {/* Project Resources */}

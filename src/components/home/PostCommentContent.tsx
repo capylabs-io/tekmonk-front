@@ -13,6 +13,7 @@ import { useInView } from "react-intersection-observer";
 import { useInfiniteComment } from "@/hooks/use-comment";
 import dynamic from "next/dynamic";
 import data from "@emoji-mart/data";
+import { useUserStore } from "@/store/UserStore";
 
 // Dynamically import emoji picker to avoid SSR issues
 const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false });
@@ -39,6 +40,8 @@ export const PostCommentContent = ({
     state.show,
     state.hide,
   ]);
+
+  const [isConnected] = useUserStore((state) => [state.isConnected]);
 
   const {
     data: listComment,
@@ -192,7 +195,7 @@ export const PostCommentContent = ({
             />
 
             {/* Emoji picker */}
-            {showEmojiPicker && (
+            {showEmojiPicker && isConnected() && (
               <div
                 ref={emojiPickerRef}
                 className="absolute left-0 bottom-14 z-[999]"

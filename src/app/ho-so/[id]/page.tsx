@@ -155,15 +155,15 @@ export default function Profile() {
               >
                 <Edit size={24} className="text-primary-600" />
               </CommonButton>
-              <CommonButton
-                outlined
-                className="border-2 border-gray-30 rounded-lg  h-10 w-10"
-                onClick={handleShareProfile}
-              >
-                <Share2 size={24} className="text-primary-600" />
-              </CommonButton>
             </>
           )}
+          <CommonButton
+            outlined
+            className="border-2 border-gray-30 rounded-lg  h-10 w-10"
+            onClick={handleShareProfile}
+          >
+            <Share2 size={24} className="text-primary-600" />
+          </CommonButton>
         </div>
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">

@@ -25,7 +25,13 @@ export const CertificateProfile = ({ id }: { id: number }) => {
     queryKey: ["certificates", id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ['certificate', 'student', 'certificate.course', 'certificate.certificatePdfConfig', 'certificate.certificatePdfConfig.fields'],
+        populate: [
+          "certificate",
+          "student",
+          "certificate.course",
+          "certificate.certificatePdfConfig",
+          "certificate.certificatePdfConfig.fields",
+        ],
         filters: {
           student: { id: id },
         },
@@ -71,11 +77,14 @@ export const CertificateProfile = ({ id }: { id: number }) => {
 
   if (!certificates?.data || certificates.data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white">
-        <CommonEmptyState />
-        <p className="text-sm text-gray-500 text-center max-w-md mt-2">
-          Hoàn thành khóa học để nhận chứng chỉ
-        </p>
+      <div className="px-6 mt-4 mb-8">
+        <div className="text-gray-95 text-SubheadLg">Chứng chỉ</div>
+        <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white mt-4">
+          <CommonEmptyState />
+          <p className="text-sm text-gray-500 text-center max-w-md mt-2">
+            Hoàn thành khóa học để nhận chứng chỉ
+          </p>
+        </div>
       </div>
     );
   }
@@ -91,7 +100,11 @@ export const CertificateProfile = ({ id }: { id: number }) => {
       <div className="flex flex-col gap-4 mt-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {certificates.data.map((certificate) => {
-            let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
+            let imgUrl = get(
+              certificate,
+              "certificate.certificatePdfConfig.backgroundUrl",
+              ""
+            );
             if (imgUrl == null) {
               imgUrl = "/image/app-logox5.png";
             }
@@ -112,7 +125,10 @@ export const CertificateProfile = ({ id }: { id: number }) => {
                     {get(certificate, "certificate.name", "")}
                   </div>
                   <div className="text-BodyXs text-gray-600">
-                    Tên khoá học: <span className="text-gray-95 font-medium">{get(certificate, "certificate.course.name", "")}</span>
+                    Tên khoá học:{" "}
+                    <span className="text-gray-95 font-medium">
+                      {get(certificate, "certificate.course.name", "")}
+                    </span>
                   </div>
                   <div className="flex items-center text-BodyXs text-gray-600">
                     <span className="mr-1">Hoàn thành:</span>
