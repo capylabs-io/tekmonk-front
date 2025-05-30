@@ -398,6 +398,12 @@ export const Post = ({
             )}
           </div>
 
+          {/* Project Resources */}
+          <ProjectResources
+            projectFile={data?.projectFile}
+            projectLink={data?.projectLink}
+          />
+
           <div className="flex items-center justify-between mt-3">
             {!hideSocial && (
               <div className="flex gap-x-10">
@@ -471,11 +477,7 @@ export const Post = ({
               />
             </div>
           </div>
-          {/* Project Resources */}
-          <ProjectResources
-            projectFile={data?.projectFile}
-            projectLink={data?.projectLink}
-          />
+          
 
           {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
           {showCommentInput && isDetail && (

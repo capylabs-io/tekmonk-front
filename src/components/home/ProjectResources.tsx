@@ -194,22 +194,17 @@ export const ProjectResources: React.FC<ProjectResourcesProps> = ({
 
                     {isYoutubeLink && youtubeVideoId ? (
                       <div className="flex flex-col space-y-2">
-                        <div
-                          className={`relative w-full ${
-                            isYoutubeWithFile ? "h-40" : "h-24"
-                          } rounded-md overflow-hidden`}
-                        >
-                          <Image
-                            src={`https://img.youtube.com/vi/${youtubeVideoId}/mqdefault.jpg`}
-                            alt="YouTube thumbnail"
-                            fill
-                            className="object-cover"
+                        <div className="relative w-full flex justify-center rounded-md overflow-hidden">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                            title="YouTube video player"
+                            width="560"
+                            height="315"
+                            className="rounded-md"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
                           />
-                          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                            <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center">
-                              <Youtube className="w-4 h-4 text-white" />
-                            </div>
-                          </div>
                         </div>
 
                         <div className="flex items-center justify-between">
