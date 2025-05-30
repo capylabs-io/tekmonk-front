@@ -14,4 +14,5 @@ export type ShopItem = {
 export enum ShopItemEnum {
   VIRTUAL = "virtual",
   STATIONERY = "stationery",
+  DEFAULT = "default",
 }

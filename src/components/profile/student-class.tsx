@@ -88,9 +88,7 @@ export const StudentClass = ({ id }: { id: number }) => {
     }
     setShowMissionDialog(true);
   };
-  useEffect(() => {
-    console.log("data", myClassList);
-  }, [myClassList]);
+
   return (
     <div className="px-6 mt-3">
       <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">

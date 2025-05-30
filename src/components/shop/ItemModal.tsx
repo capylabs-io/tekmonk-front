@@ -21,6 +21,7 @@ import { ClaimedItem } from "@/types/claimed-item";
 import { Copy, CheckCircle } from "lucide-react";
 import { ActionGuard } from "../common/ActionGuard";
 import { User } from "@/types/common-types";
+import { cn } from "@/lib/utils";
 type Props = {
   userInfo?: User | null;
   itemData: ShopItem;
@@ -225,17 +226,16 @@ export const ItemModal = ({
           <div className="flex flex-col gap-6">
             {/* Image and Basic Info Section */}
             <div className="flex gap-6">
-              <div className="flex-shrink-0">
-                <Image
-                  src={
-                    get(itemData, "image", "") !== null
-                      ? get(itemData, "image", "")
-                      : ""
-                  }
-                  height={160}
-                  width={160}
-                  alt="test"
-                  className="rounded-xl object-cover"
+              <div className="w-[156px] h-[166px] flex-shrink-0 border-2 border-gray-30 rounded-xl relative overflow-hidden">
+                <Image src={itemData.image || ''} alt={itemData.name || ''} fill className={cn("object-cover absolute ",
+                  itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[1]' :
+                    itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[2]" : ""
+                )}
+                />
+                <Image src='/image/avatar/cloth/cloth1.svg' alt={itemData.name || ''} fill className={cn("object-cover absolute ",
+                  itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[2]' :
+                    itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[1]" : "hidden"
+                )}
                 />
               </div>
 

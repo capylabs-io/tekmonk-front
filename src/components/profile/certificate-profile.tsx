@@ -75,19 +75,6 @@ export const CertificateProfile = ({ id }: { id: number }) => {
     );
   }
 
-  if (!certificates?.data || certificates.data.length === 0) {
-    return (
-      <div className="px-6 mt-4 mb-8">
-        <div className="text-gray-95 text-SubheadLg">Chứng chỉ</div>
-        <div className="flex flex-col items-center justify-center py-8 px-4 rounded-lg bg-white mt-4">
-          <CommonEmptyState />
-          <p className="text-sm text-gray-500 text-center max-w-md mt-2">
-            Hoàn thành khóa học để nhận chứng chỉ
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="px-6 mt-4 mb-8">
@@ -99,12 +86,8 @@ export const CertificateProfile = ({ id }: { id: number }) => {
       </div>
       <div className="flex flex-col gap-4 mt-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {certificates.data.map((certificate) => {
-            let imgUrl = get(
-              certificate,
-              "certificate.certificatePdfConfig.backgroundUrl",
-              ""
-            );
+          {certificates && certificates.data.length > 0 && certificates.data.map((certificate) => {
+            let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
             if (imgUrl == null) {
               imgUrl = "/image/app-logox5.png";
             }
@@ -142,6 +125,11 @@ export const CertificateProfile = ({ id }: { id: number }) => {
               </CommonCard>
             );
           })}
+          {certificates && certificates.data.length === 0 && (
+            <div className="w-full h-full flex items-center justify-center col-span-2">
+              <CommonEmptyState />
+            </div>
+          )}
         </div>
       </div>
 

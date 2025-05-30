@@ -8,7 +8,6 @@ import { CommonButton } from "@/components/common/button/CommonButton";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import CommonLayout from "@/components/common/CommonLayout";
-import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { useUserStore } from "@/store/UserStore";
 import { CommonRightSidebar } from "@/components/common/sidebar/common-right-sidebar";
 import { NavigationInfo } from "@/components/common/sidebar/naivgation-info";
@@ -73,7 +72,6 @@ export default function Layout({
         }
       />
       <CreatePostModal />
-      <AvatarConfigModal />
     </>
   );
 }

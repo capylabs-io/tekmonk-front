@@ -97,10 +97,10 @@ export const CategoryBar = ({
       setIsShow(false);
     }
 
-    // Handle if all data in this category have type is ShopItemEnum.VIRTUAL
-    if (data?.data?.every((item) => item.type === ShopItemEnum.VIRTUAL)) {
-      setIsShow(false);
-    }
+    // // Handle if all data in this category have type is ShopItemEnum.VIRTUAL
+    // if (data?.data?.every((item) => item.type === ShopItemEnum.VIRTUAL)) {
+    //   setIsShow(false);
+    // }
   }, [data]);
   return (
     <div className={cn("px-4", !isShow && "hidden")}>

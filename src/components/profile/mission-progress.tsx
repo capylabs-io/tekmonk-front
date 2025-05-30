@@ -12,6 +12,7 @@ import { useMissionHistory } from "@/hooks/use-mission-history";
 import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
+import { CommonEmptyState } from "../common/CommonEmptyState";
 const PAGE = 1;
 const ITEM_PER_PAGE = 9;
 export const MissionProgress = ({ id }: { id: number }) => {
@@ -93,39 +94,52 @@ export const MissionProgress = ({ id }: { id: number }) => {
         </div>
       </div>
       <div className="flex flex-col mt-4">
-        <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
-          <Image
-            src={missions?.data[0]?.imageUrl == "" || missions?.data[0]?.imageUrl == null ? "/image/app-logox2.png" : missions?.data[0]?.imageUrl}
-            alt="Mission"
-            width={100}
-            height={100}
-            className="object-contain flex-none border border-gray-200 rounded-md"
-          />
+        {
+          missions && missions.data.length > 0 && (
 
-          <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
-            <div className="flex flex-row justify-between items-end w-full h-12">
-              <div className="flex flex-col items-start">
-                <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
-                  {missions?.data[0]?.title || ""}
-                </h3>
-                <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
-                  #{missions?.data[0]?.id || ""}
-                </p>
-              </div>
 
-              <div className="flex flex-row items-start gap-[7px]">
-                <span className="text-SubheadSm text-gray-95">Tiến trình</span>
-                <span className="text-BodySm text-gray-60">
-                  {missions?.data[0]?.currentProgress
-                    ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`
-                    : `${missions?.data[0]?.requiredQuantity}/${missions?.data[0]?.requiredQuantity}`}
-                </span>
+            <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
+              <Image
+                src={missions?.data[0]?.imageUrl == "" || missions?.data[0]?.imageUrl == null ? "/image/app-logox2.png" : missions?.data[0]?.imageUrl}
+                alt="Mission"
+                width={100}
+                height={100}
+                className="object-contain flex-none border border-gray-200 rounded-md"
+              />
+
+              <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
+                <div className="flex flex-row justify-between items-end w-full h-12">
+                  <div className="flex flex-col items-start">
+                    <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
+                      {missions?.data[0]?.title || ""}
+                    </h3>
+                    <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
+                      #{missions?.data[0]?.id || ""}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-row items-start gap-[7px]">
+                    <span className="text-SubheadSm text-gray-95">Tiến trình</span>
+                    <span className="text-BodySm text-gray-60">
+                      {missions?.data[0]?.currentProgress
+                        ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`
+                        : `${missions?.data[0]?.requiredQuantity}/${missions?.data[0]?.requiredQuantity}`}
+                    </span>
+                  </div>
+                </div>
+
+                <Progress value={progressPercentage} />
               </div>
             </div>
-
-            <Progress value={progressPercentage} />
-          </div>
-        </div>
+          )
+        }
+        {
+          missions && missions.data.length === 0 && (
+            <div className="w-full h-full flex items-center justify-center">
+              <CommonEmptyState />
+            </div>
+          )
+        }
       </div>
       <MissionDialog
         open={showMissionDialog}

@@ -79,7 +79,6 @@ export default function GroupStageGuard({ children }: any) {
 
 
   const fetAllData = async () => {
-    console.log('fetAllData')
     try {
       show();
       const checkIsSubmited = await isExistContestSubmission();

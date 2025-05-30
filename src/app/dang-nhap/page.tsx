@@ -58,7 +58,6 @@ export default function Login() {
         identifier: data.email,
         password: data.password,
       });
-      console.log("resUserInfo", resUserInfo);
       const roleName = get(resUserInfo, "user_role.name", "").toLowerCase();
 
       if (roleName === Role.STUDENT.toLowerCase()) {
