@@ -112,7 +112,7 @@ const GroupStageDialog = ({
             </Button>
           )}
 
-          {isShowButtonResult && (
+          {/* {isShowButtonResult && (
             <Button
               className="w-[312px] h-[52px] max-[460px]:w-[280px] rounded-[4rem] shadow-custom-primary text-SubheadLg 
             max-[460px]:text-[16px]
@@ -125,7 +125,7 @@ const GroupStageDialog = ({
             >
               Xem kết quả thi
             </Button>
-          )}
+          )} */}
         </>
       </>
     )
