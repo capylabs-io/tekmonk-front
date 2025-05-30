@@ -8,6 +8,7 @@ import { ReqGetClasses } from '@/requests/class';
 import qs from 'qs';
 import { get } from 'lodash';
 import { ReqGetClassSessionDetail } from '@/requests/class-session-detail';
+import { CommonEmptyState } from '../common/CommonEmptyState';
 
 export const StudentClass = ({ id }: { id: number }) => {
   const router = useCustomRouter();
@@ -88,7 +89,6 @@ export const StudentClass = ({ id }: { id: number }) => {
     setShowMissionDialog(true);
   };
   useEffect(() => {
-    console.log('data', myClassList);
   }, [myClassList]);
   return (
     <div className="px-6 mt-3">
@@ -140,6 +140,11 @@ export const StudentClass = ({ id }: { id: number }) => {
               </CommonCard>
             );
           })}
+          {myClassList.length === 0 && (
+            <div className="w-full h-full flex items-center justify-center col-span-2">
+              <CommonEmptyState />
+            </div>
+          )}
         </div>
       </div>
     </div>

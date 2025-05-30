@@ -6,7 +6,12 @@ import qs from "qs";
 export const useGetUserQueryById = (id: string) => {
   return useQuery({
     queryKey: ["user", id],
-    queryFn: () => ReqGetUserById(id),
+    queryFn: () => {
+      const queryString = qs.stringify({
+        populate: "*",
+      });
+      return ReqGetUserById(id, queryString);
+    },
     enabled: !!id,
     refetchOnWindowFocus: false,
   });

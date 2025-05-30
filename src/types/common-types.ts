@@ -57,6 +57,7 @@ export type User = {
   totalPrice: number;
   user_role?: UserRole;
   user_profiles?: UserProfile[];
+  avatarConfig?: AvatarConfig;
   imageURL?: string;
 };
 
@@ -366,3 +367,15 @@ export type Mission = {
   updatedAt?: string;
   currentProgress?: number;
 };
+
+export type AvatarConfig = {
+  id?: number;
+  user?: User;
+  frontHair?: ShopItem;
+  backHair?: ShopItem;
+  cloth?: ShopItem;
+  mouth?: ShopItem;
+  eye?: ShopItem;
+  theme?: ShopItem;
+  special?: ShopItem;
+}

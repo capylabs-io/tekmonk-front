@@ -82,7 +82,6 @@ export default function CheckContestStartGuard({ children }: any) {
   }
 
   const fetAllData = async () => {
-    console.log('fetAllData')
     try {
       show();
       await reloadData();
