@@ -48,8 +48,13 @@ export const ProfileUpdateReminder = ({
         user: {
           id: userInfo.id,
         },
+        achievement: {
+          actionType: {
+            $eq: "SpecialUpdate",
+          },
+        },
       },
-      populate: ["user"],
+      populate: ["user", "achievement"],
     });
     const achievementHistory = await ReqGetAchievementHistory(queryString);
     if (achievementHistory.data.length > 0) {
@@ -100,7 +105,7 @@ export const ProfileUpdateReminder = ({
             <div className="flex items-center gap-2 text-sm text-gray-700">
               <Gift className="h-4 w-4 text-red-500" />
               <span>
-                Nhận <span className="font-medium">500 điểm kinh nghiệm</span>{" "}
+                Nhận <span className="font-medium">100 điểm kinh nghiệm</span>{" "}
                 vào tài khoản
               </span>
             </div>

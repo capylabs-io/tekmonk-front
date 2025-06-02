@@ -75,12 +75,12 @@ export const UpdateInfoDialog = ({
         parentPhoneNumber: user?.parentPhoneNumber || "",
         parentEmail: user?.parentEmail || "",
       },
-      stepTwo: {
-        email: user?.email || "",
-        username: user?.username || "",
-        password: "",
-        confirmPassword: "",
-      },
+      // stepTwo: {
+      //   email: user?.email || "",
+      //   username: user?.username || "",
+      //   password: "",
+      //   confirmPassword: "",
+      // },
     },
     mode: "onChange", // Validate on change for better user experience
   });
@@ -99,10 +99,10 @@ export const UpdateInfoDialog = ({
         parentName: data.stepOne.parentName,
         parentPhoneNumber: data.stepOne.parentPhoneNumber,
         parentEmail: data.stepOne.parentEmail,
-        email: data.stepTwo.email,
-        username: data.stepTwo.username,
+        // email: data.stepTwo.email,
+        // username: data.stepTwo.username,
         // Only include password if it's provided
-        ...(data.stepTwo.password ? { password: data.stepTwo.password } : {}),
+        // ...(data.stepTwo.password ? { password: data.stepTwo.password } : {}),
       };
 
       // Call the API to update user profile

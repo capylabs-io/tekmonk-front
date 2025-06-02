@@ -12,7 +12,7 @@ import moment from "moment";
 import { get } from "lodash";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useUserStore } from "@/store/UserStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useInfiniteLatestPost } from "@/hooks/use-post";
 import { useInView } from "react-intersection-observer";
 import { useProfileStore } from "@/store/ProfileStore";
@@ -26,6 +26,7 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
+
 const Home = () => {
   const { ref, inView } = useInView();
 
@@ -35,12 +36,17 @@ const Home = () => {
     state.isUpdated,
     state.isConnected,
   ]);
+
+  // Use a single state for tab management
+  const [activeTab, setActiveTab] = useState<string>("all");
   const [postType, setPostType] = useState<PostTypeEnum>(PostTypeEnum.POST);
+
   const [showLoading, hideLoading] = useLoadingStore((state) => [
     state.show,
     state.hide,
   ]);
   const [success] = useSnackbarStore((state) => [state.success]);
+
   const {
     data: currentPageData,
     isLoading,
@@ -54,45 +60,59 @@ const Home = () => {
     type: postType,
     isVerified: PostVerificationType.ACCEPTED,
   });
-  const [tabValue, setTabValue] = useState<string>("all");
-  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 
-  const handleTabChange = (value: string) => {
-    setTabValue(value);
-    setPostType(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
-    setTypeModal(value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT);
-  };
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [show, setTypeModal] = useProfileStore((state) => [
     state.show,
     state.setTypeModal,
   ]);
-  const handleLikedPostClick = async (data: PostType) => {
-    try {
-      showLoading();
-      await likePost({
-        postId: get(data, "id"),
-      });
-      refetch();
-    } catch (error) {
-      console.log("error", error);
-    } finally {
-      hideLoading();
-    }
-  };
 
-  const handleOpenUpdateDialog = () => {
+  // Memoize the tab change handler to prevent unnecessary re-renders
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setActiveTab(value);
+      const newPostType =
+        value === "all" ? PostTypeEnum.POST : PostTypeEnum.PROJECT;
+      setPostType(newPostType);
+      setTypeModal(newPostType);
+    },
+    [setTypeModal]
+  );
+
+  // Memoize the like post handler
+  const handleLikedPostClick = useCallback(
+    async (data: PostType) => {
+      try {
+        showLoading();
+        await likePost({
+          postId: get(data, "id"),
+        });
+        refetch();
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        hideLoading();
+      }
+    },
+    [showLoading, hideLoading, refetch]
+  );
+
+  const handleOpenUpdateDialog = useCallback(() => {
     if (!isConnected() || isUpdated) {
       return;
     }
     setUpdateDialogOpen(true);
-  };
+  }, [isConnected, isUpdated]);
 
-  const handleUpdateDialogClose = (updated: boolean) => {
-    setUpdateDialogOpen(false);
-    if (updated) {
-      success("Thành công", "Thông tin cá nhân đã được cập nhật");
-    }
-  };
+  const handleUpdateDialogClose = useCallback(
+    (updated: boolean) => {
+      setUpdateDialogOpen(false);
+      if (updated) {
+        success("Thành công", "Thông tin cá nhân đã được cập nhật");
+      }
+    },
+    [success]
+  );
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -106,11 +126,12 @@ const Home = () => {
   if (isLoading) {
     return <CommonLoading />;
   }
+
   return (
     <>
       <Tabs
+        value={activeTab}
         onValueChange={handleTabChange}
-        defaultValue="all"
         className="w-full"
       >
         <TabsList className="w-full border-b border-gray-200">
@@ -253,13 +274,13 @@ const Home = () => {
       </Tabs>
 
       {/* Profile Update Reminder Dialog */}
-      <ProfileUpdateReminder onUpdateClick={handleOpenUpdateDialog} />
+      {/* <ProfileUpdateReminder onUpdateClick={handleOpenUpdateDialog} /> */}
 
       {/* Update Information Dialog */}
-      <UpdateInfoDialog
+      {/* <UpdateInfoDialog
         open={updateDialogOpen}
         onOpenChange={handleUpdateDialogClose}
-      />
+      /> */}
     </>
   );
 };

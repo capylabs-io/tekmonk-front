@@ -1,7 +1,7 @@
 "use client";
 
 import { useProfileStore } from "@/store/ProfileStore";
-import { Info, X } from "lucide-react";
+import { Info, X, Youtube, Link2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "../common/Input";
 import { Button } from "../common/button/Button";
@@ -31,6 +31,7 @@ import {
 } from "../ui/select";
 import { HandleReturnMessgaeErrorAxios } from "@/requests/return-message-error";
 import { UploadProgressModal, UploadProgressItem } from "./UploadProgressModal";
+import Image from "next/image";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -423,16 +424,95 @@ export const CreatePostModal = () => {
                         <Controller
                           control={control}
                           name="projectLink"
-                          render={({ field: { value, onChange } }) => (
-                            <Input
-                              value={value || ""}
-                              onChange={onChange}
-                              type="url"
-                              placeholder="https://github.com/username/project"
-                              customClassNames="max-w-[424px]"
-                              customInputClassNames="text-sm"
-                            />
-                          )}
+                          render={({ field: { value, onChange } }) => {
+                            const isYoutubeLink =
+                              value &&
+                              (value.includes("youtube.com") ||
+                                value.includes("youtu.be"));
+
+                            // Extract YouTube video ID
+                            const getYoutubeVideoId = (url: string) => {
+                              if (!url) return null;
+                              const regExp =
+                                /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                              const match = url.match(regExp);
+                              return match && match[2].length === 11
+                                ? match[2]
+                                : null;
+                            };
+
+                            const youtubeVideoId =
+                              isYoutubeLink && value
+                                ? getYoutubeVideoId(value)
+                                : null;
+
+                            return (
+                              <>
+                                <div className="relative">
+                                  <Input
+                                    value={value || ""}
+                                    onChange={onChange}
+                                    type="url"
+                                    placeholder="https://github.com/username/project"
+                                    customClassNames="max-w-[424px]"
+                                    customInputClassNames="text-sm pl-9"
+                                  />
+                                  <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                                    {isYoutubeLink ? (
+                                      <Youtube
+                                        size={16}
+                                        className="text-red-500"
+                                      />
+                                    ) : (
+                                      <Link2
+                                        size={16}
+                                        className="text-emerald-500"
+                                      />
+                                    )}
+                                  </div>
+                                  {isYoutubeLink && (
+                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                                      YouTube
+                                    </div>
+                                  )}
+                                </div>
+
+                                {isYoutubeLink && youtubeVideoId && (
+                                  <div className="mt-2 rounded-lg overflow-hidden border border-gray-200">
+                                    <div className="relative w-full h-32">
+                                      <Image
+                                        src={`https://img.youtube.com/vi/${youtubeVideoId}/mqdefault.jpg`}
+                                        alt="YouTube thumbnail"
+                                        fill
+                                        className="object-cover"
+                                      />
+                                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                        <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center">
+                                          <Youtube className="w-5 h-5 text-white" />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="p-2 bg-white">
+                                      <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                          <Youtube
+                                            size={14}
+                                            className="text-red-500"
+                                          />
+                                          <span className="text-xs font-medium truncate">
+                                            Video YouTube
+                                          </span>
+                                        </div>
+                                        <div className="px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">
+                                          Preview
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          }}
                         />
                         {errors.projectLink && (
                           <span className="text-red-500 text-xs mt-1">

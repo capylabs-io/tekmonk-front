@@ -1,14 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Download,
-  ExternalLink,
-  FileText,
-  Link2,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import React, { useMemo } from "react";
+import { motion } from "framer-motion";
+import { Download, ExternalLink, FileText, Link2, Youtube } from "lucide-react";
+import Image from "next/image";
 
 interface ProjectResourcesProps {
   projectFile?: string;
@@ -19,7 +13,27 @@ export const ProjectResources: React.FC<ProjectResourcesProps> = ({
   projectFile,
   projectLink,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // Check if the link is a YouTube link
+  const isYoutubeLink = useMemo(() => {
+    if (!projectLink) return false;
+    return (
+      projectLink.includes("youtube.com") || projectLink.includes("youtu.be")
+    );
+  }, [projectLink]);
+
+  // Extract video ID from YouTube URL
+  const getYoutubeVideoId = (url: string) => {
+    if (!url) return null;
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
+  const youtubeVideoId = useMemo(() => {
+    if (!isYoutubeLink || !projectLink) return null;
+    return getYoutubeVideoId(projectLink);
+  }, [isYoutubeLink, projectLink]);
 
   if (!projectFile && !projectLink) return null;
 
@@ -48,37 +62,14 @@ export const ProjectResources: React.FC<ProjectResourcesProps> = ({
     },
   };
 
-  const contentVariants = {
-    collapsed: {
-      height: 0,
-      opacity: 0,
-      transition: {
-        height: {
-          duration: 0.3,
-          ease: "easeInOut",
-        },
-        opacity: {
-          duration: 0.2,
-          ease: "easeInOut",
-        },
-      },
-    },
-    expanded: {
-      height: "auto",
-      opacity: 1,
-      transition: {
-        height: {
-          duration: 0.3,
-          ease: "easeInOut",
-        },
-        opacity: {
-          duration: 0.3,
-          delay: 0.1,
-          ease: "easeInOut",
-        },
-      },
-    },
-  };
+  // Determine grid layout based on available resources
+  const hasBoth = projectFile && projectLink;
+  const isYoutubeWithFile = isYoutubeLink && projectFile;
+  const gridClass = hasBoth
+    ? isYoutubeWithFile
+      ? "flex flex-col gap-3"
+      : "grid grid-cols-2 gap-3"
+    : "block";
 
   return (
     <motion.div
@@ -94,182 +85,220 @@ export const ProjectResources: React.FC<ProjectResourcesProps> = ({
         <div className="absolute -bottom-0.5 -right-0.5 w-6 h-6 bg-gradient-to-br from-indigo-400/10 to-transparent rounded-full blur-lg"></div>
 
         <div className="relative z-10">
-          {/* Header - Always visible */}
-          <motion.div
-            className="flex items-center justify-between cursor-pointer group"
-            variants={itemVariants}
-            onClick={() => setIsExpanded(!isExpanded)}
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-6 h-6 bg-gradient-to-br from-primary-70 to-primary-80 rounded-lg shadow-sm group-hover:shadow-md transition-all duration-200">
-                <FileText className="w-3 h-3 text-white" />
-              </div>
-              <div>
-                <h4 className="text-sm font-medium text-slate-800 group-hover:text-primary-70 transition-colors duration-200">
-                  Tài nguyên dự án
-                </h4>
-                <p className="text-xs text-slate-500">
-                  {projectFile && projectLink ? "2 tài liệu" : "1 tài liệu"}
-                </p>
-              </div>
-            </div>
-
-            <motion.div
-              className="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-100/80 group-hover:bg-primary-70 group-hover:text-white transition-all duration-200"
-              animate={{ rotate: isExpanded ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ChevronDown className="w-3 h-3" />
-            </motion.div>
-          </motion.div>
-
-          {/* Expandable Content */}
-          <AnimatePresence mode="wait">
-            {isExpanded && (
+          {/* Resources - Single line layout */}
+          <div className={gridClass}>
+            {projectFile && (
               <motion.div
-                className="overflow-hidden"
-                variants={contentVariants}
-                initial="collapsed"
-                animate="expanded"
-                exit="collapsed"
+                variants={itemVariants}
+                className={`group ${
+                  isYoutubeWithFile ? "max-w-xl mx-auto w-full" : ""
+                }`}
               >
-                <div className="pt-3 space-y-2">
-                  {projectFile && (
-                    <motion.div variants={itemVariants} className="group">
-                      <a
-                        href={projectFile}
-                        download
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block"
+                <a
+                  href={projectFile}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <motion.div
+                    className="relative p-2.5 bg-white/80 backdrop-blur-sm rounded-lg border border-slate-200/40 hover:border-primary-70/40 transition-all duration-200 group-hover:shadow-md group-hover:shadow-primary-70/5"
+                    whileHover={{
+                      scale: 1.005,
+                      y: -1,
+                    }}
+                    whileTap={{ scale: 0.995 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  >
+                    {/* Subtle shine effect */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 group-hover:translate-x-full"></div>
+
+                    <div className="relative flex items-center gap-3">
+                      <motion.div
+                        className="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-primary-60 to-primary-80 rounded-lg shadow-sm group-hover:shadow-md transition-all duration-200"
+                        whileHover={{ rotate: 3 }}
                       >
-                        <motion.div
-                          className="relative p-2.5 bg-white/80 backdrop-blur-sm rounded-lg border border-slate-200/40 hover:border-primary-70/40 transition-all duration-200 group-hover:shadow-md group-hover:shadow-primary-70/5"
-                          whileHover={{
-                            scale: 1.005,
-                            y: -1,
-                          }}
-                          whileTap={{ scale: 0.995 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 30,
-                          }}
-                        >
-                          {/* Subtle shine effect */}
-                          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 group-hover:translate-x-full"></div>
+                        <Download className="w-3.5 h-3.5 text-white" />
+                      </motion.div>
 
-                          <div className="relative flex items-center gap-3">
-                            <motion.div
-                              className="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-primary-60 to-primary-80 rounded-lg shadow-sm group-hover:shadow-md transition-all duration-200"
-                              whileHover={{ rotate: 3 }}
-                            >
-                              <Download className="w-3.5 h-3.5 text-white" />
-                            </motion.div>
-
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <h5 className="text-xs font-medium text-slate-900 group-hover:text-primary-70 transition-colors duration-200">
-                                  Tải xuống file dự án
-                                </h5>
-                                <motion.div
-                                  className="opacity-0 group-hover:opacity-100 transition-all duration-200"
-                                  initial={{ scale: 0.8 }}
-                                  whileHover={{ scale: 1 }}
-                                >
-                                  <div className="px-1.5 py-0.5 bg-primary-70 text-white text-[10px] rounded-full">
-                                    Mới
-                                  </div>
-                                </motion.div>
-                              </div>
-                              <p className="text-[10px] text-slate-500 mt-0.5">
-                                Nhấp để tải về máy tính
-                              </p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <h5 className="text-xs font-medium text-slate-900 group-hover:text-primary-70 transition-colors duration-200">
+                            Tải xuống file dự án
+                          </h5>
+                          <motion.div
+                            className="opacity-0 group-hover:opacity-100 transition-all duration-200"
+                            initial={{ scale: 0.8 }}
+                            whileHover={{ scale: 1 }}
+                          >
+                            <div className="px-1.5 py-0.5 bg-primary-70 text-white text-[10px] rounded-full">
+                              Mới
                             </div>
+                          </motion.div>
+                        </div>
+                        <p className="text-[10px] text-slate-500 mt-0.5">
+                          Nhấp để tải về máy tính
+                        </p>
+                      </div>
 
-                            <motion.div
-                              className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity duration-200"
-                              whileHover={{ x: 2 }}
-                            >
-                              <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-primary-70 group-hover:text-white transition-all duration-200">
-                                <Download className="w-2.5 h-2.5" />
-                              </div>
-                            </motion.div>
-                          </div>
-                        </motion.div>
-                      </a>
-                    </motion.div>
-                  )}
-
-                  {projectLink && (
-                    <motion.div variants={itemVariants} className="group">
-                      <a
-                        href={projectLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block"
+                      <motion.div
+                        className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity duration-200"
+                        whileHover={{ x: 2 }}
                       >
-                        <motion.div
-                          className="relative p-2.5 bg-white/80 backdrop-blur-sm rounded-lg border border-slate-200/40 hover:border-emerald-400/40 transition-all duration-200 group-hover:shadow-md group-hover:shadow-emerald-400/5"
-                          whileHover={{
-                            scale: 1.005,
-                            y: -1,
-                          }}
-                          whileTap={{ scale: 0.995 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 30,
-                          }}
-                        >
-                          {/* Subtle shine effect */}
-                          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 group-hover:translate-x-full"></div>
-
-                          <div className="relative flex items-center gap-3">
-                            <motion.div
-                              className="flex items-center justify-center w-5 h-5 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-sm group-hover:shadow-md transition-all duration-200"
-                              whileHover={{ rotate: 3 }}
-                            >
-                              <Link2 className="w-3.5 h-3.5 text-white" />
-                            </motion.div>
-
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-1.5">
-                                <h5 className="text-xs font-medium text-slate-900 group-hover:text-emerald-600 transition-colors duration-200">
-                                  Liên kết dự án
-                                </h5>
-                                <motion.div
-                                  className="opacity-0 group-hover:opacity-100 transition-all duration-200"
-                                  initial={{ scale: 0.8 }}
-                                  whileHover={{ scale: 1 }}
-                                >
-                                  <div className="px-1.5 py-0.5 bg-emerald-500 text-white text-[10px] rounded-full">
-                                    Live
-                                  </div>
-                                </motion.div>
-                              </div>
-                              <p className="text-[10px] text-slate-500 mt-0.5 truncate">
-                                {projectLink}
-                              </p>
-                            </div>
-
-                            <motion.div
-                              className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity duration-200"
-                              whileHover={{ x: 2 }}
-                            >
-                              <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all duration-200">
-                                <ExternalLink className="w-2.5 h-2.5" />
-                              </div>
-                            </motion.div>
-                          </div>
-                        </motion.div>
-                      </a>
-                    </motion.div>
-                  )}
-                </div>
+                        <div className="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-primary-70 group-hover:text-white transition-all duration-200">
+                          <Download className="w-2.5 h-2.5" />
+                        </div>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+                </a>
               </motion.div>
             )}
-          </AnimatePresence>
+
+            {projectLink && (
+              <motion.div
+                variants={itemVariants}
+                className={`group ${
+                  isYoutubeWithFile ? "max-w-xl mx-auto w-full" : ""
+                }`}
+              >
+                <a
+                  href={projectLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <motion.div
+                    className={`relative p-2.5 bg-white/80 backdrop-blur-sm rounded-lg border border-slate-200/40 ${
+                      isYoutubeLink
+                        ? "hover:border-red-500/40 group-hover:shadow-red-500/5"
+                        : "hover:border-emerald-400/40 group-hover:shadow-emerald-400/5"
+                    } transition-all duration-200 group-hover:shadow-md`}
+                    whileHover={{
+                      scale: 1.005,
+                      y: -1,
+                    }}
+                    whileTap={{ scale: 0.995 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 30,
+                    }}
+                  >
+                    {/* Subtle shine effect */}
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -skew-x-12 group-hover:translate-x-full"></div>
+
+                    {isYoutubeLink && youtubeVideoId ? (
+                      <div className="flex flex-col space-y-2">
+                        <div className="relative w-full flex justify-center rounded-md overflow-hidden">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${youtubeVideoId}`}
+                            title="YouTube video player"
+                            width="560"
+                            height="315"
+                            className="rounded-md"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 flex items-center justify-center bg-red-600 rounded-full">
+                              <Youtube className="w-3 h-3 text-white" />
+                            </div>
+                            <span className="text-xs font-medium text-slate-900">
+                              Video YouTube
+                            </span>
+                          </div>
+                          <div className="px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full">
+                            Xem
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="relative flex items-center gap-3">
+                        <motion.div
+                          className={`flex items-center justify-center w-5 h-5 rounded-lg shadow-sm group-hover:shadow-md transition-all duration-200 ${
+                            isYoutubeLink
+                              ? "bg-gradient-to-br from-red-500 to-red-600"
+                              : "bg-gradient-to-br from-emerald-500 to-emerald-600"
+                          }`}
+                          whileHover={{ rotate: 3 }}
+                        >
+                          {isYoutubeLink ? (
+                            <Youtube className="w-3.5 h-3.5 text-white" />
+                          ) : (
+                            <Link2 className="w-3.5 h-3.5 text-white" />
+                          )}
+                        </motion.div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <h5
+                              className={`text-xs font-medium text-slate-900 ${
+                                isYoutubeLink
+                                  ? "group-hover:text-red-600"
+                                  : "group-hover:text-emerald-600"
+                              } transition-colors duration-200`}
+                            >
+                              {isYoutubeLink
+                                ? "Video YouTube"
+                                : "Liên kết dự án"}
+                            </h5>
+                            <motion.div
+                              className="opacity-0 group-hover:opacity-100 transition-all duration-200"
+                              initial={{ scale: 0.8 }}
+                              whileHover={{ scale: 1 }}
+                            >
+                              <div
+                                className={`px-1.5 py-0.5 ${
+                                  isYoutubeLink
+                                    ? "bg-red-500"
+                                    : "bg-emerald-500"
+                                } text-white text-[10px] rounded-full`}
+                              >
+                                {isYoutubeLink ? "Video" : "Live"}
+                              </div>
+                            </motion.div>
+                          </div>
+                          <p className="text-[10px] text-slate-500 mt-0.5 truncate">
+                            {isYoutubeLink
+                              ? "Xem video trên YouTube"
+                              : projectLink}
+                          </p>
+                        </div>
+
+                        <motion.div
+                          className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity duration-200"
+                          whileHover={{ x: 2 }}
+                        >
+                          <div
+                            className={`w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center ${
+                              isYoutubeLink
+                                ? "group-hover:bg-red-500"
+                                : "group-hover:bg-emerald-500"
+                            } group-hover:text-white transition-all duration-200`}
+                          >
+                            {isYoutubeLink ? (
+                              <Youtube className="w-2.5 h-2.5" />
+                            ) : (
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            )}
+                          </div>
+                        </motion.div>
+                      </div>
+                    )}
+                  </motion.div>
+                </a>
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>

@@ -35,6 +35,9 @@ import { TitleSelectModal } from "@/components/profile/TitleSelectModal";
 import { ReqUpdateUser } from "@/requests/user";
 import Image from "next/image";
 import { StudentClass } from "@/components/profile/student-class";
+import { cn } from "@/lib/utils";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 
 export default function Profile() {
   const { id } = useParams();
@@ -50,6 +53,27 @@ export default function Profile() {
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
+    queryKey: ["avatar-config", guestInfor?.id],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: Number(guestInfor?.id),
+            }
+          },
+        },
+
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    },
+    enabled: !!userInfo?.id,
+    refetchOnWindowFocus: false,
+  });
 
   const { data: myPosts, isLoading: isLoadingPosts } = useQuery({
     refetchOnWindowFocus: false,
@@ -111,7 +135,22 @@ export default function Profile() {
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
-        <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center absolute left-8 -bottom-8 h-[152px] w-[152px]" />
+        {/* <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center absolute left-8 -bottom-8 h-[152px] w-[152px]" /> */}
+        <div className="absolute left-8 -bottom-8 w-full h-full">
+          <div className="border-[5px] border-white p-3 bg-white rounded-full  h-[152px] w-[152px] relative overflow-hidden">
+            {dataAvatarConfig && dataAvatarConfig.length > 0 && (
+              <>
+                {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+                {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+                {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+                {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+                {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+                {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+                {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+              </>
+            )}
+          </div>
+        </div>
       </div>
       <div className="flex w-full justify-between mt-14 px-6">
         <div>
@@ -141,13 +180,13 @@ export default function Profile() {
 
           {userInfo && userInfo.id === guestInfor?.id && (
             <>
-              {/* <CommonButton
+              <CommonButton
                 outlined
                 className="border-2 border-primary-60 !bg-primary-10 rounded-lg w-10 h-10"
                 onClick={showAvatarModal}
               >
                 <Settings size={24} className="text-primary-600" />
-              </CommonButton> */}
+              </CommonButton>
               <CommonButton
                 outlined
                 className="border-2 w-10 border-primary-60 !bg-primary-10 rounded-lg h-10"
@@ -155,15 +194,15 @@ export default function Profile() {
               >
                 <Edit size={24} className="text-primary-600" />
               </CommonButton>
-              <CommonButton
-                outlined
-                className="border-2 border-gray-30 rounded-lg  h-10 w-10"
-                onClick={handleShareProfile}
-              >
-                <Share2 size={24} className="text-primary-600" />
-              </CommonButton>
             </>
           )}
+          <CommonButton
+            outlined
+            className="border-2 border-gray-30 rounded-lg  h-10 w-10"
+            onClick={handleShareProfile}
+          >
+            <Share2 size={24} className="text-primary-600" />
+          </CommonButton>
         </div>
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">
@@ -257,6 +296,8 @@ export default function Profile() {
         currentTitle={guestInfor?.specialName || ""}
         onSave={handleSaveTitle}
       />
+      <AvatarConfigModal onSubmit={refetchAvatarConfig} />
+
     </div>
   );
 }

@@ -28,7 +28,7 @@ export const getMe = async () => {
   return response.data;
 };
 
-export const ReqGetUserById = async (id: string) => {
-  const response = await tekdojoAxios.get(`${BASE_URL}/users/${id}`);
+export const ReqGetUserById = async (id: string, query: string = "") => {
+  const response = await tekdojoAxios.get(`${BASE_URL}/users/${id}?${query}`);
   return response.data;
 };
