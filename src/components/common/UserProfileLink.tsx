@@ -7,6 +7,11 @@ import { useCustomRouter } from "./router/CustomRouter";
 import { FaHistory } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { ROUTE } from "@/contants/router";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 type UserProfileLinkProps = {
   userName: string;
@@ -36,14 +41,48 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
   const handleRedirectToProfile = () => {
     router.push(`${ROUTE.PROFILE}/${userInfo?.id}`);
   };
+  const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
+    queryKey: ["avatar-config", userInfo?.id],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: Number(userInfo?.id),
+            }
+          },
+        },
 
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    },
+    enabled: !!userInfo?.id,
+    refetchOnWindowFocus: false,
+  });
   return (
     <div className="flex items-center mt-8 w-full xl:justify-between justify-center relative">
       <div className="flex items-center gap-x-2 cursor-pointer hover:text-primary-600">
-        <div
-          className="xl:h-10 xl:w-10 h-8 w-8 rounded-full flex flex-col bg-[url('/image/home/profile-pic.png')] bg-yellow-100 items-center justify-center bg-cover"
-          onClick={toggleMenu}
-        />
+
+        {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+          <div className="border-[5px] border-white p-3 bg-white rounded-full  xl:h-10 xl:w-10 h-8 w-8 relative overflow-hidden" onClick={toggleMenu}>
+            <>
+              {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+              {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+              {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+              {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+              {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+              {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+              {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+            </>
+          </div>
+        ) : (
+          <div
+            className="xl:h-10 xl:w-10 h-8 w-8 rounded-full flex flex-col bg-[url('/image/home/profile-pic.png')] bg-yellow-100 items-center justify-center bg-cover"
+            onClick={toggleMenu}
+          />
+        )}
         <div className="xl:block hidden">
           <p
             className="text-sm truncate"

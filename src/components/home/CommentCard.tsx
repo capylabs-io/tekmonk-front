@@ -13,13 +13,17 @@ import {
   Pencil,
 } from "lucide-react";
 import { get } from "lodash";
-import { timeAgo } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSnackbarStore } from "@/store/SnackbarStore";
 import { editCommentPost } from "@/requests/post";
 import { PostComment } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
+import moment from "moment";
+import { useQuery } from "@tanstack/react-query";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import qs from "qs";
 
 type Props = {
   comment: PostComment;
@@ -80,17 +84,49 @@ export const CommentCard = ({
       error("Lỗi", "Không thể cập nhật bình luận");
     }
   };
+  const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
+    queryKey: ["avatar-config", userInfo?.id],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: Number(userInfo?.id),
+            }
+          },
+        },
 
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    },
+    enabled: !!userInfo?.id,
+    refetchOnWindowFocus: false,
+  });
   return (
     <div className="flex items-start gap-3">
-      <div
-        className={`h-[40px] w-[40px] flex-shrink-0 rounded-full border bg-cover bg-center bg-no-repeat`}
-        style={{
-          backgroundImage: `url(${
-            comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
-          })`,
-        }}
-      ></div>
+      {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+        <div className="border-[5px] border-white p-1 bg-white h-[40px] w-[40px] flex-shrink-0 rounded-full relative overflow-hidden" >
+          <>
+            {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+            {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+            {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+            {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+            {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+            {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+            {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+          </>
+        </div>
+      ) : (
+        <div
+          className={`h-[40px] w-[40px] flex-shrink-0 rounded-full border bg-cover bg-center bg-no-repeat`}
+          style={{
+            backgroundImage: `url(${comment?.commentedBy?.data?.avatar || "/image/home/profile-pic.png"
+              })`,
+          }}
+        ></div>
+      )}
       <div className="w-full flex-1 space-y-0.5">
         <div className="text-black flex items-center gap-1 text-base font-medium">
           <div
@@ -103,9 +139,9 @@ export const CommentCard = ({
             className="inline-flex items-center gap-1 text-sm text-grey-500 hover:cursor-pointer hover:underline hover:text-primary-70"
             onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}
           >
-            @{comment?.commentedBy?.username || username}
+            {/* @{comment?.commentedBy?.specialName || "Thường dân"} */}
             <Dot size={20} />
-            {time ? timeAgo(Number(time)) : "Invalid time"}
+            {time ? timeAgo(moment(time).valueOf()) : "Thời gian không hợp lệ"}
           </div>
           {comment?.commentedBy?.id === userInfo?.id && (
             <Button

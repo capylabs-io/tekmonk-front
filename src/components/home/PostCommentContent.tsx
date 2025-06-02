@@ -13,7 +13,12 @@ import { useInView } from "react-intersection-observer";
 import { useInfiniteComment } from "@/hooks/use-comment";
 import dynamic from "next/dynamic";
 import data from "@emoji-mart/data";
-
+import { useUserStore } from "@/store/UserStore";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 // Dynamically import emoji picker to avoid SSR issues
 const Picker = dynamic(() => import("@emoji-mart/react"), { ssr: false });
 
@@ -39,6 +44,8 @@ export const PostCommentContent = ({
     state.show,
     state.hide,
   ]);
+  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [isConnected] = useUserStore((state) => [state.isConnected]);
 
   const {
     data: listComment,
@@ -156,21 +163,63 @@ export const PostCommentContent = ({
     setText(newText);
     setShowEmojiPicker(false);
   };
+  const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
+    queryKey: ["avatar-config", userInfo?.id],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: Number(userInfo?.id),
+            }
+          },
+        },
 
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    },
+    enabled: !!userInfo?.id,
+    refetchOnWindowFocus: false,
+  });
   return (
     <div className=" space-y-5 h-full">
       <ActionGuard
         actionName="Thêm bình luận"
         className="flex w-full cursor-pointer items-start gap-2"
       >
-        <div
+        {/* <div
           className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
           style={{
             backgroundImage: `url(/image/home/profile-pic.png)`,
             height: 40,
             width: 40,
           }}
-        ></div>
+        ></div> */}
+        {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+          <div className="border-[5px] p-1 border-white bg-white rounded-full  size-10 relative overflow-hidden" style={{
+            height: 40,
+            width: 40,
+          }}>
+            {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+            {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+            {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+            {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+            {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+            {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+            {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+          </div>
+        ) : (
+          <div
+            className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
+            style={{
+              backgroundImage: `url(/image/home/profile-pic.png)`,
+              height: 40,
+              width: 40,
+            }}
+          ></div>
+        )}
         <div className="w-full flex flex-col items-center bg-[#f0f2f5] rounded-lg px-2 py-1">
           <div className="relative flex h-auto w-full items-center justify-center">
             <textarea
@@ -192,7 +241,7 @@ export const PostCommentContent = ({
             />
 
             {/* Emoji picker */}
-            {showEmojiPicker && (
+            {showEmojiPicker && isConnected() && (
               <div
                 ref={emojiPickerRef}
                 className="absolute left-0 bottom-14 z-[999]"
@@ -223,13 +272,12 @@ export const PostCommentContent = ({
 
               {/* Word count indicator */}
               <span
-                className={`text-xs ${
-                  isOverLimit
-                    ? "text-red-500"
-                    : isAtLimit
+                className={`text-xs ${isOverLimit
+                  ? "text-red-500"
+                  : isAtLimit
                     ? "text-yellow-500"
                     : "text-gray-500"
-                }`}
+                  }`}
               >
                 {currentWordCount}/{maxWords}
               </span>
@@ -247,7 +295,7 @@ export const PostCommentContent = ({
       </ActionGuard>
       <div className="space-y-5">
         {listComment?.pages?.map((page, pageIndex) =>
-          page.data.map((item: PostComment, index: number) => (
+          page.data.map((item: any, index: number) => (
             <CommentCard
               key={`${pageIndex}-${index}`}
               comment={item}
