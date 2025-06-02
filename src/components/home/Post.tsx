@@ -29,8 +29,11 @@ import { ROUTE } from "@/contants/router";
 import { ActionGuard } from "../common/ActionGuard";
 import { motion } from "framer-motion";
 import { PostImageGallery } from "./post-detail";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProjectResources } from "./ProjectResources";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import qs from "qs";
+import { cn } from "@/lib/utils";
 
 export type PostProps = {
   data?: PostType | null;
@@ -110,7 +113,26 @@ export const Post = ({
       (user) => user.id.toString() !== data?.postedBy?.id.toString()
     );
   }, [taggedUsers, data]);
+  const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
+    queryKey: ["avatar-config", get(data, "postedBy.id", 0)],
+    queryFn: async () => {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: Number(get(data, "postedBy.id", 0)),
+            }
+          },
+        },
 
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    },
+    enabled: !!get(data, "postedBy.id", 0),
+    refetchOnWindowFocus: false,
+  });
   // Extract images from the post data
   const postImages = useMemo(() => {
     // For now, we'll use the thumbnail as the first image
@@ -482,14 +504,30 @@ export const Post = ({
           {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
           {showCommentInput && isDetail && (
             <div className="mt-4 flex items-center gap-2">
-              <div
-                className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
-                style={{
-                  backgroundImage: `url(/image/home/profile-pic.png)`,
-                  height: 40,
-                  width: 40,
-                }}
-              ></div>
+
+              {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+                <div className="border-[5px] p-1 border-white bg-white rounded-full size-10 relative overflow-hidden" style={{
+                }}>
+
+                  {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+                  {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+                  {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+                  {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+                  {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+                  {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+                  {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+
+                </div>
+              ) : (
+                <div
+                  className={`size-10 rounded-full border bg-cover bg-center bg-no-repeat`}
+                  style={{
+                    backgroundImage: `url(/image/home/profile-pic.png)`,
+                    height: 40,
+                    width: 40,
+                  }}
+                ></div>
+              )}
               <div className="flex h-14 w-full items-center justify-center gap-1 rounded-lg border border-gray-300 px-3">
                 <textarea
                   value={commentText}
