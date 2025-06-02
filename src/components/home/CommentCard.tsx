@@ -20,6 +20,7 @@ import { editCommentPost } from "@/requests/post";
 import { PostComment } from "@/types/common-types";
 import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
+import moment from "moment";
 
 type Props = {
   comment: PostComment;
@@ -103,9 +104,9 @@ export const CommentCard = ({
             className="inline-flex items-center gap-1 text-sm text-grey-500 hover:cursor-pointer hover:underline hover:text-primary-70"
             onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}
           >
-            @{comment?.commentedBy?.username || username}
+            {/* @{comment?.commentedBy?.specialName || "Thường dân"} */}
             <Dot size={20} />
-            {time ? timeAgo(Number(time)) : "Invalid time"}
+            {time ? timeAgo(moment(time).valueOf()) : "Thời gian không hợp lệ"}
           </div>
           {comment?.commentedBy?.id === userInfo?.id && (
             <Button

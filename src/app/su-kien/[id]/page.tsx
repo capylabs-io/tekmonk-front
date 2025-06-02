@@ -25,7 +25,7 @@ const translateDayOfWeek = (day: string): string => {
     Thursday: "Thứ 5",
     Friday: "Thứ 6",
     Saturday: "Thứ 7",
-    Sunday: "Chủ nhật"
+    Sunday: "Chủ nhật",
   };
   return translations[day] || day;
 };
@@ -106,7 +106,7 @@ export default function Page() {
           <div className="w-full flex flex-col items-start justify-center gap-2">
             <div className="flex items-center text-SubheadMd text-gray-95 gap-2">
               <Clock8 className="text-gray-70" size={16} />
-              <div>{moment(news?.startTime).format("HH:mm A")}</div>
+              <div>{moment(news?.startTime).format("HH:mm")}</div>
             </div>
             <div className="flex items-start text-BodyMd text-gray-95 gap-2">
               <MapPin className="text-gray-70 mt-1" size={16} />
@@ -138,9 +138,7 @@ export default function Page() {
         </div>
       </div>
       <div className="w-full flex flex-col gap-4 col-span-1 mt-16">
-        <div className="text-HeadingSm text-[#320130]">
-          Sự kiện khác
-        </div>
+        <div className="text-HeadingSm text-[#320130]">Sự kiện khác</div>
         {randomNews &&
           randomNews.data
             .filter((item) => item.type === "event")
@@ -166,7 +164,7 @@ export default function Page() {
                     dangerouslySetInnerHTML={{
                       __html: (get(newsItem, "title", "") || "")
                         .replace(/<[^>]+>/g, "")
-                        .trim()
+                        .trim(),
                     }}
                   ></div>
                 </div>

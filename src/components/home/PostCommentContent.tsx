@@ -250,7 +250,7 @@ export const PostCommentContent = ({
       </ActionGuard>
       <div className="space-y-5">
         {listComment?.pages?.map((page, pageIndex) =>
-          page.data.map((item: PostComment, index: number) => (
+          page.data.map((item: any, index: number) => (
             <CommentCard
               key={`${pageIndex}-${index}`}
               comment={item}
