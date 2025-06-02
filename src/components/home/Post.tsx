@@ -114,14 +114,14 @@ export const Post = ({
     );
   }, [taggedUsers, data]);
   const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
-    queryKey: ["avatar-config", get(data, "postedBy.id", 0)],
+    queryKey: ["avatar-config", data?.postedBy?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
         populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
         filters: {
           user: {
             id: {
-              $eq: Number(get(data, "postedBy.id", 0)),
+              $eq: Number(data?.postedBy?.id),
             }
           },
         },
@@ -130,7 +130,7 @@ export const Post = ({
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
     },
-    enabled: !!get(data, "postedBy.id", 0),
+    enabled: !!data?.postedBy?.id,
     refetchOnWindowFocus: false,
   });
   // Extract images from the post data
@@ -499,7 +499,7 @@ export const Post = ({
               />
             </div>
           </div>
-          
+
 
           {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
           {showCommentInput && isDetail && (

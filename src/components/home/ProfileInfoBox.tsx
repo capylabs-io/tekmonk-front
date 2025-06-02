@@ -76,12 +76,27 @@ export const ProfileInfoBox = ({
           onError={() => setIsLoading(false)}
         />
       </div> */}
-      <div
-        className={classNames(
-          "h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center",
-          imageUrl && imageUrl
-        )}
-      />
+      {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+        <div className="border-[5px] border-white bg-white rounded-full w-10 h-10 relative overflow-hidden" style={{
+        }}>
+
+          {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+          {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
+          {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+          {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
+          {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
+          {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
+          {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+
+        </div>
+      ) : (
+        <div
+          className={classNames(
+            "h-10 w-10 rounded-full flex flex-col bg-yellow-100 items-center justify-center",
+            imageUrl && imageUrl
+          )}
+        />
+      )}
 
       <div>
         <div className="truncate flex gap-x-2 items-center hover:underline hover:text-primary-70">

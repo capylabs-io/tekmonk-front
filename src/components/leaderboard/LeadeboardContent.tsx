@@ -43,12 +43,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-          (item) =>
-            item.user.username
-              .toLowerCase()
-              .includes(searchValue.toLowerCase()) ||
-            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-        )
+        (item) =>
+          item.user.username
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+      )
       : dataWithRanks;
 
     // Calculate pagination
@@ -93,7 +93,7 @@ export const LeadeboardContent = ({
             rank="second"
             name={topThreeRankingData?.data[1]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[1]?.user?.username ?? "không có"
+              topThreeRankingData?.data[1]?.user?.specialName ?? "không có"
             }
             score={topThreeRankingData?.data[1]?.count.toString() ?? "0"}
             imageUrl={
@@ -113,7 +113,7 @@ export const LeadeboardContent = ({
             rank="first"
             name={topThreeRankingData?.data[0]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[0]?.user?.username ?? "không có"
+              topThreeRankingData?.data[0]?.user?.specialName ?? "không có"
             }
             score={topThreeRankingData?.data[0]?.count.toString() ?? "0"}
             imageUrl={
@@ -133,7 +133,7 @@ export const LeadeboardContent = ({
             rank="third"
             name={topThreeRankingData?.data[2]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[2]?.user?.username ?? "không có"
+              topThreeRankingData?.data[2]?.user?.specialName ?? "không có"
             }
             score={topThreeRankingData?.data[2]?.count.toString() ?? "0"}
             imageUrl={
