@@ -8,6 +8,7 @@ type Props = {
   name: string;
   specialName: string;
   score: string;
+  customClassNames?: string;
 };
 
 export const LeaderboardTopUserCard = ({
@@ -16,39 +17,28 @@ export const LeaderboardTopUserCard = ({
   name,
   specialName,
   score,
+  customClassNames
 }: Props) => {
-  const CARD_DIMENSION = (value: string) => {
-    switch (value) {
-      case "first":
-        return "w-[214px]";
-      case "second":
-        return "w-[180px]";
-      case "third":
-        return "w-[180px]";
-      default:
-        return;
-    }
-  };
   const BACKGROUND = (value: string) => {
     switch (value) {
       case "first":
-        return "bg-[url('/image/leaderboard/gold-smoke.png')] h-[203px]";
+        return "/image/leaderboard/gold-background.png";
       case "second":
-        return "bg-[url('/image/leaderboard/silver-smoke.png')] h-[160px]";
+        return "/image/leaderboard/silver-background.png";
       case "third":
-        return "bg-[url('/image/leaderboard/bronze-smoke.png')] h-[160px]";
+        return "/image/leaderboard/bronze-background.png";
       default:
         return;
     }
   };
-  const MEDAL = (value: string) => {
+  const CARD_ASSETS = (value: string) => {
     switch (value) {
       case "first":
-        return "/image/leaderboard/gold-medal.png";
+        return "bg-[#F9FFCA] border-[#F2E370]";
       case "second":
-        return "/image/leaderboard/silver-medal.png";
+        return "bg-gray-10 border-gray-30";
       case "third":
-        return "/image/leaderboard/bronze-medal.png";
+        return "bg-[#FFEAD9] border-[#EE9F48]";
       default:
         return;
     }
@@ -56,63 +46,74 @@ export const LeaderboardTopUserCard = ({
   const IMAGE = (value: string) => {
     switch (value) {
       case "first":
-        return "border-[#E8EB70] h-[164px] w-[164px]";
+        return "border-[#F2E370] h-[80px] w-[80px]";
       case "second":
-        return "border-[#E8E6EF] h-[120px] w-[120px]";
+        return "border-gray-10 h-[80px] w-[80px]";
       case "third":
-        return "border-[#FFB361]  h-[120px] w-[120px]";
+        return "border-[#EE9F48] h-[80px] w-[80px]";
       default:
         return;
     }
   };
-  const backgroundCard = BACKGROUND(rank);
-  const dimesion = CARD_DIMENSION(rank);
-  const cardMedal = MEDAL(rank);
+  const BOX_SHADOW = (value: string) => {
+    switch (value) {
+      case "first":
+        return "0px 8px 0px #DAC20F";
+      case "second":
+        return "0px 8px 0px #AC9FB1";
+      case "third":
+        return "0px 8px 0px #D67A17";
+      default:
+        return;
+    }
+  };
+  const CARD_SHADOW = (value: string) => {
+    switch (value) {
+      case "first":
+        return "shadow-[0px_6px_0px_#DAC20F] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#DAC20F]";
+      case "second":
+        return "shadow-[0px_6px_0px_#AC9FB1] before:absolute before:inset-0 before:rounded-full shadow-[inset_0px_4px_0px_#AC9FB1]";
+      case "third": ``
+        return "shadow-[0px_6px_0px_#D67A17] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#D67A17]";
+      default:
+        return;
+    }
+  };
   const userImage = IMAGE(rank);
+  const backgroundImage = BACKGROUND(rank);
+  const cardAssets = CARD_ASSETS(rank);
+  const boxShadow = BOX_SHADOW(rank);
+  const cardShadow = CARD_SHADOW(rank);
+  // const cardMedal = MEDAL(rank);
   return (
-    <div className={classNames("flex flex-col", dimesion)}>
+    <div className={classNames("flex flex-col w-[200px]", customClassNames)}>
       <div
+        style={{
+          boxShadow: boxShadow,
+        }}
         className={classNames(
-          "bg-no-repeat bg-cover bg-center relative flex justify-center items-center",
-          backgroundCard
+          "border-2 relative flex flex-col justify-center items-center rounded-2xl", cardAssets
         )}
       >
-        <div
-          className={classNames(
-            "rounded-full justify-center bg-no-repeat bg-cover border-[5px]",
-            !!imageUrl && imageUrl,
-            userImage
-          )}
-        />
         <Image
-          src={cardMedal || ""}
-          alt="medal pic"
-          width={rank === "first" ? 40 : 36}
-          height={rank === "first" ? 44 : 36}
-          className="absolute bottom-0"
+          src={backgroundImage || ""}
+          alt="avatar pic"
+          width={200}
+          height={116}
+          className="rounded-t-xl"
         />
-      </div>
-      <div className="flex flex-col gap-y-1 text-white items-center mt-1">
-        <div className="flex gap-x-2 items-center">
-          <div className="h-4 w-4">
-            <Image
-              src="/image/gem/diamond-gem.png"
-              alt="gem pic"
-              width={16}
-              height={16}
-            />
-          </div>
-          <div className="text-SubheadSm !font-medium">{name}</div>
-        </div>
         <div
           className={classNames(
-            "text-SubheadXl",
-            rank === "first" ? "text-[#FCD53F]" : "text-white"
+            "rounded-full justify-center bg-no-repeat bg-cover border-[5px] absolute mb-16",
+            !!imageUrl && imageUrl,
+            userImage, cardShadow
           )}
-        >
-          {score}
+        />
+        <div className="flex flex-col justify-center items-center w-full h-[100%-116px] p-5">
+          <div className="text-gray-95 text-SubheadMd">{name}</div>
+          <div className="text-gray-50 text-BodyXs">{specialName}</div>
+          <div className="text-gray-95 text-HeadingMd">{score}</div>
         </div>
-        <div className="text-SubheadXXs !font-medium">{specialName}</div>
       </div>
     </div>
   );

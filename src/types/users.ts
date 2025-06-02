@@ -1,9 +1,22 @@
-// Schema/ bang co truong nao
-export interface User {
-  id: string;
-  username: string;
-  userRank: string;
-  specialName: string;
-  imageURL?: string;
-  twitterName?: string;
+import { User } from "./common-types";
+
+export type UserStatProps = {
+  missions: number;
+  points: number;
+  achievements: number;
+  isVerifiedPost: number;
+  certificates: number;
+  items: number;
+};
+
+export type UserRankingProps = {
+  user: User;
+  count: number;
+};
+
+export enum UserRankingType {
+  TOTAL_PRICE = "totalPrice",
+  POINT = "point",
+  POST = "post",
+  PROJECT = "project",
 }

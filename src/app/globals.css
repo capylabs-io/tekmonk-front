@@ -1,147 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700&display=swap");
 
-/* Typography */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-h1 {
-  font-family: var(--font-nunito);
-  line-height: 100px;
-  @apply text-8xl font-bold;
+:root {
+  /* Typography */
+
+  --font-nunito-sans: "Nunito Sans", sans-serif;
+  --font-kanit: "Kanit", sans-serif;
 }
 
-h2 {
-  font-family: var(--font-nunito);
-  line-height: 88px;
-  font-size: 80px;
-  @apply font-bold;
+/* body {
+  font-family: var(--font-nunito-sans);
+} */
+
+.mission-description * {
+  margin: 0;
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  line-height: 1.2;
 }
 
-h3 {
-  font-family: var(--font-nunito);
-  line-height: 80px;
-  @apply text-7xl font-bold;
+.mission-description p {
+  margin: 0;
+  padding: 0;
 }
 
-h4 {
-  font-family: var(--font-nunito);
-  line-height: 88px;
-  font-size: 80px;
-  @apply font-bold;
-}
-
-h5 {
-  font-family: var(--font-nunito);
-  line-height: 60px;
-  font-size: 52px;
-  @apply font-bold;
-}
-
-h6 {
-  font-family: var(--font-nunito);
-  line-height: 48px;
-  font-size: 40px;
-  @apply font-bold;
-}
-
-.text-bodyXs {
-  font-size: 10px;
-  font-family: var(--font-nunito);
-  @apply leading-3 font-normal;
-}
-
-.text-bodySm {
-  font-family: var(--font-nunito);
-  @apply text-xs !leading-4 font-normal;
-}
-
-.text-bodyMd {
-  font-family: var(--font-nunito);
-  @apply text-sm !leading-5 font-normal;
-}
-
-.text-bodyLg {
-  font-family: var(--font-nunito);
-  @apply text-base !leading-5 font-normal;
-}
-
-.text-SubheadXXs {
-  font-family: var(--font-nunito);
-  font-size: 10px;
-  line-height: 14px !important;
-  @apply font-bold;
-}
-
-.text-SubheadXs {
-  font-family: var(--font-nunito);
-  @apply text-xs !leading-4 font-bold;
-}
-
-.text-SubheadSm {
-  font-family: var(--font-nunito);
-  @apply text-sm !leading-5 font-bold;
-}
-
-.text-SubheadMd {
-  font-family: var(--font-nunito);
-  @apply text-base !leading-6 font-bold;
-}
-
-.text-SubheadLg {
-  font-family: var(--font-nunito);
-  @apply text-xl !leading-6 font-bold;
-}
-
-.text-SubheadXl {
-  font-family: var(--font-nunito);
-  @apply text-2xl !leading-7 font-bold;
-}
-
-.text-Subhead2Xl {
-  font-family: var(--font-nunito);
-  font-size: 28px;
-  @apply leading-8  font-bold;
-}
-
-.text-Subhead3Xl {
-  font-family: var(--font-nunito);
-  font-size: 32px;
-  @apply !leading-10 font-bold;
-}
-
-.text-Subhead4Xl {
-  font-family: var(--font-nunito);
-  @apply text-[40px] leading-[48px] font-bold;
-}
-
-.text-Heading4xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-[32px] max-sm:leading-10 md:text-[40px] md:leading-[48px];
-}
-
-.text-Heading3xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-2xl max-sm:!leading-7 md:text-[32px] md:leading-10;
-}
-
-.text-Heading2xl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-[28px] md:leading-[32px];
-}
-
-.text-HeadingXl {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-xl max-sm:!leading-6 md:text-2xl md:!leading-7;
-}
-
-.text-HeadingLg {
-  font-family: var(--font-nunito);
-  @apply font-bold max-sm:text-base max-sm:!leading-5 md:text-xl md:!leading-6;
-}
-
-.max-width-pc {
-  width: 100%;
-  max-width: 1400px !important;
+.mission-description img {
+  max-width: 100%;
+  height: auto;
 }
 
 /*for override date picker*/
@@ -184,13 +77,30 @@ h6 {
   background-color: #f1f1f1; /* Light color track */
 }
 
+/* custom scroll bar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #555;
+  border-radius: 5px;
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #b1b6c6bf;
+  border-radius: 5px;
+}
 /* quill editor */
 .ql-editor {
-  @apply text-bodyMd font-normal not-italic;
+  @apply text-BodyMd font-normal not-italic;
 }
 
 .ql-viewer {
-  @apply text-bodyMd font-normal not-italic;
+  @apply text-BodyMd font-normal not-italic;
 }
 
 .ql-viewer * {
@@ -220,7 +130,7 @@ h6 {
 
 .ql-container {
   border: none !important;
-  min-height: 150px !important;
+  height: calc(100% - 40px) !important;
 }
 
 .ql-editor ul {
@@ -238,4 +148,173 @@ h6 {
   font-size: 16px; /* Tailwind text-2xl equivalent */
   font-style: italic; /* Tailwind italic equivalent */
   content: attr(placeholder); /* Ensure the placeholder text is displayed */
+}
+
+/* css react-date-picker */
+.react-daterange-picker__wrapper {
+  display: flex;
+  flex-grow: 0;
+  border: 1px solid red important;
+}
+
+.custom-scrollbar {
+  display: block;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(#bc4cac, #bc4cac);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+input[type="checkbox"] {
+  accent-color: #bc4cac; /* Change to any color */
+}
+
+/* import here */
+/* Container styles */
+.date-range-picker-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Input wrapper styles */
+.date-range-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Input field styles */
+.date-range-input {
+  width: 100%;
+  min-width: 280px; /* Ensure minimum width to fit the date range */
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+  padding-right: 40px; /* Space for the calendar icon */
+}
+
+.date-range-input:focus {
+  border-color: #a0aec0;
+}
+
+.date-range-input::placeholder {
+  color: #a0aec0;
+}
+
+/* Calendar icon styles */
+.date-range-calendar-icon {
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+/* Hide the default react-datepicker input */
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Calendar popup styles */
+.date-range-popper {
+  z-index: 10;
+}
+
+.date-range-calendar {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Selected date styles */
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+  background-color: #3b82f6 !important;
+  color: white !important;
+  border-radius: 0.3rem;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #bfdbfe !important;
+  color: #1e40af !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #dbeafe !important;
+  border-radius: 0.3rem;
+}
+
+/* Range start and end styles */
+.react-datepicker__day--range-start {
+  border-top-left-radius: 0.3rem !important;
+  border-bottom-left-radius: 0.3rem !important;
+}
+
+.react-datepicker__day--range-end {
+  border-top-right-radius: 0.3rem !important;
+  border-bottom-right-radius: 0.3rem !important;
+}
+
+/* Header styles */
+.react-datepicker__header {
+  background-color: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.react-datepicker__current-month {
+  font-weight: 600 !important;
+  color: #334155 !important;
+}
+
+.react-datepicker__day-name {
+  color: #64748b !important;
+}
+
+/* Navigation styles */
+.react-datepicker__navigation {
+  top: 12px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .date-range-input {
+    font-size: 13px;
+    padding: 10px 14px;
+    padding-right: 36px;
+  }
 }

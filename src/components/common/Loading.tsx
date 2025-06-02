@@ -3,6 +3,7 @@
 import React from "react";
 
 import { useLoadingStore } from "@/store/LoadingStore";
+import { AnimationLoading } from "../lottie/AnimationLoading";
 
 export function Loading() {
   const [isShowing, content] = useLoadingStore((state) => [
@@ -13,14 +14,15 @@ export function Loading() {
   return isShowing ? (
     <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/70 text-6xl">
       <div className="flex flex-col items-center">
-        <span
+        <AnimationLoading className="w-[400px] h-[400px]" />
+        {/* <span
           className="inline-block h-14 w-14 animate-spin rounded-full border-[3px] border-current border-t-transparent text-white/80"
           role="status"
           aria-label="loading"
-        />
+        /> */}
         {content && (
           <div className="text-white/80 mt-4 text-base font-medium">
-            {content}
+            {content || "Đang tải..."}
           </div>
         )}
       </div>

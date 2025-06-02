@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
-import { Dela_Gothic_One, Inter, Nunito_Sans } from "next/font/google";
+import { Inter, Nunito_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Loading } from "@/components/common/Loading";
 import { Snackbar } from "@/components/common/Snackbar";
 import { Suspense } from "react";
+import { localKanitFont } from "@/fonts";
 import {
   CONTEST_SHARE_IMAGE_LINK,
   SHARE_TEXT,
   SHARE_TITLE,
 } from "@/contants/contest/tekmonk";
+
+import TopLoader from "nextjs-toploader";
+import Providers from "./providers";
+import {
+  METADATA_SHARE_TEXT,
+  METADATA_SHARE_TITLE,
+} from "@/contants/metadata/config";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,8 +36,8 @@ const nunitoSans = Nunito_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://olympiad.tekmonk.edu.vn"),
-  title: SHARE_TITLE,
-  description: SHARE_TEXT,
+  title: METADATA_SHARE_TITLE,
+  description: METADATA_SHARE_TEXT,
   icons: {
     icon: "/favicon.ico?v=4",
   },
@@ -37,9 +45,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     url: process.env.NEXT_PUBLIC_BASE_URL,
-    title: SHARE_TITLE,
-    description: SHARE_TEXT,
-    siteName: SHARE_TITLE,
+    title: METADATA_SHARE_TITLE,
+    description: METADATA_SHARE_TEXT,
+    siteName: METADATA_SHARE_TITLE,
     images: [
       {
         url: CONTEST_SHARE_IMAGE_LINK,
@@ -60,6 +68,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
   twitter: {
     card: "summary_large_image",
     site: "@tekmonk",
@@ -71,12 +80,11 @@ export const metadata: Metadata = {
     "fb:app_id": "1234567890",
     "og:image:alt": SHARE_TITLE,
     "og:locale": "vi_VN",
-    "og:site_name": "Tekmonk",
+    "og:site_name": SHARE_TITLE,
     "twitter:image:alt": SHARE_TITLE,
-    "twitter:creator": "@tekmonk",
+    "twitter:creator": SHARE_TITLE,
   },
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -85,12 +93,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${nunitoSans.variable} ${delaGothicOne.variable}`}
+      className={`${nunitoSans.variable} ${delaGothicOne.variable} ${localKanitFont.variable}`}
     >
       <body>
         <Snackbar />
+        <TopLoader showSpinner={false} color="#bc4cac" />
         <Suspense fallback={<Loading />}>
-          <div className="relative">{children}</div>
+          <Providers>
+            <div className="relative">{children}</div>
+          </Providers>
         </Suspense>
         <Loading />
       </body>

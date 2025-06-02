@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/common/button/Button";
 import { RecruitmentCard } from "@/components/recruitment/RecruitmentCard";
 import { Dela_Gothic_One } from "next/font/google";
-import { Recruitment } from "@/types/common-types";
+// import { Recruitment } from "@/types/common-types";
 import { Pagination } from "@/components/common/Pagination";
 import axios from "axios";
 import { API_POST } from "@/contants/api-url";
@@ -20,7 +20,7 @@ const delaGothicOne = localFont({
 const itemsPerPage = 12;
 
 function Recruitment() {
-  const [recruitments, setRecruitments] = useState<Recruitment[]>([]);
+  const [recruitments, setRecruitments] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 

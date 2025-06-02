@@ -5,15 +5,15 @@ export const HandleReturnMessgaeErrorAxios = (error: any) => {
   if (error.response) {
     const { data } = error.response;
     if (data.error.message == "Username") {
-      return "username";
+      return "Tài khoản đã tồn tại trong hệ thống";
     }
     if (data.error.message == "Email") {
-      return "email";
+      return "Email đã tồn tại trong hệ thống";
     }
     if (data.error.message == "unknown") {
-      return "unknown";
+      return "Lỗi không xác định";
     }
-    return "Tài khoản hoặc email đã tồn tại";
+    return data.error.message;
   } else if (error.request) {
     return "Không thể kết nối đến server";
   } else {
@@ -34,4 +34,14 @@ export const HandleReturnMessgaeErrorLogin = (error: any) => {
   } else {
     return "Lỗi không xác định";
   }
-}
+};
+
+/**
+ * app_001: username
+ * app_002: email
+ * app_003: password
+ * app_004: unknown
+ * app_005: not connect to server
+ * app_006: unknown
+ * app_007: product unavailable
+ */

@@ -1,36 +1,20 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      }, 
-      colors: {
-        primary: {
-          25: '#FCF7FB',
-          50: '#FBF3FA',
-          100: '#F9E7F6',
-          200: '#F5D0EF',
-          300: '#EEABE4',
-          400: '#E578D5',
-          500: '#DC58C8',
-          600: '#BC4CAC',
-          700: '#9A1595',
-          800: '#83077E',
-          900: '#5A0057',
-          950: '#320130',
-        }
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;
