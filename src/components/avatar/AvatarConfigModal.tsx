@@ -21,7 +21,7 @@ import { CheckCircle2 } from 'lucide-react';
 import { useSnackbarStore } from '@/store/SnackbarStore';
 
 type Props = {
-  onSubmit: () => void,
+  onSubmit?: () => void,
   onClose?: () => void
 }
 export const AvatarConfigModal = ({ onSubmit }: Props) => {
