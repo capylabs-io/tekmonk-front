@@ -274,13 +274,13 @@ const Home = () => {
       </Tabs>
 
       {/* Profile Update Reminder Dialog */}
-      <ProfileUpdateReminder onUpdateClick={handleOpenUpdateDialog} />
+      {/* <ProfileUpdateReminder onUpdateClick={handleOpenUpdateDialog} /> */}
 
       {/* Update Information Dialog */}
-      <UpdateInfoDialog
+      {/* <UpdateInfoDialog
         open={updateDialogOpen}
         onOpenChange={handleUpdateDialogClose}
-      />
+      /> */}
     </>
   );
 };
