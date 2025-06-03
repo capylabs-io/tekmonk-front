@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import classNames from "classnames";
+import { TabIcon } from "./TabIcons";
+import { UserRankingType } from "@/types/users";
 
 type Props = {
   rank: "first" | "second" | "third";
@@ -9,6 +11,7 @@ type Props = {
   specialName: string;
   score: string;
   customClassNames?: string;
+  rankingType: UserRankingType;
 };
 
 export const LeaderboardTopUserCard = ({
@@ -17,7 +20,8 @@ export const LeaderboardTopUserCard = ({
   name,
   specialName,
   score,
-  customClassNames
+  customClassNames,
+  rankingType,
 }: Props) => {
   const BACKGROUND = (value: string) => {
     switch (value) {
@@ -73,7 +77,8 @@ export const LeaderboardTopUserCard = ({
         return "shadow-[0px_6px_0px_#DAC20F] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#DAC20F]";
       case "second":
         return "shadow-[0px_6px_0px_#AC9FB1] before:absolute before:inset-0 before:rounded-full shadow-[inset_0px_4px_0px_#AC9FB1]";
-      case "third": ``
+      case "third":
+        ``;
         return "shadow-[0px_6px_0px_#D67A17] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#D67A17]";
       default:
         return;
@@ -92,7 +97,8 @@ export const LeaderboardTopUserCard = ({
           boxShadow: boxShadow,
         }}
         className={classNames(
-          "border-2 relative flex flex-col justify-center items-center rounded-2xl", cardAssets
+          "border-2 relative flex flex-col justify-center items-center rounded-2xl",
+          cardAssets
         )}
       >
         <Image
@@ -106,13 +112,19 @@ export const LeaderboardTopUserCard = ({
           className={classNames(
             "rounded-full justify-center bg-no-repeat bg-cover border-[5px] absolute mb-16",
             !!imageUrl && imageUrl,
-            userImage, cardShadow
+            userImage,
+            cardShadow
           )}
         />
-        <div className="flex flex-col justify-center items-center w-full h-[100%-116px] p-5">
-          <div className="text-gray-95 text-SubheadMd">{name}</div>
-          <div className="text-gray-50 text-BodyXs">{specialName}</div>
-          <div className="text-gray-95 text-HeadingMd">{score}</div>
+        <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-5">
+          <div className="text-gray-95 text-SubheadMd text-center">{name}</div>
+          <div className="text-gray-50 text-BodyXs text-center">
+            {specialName}
+          </div>
+          <div className="flex items-center justify-center gap-2 text-gray-95 text-HeadingMd">
+            <TabIcon type={rankingType} />
+            <span>{score}</span>
+          </div>
         </div>
       </div>
     </div>

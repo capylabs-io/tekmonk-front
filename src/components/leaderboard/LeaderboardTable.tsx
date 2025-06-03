@@ -2,11 +2,12 @@
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import { CommonTable } from "../common/CommonTable";
-import { UserRankingProps } from "@/types/users";
+import { UserRankingProps, UserRankingType } from "@/types/users";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { Input } from "../common/Input";
 import { useState, useEffect, useCallback } from "react";
 import { get } from "lodash";
+import { TabIcon } from "./TabIcons";
 
 type Props = {
   data: UserRankingProps[];
@@ -18,6 +19,7 @@ type Props = {
   onSearch?: (searchValue: string) => void;
   isLoading?: boolean;
   countText: string;
+  rankingType: UserRankingType;
 };
 
 // Medal component for top 3 ranks
@@ -53,6 +55,7 @@ export const LeaderboardTable = ({
   onSearch,
   isLoading,
   countText = "ĐIỂM SỐ",
+  rankingType,
 }: Props) => {
   const router = useCustomRouter();
   const [searchValue, setSearchValue] = useState("");
@@ -147,9 +150,12 @@ export const LeaderboardTable = ({
         const originalRank = row.original?.originalRank;
         const rank = originalRank || (page - 1) * pageSize + row.index + 1;
         return (
-          <span className={rank <= 3 ? "font-bold" : ""}>
-            {row.original?.count.toString()}
-          </span>
+          <div className="flex items-center gap-2">
+            <TabIcon type={rankingType} />
+            <span className={rank <= 3 ? "font-bold" : ""}>
+              {row.original?.count.toString()}
+            </span>
+          </div>
         );
       },
     },

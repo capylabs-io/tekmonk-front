@@ -43,12 +43,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-        (item) =>
-          item.user.username
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-      )
+          (item) =>
+            item.user.username
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+        )
       : dataWithRanks;
 
     // Calculate pagination
@@ -93,13 +93,14 @@ export const LeadeboardContent = ({
             rank="second"
             name={topThreeRankingData?.data[1]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[1]?.user?.specialName ?? "không có"
+              topThreeRankingData?.data[1]?.user?.specialName ?? "Thường dân"
             }
             score={topThreeRankingData?.data[1]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[1]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user1.png')]"
             }
+            rankingType={type}
           />
         </motion.div>
 
@@ -113,13 +114,14 @@ export const LeadeboardContent = ({
             rank="first"
             name={topThreeRankingData?.data[0]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[0]?.user?.specialName ?? "không có"
+              topThreeRankingData?.data[0]?.user?.specialName ?? "Thường dân"
             }
             score={topThreeRankingData?.data[0]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[0]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user3.png')]"
             }
+            rankingType={type}
           />
         </motion.div>
 
@@ -133,13 +135,14 @@ export const LeadeboardContent = ({
             rank="third"
             name={topThreeRankingData?.data[2]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[2]?.user?.specialName ?? "không có"
+              topThreeRankingData?.data[2]?.user?.specialName ?? "Thường dân"
             }
             score={topThreeRankingData?.data[2]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[2]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user2.png')]"
             }
+            rankingType={type}
           />
         </motion.div>
       </div>
@@ -154,6 +157,7 @@ export const LeadeboardContent = ({
         isLoading={isLoading}
         countText={countText}
         onSearch={handleSearch}
+        rankingType={type}
       />
     </div>
   );
