@@ -12,12 +12,15 @@ import { useLoadingStore } from "@/store/LoadingStore";
 import { CommonLoading } from "@/components/common/CommonLoading";
 
 const Leaderboard: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide])
+  const [isLoading, setIsLoading] = useState(true);
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   useEffect(() => {
     setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+      setIsLoading(false);
+    }, 3000);
   }, []);
   if (isLoading) {
     return <CommonLoading />;
@@ -38,7 +41,7 @@ const Leaderboard: React.FC = () => {
         <TabsContent value="pointCollector" className="overflow-y-auto mt-0">
           <LeadeboardContent
             type={UserRankingType.TOTAL_PRICE}
-            countText="ĐIỂM THƯỞNG"
+            countText="TIỀN THƯỞNG"
           />
         </TabsContent>
         <TabsContent value="creator" className="overflow-y-auto mt-0">

@@ -184,7 +184,7 @@ export const PostCommentContent = ({
     refetchOnWindowFocus: false,
   });
   return (
-    <div className=" space-y-5 h-full">
+    <div className="space-y-5 h-full">
       <ActionGuard
         actionName="Thêm bình luận"
         className="flex w-full cursor-pointer items-start gap-2"
@@ -293,7 +293,7 @@ export const PostCommentContent = ({
           </div>
         </div>
       </ActionGuard>
-      <div className="space-y-5">
+      <div className="space-y-5 w-full">
         {listComment?.pages?.map((page, pageIndex) =>
           page.data.map((item: any, index: number) => (
             <CommentCard

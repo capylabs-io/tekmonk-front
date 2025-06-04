@@ -94,7 +94,7 @@ export const AchievementProfile = ({ id }: { id: number }) => {
                 <Image
                   src={
                     achievement.achievement?.imageUrl == "" ||
-                    achievement.achievement?.imageUrl == null
+                      achievement.achievement?.imageUrl == null
                       ? "/image/app-logox4.png"
                       : achievement.achievement?.imageUrl
                   }
@@ -102,9 +102,9 @@ export const AchievementProfile = ({ id }: { id: number }) => {
                   width={100}
                   height={100}
                   className="object-contain mx-auto"
-                  // onError={(e) => {
-                  //   e.currentTarget.src = "/image/placeholder.png";
-                  // }}
+                // onError={(e) => {
+                //   e.currentTarget.src = "/image/placeholder.png";
+                // }}
                 />
               </div>
               <h3 className="text-center mt-2 text-gray-95 text-SubheadXs truncate w-full overflow-hidden whitespace-nowrap">
@@ -113,7 +113,7 @@ export const AchievementProfile = ({ id }: { id: number }) => {
             </CommonCard>
           ))}
           {achievements && achievements.data.length === 0 && (
-            <div className="w-full h-full flex items-center justify-center col-span-2">
+            <div className="w-full h-full flex items-center justify-center col-span-3 xl:col-span-2">
               <CommonEmptyState />
             </div>
           )}

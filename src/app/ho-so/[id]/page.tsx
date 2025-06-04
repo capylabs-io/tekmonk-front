@@ -20,7 +20,7 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Edit, Edit2, Settings, Share2 } from "lucide-react";
+import { Dot, Edit, Edit2, Settings, Share2, SquareUser } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -38,6 +38,7 @@ import { StudentClass } from "@/components/profile/student-class";
 import { cn } from "@/lib/utils";
 import { ReqGetAvatarConfig } from "@/requests/avatar-config";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
+import { AvatarLayer } from "@/components/avatar/AvatarLayer";
 
 export default function Profile() {
   const { id } = useParams();
@@ -135,73 +136,75 @@ export default function Profile() {
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
-        {/* <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center absolute left-8 -bottom-8 h-[152px] w-[152px]" /> */}
-        <div className="absolute left-8 -bottom-8 w-full h-full">
-          <div className="border-[5px] border-white p-3 bg-white rounded-full  h-[152px] w-[152px] relative overflow-hidden">
-            {dataAvatarConfig && dataAvatarConfig.length > 0 && (
-              <>
-                {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-                {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
-                {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-                {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-                {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-                {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
-                {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
-              </>
-            )}
-          </div>
+        <div className="absolute left-8 -bottom-8 w-max h-max">
+          {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
+            <AvatarLayer avatarConfig={dataAvatarConfig[0]} customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full" />
+          ) : (
+            <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center h-[152px] w-[152px]" />
+          )}
         </div>
       </div>
-      <div className="flex w-full justify-between mt-14 px-6">
-        <div>
+      <div className="w-full mt-14 px-6">
+        <div className="flex gap-x-1 items-center">
           <div className="truncate flex gap-x-2 items-center">
-            <span className="text-xl font-bold text-primary-950">
+            <span className="text-subheadLg font-bold text-primary-950">
               {guestInfor?.username}
             </span>
           </div>
-          <div className="text-base text-primary-950">
+          <Dot size={24} />
+          <div className="text-bodyMd text-primary-950">
             {get(guestInfor, "specialName")}
           </div>
+        </div>
+
+
+        <div className="flex gap-x-2 mt-3">
+
           {userInfo && userInfo.id === guestInfor?.id && (
             <CommonButton
               outlined
-              className="border-2 border-primary-60 !bg-primary-10 rounded-lg !px-2 !py-1 text-sm flex items-center mt-2"
+              className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
               onClick={handleOpenTitleModal}
             >
-              <div>Chỉnh sửa danh hiệu</div>
-              <Edit size={16} className="text-primary-600 ml-2" />
+              <div className="flex items-center gap-x-1">
+                <Image src="/image/icon/crown.png" alt="setting" width={18} height={18} />
+                <div className="text-bodyMd text-primary-900">Cài đặt danh hiệu</div>
+              </div>
             </CommonButton>
           )}
-        </div>
-        <div className="flex gap-x-2">
-          {/* <Button outlined className="text-primary-900 text-sm border">
-            Hồ sơ
-          </Button> */}
-
           {userInfo && userInfo.id === guestInfor?.id && (
             <>
               <CommonButton
                 outlined
-                className="border-2 border-primary-60 !bg-primary-10 rounded-lg w-10 h-10"
+                className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
                 onClick={showAvatarModal}
               >
-                <Settings size={24} className="text-primary-600" />
+                <div className="flex items-center gap-x-1">
+                  <SquareUser size={18} className="text-gray-50" />
+                  <div className="text-bodyMd text-primary-900">Ảnh đại diện</div>
+                </div>
               </CommonButton>
               <CommonButton
                 outlined
-                className="border-2 w-10 border-primary-60 !bg-primary-10 rounded-lg h-10"
+                className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
                 onClick={openUpdateDialog}
               >
-                <Edit size={24} className="text-primary-600" />
+                <div className="flex items-center gap-x-1">
+                  <Settings size={18} className="text-gray-50" />
+                  <div className="text-bodyMd text-primary-900">Thông tin hồ sơ</div>
+                </div>
               </CommonButton>
             </>
           )}
           <CommonButton
             outlined
-            className="border-2 border-gray-30 rounded-lg  h-10 w-10"
+            className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
             onClick={handleShareProfile}
           >
-            <Share2 size={24} className="text-primary-600" />
+            <div className="flex items-center gap-x-1">
+              <Share2 size={18} className="text-gray-50" />
+              <div className="text-bodyMd text-primary-900">Chia sẻ hồ sơ</div>
+            </div>
           </CommonButton>
         </div>
       </div>
