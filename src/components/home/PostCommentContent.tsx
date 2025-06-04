@@ -44,7 +44,7 @@ export const PostCommentContent = ({
     state.show,
     state.hide,
   ]);
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
   const [isConnected] = useUserStore((state) => [state.isConnected]);
 
   const {
@@ -151,6 +151,7 @@ export const PostCommentContent = ({
       console.log("error", err);
       error("Lỗi", "Đã xảy ra lỗi khi thêm bình luận");
     } finally {
+      getMe()
       hideLoading();
       refetchListPostComment();
       onUpdateComment?.();

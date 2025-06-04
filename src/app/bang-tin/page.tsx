@@ -66,7 +66,6 @@ const Home = () => {
     state.show,
     state.setTypeModal,
   ]);
-
   // Memoize the tab change handler to prevent unnecessary re-renders
   const handleTabChange = useCallback(
     (value: string) => {
@@ -199,8 +198,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
+                    ? ""
+                    : ""}
               </motion.div>
             </>
           )}
@@ -265,8 +264,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                  ? ""
-                  : ""}
+                    ? ""
+                    : ""}
               </motion.div>
             </>
           )}
