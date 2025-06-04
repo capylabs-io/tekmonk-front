@@ -60,3 +60,13 @@ export function timeAgo(timestamp: number): string {
 
   return "Bây giờ";
 }
+
+export function getTextFromHTML(html: string) {
+  if (typeof window !== "undefined") {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  } else {
+    return html.replace(/<[^>]*>/g, "");
+  }
+}

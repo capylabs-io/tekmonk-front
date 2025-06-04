@@ -109,7 +109,7 @@ export const LeaderboardTopUserCard = ({
           alt="avatar pic"
           width={200}
           height={116}
-          className="rounded-t-xl"
+          className="rounded-t-xl !h-[116px]"
         />
         {avatarConfig ? <AvatarLayer avatarConfig={avatarConfig} customClassName={classNames("rounded-full justify-center bg-no-repeat bg-cover !border-[5px] !absolute mb-16", userImage, cardShadow)} /> :
           <div
@@ -122,9 +122,9 @@ export const LeaderboardTopUserCard = ({
 
           </div>
         }
-        <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-5">
-          <div className="text-gray-95 text-SubheadMd text-center">{name}</div>
-          <div className="text-gray-50 text-BodyXs text-center">
+        <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-4">
+          <div className="text-gray-95 text-[15px] text-center line-clamp-2 !leading-4">{name}</div>
+          <div className="text-gray-50 text-BodyXs text-center mt-1">
             {specialName}
           </div>
           <div className="flex items-center justify-center gap-2 text-gray-95 text-HeadingMd">

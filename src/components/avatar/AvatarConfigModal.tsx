@@ -153,6 +153,9 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       setCurrentAvatar(dataAvatarConfig[0])
     }
   }, [dataAvatarConfig])
+  useEffect(() => {
+    getMe();
+  }, [])
   const userAvatarConfig = useMemo(() => {
     return (
       currentAvatar ? <AvatarLayer avatarConfig={currentAvatar} customClassName="w-[200px] h-[200px] rounded-xl" /> :

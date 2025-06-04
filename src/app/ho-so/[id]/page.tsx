@@ -17,7 +17,7 @@ import { useGetUserQueryById } from "@/hooks/use-user-query";
 import { getListPostCustom } from "@/requests/post";
 import { useUserAvatarStore } from "@/store/UserAvatarStore";
 import { useUserStore } from "@/store/UserStore";
-import { PostType } from "@/types/posts";
+import { PostType, PostTypeEnum } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
 import { Dot, Edit, Edit2, Settings, Share2, SquareUser } from "lucide-react";
@@ -153,7 +153,7 @@ export default function Profile() {
           </div>
           <Dot size={24} />
           <div className="text-bodyMd text-primary-950">
-            {get(guestInfor, "specialName")}
+            {get(guestInfor, "specialName") || "Thường dân"}
           </div>
         </div>
 
@@ -211,6 +211,7 @@ export default function Profile() {
       <Tabs defaultValue="personal" className="w-full mt-5">
         <TabsList className="w-full border-b border-gray-200">
           <TabsTrigger value="personal">Cá nhân</TabsTrigger>
+          <TabsTrigger value="new">Bài viết</TabsTrigger>
           <TabsTrigger value="project">Dự án</TabsTrigger>
         </TabsList>
         <TabsContent value="personal" className="overflow-y-auto w-full">
@@ -251,9 +252,9 @@ export default function Profile() {
             </ResponsiveContainer>
           </div> */}
         </TabsContent>
-        <TabsContent value="project" className="overflow-y-auto">
-          {myPosts &&
-            myPosts.data.map((item: PostType, index: number) => (
+        <TabsContent value="new" className="overflow-y-auto">
+          {myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).length > 0 &&
+            myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).map((item: PostType, index: number) => (
               <>
                 <div className="px-8 relative">
                   <div className="text-sm text-gray-500 absolute top-2 right-8">
@@ -284,7 +285,42 @@ export default function Profile() {
                 )}
               </>
             ))}
-          {myPosts?.data.length === 0 && <CommonEmptyState />}
+          {myPosts?.data.length === 0 || (myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).length === 0) && <CommonEmptyState />}
+        </TabsContent>
+        <TabsContent value="project" className="overflow-y-auto">
+          {myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).length > 0 &&
+            myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).map((item: PostType, index: number) => (
+              <>
+                <div className="px-8 relative">
+                  <div className="text-sm text-gray-500 absolute top-2 right-8">
+                    {moment(get(item, "createdAt", ""))
+                      .format("DD/MM/YYYY")
+                      .toString()}
+                  </div>
+                  <Post
+                    isAllowClickDetail
+                    data={item}
+                    imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                    thumbnailUrl={get(item, "thumbnail") || ""}
+                    userName={guestInfor?.username || "User"}
+                    specialName={get(item, "postedBy.specialName", "")}
+                    postContent={get(item, "content", "")}
+                    postName={get(item, "name", "")}
+                    createdAt={moment(get(item, "createdAt", ""))
+                      .format("DD/MM/YYYY")
+                      .toString()}
+                    likedCount={get(item, "likeCount", 0).toString() || "0"}
+                    commentCount={
+                      get(item, "commentCount", 0).toString() || "0"
+                    }
+                  />
+                </div>
+                {index !== myPosts.data.length - 1 && (
+                  <hr className="border-t border-gray-200 my-4" />
+                )}
+              </>
+            ))}
+          {myPosts?.data.length === 0 || (myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).length === 0) && <CommonEmptyState />}
         </TabsContent>
       </Tabs>
 

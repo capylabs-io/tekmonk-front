@@ -77,12 +77,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-          (item) =>
-            item.user.username
-              .toLowerCase()
-              .includes(searchValue.toLowerCase()) ||
-            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-        )
+        (item) =>
+          item.user.username
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+      )
       : dataWithRanks;
 
     // Calculate pagination
@@ -117,71 +117,76 @@ export const LeadeboardContent = ({
   return (
     <div>
       <div className="w-full flex justify-center items-center bg-[url('/image/leaderboard/leaderboard-banner.png')] bg-no-repeat bg-cover h-[400px] gap-x-12 pb-7">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <LeaderboardTopUserCard
-            customClassNames="mt-4"
-            rank="second"
-            name={mappedData?.[1]?.user?.username ?? "Không có"}
-            specialName={
-              mappedData?.[1]?.user?.specialName ?? "Không có"
-            }
-            score={mappedData?.[1]?.count.toString() ?? "0"}
-            imageUrl={
-              // dataMockData[1]?.user?.imageURL ??
-              "bg-[url('/image/leaderboard/user1.png')]"
-            }
-            avatarConfig={mappedData?.[1]?.avatarConfig?.[0]}
-            rankingType={type}
-          />
-        </motion.div>
+        {
+          !isTopThreeRankingLoading &&
+          <>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <LeaderboardTopUserCard
+                customClassNames="mt-4"
+                rank="second"
+                name={mappedData?.[1]?.user?.username ?? "Không có"}
+                specialName={
+                  mappedData?.[1]?.user?.specialName ?? "Thường dân"
+                }
+                score={mappedData?.[1]?.count && mappedData?.[1]?.count?.toString() || "0"}
+                imageUrl={
+                  // dataMockData[1]?.user?.imageURL ??
+                  "bg-[url('/image/leaderboard/user1.png')]"
+                }
+                avatarConfig={mappedData?.[1]?.avatarConfig?.[0]}
+                rankingType={type}
+              />
+            </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0 }}
-        >
-          <LeaderboardTopUserCard
-            customClassNames="mb-4"
-            rank="first"
-            name={mappedData?.[0]?.user?.username ?? ""}
-            specialName={
-              mappedData?.[0]?.user?.specialName ?? "Không có"
-            }
-            score={mappedData?.[0]?.count.toString() ?? "0"}
-            imageUrl={
-              // dataMockData[0]?.user?.imageURL ??
-              "bg-[url('/image/leaderboard/user3.png')]"
-            }
-            avatarConfig={mappedData?.[0]?.avatarConfig?.[0]}
-            rankingType={type}
-          />
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0 }}
+            >
+              <LeaderboardTopUserCard
+                customClassNames="mb-4"
+                rank="first"
+                name={mappedData?.[0]?.user?.username ?? "Không có"}
+                specialName={
+                  mappedData?.[0]?.user?.specialName ?? "Thường dân"
+                }
+                score={mappedData?.[0]?.count && mappedData?.[0]?.count?.toString() || "0"}
+                imageUrl={
+                  // dataMockData[0]?.user?.imageURL ??
+                  "bg-[url('/image/leaderboard/user3.png')]"
+                }
+                avatarConfig={mappedData?.[0]?.avatarConfig?.[0]}
+                rankingType={type}
+              />
+            </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <LeaderboardTopUserCard
-            customClassNames="mt-4"
-            rank="third"
-            name={mappedData?.[2]?.user?.username ?? "Không có"}
-            specialName={
-              mappedData?.[2]?.user?.specialName ?? "Không có"
-            }
-            score={mappedData?.[2]?.count.toString() ?? "0"}
-            imageUrl={
-              // dataMockData[2]?.user?.imageURL ??
-              "bg-[url('/image/leaderboard/user2.png')]"
-            }
-            avatarConfig={mappedData?.[2]?.avatarConfig?.[0]}
-            rankingType={type}
-          />
-        </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <LeaderboardTopUserCard
+                customClassNames="mt-4"
+                rank="third"
+                name={mappedData?.[2]?.user?.username ?? "Không có"}
+                specialName={
+                  mappedData?.[2]?.user?.specialName ?? "Thường dân"
+                }
+                score={mappedData?.[2]?.count && mappedData?.[2]?.count?.toString() || "0"}
+                imageUrl={
+                  // dataMockData[2]?.user?.imageURL ??
+                  "bg-[url('/image/leaderboard/user2.png')]"
+                }
+                avatarConfig={mappedData?.[2]?.avatarConfig?.[0]}
+                rankingType={type}
+              />
+            </motion.div>
+          </>
+        }
       </div>
 
       <LeaderboardTable
