@@ -77,12 +77,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-        (item) =>
-          item.user.username
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-      )
+          (item) =>
+            item.user.username
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+        )
       : dataWithRanks;
 
     // Calculate pagination
@@ -135,6 +135,7 @@ export const LeadeboardContent = ({
               "bg-[url('/image/leaderboard/user1.png')]"
             }
             avatarConfig={mappedData?.[1]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
 
@@ -156,6 +157,7 @@ export const LeadeboardContent = ({
               "bg-[url('/image/leaderboard/user3.png')]"
             }
             avatarConfig={mappedData?.[0]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
 
@@ -177,6 +179,7 @@ export const LeadeboardContent = ({
               "bg-[url('/image/leaderboard/user2.png')]"
             }
             avatarConfig={mappedData?.[2]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
       </div>
@@ -191,6 +194,7 @@ export const LeadeboardContent = ({
         isLoading={isLoading}
         countText={countText}
         onSearch={handleSearch}
+        rankingType={type}
       />
     </div>
   );

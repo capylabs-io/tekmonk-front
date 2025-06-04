@@ -3,6 +3,8 @@ import Image from "next/image";
 import classNames from "classnames";
 import { AvatarLayer } from "../avatar/AvatarLayer";
 import { AvatarConfig } from "@/types/common-types";
+import { TabIcon } from "./TabIcons";
+import { UserRankingType } from "@/types/users";
 
 type Props = {
   rank: "first" | "second" | "third";
@@ -12,6 +14,7 @@ type Props = {
   score: string;
   customClassNames?: string;
   avatarConfig?: AvatarConfig
+  rankingType: UserRankingType;
 };
 
 export const LeaderboardTopUserCard = ({
@@ -21,7 +24,8 @@ export const LeaderboardTopUserCard = ({
   specialName,
   score,
   customClassNames,
-  avatarConfig
+  avatarConfig,
+  rankingType,
 }: Props) => {
   const BACKGROUND = (value: string) => {
     switch (value) {
@@ -96,7 +100,8 @@ export const LeaderboardTopUserCard = ({
           boxShadow: boxShadow,
         }}
         className={classNames(
-          "border-2 relative flex flex-col justify-center items-center rounded-2xl", cardAssets
+          "border-2 relative flex flex-col justify-center items-center rounded-2xl",
+          cardAssets
         )}
       >
         <Image
@@ -117,10 +122,15 @@ export const LeaderboardTopUserCard = ({
 
           </div>
         }
-        <div className="flex flex-col justify-center items-center w-full h-[100%-116px] p-5">
-          <div className="text-gray-95 text-SubheadMd">{name}</div>
-          <div className="text-gray-50 text-BodyXs">{specialName}</div>
-          <div className="text-gray-95 text-HeadingMd">{score}</div>
+        <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-5">
+          <div className="text-gray-95 text-SubheadMd text-center">{name}</div>
+          <div className="text-gray-50 text-BodyXs text-center">
+            {specialName}
+          </div>
+          <div className="flex items-center justify-center gap-2 text-gray-95 text-HeadingMd">
+            <TabIcon type={rankingType} />
+            <span>{score}</span>
+          </div>
         </div>
       </div>
     </div>
