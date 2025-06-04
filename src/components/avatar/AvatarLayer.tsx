@@ -9,7 +9,7 @@ type Props = {
 }
 export const AvatarLayer = ({ avatarConfig, customClassName }: Props) => {
   return (
-    <div className={cn("border-2 border-gray-30 relative overflow-hidden", customClassName)}>
+    <div className={cn("border-2 border-gray-30 bg-[rgb(245,245,245)] relative overflow-hidden", customClassName)}>
       {avatarConfig?.frontHair && <Image src={avatarConfig?.frontHair?.image || ''} alt={avatarConfig?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
       {avatarConfig?.backHair && <Image src={avatarConfig?.backHair?.image || ''} alt={avatarConfig?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
       {avatarConfig?.cloth && <Image src={avatarConfig?.cloth?.image || ''} alt={avatarConfig?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}

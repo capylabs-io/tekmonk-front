@@ -10,9 +10,10 @@ import { CommonLoading } from "../common/CommonLoading";
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const router = useCustomRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isConnected] = useUserStore((state) => [state.isConnected]);
+  const [isConnected, getMe] = useUserStore((state) => [state.isConnected, state.getMe]);
   const warn = useSnackbarStore((state) => state.warn);
   useEffect(() => {
+    // getMe();
     if (isConnected()) {
       setIsAuthenticated(true);
       return;
@@ -20,5 +21,6 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     warn("Chú ý", "Vui lòng đăng nhập để tiếp tục");
     router.push(ROUTE.LOGIN);
   }, []);
+
   return isAuthenticated ? children : <CommonLoading />;
 };
