@@ -371,11 +371,11 @@ export type Mission = {
 export type AvatarConfig = {
   id?: number;
   user?: User;
-  frontHair?: ShopItem;
-  backHair?: ShopItem;
-  cloth?: ShopItem;
-  mouth?: ShopItem;
-  eye?: ShopItem;
-  theme?: ShopItem;
-  special?: ShopItem;
+  frontHair?: ShopItem | null;
+  backHair?: ShopItem | null;
+  cloth?: ShopItem | null;
+  mouth?: ShopItem | null;
+  eye?: ShopItem | null;
+  theme?: ShopItem | null;
+  special?: ShopItem | null;
 }

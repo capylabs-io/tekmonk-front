@@ -3,9 +3,12 @@ import { LeaderboardTable } from "./LeaderboardTable";
 import { get } from "lodash";
 import { useTopThreeRanking, useBulkUserRanking } from "@/hooks/user-query";
 import { useUserStore } from "@/store/UserStore";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { UserRankingProps, UserRankingType } from "@/types/users";
 import { motion } from "framer-motion";
+import { ReqGetAvatarConfig } from "@/requests/avatar-config";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
 
 export const LeadeboardContent = ({
   type,
@@ -18,17 +21,48 @@ export const LeadeboardContent = ({
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [searchValue, setSearchValue] = useState("");
+  const [mappedData, setMappedData] = useState<any[]>([]);
 
   // Fetch all 100 users at once
   const { data: bulkUserRankingData, isLoading } = useBulkUserRanking({
     type: type,
   });
-
+  const fetchAvatarConfig = async (id: number) => {
+    try {
+      const queryString = qs.stringify({
+        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        filters: {
+          user: {
+            id: {
+              $eq: id
+            }
+          }
+        }
+      });
+      const res = await ReqGetAvatarConfig(queryString);
+      return res.data;
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  }
   // Fetch top 3 users separately
   const { data: topThreeRankingData, isLoading: isTopThreeRankingLoading } =
     useTopThreeRanking({
       type: type,
     });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!topThreeRankingData?.data) return;
+      const promises = topThreeRankingData.data.map(async (item) => ({
+        ...item,
+        avatarConfig: await fetchAvatarConfig(item.user.id)
+      }));
+      const results = await Promise.all(promises);
+      setMappedData(results);
+    };
+    fetchData();
+  }, [topThreeRankingData]);
 
   // Filter and paginate data client-side
   const filteredAndPaginatedData = useMemo(() => {
@@ -43,12 +77,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-        (item) =>
-          item.user.username
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-      )
+          (item) =>
+            item.user.username
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+        )
       : dataWithRanks;
 
     // Calculate pagination
@@ -91,15 +125,17 @@ export const LeadeboardContent = ({
           <LeaderboardTopUserCard
             customClassNames="mt-4"
             rank="second"
-            name={topThreeRankingData?.data[1]?.user?.username ?? ""}
+            name={mappedData?.[1]?.user?.username ?? "Không có"}
             specialName={
-              topThreeRankingData?.data[1]?.user?.specialName ?? "không có"
+              mappedData?.[1]?.user?.specialName ?? "Không có"
             }
-            score={topThreeRankingData?.data[1]?.count.toString() ?? "0"}
+            score={mappedData?.[1]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[1]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user1.png')]"
             }
+            avatarConfig={mappedData?.[1]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
 
@@ -111,15 +147,17 @@ export const LeadeboardContent = ({
           <LeaderboardTopUserCard
             customClassNames="mb-4"
             rank="first"
-            name={topThreeRankingData?.data[0]?.user?.username ?? ""}
+            name={mappedData?.[0]?.user?.username ?? ""}
             specialName={
-              topThreeRankingData?.data[0]?.user?.specialName ?? "không có"
+              mappedData?.[0]?.user?.specialName ?? "Không có"
             }
-            score={topThreeRankingData?.data[0]?.count.toString() ?? "0"}
+            score={mappedData?.[0]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[0]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user3.png')]"
             }
+            avatarConfig={mappedData?.[0]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
 
@@ -131,15 +169,17 @@ export const LeadeboardContent = ({
           <LeaderboardTopUserCard
             customClassNames="mt-4"
             rank="third"
-            name={topThreeRankingData?.data[2]?.user?.username ?? ""}
+            name={mappedData?.[2]?.user?.username ?? "Không có"}
             specialName={
-              topThreeRankingData?.data[2]?.user?.specialName ?? "không có"
+              mappedData?.[2]?.user?.specialName ?? "Không có"
             }
-            score={topThreeRankingData?.data[2]?.count.toString() ?? "0"}
+            score={mappedData?.[2]?.count.toString() ?? "0"}
             imageUrl={
               // dataMockData[2]?.user?.imageURL ??
               "bg-[url('/image/leaderboard/user2.png')]"
             }
+            avatarConfig={mappedData?.[2]?.avatarConfig?.[0]}
+            rankingType={type}
           />
         </motion.div>
       </div>
@@ -154,6 +194,7 @@ export const LeadeboardContent = ({
         isLoading={isLoading}
         countText={countText}
         onSearch={handleSearch}
+        rankingType={type}
       />
     </div>
   );

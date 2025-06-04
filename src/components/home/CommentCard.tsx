@@ -105,7 +105,7 @@ export const CommentCard = ({
     refetchOnWindowFocus: false,
   });
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-3 w-full">
       {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
         <div className="border-[5px] border-white p-1 bg-white h-[40px] w-[40px] flex-shrink-0 rounded-full relative overflow-hidden" >
           <>
@@ -127,8 +127,8 @@ export const CommentCard = ({
           }}
         ></div>
       )}
-      <div className="w-full flex-1 space-y-0.5">
-        <div className="text-black flex items-center gap-1 text-base font-medium">
+      <div className="w-[calc(100%-40px-12px)] space-y-0.5">
+        <div className="text-black flex items-center gap-1 text-base font-medium flex-wrap">
           <div
             className="hover:cursor-pointer hover:underline hover:text-primary-70"
             onClick={() => router.push(`/ho-so/${comment?.commentedBy?.id}`)}
@@ -183,7 +183,7 @@ export const CommentCard = ({
             </div>
           </div>
         ) : (
-          <p className="text-sm md:text-base">{content}</p>
+          <div className="text-sm md:text-base text-wrap break-words whitespace-pre-wrap w-full overflow-y-auto overflow-x-hidden font-thin">{content}</div>
         )}
       </div>
     </div>
