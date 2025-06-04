@@ -110,17 +110,16 @@ export const LeaderboardTable = ({
             <div className="flex-shrink-0 w-6 flex justify-center">
               <RankMedal rank={rank} />
             </div>
-            <Image
+            {/* <Image
               src="/image/leaderboard/user1.png"
               alt="avatar pic"
               width={26}
               height={26}
               className="rounded-full"
-            />
+            /> */}
             <div
-              className={`text-SubheadSm !font-medium ${
-                rank <= 3 ? "font-bold" : ""
-              }`}
+              className={`text-SubheadSm !font-medium ${rank <= 3 ? "font-bold" : ""
+                }`}
             >
               {row.original?.user.username}
               {rank === 1 && <span className="ml-2 text-yellow-500">👑</span>}

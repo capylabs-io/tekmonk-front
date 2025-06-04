@@ -19,6 +19,7 @@ import { ReqGetShopItems } from '@/requests/shopItem';
 import classNames from 'classnames';
 import { CheckCircle2 } from 'lucide-react';
 import { useSnackbarStore } from '@/store/SnackbarStore';
+import { AvatarLayer } from './AvatarLayer';
 
 type Props = {
   onSubmit?: () => void,
@@ -30,7 +31,15 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     state.userInfo, state.getMe
   ]);
   const [showSuccess, showError] = useSnackbarStore((state) => [state.success, state.error])
-  const [currentAvatar, setCurrentAvatar] = useState<AvatarConfig | null>(null)
+  const [currentAvatar, setCurrentAvatar] = useState<AvatarConfig | null>({
+    frontHair: null,
+    backHair: null,
+    cloth: null,
+    mouth: null,
+    eye: null,
+    theme: null,
+    special: null,
+  })
   const { data: dataAvatarConfig } = useQuery({
     queryKey: ["avatar-config", userInfo?.id],
     queryFn: async () => {
@@ -89,18 +98,21 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     },
   });
   const { mutate: updateAvatarConfig } = useMutation({
+    mutationKey: ["update-avatar-config", dataAvatarConfig?.[0]?.id],
     mutationFn: async () => {
       const data = {
-        frontHair: currentAvatar?.frontHair || dataAvatarConfig?.[0]?.frontHair,
-        backHair: currentAvatar?.backHair || dataAvatarConfig?.[0]?.backHair,
-        cloth: currentAvatar?.cloth || dataAvatarConfig?.[0]?.cloth,
-        mouth: currentAvatar?.mouth || dataAvatarConfig?.[0]?.mouth,
-        eye: currentAvatar?.eye || dataAvatarConfig?.[0]?.eye,
-        theme: currentAvatar?.theme || dataAvatarConfig?.[0]?.theme,
-        special: currentAvatar?.special || dataAvatarConfig?.[0]?.special,
+        frontHair: currentAvatar?.frontHair,
+        backHair: currentAvatar?.backHair,
+        cloth: currentAvatar?.cloth,
+        mouth: currentAvatar?.mouth,
+        eye: currentAvatar?.eye,
+        theme: currentAvatar?.theme,
+        special: currentAvatar?.special,
       }
-      const res = await ReqUpdateAvatarConfig(dataAvatarConfig && Number(dataAvatarConfig[0]?.id) || 0, data);
-      return res;
+      if (dataAvatarConfig?.[0]?.id) {
+        const res = await ReqUpdateAvatarConfig(Number(dataAvatarConfig?.[0]?.id), data);
+        return res;
+      }
     },
     onSuccess: () => {
       // Cập nhật state currentAvatar sau khi mutation thành công
@@ -132,8 +144,8 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       cloth: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
       mouth: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
       eye: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
-      theme: undefined,
-      special: undefined,
+      theme: null,
+      special: null,
     })
   }, [dataDefaultShopItem])
   useEffect(() => {
@@ -143,15 +155,11 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
   }, [dataAvatarConfig])
   const userAvatarConfig = useMemo(() => {
     return (
-      <div className="w-[200px] h-[200px] border-2 border-gray-30 rounded-xl relative overflow-hidden">
-        {currentAvatar?.frontHair && <Image src={currentAvatar?.frontHair?.image || ''} alt={currentAvatar?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-        {currentAvatar?.backHair && <Image src={currentAvatar?.backHair?.image || ''} alt={currentAvatar?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
-        {currentAvatar?.cloth && <Image src={currentAvatar?.cloth?.image || ''} alt={currentAvatar?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-        {currentAvatar?.mouth && <Image src={currentAvatar?.mouth?.image || ''} alt={currentAvatar?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-        {currentAvatar?.eye && <Image src={currentAvatar?.eye?.image || ''} alt={currentAvatar?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-        {currentAvatar?.theme && <Image src={currentAvatar?.theme?.image || ''} alt={currentAvatar?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
-        {currentAvatar?.special && <Image src={currentAvatar?.special?.image || ''} alt={currentAvatar?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
-      </div>
+      currentAvatar ? <AvatarLayer avatarConfig={currentAvatar} customClassName="w-[200px] h-[200px] rounded-xl" /> :
+        <div className="border-2 flex justify-center items-end border-gray-30 rounded-xl relative overflow-hidden w-[200px] h-[200px] ">
+          <Image src="/image/profile/avatar-x2.png" className='self-end z-[2] absolute' height={200} width={200} alt='pic'>
+          </Image>
+        </div>
     )
   }, [currentAvatar])
   const dateUserByCategory = (category: string) => {
@@ -170,7 +178,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   setCurrentAvatar(prev => ({
                     ...prev,
                     cloth: item.shop_item,
-                    special: undefined,
+                    special: null,
                   }))
                 }} style={{
                   boxShadow: "0 2px 0 0 #DDD0DD"
@@ -201,7 +209,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   setCurrentAvatar(prev => ({
                     ...prev,
                     frontHair: item.shop_item,
-                    special: undefined,
+                    special: null,
                   }))
                 }} style={{
                   boxShadow: "0 2px 0 0 #DDD0DD"
@@ -233,7 +241,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                 setCurrentAvatar(prev => ({
                   ...prev,
                   backHair: item.shop_item,
-                  special: undefined,
+                  special: null,
 
                 }))
               }} style={{
@@ -265,7 +273,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                 setCurrentAvatar(prev => ({
                   ...prev,
                   eye: item.shop_item,
-                  special: undefined,
+                  special: null,
                 }))
               }} style={{
                 boxShadow: "0 2px 0 0 #DDD0DD"
@@ -297,7 +305,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   setCurrentAvatar(prev => ({
                     ...prev,
                     mouth: item.shop_item,
-                    special: undefined,
+                    special: null,
                   }))
                 }} style={{
                   boxShadow: "0 2px 0 0 #DDD0DD"
@@ -330,7 +338,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   setCurrentAvatar(prev => ({
                     ...prev,
                     theme: item.shop_item,
-                    special: undefined,
+                    special: null,
                   }))
                 }}
                 style={{
