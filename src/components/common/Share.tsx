@@ -147,7 +147,7 @@ export default function Share({
 
             <div
               className="flex flex-col items-center gap-2 h-auto px-3 py-2 cursor-pointer"
-              onClick={handleCopyLink} 
+              onClick={handleCopyLink}
             >
               <Link className="h-6 w-6 text-primary-70" />
               <span className="text-xs text-gray-600">{isCopied ? 'Đã sao chép' : 'Sao chép link'}</span>
