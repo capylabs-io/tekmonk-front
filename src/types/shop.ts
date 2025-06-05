@@ -9,6 +9,7 @@ export type ShopItem = {
   category: Category;
   type?: ShopItemEnum;
   quantity: number;
+  isHidden?: boolean;
 };
 
 export enum ShopItemEnum {

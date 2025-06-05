@@ -99,7 +99,7 @@ export function TitleSelectModal({
             onChange={setSearchTitle}
             customClassNames="mb-4"
           />
-          <div className="max-h-[320px] overflow-y-auto custom-scrollbar">
+          <div className="overflow-y-auto custom-scrollbar h-[500px]">
             <RadioGroup value={selectedTitle} onValueChange={setSelectedTitle}>
               {isLoading ? (
                 <div className="text-center py-8">
