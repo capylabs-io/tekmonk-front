@@ -192,6 +192,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('CLOTH').length > 0 && dateUserByCategory('CLOTH').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -232,6 +233,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('FRONT_HAIR').length > 0 && dateUserByCategory('FRONT_HAIR').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -275,6 +277,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('BACK_HAIR').length > 0 && dateUserByCategory('BACK_HAIR').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -317,6 +320,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('EYE').length > 0 && dateUserByCategory('EYE').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -357,6 +361,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('MOUTH').length > 0 && dateUserByCategory('MOUTH').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -384,6 +389,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('THEME').length > 0 && dateUserByCategory('THEME').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -394,27 +400,6 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   isActive={currentAvatar?.theme?.id === item.shop_item.id}
                   imageUrl={item.shop_item.image || ''}
                 />
-                // <div
-                //   key={item.id}
-                //   className="border-2 border-gray-30 rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer" onClick={() => {
-                //     setCurrentAvatar(prev => ({
-                //       ...prev,
-                //       theme: item.shop_item,
-                //       special: null,
-                //     }))
-                //   }}
-                //   style={{
-                //     boxShadow: "0 2px 0 0 #DDD0DD",
-                //   }}
-                // >
-                //   {
-                //     currentAvatar?.theme?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                //       <CheckCircle2 className='text-primary-50' size={30} />
-                //     </div>
-                //   }
-                //   <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
-                //   </Image>
-                // </div>
               )
             })
           }
@@ -431,6 +416,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             dateUserByCategory('SPECIAL').length > 0 && dateUserByCategory('SPECIAL').map((item) => {
               return (
                 <AvatarItem
+                  key={item.id}
                   onItemClick={() => {
                     setCurrentAvatar(prev => ({
                       ...prev,
@@ -440,27 +426,6 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
                   isActive={currentAvatar?.special?.id === item.shop_item.id}
                   imageUrl={item.shop_item.image || ''}
                 />
-                // <div
-                //   key={item.id}
-                //   className="border-2 border-gray-30  rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer"
-                //   onClick={() => {
-                //     setCurrentAvatar(prev => ({
-                //       ...prev,
-                //       special: item.shop_item
-                //     }))
-                //   }}
-                //   style={{
-                //     boxShadow: "0 2px 0 0 #DDD0DD",
-                //   }}
-                // >
-                //   {
-                //     currentAvatar?.special?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                //       <CheckCircle2 className='text-primary-50' size={30} />
-                //     </div>
-                //   }
-                //   <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
-                //   </Image>
-                // </div>
               )
             })
           }
