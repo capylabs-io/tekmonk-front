@@ -24,11 +24,14 @@ import {
   CertificateHistory,
   CertificatePdfFieldConfig,
 } from "@/types/certificate";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
+import { ArrowLeft } from "lucide-react";
 
 const TOTAL_CERTIFICATES = 4;
 const PAGE = 1;
 const ITEMS_PER_PAGE = 6;
 export default function CertificatePage() {
+  const router = useCustomRouter();
   const [page, setPage] = useState(PAGE);
   const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
@@ -70,8 +73,9 @@ export default function CertificatePage() {
     <AuthGuard>
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex items-center justify-between px-4 pb-4 border-b border-gray-200">
-          <div className="text-SubheadLg text-gray-95">
-            <span>Chứng chỉ</span>
+          <div className="text-SubheadLg text-gray-95 flex items-center gap-x-1">
+            <ArrowLeft size={24} onClick={() => router.back()} />
+            <div>Chứng chỉ</div>
           </div>
           <div></div>
         </div>

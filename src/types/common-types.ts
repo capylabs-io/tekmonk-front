@@ -58,6 +58,7 @@ export type User = {
   user_role?: UserRole;
   user_profiles?: UserProfile[];
   avatarConfig?: AvatarConfig;
+  backgroundCover?: ShopItem;
   imageURL?: string;
 };
 

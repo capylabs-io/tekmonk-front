@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Progress } from "@/components/common/Progress";
 import { ReqGetMissionInfo } from "@/requests/mission";
@@ -13,12 +13,12 @@ import { useUserStore } from "@/store/UserStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 import { ROUTE } from "@/contants/router";
 import { CommonEmptyState } from "../common/CommonEmptyState";
+import { Mission } from "@/types/common-types";
 const PAGE = 1;
 const ITEM_PER_PAGE = 9;
 export const MissionProgress = ({ id }: { id: number }) => {
   const router = useCustomRouter();
   const [showMissionDialog, setShowMissionDialog] = useState(false);
-  const [progressPercentage, setProgressPercentage] = useState(0);
   const [page, setPage] = useState(PAGE);
   const [itemsPerPage, setItemsPerPage] = useState(ITEM_PER_PAGE);
   const [userInfo] = useUserStore((state) => [state.userInfo]);
@@ -51,16 +51,12 @@ export const MissionProgress = ({ id }: { id: number }) => {
     }
     setShowMissionDialog(true);
   };
-
-  useEffect(() => {
-    if (missions?.data && missions.data.length > 0) {
-      const missionData = missions.data[0];
-      if (missionData.currentProgress !== undefined) {
-        setProgressPercentage(
-          (missionData.currentProgress / missionData.requiredQuantity) * 100
-        );
+  const progressPercentage = useCallback((mission: Mission) => {
+    if (mission) {
+      if (mission.currentProgress !== undefined) {
+        return (mission.currentProgress / mission.requiredQuantity) * 100
       } else {
-        setProgressPercentage(100);
+        return 100
       }
     }
   }, [missions]);
@@ -97,40 +93,45 @@ export const MissionProgress = ({ id }: { id: number }) => {
         {
           missions && missions.data.length > 0 && (
 
+            missions?.data.slice(0, 3).map((mission) => {
+              return (
+                <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
+                  <Image
+                    src={mission?.imageUrl == "" || mission?.imageUrl == null ? "/image/app-logox2.png" : mission?.imageUrl}
+                    alt="Mission"
+                    width={100}
+                    height={100}
+                    className="object-contain flex-none border border-gray-200 rounded-md"
+                  />
 
-            <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
-              <Image
-                src={missions?.data[0]?.imageUrl == "" || missions?.data[0]?.imageUrl == null ? "/image/app-logox2.png" : missions?.data[0]?.imageUrl}
-                alt="Mission"
-                width={100}
-                height={100}
-                className="object-contain flex-none border border-gray-200 rounded-md"
-              />
+                  <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
+                    <div className="flex flex-row justify-between items-end w-full h-12">
+                      <div className="flex flex-col items-start">
+                        <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
+                          {mission?.title || ""}
+                        </h3>
+                        <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
+                          #{mission?.id || ""}
+                        </p>
+                      </div>
 
-              <div className="flex flex-col items-start gap-4 w-[576px] h-[76px] flex-grow">
-                <div className="flex flex-row justify-between items-end w-full h-12">
-                  <div className="flex flex-col items-start">
-                    <h3 className="w-[239px] h-6 text-SubheadMd text-gray-95">
-                      {missions?.data[0]?.title || ""}
-                    </h3>
-                    <p className="w-[46px] h-6 font-[Kanit] font-light text-base leading-6 text-[#475467]">
-                      #{missions?.data[0]?.id || ""}
-                    </p>
-                  </div>
+                      <div className="flex flex-row items-start gap-[7px]">
+                        <span className="text-SubheadSm text-gray-95">Tiến trình</span>
+                        <span className="text-BodySm text-gray-60">
+                          {mission?.currentProgress
+                            ? `${mission?.currentProgress}/${mission?.requiredQuantity}`
+                            : `${mission?.requiredQuantity}/${mission?.requiredQuantity}`}
+                        </span>
+                      </div>
+                    </div>
 
-                  <div className="flex flex-row items-start gap-[7px]">
-                    <span className="text-SubheadSm text-gray-95">Tiến trình</span>
-                    <span className="text-BodySm text-gray-60">
-                      {missions?.data[0]?.currentProgress
-                        ? `${missions?.data[0]?.currentProgress}/${missions?.data[0]?.requiredQuantity}`
-                        : `${missions?.data[0]?.requiredQuantity}/${missions?.data[0]?.requiredQuantity}`}
-                    </span>
+                    <Progress value={progressPercentage(mission) || 0} />
                   </div>
                 </div>
+              )
+            })
 
-                <Progress value={progressPercentage} />
-              </div>
-            </div>
+
           )
         }
         {

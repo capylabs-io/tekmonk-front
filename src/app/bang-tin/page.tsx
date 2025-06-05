@@ -154,7 +154,7 @@ const Home = () => {
                   <div className="p-4 relative">
                     <div className="text-sm text-gray-500 absolute top-7 right-4">
                       {moment(get(item, "createdAt", ""))
-                        .format("DD/MM/YYYY")
+                        .format("DD/MM/YYYY HH:mm A")
                         .toString()}
                     </div>
                     <Post

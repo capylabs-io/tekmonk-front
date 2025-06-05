@@ -136,18 +136,18 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       showError("Cập nhật ảnh đại diện thất bại", "Vui lòng thử lại sau");
     }
   });
-  const handleResetDefault = useCallback(() => {
-    if (!dataDefaultShopItem) return;
-    setCurrentAvatar({
-      frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
-      backHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
-      cloth: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
-      mouth: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
-      eye: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
-      theme: null,
-      special: null,
-    })
-  }, [dataDefaultShopItem])
+  // const handleResetDefault = useCallback(() => {
+  //   if (!dataDefaultShopItem) return;
+  //   setCurrentAvatar({
+  //     frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
+  //     backHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
+  //     cloth: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
+  //     mouth: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
+  //     eye: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
+  //     theme: null,
+  //     special: null,
+  //   })
+  // }, [dataDefaultShopItem])
   useEffect(() => {
     if (dataAvatarConfig && dataAvatarConfig.length > 0) {
       setCurrentAvatar(dataAvatarConfig[0])
@@ -174,6 +174,26 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
+          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+            setCurrentAvatar(prev => ({
+              ...prev,
+              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
+              special: null,
+            }))
+          }} style={{
+            boxShadow: "0 2px 0 0 #DDD0DD"
+          }}>
+            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
+              <div className='text-xs text-primary-900'>Mặc định</div>
+            </div>
+            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+              <CheckCircle2 className='text-primary-50' size={30} />
+            </div>}
+            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
+            </Image>
+            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
+            </Image>
+          </div>
           {
             dateUserByCategory('CLOTH').length > 0 && dateUserByCategory('CLOTH').map((item) => {
               return (
@@ -205,6 +225,26 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
 
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
+          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+            setCurrentAvatar(prev => ({
+              ...prev,
+              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
+              special: null,
+            }))
+          }} style={{
+            boxShadow: "0 2px 0 0 #DDD0DD"
+          }}>
+            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
+              <div className='text-xs text-primary-900'>Mặc định</div>
+            </div>
+            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+              <CheckCircle2 className='text-primary-50' size={30} />
+            </div>}
+            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
+            </Image>
+            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
+            </Image>
+          </div>
           {
             dateUserByCategory('FRONT_HAIR').length > 0 && dateUserByCategory('FRONT_HAIR').map((item) => {
               return (
@@ -228,6 +268,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
               )
             })
           }
+
         </div>
       </div>
     </div>
@@ -237,30 +278,51 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
 
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>        {
-          dateUserByCategory('BACK_HAIR').length > 0 && dateUserByCategory('BACK_HAIR').map((item) => {
-            return (
-              <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                setCurrentAvatar(prev => ({
-                  ...prev,
-                  backHair: item.shop_item,
-                  special: null,
+        <div className='grid grid-cols-3 gap-4 h-max'>
+          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+            setCurrentAvatar(prev => ({
+              ...prev,
+              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
+              special: null,
+            }))
+          }} style={{
+            boxShadow: "0 2px 0 0 #DDD0DD"
+          }}>
+            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
+              <div className='text-xs text-primary-900'>Mặc định</div>
+            </div>
+            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+              <CheckCircle2 className='text-primary-50' size={30} />
+            </div>}
+            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.image || ''} className='z-[1] absolute' height={120} width={120} alt='pic'>
+            </Image>
+            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[2] absolute' height={120} width={120} alt='pic'>
+            </Image>
+          </div>
+          {
+            dateUserByCategory('BACK_HAIR').length > 0 && dateUserByCategory('BACK_HAIR').map((item) => {
+              return (
+                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+                  setCurrentAvatar(prev => ({
+                    ...prev,
+                    backHair: item.shop_item,
+                    special: null,
 
-                }))
-              }} style={{
-                boxShadow: "0 2px 0 0 #DDD0DD"
-              }}>
-                {currentAvatar?.backHair?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                  <CheckCircle2 className='text-primary-50' size={30} />
-                </div>}
-                <Image src={item.shop_item.image || ''} className='z-[1] absolute' height={120} width={120} alt='pic'>
-                </Image>
-                <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[2] absolute' height={120} width={120} alt='pic'>
-                </Image>
-              </div>
-            )
-          })
-        }
+                  }))
+                }} style={{
+                  boxShadow: "0 2px 0 0 #DDD0DD"
+                }}>
+                  {currentAvatar?.backHair?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+                    <CheckCircle2 className='text-primary-50' size={30} />
+                  </div>}
+                  <Image src={item.shop_item.image || ''} className='z-[1] absolute' height={120} width={120} alt='pic'>
+                  </Image>
+                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[2] absolute' height={120} width={120} alt='pic'>
+                  </Image>
+                </div>
+              )
+            })
+          }
         </div>
       </div>
     </div>
@@ -269,29 +331,50 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     <div className='flex gap-6 h-full'>
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>        {
-          dateUserByCategory('EYE').length > 0 && dateUserByCategory('EYE').map((item) => {
-            return (
-              <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                setCurrentAvatar(prev => ({
-                  ...prev,
-                  eye: item.shop_item,
-                  special: null,
-                }))
-              }} style={{
-                boxShadow: "0 2px 0 0 #DDD0DD"
-              }}>
-                {currentAvatar?.eye?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                  <CheckCircle2 className='text-primary-50' size={30} />
-                </div>}
-                <Image src={item.shop_item.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-                </Image>
-                <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-                </Image>
-              </div>
-            )
-          })
-        }
+        <div className='grid grid-cols-3 gap-4 h-max'>
+          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+            setCurrentAvatar(prev => ({
+              ...prev,
+              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
+              special: null,
+            }))
+          }} style={{
+            boxShadow: "0 2px 0 0 #DDD0DD"
+          }}>
+            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
+              <div className='text-xs text-primary-900'>Mặc định</div>
+            </div>
+            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+              <CheckCircle2 className='text-primary-50' size={30} />
+            </div>}
+            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
+            </Image>
+            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
+            </Image>
+          </div>
+          {
+            dateUserByCategory('EYE').length > 0 && dateUserByCategory('EYE').map((item) => {
+              return (
+                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+                  setCurrentAvatar(prev => ({
+                    ...prev,
+                    eye: item.shop_item,
+                    special: null,
+                  }))
+                }} style={{
+                  boxShadow: "0 2px 0 0 #DDD0DD"
+                }}>
+                  {currentAvatar?.eye?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+                    <CheckCircle2 className='text-primary-50' size={30} />
+                  </div>}
+                  <Image src={item.shop_item.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
+                  </Image>
+                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
+                  </Image>
+                </div>
+              )
+            })
+          }
         </div>
       </div>
     </div>
@@ -301,6 +384,26 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
+          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
+            setCurrentAvatar(prev => ({
+              ...prev,
+              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
+              special: null,
+            }))
+          }} style={{
+            boxShadow: "0 2px 0 0 #DDD0DD"
+          }}>
+            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
+              <div className='text-xs text-primary-900'>Mặc định</div>
+            </div>
+            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+              <CheckCircle2 className='text-primary-50' size={30} />
+            </div>}
+            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
+            </Image>
+            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
+            </Image>
+          </div>
           {
             dateUserByCategory('MOUTH').length > 0 && dateUserByCategory('MOUTH').map((item) => {
               return (
@@ -465,14 +568,14 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
             <div className="!text-sm !font-normal">Thoát</div>
           </Button>
           <div className="flex gap-2 items-center">
-            <Button className="w-[150px] !font-medium border border-primary-70"
+            {/* <Button className="w-[150px] !font-medium border border-primary-70"
               onClick={handleResetDefault}
               style={{
                 boxShadow:
                   "0px 4px 0px #9a1595"
               }}>
               <div className="!text-sm !font-normal">Đặt lại</div>
-            </Button>
+            </Button> */}
             <Button className="w-[150px] !font-medium border border-primary-70" onClick={updateAvatarConfig} style={{
               boxShadow:
                 "0px 4px 0px #9a1595"

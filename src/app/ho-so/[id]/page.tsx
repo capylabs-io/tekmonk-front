@@ -20,7 +20,7 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType, PostTypeEnum } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Dot, Edit, Edit2, Settings, Share2, SquareUser } from "lucide-react";
+import { Dot, Edit, Edit2, ImagePlus, Settings, Share2, SquareUser } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -136,6 +136,12 @@ export default function Profile() {
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
+        {/* <div className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30" >
+          <div className="flex items-center gap-x-1">
+            <ImagePlus size={18} className="text-gray-50" />
+            <div className="text-bodyMd text-primary-900">Chỉnh sửa ảnh bìa</div>
+          </div>
+        </div> */}
         <div className="absolute left-8 -bottom-8 w-max h-max">
           {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
             <AvatarLayer avatarConfig={dataAvatarConfig[0]} customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full" />

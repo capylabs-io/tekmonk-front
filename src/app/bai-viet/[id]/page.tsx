@@ -100,7 +100,12 @@ export default function Page({ params }: { params: { id: number } }) {
           <span className="text-SubheadLg">Bài đăng</span>
         </div>
       </div>
-      <div className="mt-3 px-6">
+      <div className="mt-3 px-6 relative">
+        <div className="text-sm text-gray-500 absolute top-6 right-6">
+          {moment(get(postData, "createdAt", ""))
+            .format("DD/MM/YYYY HH:mm A")
+            .toString()}
+        </div>
         <Post
           data={{
             ...postData,

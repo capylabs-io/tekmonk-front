@@ -110,7 +110,7 @@ const SuccessDialog = ({
         </DialogHeader>
 
         <div className="flex flex-col items-center gap-y-4 my-4">
-          <Image
+          {/* <Image
             src={
               get(itemData, "image", "") !== null
                 ? get(itemData, "image", "")
@@ -120,8 +120,19 @@ const SuccessDialog = ({
             width={120}
             alt={get(itemData, "name", "Item")}
             className="rounded-xl mx-auto object-cover"
-          />
-
+          /> */}
+          <div className="w-[156px] h-[166px] rounded-xl mx-auto relative overflow-hidden border-2 border-gray-30 ">
+            <Image src={itemData.image || ''} alt={itemData.name || ''} fill className={cn("object-cover absolute ",
+              itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[1]' :
+                itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[2]" : ""
+            )}
+            />
+            <Image src='/image/avatar/cloth/cloth1.svg' alt={itemData.name || ''} fill className={cn("object-cover absolute ",
+              itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[2]' :
+                itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[1]" : "hidden"
+            )}
+            />
+          </div>
           <div className=" rounded-lg p-4 w-full">
             <div className="grid grid-cols-2 gap-3">
               <div className="text-gray-60">Tên vật phẩm:</div>

@@ -2,9 +2,10 @@ import React from "react";
 import Image from "next/image";
 import classNames from "classnames";
 import { AvatarLayer } from "../avatar/AvatarLayer";
-import { AvatarConfig } from "@/types/common-types";
+import { AvatarConfig, User } from "@/types/common-types";
 import { TabIcon } from "./TabIcons";
 import { UserRankingType } from "@/types/users";
+import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
   rank: "first" | "second" | "third";
@@ -13,6 +14,7 @@ type Props = {
   specialName: string;
   score: string;
   customClassNames?: string;
+  user?: User;
   avatarConfig?: AvatarConfig
   rankingType: UserRankingType;
 };
@@ -26,7 +28,9 @@ export const LeaderboardTopUserCard = ({
   customClassNames,
   avatarConfig,
   rankingType,
+  user
 }: Props) => {
+  const router = useCustomRouter();
   const BACKGROUND = (value: string) => {
     switch (value) {
       case "first":
@@ -123,7 +127,9 @@ export const LeaderboardTopUserCard = ({
           </div>
         }
         <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-4">
-          <div className="text-gray-95 text-[15px] text-center line-clamp-2 !leading-4">{name}</div>
+          <div className="text-gray-95 text-[15px] text-center line-clamp-2 !leading-4 cursor-pointer hover:underline" onClick={() => {
+            user && router.push(`/ho-so/${user?.id}`);
+          }}>{name}</div>
           <div className="text-gray-50 text-BodyXs text-center mt-1">
             {specialName}
           </div>

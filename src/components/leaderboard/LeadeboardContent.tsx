@@ -126,6 +126,7 @@ export const LeadeboardContent = ({
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <LeaderboardTopUserCard
+                user={mappedData?.[1]?.user}
                 customClassNames="mt-4"
                 rank="second"
                 name={mappedData?.[1]?.user?.username ?? "Không có"}
@@ -148,6 +149,7 @@ export const LeadeboardContent = ({
               transition={{ duration: 0.5, delay: 0 }}
             >
               <LeaderboardTopUserCard
+                user={mappedData?.[0]?.user}
                 customClassNames="mb-4"
                 rank="first"
                 name={mappedData?.[0]?.user?.username ?? "Không có"}
@@ -170,6 +172,7 @@ export const LeadeboardContent = ({
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <LeaderboardTopUserCard
+                user={mappedData?.[2]?.user}
                 customClassNames="mt-4"
                 rank="third"
                 name={mappedData?.[2]?.user?.username ?? "Không có"}
