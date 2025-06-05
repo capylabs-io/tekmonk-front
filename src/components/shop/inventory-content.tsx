@@ -156,16 +156,18 @@ export const InventoryContent = () => {
               //   <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
               // </div>
             )}
-            <div className="flex w-full mx-auto">
-              <CommonPagination
-                currentPage={page}
-                itemsPerPage={pageSize}
-                totalItems={get(myItems, 'meta?.pagination?.total') || 0}
-                showDetails={false}
-                onPageChange={(page) => setPage(page)}
-                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
-              />
-            </div>
+
+            {myItems && myItems.data.length > 0 &&
+              <div className="flex w-full mx-auto">
+                <CommonPagination
+                  currentPage={page}
+                  itemsPerPage={pageSize}
+                  totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                  showDetails={false}
+                  onPageChange={(page) => setPage(page)}
+                  onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
+                />
+              </div>}
           </div>
         )}
 
@@ -202,16 +204,19 @@ export const InventoryContent = () => {
               //   <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
               // </div>
             )}
-            <div className="flex w-full mx-auto">
-              <CommonPagination
-                currentPage={page}
-                itemsPerPage={pageSize}
-                totalItems={get(myItems, 'meta?.pagination?.total') || 0}
-                showDetails={false}
-                onPageChange={(page) => setPage(page)}
-                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
-              />
-            </div>
+            {
+              myItems && myItems.data.length > 0 &&
+              <div className="flex w-full mx-auto">
+                <CommonPagination
+                  currentPage={page}
+                  itemsPerPage={pageSize}
+                  totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                  showDetails={false}
+                  onPageChange={(page) => setPage(page)}
+                  onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
+                />
+              </div>
+            }
           </div>
         )}
       </div>
@@ -289,6 +294,6 @@ export const InventoryContent = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 };
