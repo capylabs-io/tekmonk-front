@@ -118,12 +118,11 @@ export const LeaderboardTopUserCard = ({
         {avatarConfig ? <AvatarLayer avatarConfig={avatarConfig} customClassName={classNames("rounded-full justify-center bg-no-repeat bg-cover !border-[5px] !absolute mb-16", userImage, cardShadow)} /> :
           <div
             className={classNames(
-              "rounded-full justify-center bg-no-repeat bg-cover border-[5px] absolute mb-16",
+              "rounded-full justify-center bg-no-repeat bg-cover border-[5px] absolute mb-16 bg-white",
               !!imageUrl && imageUrl,
               userImage, cardShadow
             )}
           >
-
           </div>
         }
         <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-4">

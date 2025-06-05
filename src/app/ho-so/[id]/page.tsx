@@ -153,11 +153,8 @@ export default function Profile() {
             <div className="relative">
               <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center h-[152px] w-[152px]" />
               {userInfo && userInfo.id === guestInfor?.id && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" onClick={showAvatarModal}>
-                  <div className="flex items-center gap-x-1">
-                    <SquareUser size={18} className="text-white" />
-                    <div className="text-bodyMd text-white">Chỉnh sửa ảnh đại diện</div>
-                  </div>
+                <div className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50" onClick={showAvatarModal}>
+                  <LuUserRoundPen size={18} className="text-primary-900" />
                 </div>
               )}
             </div>

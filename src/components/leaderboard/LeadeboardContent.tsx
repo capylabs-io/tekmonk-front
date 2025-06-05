@@ -121,32 +121,65 @@ export const LeadeboardContent = ({
         {
           !isTopThreeRankingLoading &&
           <>
-            {mappedData.length > 0 && [
-              mappedData[1],
-              mappedData[0],
-              mappedData[2]
-            ].map((item, index) => (
-              <motion.div
-                key={item?.user?.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index === 0 ? 0.2 : index === 1 ? 0.4 : 0.6 }}
-              >
-                <LeaderboardTopUserCard
-                  user={item.user}
-                  customClassNames={item.order === 1 ? "mb-4" : item.order === 1 ? "mt-4" : "mt-4"}
-                  rank={item.order}
-                  name={item.user?.username ?? "Không có"}
-                  specialName={item.user?.specialName ?? "Thường dân"}
-                  score={item.count && item.count?.toString() || "0"}
-                  imageUrl={
-                    `bg-[url('/image/leaderboard/user${index + 1}.png')]`
-                  }
-                  avatarConfig={item.avatarConfig?.[0]}
-                  rankingType={type}
-                />
-              </motion.div>
-            ))}
+            {mappedData.length > 0 && (
+              <>
+                {(() => {
+                  const getOrderedData = () => {
+                    const defaultItem1 = {
+                      user: {
+                        id: 0,
+                        username: "Chưa có",
+                        specialName: "Thường dân"
+                      },
+                      count: 0,
+                      order: 2,
+                    };
+                    const defaultItem2 = {
+                      user: {
+                        id: 0,
+                        username: "Chưa có",
+                        specialName: "Thường dân"
+                      },
+                      count: 0,
+                      order: 3,
+                    };
+                    if (mappedData.length === 1) {
+                      return [defaultItem1, mappedData[0], defaultItem2];
+                    }
+                    if (mappedData.length === 2) {
+                      return [mappedData[1], mappedData[0], defaultItem2];
+                    }
+                    return [mappedData[1], mappedData[0], mappedData[2]];
+                  };
+
+                  const getDelay = (index: number) => {
+                    return index === 0 ? 0.2 : index === 1 ? 0.4 : 0.6;
+                  };
+
+
+                  return getOrderedData().map((item, index) => (
+                    <motion.div
+                      key={item?.user?.id || `default-${index}`}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: getDelay(index) }}
+                    >
+                      <LeaderboardTopUserCard
+                        user={item.user}
+                        customClassNames={item.order === 1 ? "mb-4" : "mt-4"}
+                        rank={item.order || index + 1}
+                        name={item.user?.username ?? "Chưa có"}
+                        specialName={item.user?.specialName ?? "Thường dân"}
+                        score={item.count?.toString() || "0"}
+                        imageUrl={`bg-[url('/image/profile/avatar-x2.png')]`}
+                        avatarConfig={item.avatarConfig?.[0]}
+                        rankingType={type}
+                      />
+                    </motion.div>
+                  ));
+                })()}
+              </>
+            )}
           </>
         }
       </div>
