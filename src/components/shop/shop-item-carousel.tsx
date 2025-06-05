@@ -70,7 +70,7 @@ export const ShopItemCarousel = ({
               key={index}
               className={cn(
                 "basis-full sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 gap-[2px] grid place-items-center py-2 hover:cursor-pointer",
-                item.type == ShopItemEnum.DEFAULT && "hidden"
+                item.type == ShopItemEnum.DEFAULT || !item.isHidden && "hidden"
               )}
             >
               <motion.div
@@ -94,7 +94,7 @@ export const ShopItemCarousel = ({
                   quantity={item.quantity || 0}
                   onClick={() => onItemClick?.(item)}
                 />
-               
+
               </motion.div>
             </CarouselItem>
           ))}
