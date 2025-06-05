@@ -95,7 +95,7 @@ export const MissionProgress = ({ id }: { id: number }) => {
 
             missions?.data.slice(0, 3).map((mission) => {
               return (
-                <div className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
+                <div key={mission.id} className="flex flex-row justify-center items-center gap-4 w-full h-[112px]">
                   <Image
                     src={mission?.imageUrl == "" || mission?.imageUrl == null ? "/image/app-logox2.png" : mission?.imageUrl}
                     alt="Mission"

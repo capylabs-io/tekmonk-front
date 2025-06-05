@@ -158,7 +158,8 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
   }, [])
   const userAvatarConfig = useMemo(() => {
     return (
-      currentAvatar ? <AvatarLayer avatarConfig={currentAvatar} customClassName="w-[200px] h-[200px] rounded-xl" /> :
+      currentAvatar ?
+        <AvatarLayer avatarConfig={currentAvatar} customClassName="w-[200px] h-[200px] rounded-xl" /> :
         <div className="border-2 flex justify-center items-end border-gray-30 rounded-xl relative overflow-hidden w-[200px] h-[200px] ">
           <Image src="/image/profile/avatar-x2.png" className='self-end z-[2] absolute' height={200} width={200} alt='pic'>
           </Image>
