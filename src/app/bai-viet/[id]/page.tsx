@@ -18,6 +18,7 @@ import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import qs from "qs";
 import { User } from "@/types/common-types";
 import { CommonLoading } from "@/components/common/CommonLoading";
+import { formatTimeToVietnamese } from "@/lib/utils";
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useCustomRouter();
@@ -102,9 +103,7 @@ export default function Page({ params }: { params: { id: number } }) {
       </div>
       <div className="mt-3 px-6 relative">
         <div className="text-sm text-gray-500 absolute top-6 right-6">
-          {moment(get(postData, "createdAt", ""))
-            .format("DD/MM/YYYY HH:mm A")
-            .toString()}
+          {formatTimeToVietnamese(get(postData, "createdAt", ""))}
         </div>
         <Post
           data={{

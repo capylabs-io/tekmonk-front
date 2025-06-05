@@ -114,7 +114,7 @@ export const AchievementProfile = ({ id }: { id: number }) => {
             </CommonCard>
           ))}
           {achievements && achievements.data.length === 0 && (
-            <div className="w-full h-full flex items-center justify-center col-span-3 xl:col-span-2">
+            <div className="w-full h-full flex items-center justify-center xl:col-span-3 col-span-2 2xl:col-span-4">
               <CommonEmptyState />
             </div>
           )}

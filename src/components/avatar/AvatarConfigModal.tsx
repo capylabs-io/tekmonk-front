@@ -20,6 +20,7 @@ import classNames from 'classnames';
 import { CheckCircle2 } from 'lucide-react';
 import { useSnackbarStore } from '@/store/SnackbarStore';
 import { AvatarLayer } from './AvatarLayer';
+import { AvatarItem } from './AvatarItem';
 
 type Props = {
   onSubmit?: () => void,
@@ -175,44 +176,32 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
-          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-            setCurrentAvatar(prev => ({
-              ...prev,
-              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
-              special: null,
-            }))
-          }} style={{
-            boxShadow: "0 2px 0 0 #DDD0DD"
-          }}>
-            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
-              <div className='text-xs text-primary-900'>Mặc định</div>
-            </div>
-            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-              <CheckCircle2 className='text-primary-50' size={30} />
-            </div>}
-            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-            </Image>
-            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-            </Image>
-          </div>
+          <AvatarItem
+            onItemClick={() => {
+              setCurrentAvatar(prev => ({
+                ...prev,
+                cloth: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
+                special: null,
+              }))
+            }}
+            isActive={currentAvatar?.cloth?.id === dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.id}
+            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.image || ''}
+            isDefault
+          />
           {
             dateUserByCategory('CLOTH').length > 0 && dateUserByCategory('CLOTH').map((item) => {
               return (
-                <div key={item.id} className={classNames('border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative')} onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    cloth: item.shop_item,
-                    special: null,
-                  }))
-                }} style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD"
-                }}>
-                  {currentAvatar?.cloth?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[2] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>}
-                  <Image src={item.shop_item.image || ''} height={120} width={120} alt='pic' className='z-[1]'>
-                  </Image>
-                </div>
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      cloth: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.cloth?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                />
               )
             })
           }
@@ -226,46 +215,34 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
 
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
-          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-            setCurrentAvatar(prev => ({
-              ...prev,
-              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
-              special: null,
-            }))
-          }} style={{
-            boxShadow: "0 2px 0 0 #DDD0DD"
-          }}>
-            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
-              <div className='text-xs text-primary-900'>Mặc định</div>
-            </div>
-            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-              <CheckCircle2 className='text-primary-50' size={30} />
-            </div>}
-            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-            </Image>
-            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-            </Image>
-          </div>
+          <AvatarItem
+            onItemClick={() => {
+              setCurrentAvatar(prev => ({
+                ...prev,
+                frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
+                special: null,
+              }))
+            }}
+            isActive={currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.id}
+            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.image || ''}
+            isDefault
+            isAllowClothBackground
+          />
           {
             dateUserByCategory('FRONT_HAIR').length > 0 && dateUserByCategory('FRONT_HAIR').map((item) => {
               return (
-                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    frontHair: item.shop_item,
-                    special: null,
-                  }))
-                }} style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD"
-                }}>
-                  {currentAvatar?.frontHair?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>}
-                  <Image src={item.shop_item.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                </div>
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      frontHair: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.frontHair?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                  isAllowClothBackground
+                />
               )
             })
           }
@@ -280,47 +257,36 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
 
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
-          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-            setCurrentAvatar(prev => ({
-              ...prev,
-              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
-              special: null,
-            }))
-          }} style={{
-            boxShadow: "0 2px 0 0 #DDD0DD"
-          }}>
-            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
-              <div className='text-xs text-primary-900'>Mặc định</div>
-            </div>
-            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-              <CheckCircle2 className='text-primary-50' size={30} />
-            </div>}
-            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.image || ''} className='z-[1] absolute' height={120} width={120} alt='pic'>
-            </Image>
-            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[2] absolute' height={120} width={120} alt='pic'>
-            </Image>
-          </div>
+          <AvatarItem
+            onItemClick={() => {
+              setCurrentAvatar(prev => ({
+                ...prev,
+                backHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
+                special: null,
+              }))
+            }}
+            isActive={currentAvatar?.backHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.id}
+            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.image || ''}
+            isDefault
+            isAllowClothBackground
+            isBackHair
+          />
           {
             dateUserByCategory('BACK_HAIR').length > 0 && dateUserByCategory('BACK_HAIR').map((item) => {
               return (
-                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    backHair: item.shop_item,
-                    special: null,
-
-                  }))
-                }} style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD"
-                }}>
-                  {currentAvatar?.backHair?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>}
-                  <Image src={item.shop_item.image || ''} className='z-[1] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[2] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                </div>
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      backHair: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.backHair?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                  isAllowClothBackground
+                  isBackHair
+                />
               )
             })
           }
@@ -333,46 +299,35 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
-          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-            setCurrentAvatar(prev => ({
-              ...prev,
-              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
-              special: null,
-            }))
-          }} style={{
-            boxShadow: "0 2px 0 0 #DDD0DD"
-          }}>
-            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
-              <div className='text-xs text-primary-900'>Mặc định</div>
-            </div>
-            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-              <CheckCircle2 className='text-primary-50' size={30} />
-            </div>}
-            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-            </Image>
-            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-            </Image>
-          </div>
+          <AvatarItem
+            onItemClick={() => {
+              setCurrentAvatar(prev => ({
+                ...prev,
+                eye: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
+                special: null,
+              }))
+            }}
+            isActive={currentAvatar?.eye?.id === dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.id}
+            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.image || ''}
+            isDefault
+            isAllowClothBackground
+          />
+
           {
             dateUserByCategory('EYE').length > 0 && dateUserByCategory('EYE').map((item) => {
               return (
-                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    eye: item.shop_item,
-                    special: null,
-                  }))
-                }} style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD"
-                }}>
-                  {currentAvatar?.eye?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>}
-                  <Image src={item.shop_item.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                </div>
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      eye: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.eye?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                  isAllowClothBackground
+                />
               )
             })
           }
@@ -385,46 +340,34 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
         <div className='grid grid-cols-3 gap-4 h-max'>
-          <div className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-            setCurrentAvatar(prev => ({
-              ...prev,
-              frontHair: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
-              special: null,
-            }))
-          }} style={{
-            boxShadow: "0 2px 0 0 #DDD0DD"
-          }}>
-            <div className='absolute top-1 right-1 w-max py-1 px-2 bg-gray-30 z-[5] flex justify-center items-center rounded-lg'>
-              <div className='text-xs text-primary-900'>Mặc định</div>
-            </div>
-            {currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-              <CheckCircle2 className='text-primary-50' size={30} />
-            </div>}
-            <Image src={dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-            </Image>
-            <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-            </Image>
-          </div>
+          <AvatarItem
+            onItemClick={() => {
+              setCurrentAvatar(prev => ({
+                ...prev,
+                mouth: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
+                special: null,
+              }))
+            }}
+            isActive={currentAvatar?.mouth?.id === dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.id}
+            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.image || ''}
+            isDefault
+            isAllowClothBackground
+          />
           {
             dateUserByCategory('MOUTH').length > 0 && dateUserByCategory('MOUTH').map((item) => {
               return (
-                <div key={item.id} className='border-2 border-gray-30 !bg-white rounded-xl flex justify-center items-end w-[130px] h-[130px] cursor-pointer relative' onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    mouth: item.shop_item,
-                    special: null,
-                  }))
-                }} style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD"
-                }}>
-                  {currentAvatar?.mouth?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>}
-                  <Image src={item.shop_item.image || ''} className='z-[2] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                  <Image src="/image/avatar/cloth/cloth1.svg" className='self-end z-[1] absolute' height={120} width={120} alt='pic'>
-                  </Image>
-                </div>
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      mouth: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.mouth?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                  isAllowClothBackground
+                />
               )
             })
           }
@@ -436,33 +379,45 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     <div className='flex gap-6 h-full'>
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>        {
-          dateUserByCategory('THEME').length > 0 && dateUserByCategory('THEME').map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="border-2 border-gray-30 rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer" onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    theme: item.shop_item,
-                    special: null,
-                  }))
-                }}
-                style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD",
-                }}
-              >
-                {
-                  currentAvatar?.theme?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>
-                }
-                <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
-                </Image>
-              </div>
-            )
-          })
-        }
+        <div className='grid grid-cols-3 gap-4 h-max'>
+          {
+            dateUserByCategory('THEME').length > 0 && dateUserByCategory('THEME').map((item) => {
+              return (
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      theme: item.shop_item,
+                      special: null,
+                    }))
+                  }}
+                  isActive={currentAvatar?.theme?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                />
+                // <div
+                //   key={item.id}
+                //   className="border-2 border-gray-30 rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer" onClick={() => {
+                //     setCurrentAvatar(prev => ({
+                //       ...prev,
+                //       theme: item.shop_item,
+                //       special: null,
+                //     }))
+                //   }}
+                //   style={{
+                //     boxShadow: "0 2px 0 0 #DDD0DD",
+                //   }}
+                // >
+                //   {
+                //     currentAvatar?.theme?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+                //       <CheckCircle2 className='text-primary-50' size={30} />
+                //     </div>
+                //   }
+                //   <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
+                //   </Image>
+                // </div>
+              )
+            })
+          }
         </div>
       </div>
     </div>
@@ -471,33 +426,44 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     <div className='flex gap-6 h-full'>
       {userAvatarConfig}
       <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>        {
-          dateUserByCategory('SPECIAL').length > 0 && dateUserByCategory('SPECIAL').map((item) => {
-            return (
-              <div
-                key={item.id}
-                className="border-2 border-gray-30  rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer"
-                onClick={() => {
-                  setCurrentAvatar(prev => ({
-                    ...prev,
-                    special: item.shop_item
-                  }))
-                }}
-                style={{
-                  boxShadow: "0 2px 0 0 #DDD0DD",
-                }}
-              >
-                {
-                  currentAvatar?.special?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
-                    <CheckCircle2 className='text-primary-50' size={30} />
-                  </div>
-                }
-                <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
-                </Image>
-              </div>
-            )
-          })
-        }
+        <div className='grid grid-cols-3 gap-4 h-max'>
+          {
+            dateUserByCategory('SPECIAL').length > 0 && dateUserByCategory('SPECIAL').map((item) => {
+              return (
+                <AvatarItem
+                  onItemClick={() => {
+                    setCurrentAvatar(prev => ({
+                      ...prev,
+                      special: item.shop_item
+                    }))
+                  }}
+                  isActive={currentAvatar?.special?.id === item.shop_item.id}
+                  imageUrl={item.shop_item.image || ''}
+                />
+                // <div
+                //   key={item.id}
+                //   className="border-2 border-gray-30  rounded-xl flex justify-center items-end w-[130px] h-[130px] relative cursor-pointer"
+                //   onClick={() => {
+                //     setCurrentAvatar(prev => ({
+                //       ...prev,
+                //       special: item.shop_item
+                //     }))
+                //   }}
+                //   style={{
+                //     boxShadow: "0 2px 0 0 #DDD0DD",
+                //   }}
+                // >
+                //   {
+                //     currentAvatar?.special?.id === item.shop_item.id && <div className='absolute top-0 left-0 w-full h-full bg-primary-20/50 z-[3] flex justify-center items-center'>
+                //       <CheckCircle2 className='text-primary-50' size={30} />
+                //     </div>
+                //   }
+                //   <Image src={item.shop_item.image || ''} className='z-[2] absolute object-cover' height={120} width={120} alt='pic'>
+                //   </Image>
+                // </div>
+              )
+            })
+          }
         </div>
       </div>
     </div>

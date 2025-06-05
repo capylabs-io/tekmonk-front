@@ -8,7 +8,7 @@ import { UserRankingType } from "@/types/users";
 import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
-  rank: "first" | "second" | "third";
+  rank: number
   imageUrl: string;
   name: string;
   specialName: string;
@@ -31,61 +31,61 @@ export const LeaderboardTopUserCard = ({
   user
 }: Props) => {
   const router = useCustomRouter();
-  const BACKGROUND = (value: string) => {
+  const BACKGROUND = (value: number) => {
     switch (value) {
-      case "first":
+      case 1:
         return "/image/leaderboard/gold-background.png";
-      case "second":
+      case 2:
         return "/image/leaderboard/silver-background.png";
-      case "third":
+      case 3:
         return "/image/leaderboard/bronze-background.png";
       default:
         return;
     }
   };
-  const CARD_ASSETS = (value: string) => {
+  const CARD_ASSETS = (value: number) => {
     switch (value) {
-      case "first":
+      case 1:
         return "bg-[#F9FFCA] border-[#F2E370]";
-      case "second":
+      case 2:
         return "bg-gray-10 border-gray-30";
-      case "third":
+      case 3:
         return "bg-[#FFEAD9] border-[#EE9F48]";
       default:
         return;
     }
   };
-  const IMAGE = (value: string) => {
+  const IMAGE = (value: number) => {
     switch (value) {
-      case "first":
+      case 1:
         return "!border-[#F2E370] h-[80px] w-[80px]";
-      case "second":
+      case 2:
         return "!border-gray-10 h-[80px] w-[80px]";
-      case "third":
+      case 3:
         return "!border-[#EE9F48] h-[80px] w-[80px]";
       default:
         return;
     }
   };
-  const BOX_SHADOW = (value: string) => {
+  const BOX_SHADOW = (value: number) => {
     switch (value) {
-      case "first":
+      case 1:
         return "0px 8px 0px #DAC20F";
-      case "second":
+      case 2:
         return "0px 8px 0px #AC9FB1";
-      case "third":
+      case 3:
         return "0px 8px 0px #D67A17";
       default:
         return;
     }
   };
-  const CARD_SHADOW = (value: string) => {
+  const CARD_SHADOW = (value: number) => {
     switch (value) {
-      case "first":
+      case 1:
         return "shadow-[0px_6px_0px_#DAC20F] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#DAC20F]";
-      case "second":
+      case 2:
         return "shadow-[0px_6px_0px_#AC9FB1] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#AC9FB1]";
-      case "third": ``
+      case 3: ``
         return "shadow-[0px_6px_0px_#D67A17] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#D67A17]";
       default:
         return;
