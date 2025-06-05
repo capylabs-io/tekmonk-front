@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Carousel,
@@ -28,7 +28,13 @@ export const ShopItemCarousel = ({
 }: ShopItemCarouselProps) => {
   const [api, setApi] = useState<CarouselApi>();
 
-  return (
+  const filteredItems = useMemo(() => {
+    return items.filter(
+      (item) => item.type !== ShopItemEnum.DEFAULT || !item.isHidden
+    );
+  }, [items]);
+
+  return items.length > 0 && (
     <div className="text-primary-900 mt-4">
       <div className="w-full flex justify-between items-center">
         <div
@@ -65,12 +71,11 @@ export const ShopItemCarousel = ({
         setApi={setApi}
       >
         <CarouselContent className="">
-          {items.map((item, index) => (
+          {filteredItems.map((item, index) => (
             <CarouselItem
               key={index}
               className={cn(
-                "basis-full sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 gap-[2px] grid place-items-center py-2 hover:cursor-pointer",
-                item.type == ShopItemEnum.DEFAULT || !item.isHidden && "hidden"
+                "basis-full sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 gap-[2px] grid place-items-center py-2 hover:cursor-pointer"
               )}
             >
               <motion.div
