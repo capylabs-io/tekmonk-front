@@ -107,6 +107,23 @@ export function TitleSelectModal({
                 </div>
               ) : (
                 <div className="border border-gray-30 rounded-md p-4">
+                  <div className="flex items-center gap-3 cursor-pointer">
+                    <Image
+                      src={
+                        "/image/leaderboard/gold-medal.png"
+                      }
+                      alt="badge"
+                      width={32}
+                      height={32}
+                    />
+                    <span className="flex-1 text-gray-900 text-base">
+                      Thường dân
+                    </span>
+                    <RadioGroupItem
+                      value={"Thường dân"}
+                    />
+                  </div>
+                  <div className="border border-gray-20 h-[1px] my-2 w-full"></div>
                   {data?.data && data.data.length > 0 ? (
                     data.data
                       .filter((t) =>
@@ -116,6 +133,7 @@ export function TitleSelectModal({
                       )
                       .map((t, index) => (
                         <>
+
                           <div
                             key={t.id}
                             className="flex items-center gap-3 cursor-pointer"
@@ -140,6 +158,7 @@ export function TitleSelectModal({
                               value={t.achievement?.title || ""}
                             />
                           </div>
+
                           {index !== data.data.length - 1 && (
                             <div className="border border-gray-20 h-[1px] my-2 w-full"></div>
                           )}
@@ -151,6 +170,7 @@ export function TitleSelectModal({
                 </div>
               )}
             </RadioGroup>
+
             <div className="flex w-full mx-auto">
               <CommonPagination
                 currentPage={page}

@@ -54,8 +54,9 @@ export const LeadeboardContent = ({
   useEffect(() => {
     const fetchData = async () => {
       if (!topThreeRankingData?.data) return;
-      const promises = topThreeRankingData.data.map(async (item) => ({
+      const promises = topThreeRankingData.data.map(async (item, index) => ({
         ...item,
+        order: index + 1,
         avatarConfig: await fetchAvatarConfig(item.user.id)
       }));
       const results = await Promise.all(promises);
@@ -120,71 +121,65 @@ export const LeadeboardContent = ({
         {
           !isTopThreeRankingLoading &&
           <>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <LeaderboardTopUserCard
-                customClassNames="mt-4"
-                rank="second"
-                name={mappedData?.[1]?.user?.username ?? "Không có"}
-                specialName={
-                  mappedData?.[1]?.user?.specialName ?? "Thường dân"
-                }
-                score={mappedData?.[1]?.count && mappedData?.[1]?.count?.toString() || "0"}
-                imageUrl={
-                  // dataMockData[1]?.user?.imageURL ??
-                  "bg-[url('/image/leaderboard/user1.png')]"
-                }
-                avatarConfig={mappedData?.[1]?.avatarConfig?.[0]}
-                rankingType={type}
-              />
-            </motion.div>
+            {mappedData.length > 0 && (
+              <>
+                {(() => {
+                  const getOrderedData = () => {
+                    const defaultItem1 = {
+                      user: {
+                        id: 0,
+                        username: "Chưa có",
+                        specialName: "Thường dân"
+                      },
+                      count: 0,
+                      order: 2,
+                    };
+                    const defaultItem2 = {
+                      user: {
+                        id: 0,
+                        username: "Chưa có",
+                        specialName: "Thường dân"
+                      },
+                      count: 0,
+                      order: 3,
+                    };
+                    if (mappedData.length === 1) {
+                      return [defaultItem1, mappedData[0], defaultItem2];
+                    }
+                    if (mappedData.length === 2) {
+                      return [mappedData[1], mappedData[0], defaultItem2];
+                    }
+                    return [mappedData[1], mappedData[0], mappedData[2]];
+                  };
 
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0 }}
-            >
-              <LeaderboardTopUserCard
-                customClassNames="mb-4"
-                rank="first"
-                name={mappedData?.[0]?.user?.username ?? "Không có"}
-                specialName={
-                  mappedData?.[0]?.user?.specialName ?? "Thường dân"
-                }
-                score={mappedData?.[0]?.count && mappedData?.[0]?.count?.toString() || "0"}
-                imageUrl={
-                  // dataMockData[0]?.user?.imageURL ??
-                  "bg-[url('/image/leaderboard/user3.png')]"
-                }
-                avatarConfig={mappedData?.[0]?.avatarConfig?.[0]}
-                rankingType={type}
-              />
-            </motion.div>
+                  const getDelay = (index: number) => {
+                    return index === 0 ? 0.2 : index === 1 ? 0.4 : 0.6;
+                  };
 
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <LeaderboardTopUserCard
-                customClassNames="mt-4"
-                rank="third"
-                name={mappedData?.[2]?.user?.username ?? "Không có"}
-                specialName={
-                  mappedData?.[2]?.user?.specialName ?? "Thường dân"
-                }
-                score={mappedData?.[2]?.count && mappedData?.[2]?.count?.toString() || "0"}
-                imageUrl={
-                  // dataMockData[2]?.user?.imageURL ??
-                  "bg-[url('/image/leaderboard/user2.png')]"
-                }
-                avatarConfig={mappedData?.[2]?.avatarConfig?.[0]}
-                rankingType={type}
-              />
-            </motion.div>
+
+                  return getOrderedData().map((item, index) => (
+                    <motion.div
+                      key={item?.user?.id || `default-${index}`}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: getDelay(index) }}
+                    >
+                      <LeaderboardTopUserCard
+                        user={item.user}
+                        customClassNames={item.order === 1 ? "mb-4" : "mt-4"}
+                        rank={item.order || index + 1}
+                        name={item.user?.username ?? "Chưa có"}
+                        specialName={item.user?.specialName ?? "Thường dân"}
+                        score={item.count?.toString() || "0"}
+                        imageUrl={`bg-[url('/image/profile/avatar-x2.png')]`}
+                        avatarConfig={item.avatarConfig?.[0]}
+                        rankingType={type}
+                      />
+                    </motion.div>
+                  ));
+                })()}
+              </>
+            )}
           </>
         }
       </div>

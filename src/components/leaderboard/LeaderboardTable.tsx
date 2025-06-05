@@ -105,7 +105,7 @@ export const LeaderboardTable = ({
 
         return (
           <div
-            className="flex gap-x-2 items-center cursor-pointer"
+            className="flex gap-x-2 items-center cursor-pointer hover:underline"
             onClick={() => {
               router.push(`/ho-so/${row.original?.user.id}`);
             }}

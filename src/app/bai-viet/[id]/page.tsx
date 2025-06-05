@@ -18,6 +18,7 @@ import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import qs from "qs";
 import { User } from "@/types/common-types";
 import { CommonLoading } from "@/components/common/CommonLoading";
+import { formatTimeToVietnamese } from "@/lib/utils";
 
 export default function Page({ params }: { params: { id: number } }) {
   const router = useCustomRouter();
@@ -100,7 +101,10 @@ export default function Page({ params }: { params: { id: number } }) {
           <span className="text-SubheadLg">Bài đăng</span>
         </div>
       </div>
-      <div className="mt-3 px-6">
+      <div className="mt-3 px-6 relative">
+        <div className="text-sm text-gray-500 absolute top-6 right-6">
+          {formatTimeToVietnamese(get(postData, "createdAt", ""))}
+        </div>
         <Post
           data={{
             ...postData,

@@ -1,6 +1,6 @@
 "use client";
 import { Button as CommonButton } from "@/components/common/button/Button";
-import { Button } from "@/components/ui/button";
+import { LuUserRoundPen } from "react-icons/lu";
 import { useCustomRouter } from "@/components/common/router/CustomRouter";
 import {
   Tabs,
@@ -20,7 +20,7 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType, PostTypeEnum } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Dot, Edit, Edit2, Settings, Share2, SquareUser } from "lucide-react";
+import { Dot, Edit, Edit2, ImagePlus, Settings, Share2, SquareUser } from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -47,13 +47,12 @@ export default function Profile() {
   const { data: guestInfor, refetch: refetchUserInfo } = useGetUserQueryById(
     id as string
   );
-  const [userInfo] = useUserStore((state) => [state.userInfo]);
+  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
-  const [saving, setSaving] = useState(false);
 
   const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
     queryKey: ["avatar-config", guestInfor?.id],
@@ -115,17 +114,15 @@ export default function Profile() {
   const handleOpenTitleModal = () => setShowTitleModal(true);
 
   const handleSaveTitle = async (title: string) => {
-    setSaving(true);
     try {
-      await ReqUpdateUser(guestInfor?.id?.toString(), { specialName: title });
+      await ReqUpdateUser(userInfo?.id?.toString() || "", { specialName: title });
       success("Hồ sơ cá nhân ", "Cập nhật danh hiệu thành công");
       setShowTitleModal(false);
       queryClient.invalidateQueries({ queryKey: ["custom-posts"] });
     } catch (error) {
       console.log("Error ", error);
     } finally {
-      setSaving(false);
-      refetchUserInfo();
+      refetchUserInfo()
     }
   };
 
@@ -136,19 +133,51 @@ export default function Profile() {
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
       <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
+        {/* <div className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30" >
+          <div className="flex items-center gap-x-1">
+            <ImagePlus size={18} className="text-gray-50" />
+            <div className="text-bodyMd text-primary-900">Chỉnh sửa ảnh bìa</div>
+          </div>
+        </div> */}
         <div className="absolute left-8 -bottom-8 w-max h-max">
           {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
-            <AvatarLayer avatarConfig={dataAvatarConfig[0]} customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full" />
+            <div className="relative">
+              <AvatarLayer avatarConfig={dataAvatarConfig[0]} customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full" />
+              {userInfo && userInfo.id === guestInfor?.id && (
+                <div className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50" onClick={showAvatarModal}>
+                  <LuUserRoundPen size={18} className="text-primary-900" />
+                </div>
+              )}
+            </div>
           ) : (
-            <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center h-[152px] w-[152px]" />
+            <div className="relative">
+              <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center h-[152px] w-[152px]" />
+              {userInfo && userInfo.id === guestInfor?.id && (
+                <div className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50" onClick={showAvatarModal}>
+                  <LuUserRoundPen size={18} className="text-primary-900" />
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>
-      <div className="w-full mt-14 px-6">
+      <div className="w-full pt-14 px-6 relative">
+
+        <CommonButton
+          outlined
+          className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center absolute top-4 right-6"
+          onClick={handleShareProfile}
+        >
+          <div className="flex items-center gap-x-1">
+            <Share2 size={18} className="text-gray-50" />
+            <div className="text-bodyMd text-primary-900">Chia sẻ hồ sơ</div>
+          </div>
+        </CommonButton>
+
         <div className="flex gap-x-1 items-center">
           <div className="truncate flex gap-x-2 items-center">
             <span className="text-subheadLg font-bold text-primary-950">
-              {guestInfor?.username}
+              {guestInfor?.username || "User"}
             </span>
           </div>
           <Dot size={24} />
@@ -156,7 +185,6 @@ export default function Profile() {
             {get(guestInfor, "specialName") || "Thường dân"}
           </div>
         </div>
-
 
         <div className="flex gap-x-2 mt-3">
 
@@ -174,7 +202,7 @@ export default function Profile() {
           )}
           {userInfo && userInfo.id === guestInfor?.id && (
             <>
-              <CommonButton
+              {/* <CommonButton
                 outlined
                 className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
                 onClick={showAvatarModal}
@@ -183,7 +211,7 @@ export default function Profile() {
                   <SquareUser size={18} className="text-gray-50" />
                   <div className="text-bodyMd text-primary-900">Ảnh đại diện</div>
                 </div>
-              </CommonButton>
+              </CommonButton> */}
               <CommonButton
                 outlined
                 className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
@@ -196,16 +224,7 @@ export default function Profile() {
               </CommonButton>
             </>
           )}
-          <CommonButton
-            outlined
-            className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center"
-            onClick={handleShareProfile}
-          >
-            <div className="flex items-center gap-x-1">
-              <Share2 size={18} className="text-gray-50" />
-              <div className="text-bodyMd text-primary-900">Chia sẻ hồ sơ</div>
-            </div>
-          </CommonButton>
+
         </div>
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">

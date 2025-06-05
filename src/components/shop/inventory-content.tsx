@@ -22,6 +22,9 @@ import { AuthGuard } from "../hoc/auth-guard";
 import { CommonEmptyState } from "../common/CommonEmptyState";
 import { BannerCard } from "../new/BannerCard";
 import { motion } from "framer-motion";
+import CommonPagination from "../admin/common-pagination";
+import { useShopItem } from "@/hooks/use-shop-item";
+import { get } from "lodash";
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -42,25 +45,7 @@ export const InventoryContent = () => {
   const [itemClaimed, setItemClaimed] = useState<ClaimedItem | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("items");
 
-  const { data: myItems } = useQuery({
-    queryKey: ["my-items"],
-    queryFn: async () => {
-      try {
-        const queryString = qs.stringify({
-          populate: "*",
-          filters: {
-            user: {
-              id: userInfo?.id,
-            },
-          },
-        });
-        return await ReqGetUserShopItems(queryString);
-      } catch (error) {
-        console.log("Error: ", error);
-        return { data: [] };
-      }
-    },
-  });
+  const { myItems, page, pageSize, setPage, setPageSize } = useShopItem();
 
   const { data: claimedItems } = useQuery({
     queryKey: ["claimed-items"],
@@ -158,6 +143,7 @@ export const InventoryContent = () => {
                       image={item.shop_item.image || "/placeholder-image.jpg"}
                       name={item.shop_item.name || ""}
                       price={item.shop_item.price || 0}
+                      category={item.shop_item.category}
                       onClick={() => handleItemClick(item)}
                     />
                   </motion.div>
@@ -170,6 +156,16 @@ export const InventoryContent = () => {
               //   <p className="text-gray-500">Bạn chưa có vật phẩm nào</p>
               // </div>
             )}
+            <div className="flex w-full mx-auto">
+              <CommonPagination
+                currentPage={page}
+                itemsPerPage={pageSize}
+                totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                showDetails={false}
+                onPageChange={(page) => setPage(page)}
+                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
+              />
+            </div>
           </div>
         )}
 
@@ -206,6 +202,16 @@ export const InventoryContent = () => {
               //   <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
               // </div>
             )}
+            <div className="flex w-full mx-auto">
+              <CommonPagination
+                currentPage={page}
+                itemsPerPage={pageSize}
+                totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                showDetails={false}
+                onPageChange={(page) => setPage(page)}
+                onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
+              />
+            </div>
           </div>
         )}
       </div>
