@@ -93,9 +93,11 @@ export const StudentClass = ({ id }: { id: number }) => {
     <div className="px-6 mt-3">
       <div className="flex w-full justify-between items-center text-SubheadSm text-primary-950">
         <div className="text-gray-95 text-SubheadLg">Lớp học của tôi</div>
-        <div className="cursor-pointer" onClick={handleShowMore}>
-          Xem thêm
+        <div className="cursor-pointer">
         </div>
+        {/* <div className="cursor-pointer" onClick={handleShowMore}>
+          Xem thêm
+        </div> */}
       </div>
       <div className="flex flex-col mt-4">
         {myClassList.length > 0 ? (
@@ -134,16 +136,15 @@ export const StudentClass = ({ id }: { id: number }) => {
                             Trạng thái:
                           </span>
                           <span
-                            className={`px-3 py-1 rounded-full text-sm ${
-                              new Date(
-                                get(classItem, "endTime", "")
-                              ).getTime() > new Date().getTime()
+                            className={`px-3 py-1 rounded-full text-sm ${new Date(
+                              get(classItem, "endTime", "")
+                            ).getTime() > new Date().getTime()
                                 ? "bg-green-100 text-green-700"
                                 : "bg-gray-100 text-gray-700"
-                            }`}
+                              }`}
                           >
                             {new Date(get(classItem, "endTime", "")).getTime() >
-                            new Date().getTime()
+                              new Date().getTime()
                               ? "Đang diễn ra"
                               : "Đã kết thúc"}
                           </span>

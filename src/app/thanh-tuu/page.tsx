@@ -28,12 +28,13 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useUserStore } from "@/store/UserStore";
 import { Achievement, Mission } from "@/types/common-types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Filter } from "lucide-react";
+import { ArrowLeft, Filter } from "lucide-react";
 import qs from "qs";
 import { useState } from "react";
 import Image from "next/image";
 import CommonPagination from "@/components/admin/common-pagination";
 import { CommonEmptyState } from "@/components/common/CommonEmptyState";
+import { useCustomRouter } from "@/components/common/router/CustomRouter";
 
 // Filter dropdown component
 const AchievementFilter = ({
@@ -91,6 +92,7 @@ const AchievementFilter = ({
 
 export default function AchievementPage() {
   /** UseState */
+  const router = useCustomRouter();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(30);
   const [filterValue, setFilterValue] = useState<string>(StatusFilter.ALL);
@@ -195,8 +197,9 @@ export default function AchievementPage() {
     <AuthGuard>
       <div className="w-full max-w-7xl mx-auto">
         <div className="flex items-center justify-between px-4">
-          <div className="text-SubheadLg text-gray-95">
-            <span>Thành tựu</span>
+          <div className="text-SubheadLg text-gray-95 flex items-center gap-x-1">
+            <ArrowLeft size={24} onClick={() => router.back()} />
+            <div>Thành tựu</div>
           </div>
         </div>
 

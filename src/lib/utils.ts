@@ -17,6 +17,27 @@ export const ConvertoStatusPostToText = (value: string) => {
   }
 };
 
+export const formatTimeToVietnamese = (time: string | Date): string => {
+  try {
+    const date = new Date(time);
+
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date string");
+    }
+
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${day}/${month}/${year} - ${hours}:${minutes}`;
+  } catch (error) {
+    console.error("Error formatting time:", error);
+    return "";
+  }
+};
+
 const convertTimeToText = (value: string) => {
   switch (value) {
     case "year":

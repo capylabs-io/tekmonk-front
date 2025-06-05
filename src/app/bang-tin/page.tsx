@@ -23,6 +23,7 @@ import { CommonEmptyState } from "@/components/common/CommonEmptyState";
 import { ProfileUpdateReminder } from "@/components/notification/ProfileUpdateReminder";
 import { UpdateInfoDialog } from "@/components/profile/UpdateInfoDialog";
 import { useSnackbarStore } from "@/store/SnackbarStore";
+import { formatTimeToVietnamese } from "@/lib/utils";
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_PAGE = 1;
@@ -153,9 +154,7 @@ const Home = () => {
                 >
                   <div className="p-4 relative">
                     <div className="text-sm text-gray-500 absolute top-7 right-4">
-                      {moment(get(item, "createdAt", ""))
-                        .format("DD/MM/YYYY")
-                        .toString()}
+                      {formatTimeToVietnamese(get(item, "createdAt", ""))}
                     </div>
                     <Post
                       isAllowClickDetail
