@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { ArrowLeft } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -23,7 +23,10 @@ import { formatTimeToVietnamese } from "@/lib/utils";
 export default function Page({ params }: { params: { id: number } }) {
   const router = useCustomRouter();
   const [showError] = useSnackbarStore((state) => [state.error]);
-  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
 
   const {
     data: postData,
@@ -49,7 +52,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
   useEffect(() => {
     getMe();
-  }, [])
+  }, []);
 
   // Thêm Facebook Open Graph script
   useEffect(() => {
@@ -63,7 +66,6 @@ export default function Page({ params }: { params: { id: number } }) {
         showError("Lỗi", "Bạn không có quyền xem bài viết này");
         router.back();
       }
-
     }
   }, [postData, params.id]);
 
@@ -117,9 +119,9 @@ export default function Page({ params }: { params: { id: number } }) {
             ) as User[],
             postedBy: get(postData, "postedBy.data")
               ? ({
-                ...get(postData, "postedBy.data.attributes", {}),
-                id: get(postData, "postedBy.data.id"),
-              } as unknown as User)
+                  ...get(postData, "postedBy.data.attributes", {}),
+                  id: get(postData, "postedBy.data.id"),
+                } as unknown as User)
               : null,
           }}
           imageUrl="bg-[url('/image/home/profile-pic.png')]"

@@ -44,7 +44,10 @@ export const PostCommentContent = ({
     state.show,
     state.hide,
   ]);
-  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
   const [isConnected] = useUserStore((state) => [state.isConnected]);
 
   const {
@@ -151,7 +154,7 @@ export const PostCommentContent = ({
       console.log("error", err);
       error("Lỗi", "Đã xảy ra lỗi khi thêm bình luận");
     } finally {
-      getMe()
+      getMe();
       hideLoading();
       refetchListPostComment();
       onUpdateComment?.();
@@ -168,15 +171,22 @@ export const PostCommentContent = ({
     queryKey: ["avatar-config", userInfo?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
               $eq: Number(userInfo?.id),
-            }
+            },
           },
         },
-
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
@@ -199,17 +209,69 @@ export const PostCommentContent = ({
           }}
         ></div> */}
         {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
-          <div className="border-[5px] p-1 border-white bg-white rounded-full  size-10 relative overflow-hidden" style={{
-            height: 40,
-            width: 40,
-          }}>
-            {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-            {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
-            {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-            {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-            {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-            {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
-            {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+          <div
+            className="border-[5px] p-1 border-white bg-white rounded-full  size-10 relative overflow-hidden"
+            style={{
+              height: 40,
+              width: 40,
+            }}
+          >
+            {dataAvatarConfig[0]?.frontHair && (
+              <Image
+                src={dataAvatarConfig[0]?.frontHair?.image || ""}
+                alt={dataAvatarConfig[0]?.frontHair?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[4]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.backHair && (
+              <Image
+                src={dataAvatarConfig[0]?.backHair?.image || ""}
+                alt={dataAvatarConfig[0]?.backHair?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[2]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.cloth && (
+              <Image
+                src={dataAvatarConfig[0]?.cloth?.image || ""}
+                alt={dataAvatarConfig[0]?.cloth?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[3]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.mouth && (
+              <Image
+                src={dataAvatarConfig[0]?.mouth?.image || ""}
+                alt={dataAvatarConfig[0]?.mouth?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[4]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.eye && (
+              <Image
+                src={dataAvatarConfig[0]?.eye?.image || ""}
+                alt={dataAvatarConfig[0]?.eye?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[3]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.theme && (
+              <Image
+                src={dataAvatarConfig[0]?.theme?.image || ""}
+                alt={dataAvatarConfig[0]?.theme?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[1]")}
+              />
+            )}
+            {dataAvatarConfig[0]?.special && (
+              <Image
+                src={dataAvatarConfig[0]?.special?.image || ""}
+                alt={dataAvatarConfig[0]?.special?.name || ""}
+                fill
+                className={cn("object-cover absolute z-[5]")}
+              />
+            )}
           </div>
         ) : (
           <div
@@ -273,12 +335,13 @@ export const PostCommentContent = ({
 
               {/* Word count indicator */}
               <span
-                className={`text-xs ${isOverLimit
-                  ? "text-red-500"
-                  : isAtLimit
+                className={`text-xs ${
+                  isOverLimit
+                    ? "text-red-500"
+                    : isAtLimit
                     ? "text-yellow-500"
                     : "text-gray-500"
-                  }`}
+                }`}
               >
                 {currentWordCount}/{maxWords}
               </span>

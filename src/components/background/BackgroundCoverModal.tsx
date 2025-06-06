@@ -15,12 +15,22 @@ interface BackgroundCoverModalProps {
   onSubmit?: () => void;
 }
 
-const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalProps) => {
-  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
+const BackgroundCoverModal = ({
+  visible,
+  hide,
+  onSubmit,
+}: BackgroundCoverModalProps) => {
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCover, setSelectedCover] = useState<number | null>(null);
   const itemsPerPage = 12;
-  const [showSuccess, showError] = useSnackbarStore((state) => [state.success, state.error])
+  const [showSuccess, showError] = useSnackbarStore((state) => [
+    state.success,
+    state.error,
+  ]);
 
   // Query để lấy danh sách background cover từ shop
   const { data: dataShopItemUser } = useQuery({
@@ -34,7 +44,7 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
               {
                 user: {
                   id: userInfo?.id,
-                }
+                },
               },
               {
                 shop_item: {
@@ -45,10 +55,8 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
               },
             ],
           },
-
         });
         return await ReqGetUserShopItems(queryString);
-
       } catch (error) {
         console.log("Error: ", error);
         return { data: [] };
@@ -96,26 +104,30 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
 
         <div className="w-full h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto mt-4">
           <div className="grid grid-cols-3 gap-4 h-max">
-            {dataShopItemUser?.data.filter((item: ShopItemUser) => item.shop_item.category.code === "COVER")?.map((item: ShopItemUser) => (
-              <div
-                key={item.id}
-                className={`cursor-pointer border-2 rounded-lg p-1 ${selectedCover === item.shop_item.id
-                  ? "border-primary-70"
-                  : "border-gray-30"
+            {dataShopItemUser?.data
+              .filter(
+                (item: ShopItemUser) => item.shop_item.category.code === "COVER"
+              )
+              ?.map((item: ShopItemUser) => (
+                <div
+                  key={item.id}
+                  className={`cursor-pointer border-2 rounded-lg p-1 ${
+                    selectedCover === item.shop_item.id
+                      ? "border-primary-70"
+                      : "border-gray-30"
                   }`}
-                onClick={() => handleSelectCover(item.shop_item.id || 0)}
-              >
-                <Image
-                  src={item.shop_item.image || ""}
-                  alt={item.shop_item.name || ""}
-                  width={100}
-                  height={32}
-                  className="w-full h-32 object-cover rounded"
-                />
-              </div>
-            ))}
+                  onClick={() => handleSelectCover(item.shop_item.id || 0)}
+                >
+                  <Image
+                    src={item.shop_item.image || ""}
+                    alt={item.shop_item.name || ""}
+                    width={100}
+                    height={32}
+                    className="w-full h-32 object-cover rounded"
+                  />
+                </div>
+              ))}
           </div>
-
         </div>
 
         <hr className="border-t border-gray-30 mt-4" />
@@ -124,7 +136,7 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
             className="!bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]"
             onClick={hide}
             style={{
-              boxShadow: "0px 4px 0px #ebe4ec"
+              boxShadow: "0px 4px 0px #ebe4ec",
             }}
           >
             <div className="!text-sm !font-normal">Thoát</div>
@@ -133,7 +145,7 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
             className="w-[150px] !font-medium border border-primary-70"
             onClick={() => updateBackgroundCover()}
             style={{
-              boxShadow: "0px 4px 0px #9a1595"
+              boxShadow: "0px 4px 0px #9a1595",
             }}
           >
             <div className="!text-sm !font-normal">Xác nhận</div>
@@ -144,4 +156,4 @@ const BackgroundCoverModal = ({ visible, hide, onSubmit }: BackgroundCoverModalP
   ) : null;
 };
 
-export default BackgroundCoverModal; 
+export default BackgroundCoverModal;

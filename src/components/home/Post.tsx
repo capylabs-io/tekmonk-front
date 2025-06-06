@@ -117,15 +117,22 @@ export const Post = ({
     queryKey: ["avatar-config", data?.postedBy?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
               $eq: Number(data?.postedBy?.id),
-            }
+            },
           },
         },
-
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
@@ -500,23 +507,70 @@ export const Post = ({
             </div>
           </div>
 
-
           {/* Quick Comment Input (only shown when showCommentInput is true and isDetail is true) */}
           {showCommentInput && isDetail && (
             <div className="mt-4 flex items-center gap-2">
-
               {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
-                <div className="border-[5px] p-1 border-white bg-white rounded-full size-10 relative overflow-hidden" style={{
-                }}>
-
-                  {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-                  {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
-                  {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-                  {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-                  {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-                  {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
-                  {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
-
+                <div
+                  className="border-[5px] p-1 border-white bg-white rounded-full size-10 relative overflow-hidden"
+                  style={{}}
+                >
+                  {dataAvatarConfig[0]?.frontHair && (
+                    <Image
+                      src={dataAvatarConfig[0]?.frontHair?.image || ""}
+                      alt={dataAvatarConfig[0]?.frontHair?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[4]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.backHair && (
+                    <Image
+                      src={dataAvatarConfig[0]?.backHair?.image || ""}
+                      alt={dataAvatarConfig[0]?.backHair?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[2]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.cloth && (
+                    <Image
+                      src={dataAvatarConfig[0]?.cloth?.image || ""}
+                      alt={dataAvatarConfig[0]?.cloth?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[3]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.mouth && (
+                    <Image
+                      src={dataAvatarConfig[0]?.mouth?.image || ""}
+                      alt={dataAvatarConfig[0]?.mouth?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[4]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.eye && (
+                    <Image
+                      src={dataAvatarConfig[0]?.eye?.image || ""}
+                      alt={dataAvatarConfig[0]?.eye?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[3]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.theme && (
+                    <Image
+                      src={dataAvatarConfig[0]?.theme?.image || ""}
+                      alt={dataAvatarConfig[0]?.theme?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[1]")}
+                    />
+                  )}
+                  {dataAvatarConfig[0]?.special && (
+                    <Image
+                      src={dataAvatarConfig[0]?.special?.image || ""}
+                      alt={dataAvatarConfig[0]?.special?.name || ""}
+                      fill
+                      className={cn("object-cover absolute z-[5]")}
+                    />
+                  )}
                 </div>
               ) : (
                 <div

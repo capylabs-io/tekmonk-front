@@ -84,46 +84,50 @@ export const EventList = () => {
     return duration >= hoursInMillis * 0.95; // Allow 5% tolerance
   };
 
-  return data && data.data.length > 0 && (
-    <div className="w-full rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="flex justify-between items-center p-4 border-b border-gray-200">
-        <h3 className="text-SubheadMd text-gray-95">SỰ KIỆN</h3>
-        <div
-          className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
-          onClick={() => router.push(ROUTE.EVENTS)}
-        >
-          Xem thêm
+  return (
+    data &&
+    data.data.length > 0 && (
+      <div className="w-full rounded-2xl border border-gray-200 overflow-hidden">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200">
+          <h3 className="text-SubheadMd text-gray-95">SỰ KIỆN</h3>
+          <div
+            className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
+            onClick={() => router.push(ROUTE.EVENTS)}
+          >
+            Xem thêm
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col divide-y">
-        {data?.data.map((event) => {
-          const { month, day, week } = getDateInfo(event.startTime);
-          const fullDay = isFullDayEvent(event.startTime, event.endTime);
+        <div className="flex flex-col divide-y">
+          {data?.data.map((event) => {
+            const { month, day, week } = getDateInfo(event.startTime);
+            const fullDay = isFullDayEvent(event.startTime, event.endTime);
 
-          return (
-            <div
-              key={event.id}
-              className="flex p-4 cursor-pointer hover:bg-gray-20 transition-colors gap-x-4"
-              onClick={() => handleRedirect(event.id)}
-            >
-              <CalendarCard day={day} month={month} week={week} />
-              <div className="flex flex-col justify-center">
-                {!fullDay && (
-                  <div className="text-sm text-gray-600">
-                    {formatTime(event.startTime)} - {formatTime(event.endTime)}
+            return (
+              <div
+                key={event.id}
+                className="flex p-4 cursor-pointer hover:bg-gray-20 transition-colors gap-x-4"
+                onClick={() => handleRedirect(event.id)}
+              >
+                <CalendarCard day={day} month={month} week={week} />
+                <div className="flex flex-col justify-center">
+                  {!fullDay && (
+                    <div className="text-sm text-gray-600">
+                      {formatTime(event.startTime)} -{" "}
+                      {formatTime(event.endTime)}
+                    </div>
+                  )}
+                  {fullDay && (
+                    <div className="text-sm text-gray-600">CẢ NGÀY</div>
+                  )}
+                  <div className="text-SubheadMd text-gray-95 line-clamp-1">
+                    {event.title}
                   </div>
-                )}
-                {fullDay && (
-                  <div className="text-sm text-gray-600">CẢ NGÀY</div>
-                )}
-                <div className="text-SubheadMd text-gray-95 line-clamp-1">
-                  {event.title}
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+    )
   );
 };

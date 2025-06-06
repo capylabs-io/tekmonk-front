@@ -9,7 +9,6 @@ export const getOneContestEntry = async (candidateNumber: string) => {
   return response.data.data[0] as ContestEntry;
 };
 
-
 export const getContestGroupStageByCandidateNumber = async (
   candidateNumber: string
 ) => {
@@ -23,21 +22,28 @@ export const getContestGroupStageByCandidateNumber = async (
   }
 };
 
-export const updateContestEntry = async (id: string, startTime: string, isContestStarted: boolean) => {
+export const updateContestEntry = async (
+  id: string,
+  startTime: string,
+  isContestStarted: boolean
+) => {
   const update = await tekdojoAxios.put(`${BASE_URL}/contest-entries/${id}`, {
     data: {
       startTime: startTime,
-      isContestStarted: isContestStarted
-    }
-  })
+      isContestStarted: isContestStarted,
+    },
+  });
   return update.data.data as ContestEntry;
-}
+};
 
-export const updateEndTimeContestEntry = async (id: string, endTime: string) => {
+export const updateEndTimeContestEntry = async (
+  id: string,
+  endTime: string
+) => {
   const update = await tekdojoAxios.put(`${BASE_URL}/contest-entries/${id}`, {
     data: {
       endTime: endTime,
-    }
-  })
+    },
+  });
   return update.data.data as ContestEntry;
-}
+};

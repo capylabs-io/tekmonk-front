@@ -8,14 +8,14 @@ import { UserRankingType } from "@/types/users";
 import { useCustomRouter } from "../common/router/CustomRouter";
 
 type Props = {
-  rank: number
+  rank: number;
   imageUrl: string;
   name: string;
   specialName: string;
   score: string;
   customClassNames?: string;
   user?: User;
-  avatarConfig?: AvatarConfig
+  avatarConfig?: AvatarConfig;
   rankingType: UserRankingType;
 };
 
@@ -28,7 +28,7 @@ export const LeaderboardTopUserCard = ({
   customClassNames,
   avatarConfig,
   rankingType,
-  user
+  user,
 }: Props) => {
   const router = useCustomRouter();
   const BACKGROUND = (value: number) => {
@@ -85,7 +85,8 @@ export const LeaderboardTopUserCard = ({
         return "shadow-[0px_6px_0px_#DAC20F] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#DAC20F]";
       case 2:
         return "shadow-[0px_6px_0px_#AC9FB1] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#AC9FB1]";
-      case 3: ``
+      case 3:
+        ``;
         return "shadow-[0px_6px_0px_#D67A17] before:absolute before:inset-0 before:rounded-full before:shadow-[inset_0px_4px_0px_#D67A17]";
       default:
         return;
@@ -115,20 +116,34 @@ export const LeaderboardTopUserCard = ({
           height={116}
           className="rounded-t-xl !h-[116px]"
         />
-        {avatarConfig ? <AvatarLayer avatarConfig={avatarConfig} customClassName={classNames("rounded-full justify-center bg-no-repeat bg-cover !border-[5px] !absolute mb-16", userImage, cardShadow)} /> :
+        {avatarConfig ? (
+          <AvatarLayer
+            avatarConfig={avatarConfig}
+            customClassName={classNames(
+              "rounded-full justify-center bg-no-repeat bg-cover !border-[5px] !absolute mb-16",
+              userImage,
+              cardShadow
+            )}
+          />
+        ) : (
           <div
             className={classNames(
               "rounded-full justify-center bg-no-repeat bg-cover border-[5px] absolute mb-16 bg-white",
               !!imageUrl && imageUrl,
-              userImage, cardShadow
+              userImage,
+              cardShadow
             )}
-          >
-          </div>
-        }
+          ></div>
+        )}
         <div className="flex flex-col justify-center items-center w-full h-[100%-100px] p-4">
-          <div className="text-gray-95 text-[15px] text-center line-clamp-2 !leading-4 cursor-pointer hover:underline" onClick={() => {
-            user && router.push(`/ho-so/${user?.id}`);
-          }}>{name}</div>
+          <div
+            className="text-gray-95 text-[15px] text-center line-clamp-2 !leading-4 cursor-pointer hover:underline"
+            onClick={() => {
+              user && router.push(`/ho-so/${user?.id}`);
+            }}
+          >
+            {name}
+          </div>
           <div className="text-gray-50 text-BodyXs text-center mt-1">
             {specialName}
           </div>

@@ -139,8 +139,9 @@ const ContestHeader = () => {
 
             {/* Mobile Menu */}
             <div
-              className={`fixed flex flex-col justify-between z-30 right-0 w-2/3 h-full bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
-                }`}
+              className={`fixed flex flex-col justify-between z-30 right-0 w-2/3 h-full bg-white shadow-md border-t border-gray-200 transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
             >
               <ul className="flex flex-col items-center py-2 text-gray-950">
                 <li
@@ -152,7 +153,7 @@ const ContestHeader = () => {
 
                 <li
                   className="py-2 w-full flex justify-center items-center cursor-pointer hover:bg-gray-100"
-                // onClick={() => router.push("/contest")}
+                  // onClick={() => router.push("/contest")}
                 >
                   Tổng hợp bài dự thi
                 </li>

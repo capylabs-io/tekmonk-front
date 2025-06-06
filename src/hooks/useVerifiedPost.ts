@@ -1,15 +1,18 @@
-import { getListPostCustom, updatePost } from '@/requests/post'
-import { useLoadingStore } from '@/store/LoadingStore'
-import { useSnackbarStore } from '@/store/SnackbarStore'
-import { PostType, PostVerificationType } from '@/types'
-import { useQuery } from '@tanstack/react-query'
-import { get } from 'lodash'
-import qs from 'qs'
-import { useMemo, useState } from 'react'
+import { getListPostCustom, updatePost } from "@/requests/post";
+import { useLoadingStore } from "@/store/LoadingStore";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { PostType, PostVerificationType } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { get } from "lodash";
+import qs from "qs";
+import { useMemo, useState } from "react";
 
 export const useVerifiedPost = () => {
   // const [listPost, setListPost] = useState<PostType[]>()
-  const [showLoading, hideLoading] = useLoadingStore((state) => [state.show, state.hide]);
+  const [showLoading, hideLoading] = useLoadingStore((state) => [
+    state.show,
+    state.hide,
+  ]);
   const [showSuccess, showError] = useSnackbarStore((state) => [
     state.success,
     state.error,
@@ -28,13 +31,14 @@ export const useVerifiedPost = () => {
     queryKey: ["posts"],
     queryFn: async () => {
       try {
-        const queryString = qs.stringify({
-          sort: ["id:asc"],
-          populate: "*",
-        },
+        const queryString = qs.stringify(
+          {
+            sort: ["id:asc"],
+            populate: "*",
+          },
           { encodeValuesOnly: true }
         );
-        const res = await getListPostCustom(queryString)
+        const res = await getListPostCustom(queryString);
         return res;
       } catch (error) {
         return Promise.reject(error);
@@ -71,8 +75,12 @@ export const useVerifiedPost = () => {
     },
   });
   const listPost = useMemo(() => {
-    return data ? data?.data?.filter((item: PostType) => item.isVerified === PostVerificationType.PENDING) : []
-  }, [data])
+    return data
+      ? data?.data?.filter(
+          (item: PostType) => item.isVerified === PostVerificationType.PENDING
+        )
+      : [];
+  }, [data]);
 
   const handleSelectChange = (value: string) => {
     setSelectedType(value);
@@ -102,8 +110,7 @@ export const useVerifiedPost = () => {
     } else {
       handleVerified(data);
     }
-
-  }
+  };
 
   return {
     page,

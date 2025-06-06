@@ -5,12 +5,11 @@ import { Achievement } from "@/types/common-types";
 
 export const useAchievement = () => {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isOpenCreateModal, setIsOpenCreateModal] = useState(false)
+  const [isOpenCreateModal, setIsOpenCreateModal] = useState(false);
   const [totalPage, setTotalPage] = useState(10);
   const [totalDocs, setTotalDocs] = useState(100);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-
 
   return {
     totalPage,
@@ -20,6 +19,6 @@ export const useAchievement = () => {
     isOpenCreateModal,
     setIsOpenCreateModal,
     setLimit,
-    setPage
-  }
+    setPage,
+  };
 };

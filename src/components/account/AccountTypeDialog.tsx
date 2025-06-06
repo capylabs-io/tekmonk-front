@@ -7,9 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import {
-  ArrowRight
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { StudentRegistrationDialog } from "./StudentRegistrationDialog";
 import { TeacherRegistrationDialog } from "./TeacherRegistrationDialog";
@@ -284,4 +282,4 @@ export const AccountTypeDialog = ({
       </DialogContent>
     </Dialog>
   );
-}
+};

@@ -10,7 +10,10 @@ import { CommonLoading } from "../common/CommonLoading";
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const router = useCustomRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isConnected, getMe] = useUserStore((state) => [state.isConnected, state.getMe]);
+  const [isConnected, getMe] = useUserStore((state) => [
+    state.isConnected,
+    state.getMe,
+  ]);
   const warn = useSnackbarStore((state) => state.warn);
   useEffect(() => {
     // getMe();

@@ -68,22 +68,26 @@ const CoreValueComponent = () => {
   const listCoreValue = [
     {
       title: "Sáng tạo",
-      description: "Thúc đẩy tư duy đổi mới không ngừng, khuyến khích học viên và giáo viên ứng dụng công nghệ để tạo ra những giải pháp đột phá.",
+      description:
+        "Thúc đẩy tư duy đổi mới không ngừng, khuyến khích học viên và giáo viên ứng dụng công nghệ để tạo ra những giải pháp đột phá.",
       imageSrc: "/image/landing/core-value-1.svg",
     },
     {
       title: "Dũng cảm",
-      description: "Nuôi dưỡng tinh thần dũng cảm – dám nghĩ lớn, dám làm khác, không sợ thất bại để dẫn dắt hành trình đổi mới giáo dục công nghệ.",
+      description:
+        "Nuôi dưỡng tinh thần dũng cảm – dám nghĩ lớn, dám làm khác, không sợ thất bại để dẫn dắt hành trình đổi mới giáo dục công nghệ.",
       imageSrc: "/image/landing/core-value-2.svg",
     },
     {
       title: "Năng động",
-      description: "Chủ động thích nghi, linh hoạt thay đổi để tạo nên môi trường học tập hiện đại, sáng tạo và đầy năng lượng.",
+      description:
+        "Chủ động thích nghi, linh hoạt thay đổi để tạo nên môi trường học tập hiện đại, sáng tạo và đầy năng lượng.",
       imageSrc: "/image/landing/core-value-3.svg",
     },
     {
       title: "Tư duy",
-      description: "Đề cao tư duy phản biện, học hỏi suốt đời và khả năng kết nối kiến thức với thực tiễn, nhằm trang bị cho học viên nền tảng vững chắc.",
+      description:
+        "Đề cao tư duy phản biện, học hỏi suốt đời và khả năng kết nối kiến thức với thực tiễn, nhằm trang bị cho học viên nền tảng vững chắc.",
       imageSrc: "/image/landing/core-value-4.svg",
     },
   ];
@@ -105,23 +109,16 @@ const CoreValueComponent = () => {
         className="mt-12 flex items-center justify-between w-full"
         threshold={0.2}
       >
-        {
-          listCoreValue.map((item, index) => (
-            <div
-              key={item.title + (index + 1)}
-              className="w-[296px] h-[232px] p-6 border-gray-30 border rounded-2xl flex flex-col items-center justify-center gap-2"
-            >
-              <Image
-                src={item.imageSrc}
-                alt=""
-                width={40}
-                height={40}
-              />
-              <div className="text-HeadingSm text-gray-95">{item.title}</div>
-              <div className="text-BodyMd text-gray-60">{item.description}</div>
-            </div>
-          ))
-        }
+        {listCoreValue.map((item, index) => (
+          <div
+            key={item.title + (index + 1)}
+            className="w-[296px] h-[232px] p-6 border-gray-30 border rounded-2xl flex flex-col items-center justify-center gap-2"
+          >
+            <Image src={item.imageSrc} alt="" width={40} height={40} />
+            <div className="text-HeadingSm text-gray-95">{item.title}</div>
+            <div className="text-BodyMd text-gray-60">{item.description}</div>
+          </div>
+        ))}
       </ScrollAnimateIn>
     </ScrollAnimateIn>
   );
@@ -149,15 +146,12 @@ const CourseSection = ({
           state ? "lg:order-1" : "lg:order-2"
         )}
       >
-
         <Image
           src={iconSrc}
           alt=""
           width={64}
           height={64}
-          className={cn(
-            "object-cover z-20 rounded-[100%]"
-          )}
+          className={cn("object-cover z-20 rounded-[100%]")}
         />
 
         <ScrollAnimateIn
@@ -171,7 +165,6 @@ const CourseSection = ({
         <ScrollAnimateIn
           animation="fade-up"
           delay={0.5}
-
           className="text-BodyLg text-gray-60"
         >
           {description}
@@ -187,17 +180,15 @@ const CourseSection = ({
           state ? "lg:order-2" : "lg:order-1"
         )}
       >
-        {
-          imageSrc && (
-            <Image
-              src={imageSrc}
-              alt=""
-              width={515}
-              height={320}
-              className="2xl:scale-110 hover:scale-125 transition-all duration-300 hover:cursor-pointer"
-            />
-          )
-        }
+        {imageSrc && (
+          <Image
+            src={imageSrc}
+            alt=""
+            width={515}
+            height={320}
+            className="2xl:scale-110 hover:scale-125 transition-all duration-300 hover:cursor-pointer"
+          />
+        )}
         {imageContent}
       </ScrollAnimateIn>
 
@@ -208,12 +199,7 @@ const CourseSection = ({
           delay={0.8}
           className="absolute  left-[30%] top-[70%] transform -translate-x-1/2 z-0 lg:block hidden"
         >
-          <Image
-            alt=""
-            src={connectSrc}
-            width={527}
-            height={364}
-          />
+          <Image alt="" src={connectSrc} width={527} height={364} />
         </ScrollAnimateIn>
       )}
     </ScrollAnimateIn>
@@ -226,13 +212,11 @@ const AboutCourseComponent = () => {
       animation="fade-up"
       className="w-full container mx-auto px-[80px] min-h-[2236px] flex flex-col items-center justify-start"
       threshold={0.1}
-
     >
       <ScrollAnimateIn
         animation="fade-up"
         className="text-DisplayXs text-[#320130] text-center"
         delay={0.1}
-
       >
         Sự đặc biệt của khóa học
       </ScrollAnimateIn>
@@ -358,7 +342,6 @@ const AboutCourseComponent = () => {
               />
             </div>
           }
-
           iconSrc="/image/landing/course4.svg"
           connectSrc=""
           title="Đồng hành cùng con trong quá trình học"
@@ -376,7 +359,6 @@ const ImageIntroduce = () => {
       animation="fade-up"
       className="w-full min-h-[912px] flex flex-col items-center justify-center gap-12 bg-[#F5F4F5]"
       threshold={0.1}
-
     >
       <ScrollAnimateIn
         animation="fade-up"
@@ -389,7 +371,6 @@ const ImageIntroduce = () => {
         animation="fade-up"
         className="w-full h-[512px] flex flex-col"
         delay={0.3}
-
       >
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden gap-4">
           <Marquee pauseOnHover className="[--duration:50s]">
@@ -428,7 +409,6 @@ const ReviewFromCommunity = () => {
       animation="fade-up"
       className="w-full min-h-[600px] flex flex-col items-center justify-center lg:gap-24 gap-10 relative"
       threshold={0.1}
-
     >
       <GridPattern
         className={cn(
@@ -452,7 +432,6 @@ const ReviewFromCommunity = () => {
         animation="fade-up"
         className="w-full z-0 bg-white"
         delay={0.3}
-
       >
         <Marquee pauseOnHover className="[--duration:50s] w-full">
           {listReview.map((review, index) => (
@@ -481,12 +460,12 @@ const ReviewFromCommunity = () => {
                 </div>
               </div>
               <div className="lg:p-4 px-4 text-gray-95 text-BodyMd text-ellipsis h-[120px]">
-                Tôi rất tin tưởng khi cho con học tại Tekmonk. Mặc dù sợ rằng con
-                sẽ chơi game và dùng máy tính vào mục đích ngoài học tập nhưng con
-                rất tự giác. Tôi thấy con thực sự đam mê với môn học này. Gia đình
-                không ép buộc con phải học ngành nào mà muốn tự con trải nghiệm.
-                Những gì học được ở Tekmonk là cơ hội để định hướng tương lai của
-                con.
+                Tôi rất tin tưởng khi cho con học tại Tekmonk. Mặc dù sợ rằng
+                con sẽ chơi game và dùng máy tính vào mục đích ngoài học tập
+                nhưng con rất tự giác. Tôi thấy con thực sự đam mê với môn học
+                này. Gia đình không ép buộc con phải học ngành nào mà muốn tự
+                con trải nghiệm. Những gì học được ở Tekmonk là cơ hội để định
+                hướng tương lai của con.
               </div>
             </div>
           ))}
@@ -555,16 +534,12 @@ export default function Page() {
               delay={0.4}
             >
               <div className="lg:text-DisplayXl md:text-DisplayLg sm:text-DisplayMd text-DisplayXs p-2">
-                Vui chơi, sáng tạo
-                & kết nối cộng đồng
+                Vui chơi, sáng tạo & kết nối cộng đồng
               </div>
               <div className="!font-normal md:text-HeadingSm text-HeadingXs text-gray-70 mt-4">
                 Được tin dùng bởi hơn 1 triệu phụ huynh & học sinh tại Việt Nam
               </div>
-              <ScrollAnimateIn
-                animation="fade-up"
-                delay={0.6}
-              >
+              <ScrollAnimateIn animation="fade-up" delay={0.6}>
                 <Button
                   className="text-white border-[2px] !w-max h-[52px] mt-8"
                   onClick={handleRedirectMainPage}

@@ -50,7 +50,7 @@ export const MissionDialog = ({
               <MissionCard
                 key={`${mission.mission?.id}-${index}`}
                 data={mission.mission as Mission}
-                onClick={() => { }}
+                onClick={() => {}}
                 isShowButtonClaim={false}
               />
             ))}

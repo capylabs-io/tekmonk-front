@@ -95,7 +95,7 @@ export default function Event() {
               handleSearch();
             }
           }}
-        // onSearch={handleSearch}
+          // onSearch={handleSearch}
         />
         <div className="flex items-center gap-1">
           <div className="text-BodySm text-gray-70">Hiển thị theo:</div>
@@ -129,15 +129,16 @@ export default function Event() {
           </Select>
         </div>
       </div>
-      {textSearch !== '' && <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
-        Tìm thấy{" "}
-        <span className="text-primary-95">
-          {(data?.data && data?.data?.length) || 0}
-        </span>{" "}
-        kết quả phù hợp với từ khoá:{" "}
-        <span className="text-primary-95">&quot;{textSearch}&quot;</span>
-      </div>
-      }
+      {textSearch !== "" && (
+        <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
+          Tìm thấy{" "}
+          <span className="text-primary-95">
+            {(data?.data && data?.data?.length) || 0}
+          </span>{" "}
+          kết quả phù hợp với từ khoá:{" "}
+          <span className="text-primary-95">&quot;{textSearch}&quot;</span>
+        </div>
+      )}
       {/* show item grid here */}
       {isLoading ? (
         <div className="w-full flex flex-col items-center justify-center">
@@ -164,10 +165,14 @@ export default function Event() {
                     <div className="flex items-start gap-2 justify-start">
                       {item.tags?.split(",").map((tag, tagIndex) => {
                         return (
-                          <CommonTag key={tagIndex} className="tag-class" onClick={() => {
-                            setTextSearch(tag);
-                            setSearchQuery(tag);
-                          }}>
+                          <CommonTag
+                            key={tagIndex}
+                            className="tag-class"
+                            onClick={() => {
+                              setTextSearch(tag);
+                              setSearchQuery(tag);
+                            }}
+                          >
                             {tag}
                           </CommonTag>
                         );
@@ -179,11 +184,15 @@ export default function Event() {
                       dangerouslySetInnerHTML={{
                         __html: (get(item, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
-                          .trim()
+                          .trim(),
                       }}
                     ></div>
-                    <div className="text-BodySm text-gray-95 hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
-                      Thời gian sự kiện: {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
+                    <div
+                      className="text-BodySm text-gray-95 hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirectDetail(item.id)}
+                    >
+                      Thời gian sự kiện:{" "}
+                      {moment(item.startTime).format("DD/MM/YYYY HH:mm")}
                     </div>
                   </div>
                 </div>

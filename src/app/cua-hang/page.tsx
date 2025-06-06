@@ -27,11 +27,11 @@ export default function Shop() {
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId as TabOptions);
   };
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+      setIsLoading(false);
+    }, 3000);
   }, []);
 
   if (isLoading) {
@@ -47,14 +47,13 @@ export default function Shop() {
         </div>
 
         {/* Tab Navigation */}
-        {
-          userInfo?.id &&
+        {userInfo?.id && (
           <TabNavigation
             tabs={TABS}
             activeTabId={activeTab}
             onTabChange={handleTabChange}
           />
-        }
+        )}
         {/* Tab Content */}
         {activeTab === TabOptions.SHOP ? <ShopContent /> : <InventoryContent />}
       </div>

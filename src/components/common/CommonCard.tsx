@@ -34,10 +34,10 @@ export const CommonCard: React.FC<CommonCardProps> = ({
         boxShadow: isActive
           ? "none"
           : size === "small"
-            ? "0px 2px 0px #DDD0DD"
-            : size === "medium"
-              ? "0px 4px 0px #DDD0DD"
-              : "0px 8px 0px #DDD0DD",
+          ? "0px 2px 0px #DDD0DD"
+          : size === "medium"
+          ? "0px 4px 0px #DDD0DD"
+          : "0px 8px 0px #DDD0DD",
       }}
       {...props}
     >

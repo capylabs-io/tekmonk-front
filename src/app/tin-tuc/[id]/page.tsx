@@ -7,7 +7,11 @@ import { RelatedInfo } from "@/components/new/RelatedInfo";
 import { LandingFooter } from "@/components/new/NewsFooter";
 import { useParams } from "next/navigation";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { ReqGetAllNews, ReqGetNewsById, ReqGetRamdomNews } from "@/requests/news";
+import {
+  ReqGetAllNews,
+  ReqGetNewsById,
+  ReqGetRamdomNews,
+} from "@/requests/news";
 import Loading from "@/app/loading";
 import { get } from "lodash";
 import moment from "moment";
@@ -22,7 +26,6 @@ export default function Page() {
   const [success] = useSnackbarStore((state) => [state.success]);
 
   const handleRedirect = (id: number) => {
-
     router.push(`${ROUTE.NEWS}/${id}`);
   };
 
@@ -33,7 +36,12 @@ export default function Page() {
     queryFn: async () => {
       try {
         const res = await ReqGetNewsById(id as string);
-        if (res && res.data && res.data && get(res.data, "status", "") !== "public") {
+        if (
+          res &&
+          res.data &&
+          res.data &&
+          get(res.data, "status", "") !== "public"
+        ) {
           router.push(ROUTE.NEWS);
         }
         return res.data;
@@ -70,13 +78,17 @@ export default function Page() {
           <div className="flex items-center justify-between w-full md:flex-row flex-col gap-2">
             <div className="flex items-start justify-center gap-2 ">
               {data?.tags &&
-                data.tags
-                  .split(",")
-                  .map((tag, index) => (
-                    <CommonTag className="cursor-pointer" onClick={() => {
-                      router.push(`${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`)
-                    }} key={index}>{tag.trim()}</CommonTag>
-                  ))}
+                data.tags.split(",").map((tag, index) => (
+                  <CommonTag
+                    className="cursor-pointer"
+                    onClick={() => {
+                      router.push(`${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`);
+                    }}
+                    key={index}
+                  >
+                    {tag.trim()}
+                  </CommonTag>
+                ))}
             </div>
             <div className="flex items-center justify-center gap-2">
               <div className="text-BodySm text-gray-70  inline-flex items-center gap-2">
@@ -104,7 +116,7 @@ export default function Page() {
               </div>
               <div className="flex items-center justify-center gap-1">
                 <div className="text-BodySm text-gray-70">Đăng tải bởi:</div>
-                <div className="text-SubheadSm text-gray-95">{'TekMonk'}</div>
+                <div className="text-SubheadSm text-gray-95">{"TekMonk"}</div>
               </div>
             </div>
             <div
@@ -122,37 +134,36 @@ export default function Page() {
         /> */}
       </div>
       <div className="flex flex-col gap-4 col-span-1 mt-16">
-        <div className="text-HeadingSm text-[#320130]">
-          Tin tức khác
-        </div>
-        {randomNews && randomNews.data.map((newsItem) => (
-          <div
-            key={newsItem.id}
-            className="h-[80px] w-full flex items-start justify-center gap-4"
-            onClick={() => handleRedirect(newsItem.id)}
-          >
-            <Image
-              src={newsItem.thumbnail ? newsItem.thumbnail : ""}
-              alt=""
-              width={108}
-              height={80}
-              className="h-full object-cover rounded-2xl"
-            />
-            <div className="flex-1 flex flex-col gap-2">
-              <time className="text-BodySm text-gray-70">
-                {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
-              </time>
-              <div
-                className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden line-clamp-2"
-                dangerouslySetInnerHTML={{
-                  __html: (get(newsItem, "title", "") || "")
-                    .replace(/<[^>]+>/g, "")
-                    .trim()
-                }}
-              ></div>
+        <div className="text-HeadingSm text-[#320130]">Tin tức khác</div>
+        {randomNews &&
+          randomNews.data.map((newsItem) => (
+            <div
+              key={newsItem.id}
+              className="h-[80px] w-full flex items-start justify-center gap-4"
+              onClick={() => handleRedirect(newsItem.id)}
+            >
+              <Image
+                src={newsItem.thumbnail ? newsItem.thumbnail : ""}
+                alt=""
+                width={108}
+                height={80}
+                className="h-full object-cover rounded-2xl"
+              />
+              <div className="flex-1 flex flex-col gap-2">
+                <time className="text-BodySm text-gray-70">
+                  {moment(newsItem.startTime).format("DD/MM/YYYY HH:mm")}
+                </time>
+                <div
+                  className="text-SubheadMd text-gray-95 max-h-16 overflow-hidden line-clamp-2"
+                  dangerouslySetInnerHTML={{
+                    __html: (get(newsItem, "title", "") || "")
+                      .replace(/<[^>]+>/g, "")
+                      .trim(),
+                  }}
+                ></div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         <Image
           src="/image/home/banner-layout.png"
           alt="Default"

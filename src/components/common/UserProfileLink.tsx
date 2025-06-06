@@ -45,15 +45,22 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
     queryKey: ["avatar-config", userInfo?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
               $eq: Number(userInfo?.id),
-            }
+            },
           },
         },
-
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
@@ -64,17 +71,68 @@ const UserProfileLink: React.FC<UserProfileLinkProps> = ({
   return (
     <div className="flex items-center mt-8 w-full xl:justify-between justify-center relative">
       <div className="flex items-center gap-x-2 cursor-pointer hover:text-primary-600">
-
         {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
-          <div className="border-[5px] border-white p-3 bg-white rounded-full  xl:h-10 xl:w-10 h-8 w-8 relative overflow-hidden" onClick={toggleMenu}>
+          <div
+            className="border-[5px] border-white p-3 bg-white rounded-full  xl:h-10 xl:w-10 h-8 w-8 relative overflow-hidden"
+            onClick={toggleMenu}
+          >
             <>
-              {dataAvatarConfig[0]?.frontHair && <Image src={dataAvatarConfig[0]?.frontHair?.image || ''} alt={dataAvatarConfig[0]?.frontHair?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-              {dataAvatarConfig[0]?.backHair && <Image src={dataAvatarConfig[0]?.backHair?.image || ''} alt={dataAvatarConfig[0]?.backHair?.name || ''} fill className={cn("object-cover absolute z-[2]")} />}
-              {dataAvatarConfig[0]?.cloth && <Image src={dataAvatarConfig[0]?.cloth?.image || ''} alt={dataAvatarConfig[0]?.cloth?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-              {dataAvatarConfig[0]?.mouth && <Image src={dataAvatarConfig[0]?.mouth?.image || ''} alt={dataAvatarConfig[0]?.mouth?.name || ''} fill className={cn("object-cover absolute z-[4]")} />}
-              {dataAvatarConfig[0]?.eye && <Image src={dataAvatarConfig[0]?.eye?.image || ''} alt={dataAvatarConfig[0]?.eye?.name || ''} fill className={cn("object-cover absolute z-[3]")} />}
-              {dataAvatarConfig[0]?.theme && <Image src={dataAvatarConfig[0]?.theme?.image || ''} alt={dataAvatarConfig[0]?.theme?.name || ''} fill className={cn("object-cover absolute z-[1]")} />}
-              {dataAvatarConfig[0]?.special && <Image src={dataAvatarConfig[0]?.special?.image || ''} alt={dataAvatarConfig[0]?.special?.name || ''} fill className={cn("object-cover absolute z-[5]")} />}
+              {dataAvatarConfig[0]?.frontHair && (
+                <Image
+                  src={dataAvatarConfig[0]?.frontHair?.image || ""}
+                  alt={dataAvatarConfig[0]?.frontHair?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[4]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.backHair && (
+                <Image
+                  src={dataAvatarConfig[0]?.backHair?.image || ""}
+                  alt={dataAvatarConfig[0]?.backHair?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[2]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.cloth && (
+                <Image
+                  src={dataAvatarConfig[0]?.cloth?.image || ""}
+                  alt={dataAvatarConfig[0]?.cloth?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[3]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.mouth && (
+                <Image
+                  src={dataAvatarConfig[0]?.mouth?.image || ""}
+                  alt={dataAvatarConfig[0]?.mouth?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[4]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.eye && (
+                <Image
+                  src={dataAvatarConfig[0]?.eye?.image || ""}
+                  alt={dataAvatarConfig[0]?.eye?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[3]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.theme && (
+                <Image
+                  src={dataAvatarConfig[0]?.theme?.image || ""}
+                  alt={dataAvatarConfig[0]?.theme?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[1]")}
+                />
+              )}
+              {dataAvatarConfig[0]?.special && (
+                <Image
+                  src={dataAvatarConfig[0]?.special?.image || ""}
+                  alt={dataAvatarConfig[0]?.special?.name || ""}
+                  fill
+                  className={cn("object-cover absolute z-[5]")}
+                />
+              )}
             </>
           </div>
         ) : (

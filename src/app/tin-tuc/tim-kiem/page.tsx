@@ -34,7 +34,7 @@ export default function SearchNews() {
   useEffect(() => {
     setSearchValue(value);
   }, [value]);
-  // use query 
+  // use query
   const {
     data,
     isLoading,
@@ -119,9 +119,7 @@ export default function SearchNews() {
           />
         </div>
         <div className="col-span-1 flex-col gap-8 lg:flex hidden">
-          <div className="text-HeadingSm text-[#320130]">
-            Tin tức liên quan
-          </div>
+          <div className="text-HeadingSm text-[#320130]">Tin tức liên quan</div>
           {randomNews?.data && randomNews?.data?.length > 0 && (
             <SuggestComponent data={randomNews?.data || []} />
           )}
@@ -167,7 +165,7 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
               dangerouslySetInnerHTML={{
                 __html: (get(newsItem, "title", "") || "")
                   .replace(/<[^>]+>/g, "")
-                  .trim()
+                  .trim(),
               }}
             ></div>
           </div>

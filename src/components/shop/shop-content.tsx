@@ -18,8 +18,7 @@ export const ShopContent = () => {
         <BannerCard className="w-full rounded-3xl h-[250px]" type="shop">
           <div className="flex flex-col items-center gap-6 z-10 max-w-[300px] text-center">
             <div className="text-HeadingMd text-gray-10">
-              Làm nhiệm vụ
-              Thu thập điểm
+              Làm nhiệm vụ Thu thập điểm
             </div>
             <div className="text-center text-SubheadSm text-gray-10">
               Tuỳ chỉnh hồ sơ cá nhân cùng với các vật phẩm trong cửa hàng
@@ -34,11 +33,7 @@ export const ShopContent = () => {
           categoryName={category.name}
         />
       ))}
-      {
-        categories?.data?.length === 0 && (
-          <CommonEmptyState />
-        )
-      }
+      {categories?.data?.length === 0 && <CommonEmptyState />}
     </div>
   );
 };
