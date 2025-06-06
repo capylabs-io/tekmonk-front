@@ -18,82 +18,76 @@ import { useState } from "react";
 import { CreateMissionModal } from "@/components/mission/CreateMissionModal";
 import { useMission } from "@/hooks/useMission";
 
-
 export default function Page() {
-  const { totalPage,
+  const {
+    totalPage,
     totalDocs,
     limit,
     page,
     isOpenCreateModal,
     setLimit,
     setPage,
-    setIsOpenCreateModal } = useMission()
+    setIsOpenCreateModal,
+  } = useMission();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [textSearch, setTextSearch] = useState("");
   const handleSearch = () => {
     setSearchQuery(textSearch);
   };
-  const columns: ColumnDef<AchievementFormData>[] =
-    [
-      {
-        header: 'STT',
-        cell: ({ row }) => <span>{row.index + 1}</span>,
-
-      },
-      {
-        header: 'Tên nhiệm vụ',
-        cell: ({ row }) => (
-          <div className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
-            style={{
-              backgroundImage: `url(${row.original?.icon})`
-            }}>
-
+  const columns: ColumnDef<AchievementFormData>[] = [
+    {
+      header: "STT",
+      cell: ({ row }) => <span>{row.index + 1}</span>,
+    },
+    {
+      header: "Tên nhiệm vụ",
+      cell: ({ row }) => (
+        <div
+          className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
+          style={{
+            backgroundImage: `url(${row.original?.icon})`,
+          }}
+        ></div>
+      ),
+    },
+    {
+      header: "Thuộc khoá học",
+      cell: ({ row }) => <span>{row.original.title}</span>,
+    },
+    {
+      header: "Trạng thái",
+      cell: ({ row }) => <div>{row.original.type}</div>,
+    },
+    {
+      id: "action",
+      header: "",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Edit className="h-4 w-4" color="#7C6C80" />
+            </button>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Trash2 className="h-4 w-4" color="#7C6C80" />
+            </button>
           </div>
-        ),
+        );
       },
-      {
-        header: 'Thuộc khoá học',
-        cell: ({ row }) => <span>{row.original.title}</span>,
-      },
-      {
-        header: 'Trạng thái',
-        cell: ({ row }) => <div>
-          {
-            row.original.type
-          }
-        </div>
-      },
-      {
-        id: 'action',
-        header: '',
-        cell: ({ row }) => {
-          return (
-            <div className="flex gap-2">
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Edit className="h-4 w-4" color="#7C6C80" />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Trash2 className="h-4 w-4" color="#7C6C80" />
-              </button>
-            </div>
-          );
-        },
-      },
-    ]
-
+    },
+  ];
 
   return (
     <>
@@ -116,7 +110,10 @@ export default function Page() {
             <TabsTrigger value="system">Thuộc hệ thống</TabsTrigger>
             <TabsTrigger value="outside">Cấu hình ngoài</TabsTrigger>
           </TabsList>
-          <TabsContent value="system" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
+          <TabsContent
+            value="system"
+            className="overflow-y-auto !h-[calc(100%-40px)] p-4"
+          >
             <div className="w-full h-[calc(100%-40px-12px)] overflow-y-auto">
               <div className="flex justify-between items-center">
                 <Input
@@ -147,7 +144,10 @@ export default function Page() {
               />
             </div>
           </TabsContent>
-          <TabsContent value="outside" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
+          <TabsContent
+            value="outside"
+            className="overflow-y-auto !h-[calc(100%-40px)] p-4"
+          >
             <div className="w-full h-[calc(100%-40px-12px)] overflow-y-auto">
               <div className="flex justify-between items-center">
                 <Input
@@ -186,9 +186,14 @@ export default function Page() {
             </div>
           </TabsContent>
         </Tabs>
-
       </div>
-      <CreateMissionModal open={isOpenCreateModal} onOpenChange={(value) => { setIsOpenCreateModal(value) }} onSubmit={() => { }} />
+      <CreateMissionModal
+        open={isOpenCreateModal}
+        onOpenChange={(value) => {
+          setIsOpenCreateModal(value);
+        }}
+        onSubmit={() => {}}
+      />
     </>
   );
 }

@@ -53,8 +53,8 @@ export const Input = ({
           BASE_CLASS,
           error && "border-red-500 focus:border-red-500 text-sm focus:border-2",
           value &&
-          !error &&
-          "border-green-400 focus:border-green-400 focus:border-2",
+            !error &&
+            "border-green-400 focus:border-green-400 focus:border-2",
           customClassNames // This affects the container div
         )}
       >

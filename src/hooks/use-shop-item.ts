@@ -1,8 +1,8 @@
-import { ReqGetUserShopItems } from '@/requests/shop-item-user';
-import { useUserStore } from '@/store/UserStore';
-import { useQuery } from '@tanstack/react-query';
-import qs from 'qs';
-import { useState } from 'react'
+import { ReqGetUserShopItems } from "@/requests/shop-item-user";
+import { useUserStore } from "@/store/UserStore";
+import { useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { useState } from "react";
 
 export const useShopItem = () => {
   const [userInfo] = useUserStore((state) => [state.userInfo]);
@@ -37,5 +37,5 @@ export const useShopItem = () => {
     pageSize,
     setPage,
     setPageSize,
-  }
+  };
 };

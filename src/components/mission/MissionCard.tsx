@@ -40,7 +40,7 @@ export const MissionCard = ({
             cardState === CardState.CLAIMED
           }
           className={cn(
-            "flex flex-col items-center justify-center w-full h-max p-4 gap-2 !bg-white border-2 border-gray-20",
+            "flex flex-col items-center justify-between w-full min-h-[280px] place-self-stretch p-4 gap-2 !bg-white border-2 border-gray-20",
             "!cursor-default rounded-2xl transition-all duration-200",
             cardState === CardState.COMPLETED &&
               "hover:border-primary-60 cursor-pointer hover:shadow-md"

@@ -41,52 +41,53 @@ export const ShowSmallCarouselItems = () => {
       }
     },
   });
-  return data && data.data.length > 0 && (
-    <>
-      <div className="flex justify-between items-center px-4">
-        <div className="text-SubheadMd text-gray-95 uppercase ">
-          Tin tức
+  return (
+    data &&
+    data.data.length > 0 && (
+      <>
+        <div className="flex justify-between items-center px-4">
+          <div className="text-SubheadMd text-gray-95 uppercase ">Tin tức</div>
+          <div
+            className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
+            onClick={() => router.push(ROUTE.NEWS)}
+          >
+            Xem thêm
+          </div>
         </div>
-        <div
-          className="text-gray-500 cursor-pointer hover:text-primary-90 transition-colors text-sm"
-          onClick={() => router.push(ROUTE.NEWS)}
+        <Carousel
+          className="w-full items-center flex justify-center h-[200px] overflow-hidden"
+          plugins={[plugin.current]}
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
         >
-          Xem thêm
-        </div>
-      </div>
-      <Carousel
-        className="w-full items-center flex justify-center h-[200px] overflow-hidden"
-        plugins={[plugin.current]}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
-      >
-        <CarouselContent>
-          {data &&
-            data.data.map((item, index) => (
-              <CarouselItem key={index}>
-                <div
-                  className="w-[319px] h-[200px] relative flex flex-col items-center justify-center cursor-pointer group"
-                  onClick={() => handleRedirect(item.id)}
-                >
-                  <Image
-                    alt=""
-                    src={item.thumbnail ? item.thumbnail : ""}
-                    width={200}
-                    height={360}
-                    className="!w-full h-full max-h-[200px] object-cover rounded-2xl transition-opacity duration-300"
-                  />
-                  <div className="absolute w-full bottom-0 h-1/2 bg-gradient-to-t from-black via-black/100 to-transparent rounded-b-2xl flex flex-col items-start justify-end p-6">
-                    <div className="flex flex-col gap-2">
-                      <div className="text-white text-BodySm font-semibold line-clamp-3 overflow-hidden">
-                        {item.title}
+          <CarouselContent>
+            {data &&
+              data.data.map((item, index) => (
+                <CarouselItem key={index}>
+                  <div
+                    className="w-[319px] h-[200px] relative flex flex-col items-center justify-center cursor-pointer group"
+                    onClick={() => handleRedirect(item.id)}
+                  >
+                    <Image
+                      alt=""
+                      src={item.thumbnail ? item.thumbnail : ""}
+                      width={200}
+                      height={360}
+                      className="!w-full h-full max-h-[200px] object-cover rounded-2xl transition-opacity duration-300"
+                    />
+                    <div className="absolute w-full bottom-0 h-1/2 bg-gradient-to-t from-black via-black/100 to-transparent rounded-b-2xl flex flex-col items-start justify-end p-6">
+                      <div className="flex flex-col gap-2">
+                        <div className="text-white text-BodySm font-semibold line-clamp-3 overflow-hidden">
+                          {item.title}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </CarouselItem>
-            ))}
-        </CarouselContent>
-      </Carousel>
-    </>
+                </CarouselItem>
+              ))}
+          </CarouselContent>
+        </Carousel>
+      </>
+    )
   );
 };

@@ -13,15 +13,15 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 
-
 export default function GroupStageGuard({ children }: any) {
   const router = useCustomRouter();
 
   //use state
   const [isSubmitted, setIsSubmitted] = useState(false);
   //
-  const [contestGroupStage, setContestGroupStage] =
-    useState<ContestGroupStage | undefined>(undefined);
+  const [contestGroupStage, setContestGroupStage] = useState<
+    ContestGroupStage | undefined
+  >(undefined);
   const [isValid, setIsValid] = useState<boolean>(false);
 
   //use store
@@ -44,14 +44,15 @@ export default function GroupStageGuard({ children }: any) {
 
   const fetchContestGroupStage = async () => {
     if (!candidateNumber) {
-      warning("Không thành công", "Không tìm thấy số báo danh, vui lòng đăng nhập lại");
+      warning(
+        "Không thành công",
+        "Không tìm thấy số báo danh, vui lòng đăng nhập lại"
+      );
       router.push("/");
       return;
     }
     try {
-      const data = await getContestGroupStageByCandidateNumber(
-        candidateNumber
-      );
+      const data = await getContestGroupStageByCandidateNumber(candidateNumber);
       console.log("guard stage", data);
       if (!!data) {
         setContestGroupStage(data);
@@ -75,8 +76,6 @@ export default function GroupStageGuard({ children }: any) {
     );
     setIsSubmitted(contestSubmission.data.length > 0);
   };
-
-
 
   const fetAllData = async () => {
     try {
@@ -110,12 +109,11 @@ export default function GroupStageGuard({ children }: any) {
     } finally {
       hide();
     }
-  }
+  };
 
   useEffect(() => {
     fetAllData();
   }, []);
 
   return isValid ? children : <div>Loading</div>;
-};
-
+}

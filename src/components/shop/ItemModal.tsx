@@ -122,15 +122,37 @@ const SuccessDialog = ({
             className="rounded-xl mx-auto object-cover"
           /> */}
           <div className="w-[156px] h-[166px] rounded-xl mx-auto relative overflow-hidden border-2 border-gray-30 ">
-            <Image src={itemData.image || ''} alt={itemData.name || ''} fill className={cn("object-cover absolute ",
-              itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[1]' :
-                itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[2]" : ""
-            )}
+            <Image
+              src={itemData.image || ""}
+              alt={itemData.name || ""}
+              fill
+              className={cn(
+                "object-cover absolute ",
+                itemData.category && itemData.category.code === "BACK_HAIR"
+                  ? "z-[1]"
+                  : itemData.category &&
+                    (itemData.category.code === "FRONT_HAIR" ||
+                      itemData.category.code === "EYE" ||
+                      itemData.category.code === "MOUTH")
+                  ? "z-[2]"
+                  : ""
+              )}
             />
-            <Image src='/image/avatar/cloth/cloth1.svg' alt={itemData.name || ''} fill className={cn("object-cover absolute ",
-              itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[2]' :
-                itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[1]" : "hidden"
-            )}
+            <Image
+              src="/image/avatar/cloth/cloth1.svg"
+              alt={itemData.name || ""}
+              fill
+              className={cn(
+                "object-cover absolute ",
+                itemData.category && itemData.category.code === "BACK_HAIR"
+                  ? "z-[2]"
+                  : itemData.category &&
+                    (itemData.category.code === "FRONT_HAIR" ||
+                      itemData.category.code === "EYE" ||
+                      itemData.category.code === "MOUTH")
+                  ? "z-[1]"
+                  : "hidden"
+              )}
             />
           </div>
           <div className=" rounded-lg p-4 w-full">
@@ -238,15 +260,37 @@ export const ItemModal = ({
             {/* Image and Basic Info Section */}
             <div className="flex gap-6">
               <div className="w-[156px] h-[166px] flex-shrink-0 border-2 border-gray-30 rounded-xl relative overflow-hidden">
-                <Image src={itemData.image || ''} alt={itemData.name || ''} fill className={cn("object-cover absolute ",
-                  itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[1]' :
-                    itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[2]" : ""
-                )}
+                <Image
+                  src={itemData.image || ""}
+                  alt={itemData.name || ""}
+                  fill
+                  className={cn(
+                    "object-cover absolute ",
+                    itemData.category && itemData.category.code === "BACK_HAIR"
+                      ? "z-[1]"
+                      : itemData.category &&
+                        (itemData.category.code === "FRONT_HAIR" ||
+                          itemData.category.code === "EYE" ||
+                          itemData.category.code === "MOUTH")
+                      ? "z-[2]"
+                      : ""
+                  )}
                 />
-                <Image src='/image/avatar/cloth/cloth1.svg' alt={itemData.name || ''} fill className={cn("object-cover absolute ",
-                  itemData.category && (itemData.category.code === 'BACK_HAIR') ? 'z-[2]' :
-                    itemData.category && (itemData.category.code === 'FRONT_HAIR' || itemData.category.code === 'EYE' || itemData.category.code === 'MOUTH') ? "z-[1]" : "hidden"
-                )}
+                <Image
+                  src="/image/avatar/cloth/cloth1.svg"
+                  alt={itemData.name || ""}
+                  fill
+                  className={cn(
+                    "object-cover absolute ",
+                    itemData.category && itemData.category.code === "BACK_HAIR"
+                      ? "z-[2]"
+                      : itemData.category &&
+                        (itemData.category.code === "FRONT_HAIR" ||
+                          itemData.category.code === "EYE" ||
+                          itemData.category.code === "MOUTH")
+                      ? "z-[1]"
+                      : "hidden"
+                  )}
                 />
               </div>
 
@@ -297,14 +341,14 @@ export const ItemModal = ({
 
                   <div className="bg-gray-10 rounded-lg p-4">
                     <div className="text-SubheadMd flex items-center justify-between">
-                      <span className="text-gray-60">Tiền trong tài khoản:</span>
+                      <span className="text-gray-60">
+                        Tiền trong tài khoản:
+                      </span>
                       <div className="flex items-center gap-2">
                         <span className="text-gray-95 font-bold text-lg">
-                          {
-                            Number(userInfo?.balance) - totalPrice > 0
-                              ? Number(userInfo?.balance)
-                              : 0
-                          }
+                          {Number(userInfo?.balance) - totalPrice > 0
+                            ? Number(userInfo?.balance)
+                            : 0}
                         </span>
                         <Image
                           src="/image/home/coin.png"
@@ -318,9 +362,7 @@ export const ItemModal = ({
                       <span className="text-gray-60">Tổng tiền phải trả:</span>
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-lg text-red-500">
-                          {
-                            -  totalPrice
-                          }
+                          {-totalPrice}
                         </span>
                         <Image
                           src="/image/home/coin.png"
@@ -334,11 +376,9 @@ export const ItemModal = ({
                       <span className="text-gray-60">Số tiền còn lại:</span>
                       <div className="flex items-center gap-2">
                         <span className="text-gray-95 font-bold text-lg">
-                          {
-                            Number(userInfo?.balance) - totalPrice > 0
-                              ? Number(userInfo?.balance) - totalPrice
-                              : 0
-                          }
+                          {Number(userInfo?.balance) - totalPrice > 0
+                            ? Number(userInfo?.balance) - totalPrice
+                            : 0}
                         </span>
                         <Image
                           src="/image/home/coin.png"

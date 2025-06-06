@@ -32,7 +32,7 @@ export type AchievementFormData = {
   title: string;
   type: string;
   icon: File | null;
-}
+};
 
 type Props = {
   open: boolean;
@@ -40,8 +40,11 @@ type Props = {
   onSubmit: (data: AchievementFormData) => void;
 };
 
-
-export const CreateCertificateModal = ({ open, onOpenChange, onSubmit }: Props) => {
+export const CreateCertificateModal = ({
+  open,
+  onOpenChange,
+  onSubmit,
+}: Props) => {
   const [success, error] = useSnackbarStore((state) => [
     state.success,
     state.error,
@@ -79,11 +82,11 @@ export const CreateCertificateModal = ({ open, onOpenChange, onSubmit }: Props) 
     onOpenChange(open);
   };
   const handleImageUpload = (file: File | null) => {
-    if (file) setValue("icon", file as any)
-  }
+    if (file) setValue("icon", file as any);
+  };
   const handleSelectChange = (value: string) => {
-    setValue('type', value)
-  }
+    setValue("type", value);
+  };
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogContent className="w-[680px] bg-white">
@@ -118,12 +121,20 @@ export const CreateCertificateModal = ({ open, onOpenChange, onSubmit }: Props) 
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="min-w-[160px] text-SubheadMd">Form chứng chỉ</div>
-                  <CommonSelect className="w-full" selectClassName="rounded-xl h-[50px] bg-grey-50 border border-grey-300" placeholder="Chọn loại thành tích" options={[]} value={getValues('type')} onChange={handleSelectChange} />
+                  <div className="min-w-[160px] text-SubheadMd">
+                    Form chứng chỉ
+                  </div>
+                  <CommonSelect
+                    className="w-full"
+                    selectClassName="rounded-xl h-[50px] bg-grey-50 border border-grey-300"
+                    placeholder="Chọn loại thành tích"
+                    options={[]}
+                    value={getValues("type")}
+                    onChange={handleSelectChange}
+                  />
                 </div>
               </div>
               {/* Category Field */}
-
             </div>
           </form>
         </FormProvider>

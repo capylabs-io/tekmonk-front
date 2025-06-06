@@ -13,95 +13,94 @@ import "react-quill/dist/quill.snow.css";
 import { CommonTable } from "@/components/common/CommonTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { useAchievement } from "@/hooks/useAchievement";
-import { AchievementFormData, CreateAchievementDialog } from "@/components/achievement/CreateAchievementModal";
+import {
+  AchievementFormData,
+  CreateAchievementDialog,
+} from "@/components/achievement/CreateAchievementModal";
 import { Input } from "@/components/common/Input";
 import { useState } from "react";
 
-
 export default function Page() {
-  const { totalPage,
+  const {
+    totalPage,
     totalDocs,
     limit,
     page,
     isOpenCreateModal,
     setLimit,
     setPage,
-    setIsOpenCreateModal } = useAchievement()
+    setIsOpenCreateModal,
+  } = useAchievement();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [textSearch, setTextSearch] = useState("");
   const handleSearch = () => {
     setSearchQuery(textSearch);
   };
-  const columns: ColumnDef<AchievementFormData>[] =
-    [
-      {
-        header: 'STT',
-        cell: ({ row }) => <span>{row.index + 1}</span>,
-
-      },
-      {
-        header: 'Icon',
-        cell: ({ row }) => (
-          <div className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
-            style={{
-              backgroundImage: `url(${row.original?.icon})`
-            }}>
-
-          </div>
-        ),
-      },
-      {
-        header: 'Tên thành tích',
-        cell: ({ row }) => <span>{row.original.title}</span>,
-      },
-      {
-        header: 'Mô tả',
-        cell: ({ row }) => <div
+  const columns: ColumnDef<AchievementFormData>[] = [
+    {
+      header: "STT",
+      cell: ({ row }) => <span>{row.index + 1}</span>,
+    },
+    {
+      header: "Icon",
+      cell: ({ row }) => (
+        <div
+          className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
+          style={{
+            backgroundImage: `url(${row.original?.icon})`,
+          }}
+        ></div>
+      ),
+    },
+    {
+      header: "Tên thành tích",
+      cell: ({ row }) => <span>{row.original.title}</span>,
+    },
+    {
+      header: "Mô tả",
+      cell: ({ row }) => (
+        <div
           className="text-base text-gray-800"
           dangerouslySetInnerHTML={{
             __html: row.original.content || "",
           }}
-        ></div>,
+        ></div>
+      ),
+    },
+    {
+      header: "Loại",
+      cell: ({ row }) => <div>{row.original.type}</div>,
+    },
+    {
+      id: "action",
+      header: "",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Edit className="h-4 w-4" color="#7C6C80" />
+            </button>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Trash2 className="h-4 w-4" color="#7C6C80" />
+            </button>
+          </div>
+        );
       },
-      {
-        header: 'Loại',
-        cell: ({ row }) => <div>
-          {
-            row.original.type
-          }
-        </div>
-      },
-      {
-        id: 'action',
-        header: '',
-        cell: ({ row }) => {
-          return (
-            <div className="flex gap-2">
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Edit className="h-4 w-4" color="#7C6C80" />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Trash2 className="h-4 w-4" color="#7C6C80" />
-              </button>
-            </div>
-          );
-        },
-      },
-    ]
-
+    },
+  ];
 
   return (
     <>
@@ -124,7 +123,10 @@ export default function Page() {
             <TabsTrigger value="system">Thuộc hệ thống</TabsTrigger>
             <TabsTrigger value="outside">Cấu hình ngoài</TabsTrigger>
           </TabsList>
-          <TabsContent value="system" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
+          <TabsContent
+            value="system"
+            className="overflow-y-auto !h-[calc(100%-40px)] p-4"
+          >
             <div className="w-full h-[calc(100%-40px-12px)] overflow-y-auto">
               <div className="flex justify-between items-center">
                 <Input
@@ -155,7 +157,10 @@ export default function Page() {
               />
             </div>
           </TabsContent>
-          <TabsContent value="outside" className="overflow-y-auto !h-[calc(100%-40px)] p-4">
+          <TabsContent
+            value="outside"
+            className="overflow-y-auto !h-[calc(100%-40px)] p-4"
+          >
             <div className="w-full h-[calc(100%-40px-12px)] overflow-y-auto">
               <div className="flex justify-between items-center">
                 <Input
@@ -194,9 +199,14 @@ export default function Page() {
             </div>
           </TabsContent>
         </Tabs>
-
       </div>
-      <CreateAchievementDialog open={isOpenCreateModal} onOpenChange={(value) => { setIsOpenCreateModal(value) }} onSubmit={() => { }} />
+      <CreateAchievementDialog
+        open={isOpenCreateModal}
+        onOpenChange={(value) => {
+          setIsOpenCreateModal(value);
+        }}
+        onSubmit={() => {}}
+      />
     </>
   );
 }

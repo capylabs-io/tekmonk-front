@@ -30,21 +30,29 @@ export const LeadeboardContent = ({
   const fetchAvatarConfig = async (id: number) => {
     try {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
-              $eq: id
-            }
-          }
-        }
+              $eq: id,
+            },
+          },
+        },
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
     } catch (error) {
       console.log("error: ", error);
     }
-  }
+  };
   // Fetch top 3 users separately
   const { data: topThreeRankingData, isLoading: isTopThreeRankingLoading } =
     useTopThreeRanking({
@@ -57,7 +65,7 @@ export const LeadeboardContent = ({
       const promises = topThreeRankingData.data.map(async (item, index) => ({
         ...item,
         order: index + 1,
-        avatarConfig: await fetchAvatarConfig(item.user.id)
+        avatarConfig: await fetchAvatarConfig(item.user.id),
       }));
       const results = await Promise.all(promises);
       setMappedData(results);
@@ -78,12 +86,12 @@ export const LeadeboardContent = ({
     // Filter by search term if provided
     const filtered = searchValue
       ? dataWithRanks.filter(
-        (item) =>
-          item.user.username
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
-      )
+          (item) =>
+            item.user.username
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+            item.user.email?.toLowerCase().includes(searchValue.toLowerCase())
+        )
       : dataWithRanks;
 
     // Calculate pagination
@@ -118,8 +126,7 @@ export const LeadeboardContent = ({
   return (
     <div>
       <div className="w-full flex justify-center items-center bg-[url('/image/leaderboard/leaderboard-banner.png')] bg-no-repeat bg-cover h-[400px] gap-x-12 pb-7">
-        {
-          !isTopThreeRankingLoading &&
+        {!isTopThreeRankingLoading && (
           <>
             {mappedData.length > 0 && (
               <>
@@ -129,7 +136,7 @@ export const LeadeboardContent = ({
                       user: {
                         id: 0,
                         username: "Chưa có",
-                        specialName: "Thường dân"
+                        specialName: "Thường dân",
                       },
                       count: 0,
                       order: 2,
@@ -138,7 +145,7 @@ export const LeadeboardContent = ({
                       user: {
                         id: 0,
                         username: "Chưa có",
-                        specialName: "Thường dân"
+                        specialName: "Thường dân",
                       },
                       count: 0,
                       order: 3,
@@ -155,7 +162,6 @@ export const LeadeboardContent = ({
                   const getDelay = (index: number) => {
                     return index === 0 ? 0.2 : index === 1 ? 0.4 : 0.6;
                   };
-
 
                   return getOrderedData().map((item, index) => (
                     <motion.div
@@ -181,7 +187,7 @@ export const LeadeboardContent = ({
               </>
             )}
           </>
-        }
+        )}
       </div>
 
       <LeaderboardTable

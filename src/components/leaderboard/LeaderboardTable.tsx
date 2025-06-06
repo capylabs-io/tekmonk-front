@@ -121,8 +121,9 @@ export const LeaderboardTable = ({
               className="rounded-full"
             /> */}
             <div
-              className={`text-SubheadSm !font-medium ${rank <= 3 ? "font-bold" : ""
-                }`}
+              className={`text-SubheadSm !font-medium ${
+                rank <= 3 ? "font-bold" : ""
+              }`}
             >
               {row.original?.user.username}
               {rank === 1 && <span className="ml-2 text-yellow-500">👑</span>}
@@ -152,7 +153,7 @@ export const LeaderboardTable = ({
           <div className="flex items-center gap-2">
             <TabIcon type={rankingType} />
             <span className={rank <= 3 ? "font-bold" : ""}>
-              {row.original?.count && row.original?.count?.toString() || "0"}
+              {(row.original?.count && row.original?.count?.toString()) || "0"}
             </span>
           </div>
         );

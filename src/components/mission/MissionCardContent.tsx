@@ -102,12 +102,14 @@ export const MissionCardContent = ({
           /> */}
         </h3>
 
-        <div className="text-BodyXs font-light text-gray-70 w-full h-8 text-center mt-1">
-          <TextWithEllipsis
-            text={data.description || ""}
-            maxLines={2}
-            secondText={renderProgressIndicator()}
-          />
+        <div className="text-BodyXs font-light text-gray-70 w-full text-center mt-1 flex flex-col gap-1">
+          <div>{data.description}</div>
+          <div>{renderProgressIndicator()}</div>
+          {/* <TextWithEllipsis
+            text={""}
+            maxLines={3}
+            secondText={""}
+          /> */}
         </div>
 
         <div className="flex flex-row items-center justify-center gap-2 mt-1">

@@ -158,7 +158,7 @@ export default function ShopItemDetail() {
               onClickNextPage={handleNextPage}
               onPageClick={handlePageChange}
             />
-           </div>
+          </div>
         )}
 
         {itemData && (

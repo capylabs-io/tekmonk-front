@@ -71,39 +71,41 @@ export const ListStudentRemainingSelect = ({
   const filteredStudents = useMemo(() => {
     return get(studentList, "data", [])
       ? get(studentList, "data", [])?.filter((student: User) =>
-        student.username.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+          student.username.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       : [];
   }, [studentList, searchQuery]);
   return (
     <div>
       <div className="space-y-2">
-        {selectedStudents.length > 0 && <div className="flex flex-wrap gap-2 rounded-md h-max my-2">
-          <div className="text-gray-500 !text-sm">Người dùng đã chọn:</div>
-          {selectedStudents.map((selectedId) => {
-            const student =
-              get(studentList, "data?", []) &&
-              get(studentList, "data", []).find(
-                (s: User) => s.id.toString() === selectedId
-              );
-            return student ? (
-              <CommonTag
-                key={get(student, "id")}
-                className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm flex items-center gap-1"
-              >
-                {get(student, "username")}
-                <button
-                  onClick={() =>
-                    handleStudentSelect(get(student, "id", 0).toString())
-                  }
-                  className="text-gray-500 hover:text-gray-700 ml-1"
+        {selectedStudents.length > 0 && (
+          <div className="flex flex-wrap gap-2 rounded-md h-max my-2">
+            <div className="text-gray-500 !text-sm">Người dùng đã chọn:</div>
+            {selectedStudents.map((selectedId) => {
+              const student =
+                get(studentList, "data?", []) &&
+                get(studentList, "data", []).find(
+                  (s: User) => s.id.toString() === selectedId
+                );
+              return student ? (
+                <CommonTag
+                  key={get(student, "id")}
+                  className="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm flex items-center gap-1"
                 >
-                  ×
-                </button>
-              </CommonTag>
-            ) : null;
-          })}
-        </div>}
+                  {get(student, "username")}
+                  <button
+                    onClick={() =>
+                      handleStudentSelect(get(student, "id", 0).toString())
+                    }
+                    className="text-gray-500 hover:text-gray-700 ml-1"
+                  >
+                    ×
+                  </button>
+                </CommonTag>
+              ) : null;
+            })}
+          </div>
+        )}
 
         <div className="relative">
           <Input

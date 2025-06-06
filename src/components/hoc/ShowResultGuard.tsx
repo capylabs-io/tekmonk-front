@@ -34,7 +34,7 @@
 //     const [result, setResult] = useState<TResultCodeCombatFinal[]>();
 //     const [timeContest, setTimeContest] = useState<TTimeContest>();
 //     //use state
-    
+
 //     //
 //     const [contestGroupStage, setContestGroupStage] =
 //       useState<ContestGroupStage | null>(null);
@@ -68,7 +68,7 @@
 //             codeCombatId,
 //             Number(get(contestGroupStage, "id", 6))
 //           );
-          
+
 //           if (res) {
 //             setProgress(res);
 //           }
@@ -79,13 +79,13 @@
 
 //     function transformData(progress: any[], listcourse: any[]): TResultCodeCombatFinal[] {
 //         const result: TResultCodeCombatFinal[] = [];
-      
+
 //         for (const course of listcourse) {
 //           // Tìm thông tin progress tương ứng với course hiện tại
 //           const courseProgress = progress.find(
 //             (p) => p.courseId === course.courseId && p.courseInstanceId === course.courseInstanceId
 //           );
-      
+
 //           // Tạo một Map từ listSlug của progress để dễ dàng tra cứu playtime
 //           const playtimeMap = new Map<string, number>(
 //             courseProgress?.listSlug.map((slugObj: { name: string; playtime: number }) => [
@@ -93,15 +93,15 @@
 //               slugObj.playtime,
 //             ])
 //           );
-      
+
 //           // Lấy currentLevel từ progress để đánh dấu các slug đã hoàn thành
 //           const currentLevel = courseProgress?.currentLevel || 0;
-      
+
 //           for (let i = 0; i < course.slugs.length; i++) {
 //             const slug = course.slugs[i];
 //             const playtime = playtimeMap.get(slug) || 0;
 //             const isCompleted = i < currentLevel;
-      
+
 //             result.push({
 //               slug,
 //               playtime,
@@ -109,7 +109,7 @@
 //             });
 //           }
 //         }
-      
+
 //         return result;
 //     }
 
@@ -140,7 +140,7 @@
 //       await handleGetProgress();
 //       await handleGetTimeResultContest();
 //     }
-    
+
 //     useEffect(() => {
 //       fetAllData();
 //     }, [candidateNumber]);

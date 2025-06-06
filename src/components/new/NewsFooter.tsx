@@ -9,20 +9,31 @@ export const LandingFooter = () => {
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div className="space-y-4 mb-6 md:mb-0">
           {/* Logo */}
-          <Image alt="" src="/image/app-logo-white.png" width={159} height={32} />
+          <Image
+            alt=""
+            src="/image/app-logo-white.png"
+            width={159}
+            height={32}
+          />
 
           {/* Contact Information */}
           <div className="space-y-2 text-sm">
             <p className="max-w-md">
-              <span className="font-semibold">Địa chỉ:</span> <span className="text-sm font-normal">Tầng 3, Tháp B,
-                Tòa Việt Đức Complex, Ngõ 187 Nguyễn Tuân, P. Nhân Chính, Q.
-                Thanh Xuân,Tp. Hà Nội</span>
+              <span className="font-semibold">Địa chỉ:</span>{" "}
+              <span className="text-sm font-normal">
+                Tầng 3, Tháp B, Tòa Việt Đức Complex, Ngõ 187 Nguyễn Tuân, P.
+                Nhân Chính, Q. Thanh Xuân,Tp. Hà Nội
+              </span>
             </p>
             <p>
-              <span className="font-semibold">Hotline:</span> <span className="text-sm font-normal">0378 247 797</span>
+              <span className="font-semibold">Hotline:</span>{" "}
+              <span className="text-sm font-normal">0378 247 797</span>
             </p>
             <p>
-              <span className="font-semibold">Email:</span> <span className="text-sm font-normal">tekmonk.academy@gmail.com</span>
+              <span className="font-semibold">Email:</span>{" "}
+              <span className="text-sm font-normal">
+                tekmonk.academy@gmail.com
+              </span>
             </p>
           </div>
         </div>

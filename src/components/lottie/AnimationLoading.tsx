@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 type AnimationLoadingProps = {
@@ -12,7 +12,7 @@ export const AnimationLoading = ({ className }: AnimationLoadingProps) => {
       loop
       autoplay
       className={className}
-      style={{ width: '100%', height: '100%' }}
+      style={{ width: "100%", height: "100%" }}
     />
   );
 };

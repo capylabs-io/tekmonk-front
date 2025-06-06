@@ -47,7 +47,7 @@ export const AchievementHistoryDialog = ({
               <MissionCard
                 key={`${mission.achievement?.id}-${index}`}
                 data={mission.achievement as Achievement}
-                onClick={() => { }}
+                onClick={() => {}}
                 isShowButtonClaim={false}
               />
             ))}

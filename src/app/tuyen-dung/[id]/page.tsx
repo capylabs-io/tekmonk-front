@@ -156,7 +156,7 @@ export default function Page() {
                     dangerouslySetInnerHTML={{
                       __html: (get(newsItem, "title", "") || "")
                         .replace(/<[^>]+>/g, "")
-                        .trim()
+                        .trim(),
                     }}
                   ></div>
                 </div>

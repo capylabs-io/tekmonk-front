@@ -197,8 +197,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}
@@ -263,8 +263,8 @@ const Home = () => {
                 {isFetchingNextPage
                   ? "Đang tải thêm bài viết..."
                   : !hasNextPage && flattenedPosts.length > 0
-                    ? ""
-                    : ""}
+                  ? ""
+                  : ""}
               </motion.div>
             </>
           )}

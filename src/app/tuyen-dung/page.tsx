@@ -97,7 +97,7 @@ export default function Hiring() {
               handleSearch();
             }
           }}
-        // onSearch={handleSearch}
+          // onSearch={handleSearch}
         />
         <div className="flex items-center gap-1">
           <div className="text-BodySm text-gray-70">Hiển thị theo:</div>
@@ -130,15 +130,16 @@ export default function Hiring() {
           </Select>
         </div>
       </div>
-      {textSearch !== '' && <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
-        Tìm thấy{" "}
-        <span className="text-primary-95">
-          {(data?.data && data?.data?.length) || 0}
-        </span>{" "}
-        kết quả phù hợp với từ khoá:{" "}
-        <span className="text-primary-95">&quot;{textSearch}&quot;</span>
-      </div>
-      }
+      {textSearch !== "" && (
+        <div className="mt-4 text-gray-50 text-SubheadMd text-start w-full">
+          Tìm thấy{" "}
+          <span className="text-primary-95">
+            {(data?.data && data?.data?.length) || 0}
+          </span>{" "}
+          kết quả phù hợp với từ khoá:{" "}
+          <span className="text-primary-95">&quot;{textSearch}&quot;</span>
+        </div>
+      )}
       {/* show item grid here */}
       {isLoading ? (
         <div className="w-full flex flex-col items-center justify-center">
@@ -168,10 +169,13 @@ export default function Hiring() {
                       dangerouslySetInnerHTML={{
                         __html: (get(item, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
-                          .trim()
+                          .trim(),
                       }}
                     ></div>
-                    <div className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
+                    <div
+                      className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirectDetail(item.id)}
+                    >
                       <Banknote className="text-gray-70" size={16} />
                       <div>
                         Mức lương:{" "}
@@ -180,7 +184,10 @@ export default function Hiring() {
                           : "Lương thỏa thuận"}
                       </div>
                     </div>
-                    <div className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95" onClick={() => handleRedirectDetail(item.id)}>
+                    <div
+                      className="text-BodySm text-gray-95 flex gap-2 items-center hover:cursor-pointer hover:underline hover:text-primary-95"
+                      onClick={() => handleRedirectDetail(item.id)}
+                    >
                       <Users className="text-gray-70" size={16} />
                       <div>
                         Số lượng tuyển dụng:{" "}
@@ -190,10 +197,14 @@ export default function Hiring() {
                     <div className="flex items-start gap-2 justify-start">
                       {item.tags?.split(",").map((tag, tagIndex) => {
                         return (
-                          <CommonTag key={tagIndex} className="tag-class" onClick={() => {
-                            setTextSearch(tag);
-                            setSearchQuery(tag);
-                          }}>
+                          <CommonTag
+                            key={tagIndex}
+                            className="tag-class"
+                            onClick={() => {
+                              setTextSearch(tag);
+                              setSearchQuery(tag);
+                            }}
+                          >
                             {tag}
                           </CommonTag>
                         );
@@ -217,7 +228,7 @@ export default function Hiring() {
           currentPage={currentPage}
           itemsPerPage={PAGE_SIZE}
           onPageChange={(page) => setCurrentPage(page)}
-          onItemsPerPageChange={() => { }}
+          onItemsPerPageChange={() => {}}
           className="max-w-[444px]"
         />
       </div>
