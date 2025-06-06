@@ -39,6 +39,7 @@ import { cn } from "@/lib/utils";
 import { ReqGetAvatarConfig } from "@/requests/avatar-config";
 import { AvatarConfigModal } from "@/components/avatar/AvatarConfigModal";
 import { AvatarLayer } from "@/components/avatar/AvatarLayer";
+import BackgroundCoverModal from "@/components/background/BackgroundCoverModal";
 
 export default function Profile() {
   const { id } = useParams();
@@ -53,6 +54,7 @@ export default function Profile() {
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
+  const [isBackgroundModalVisible, setIsBackgroundModalVisible] = useState(false);
 
   const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
     queryKey: ["avatar-config", guestInfor?.id],
@@ -111,6 +113,10 @@ export default function Profile() {
     setUpdateDialogOpen(true);
   };
 
+  const handleUpdateBanner = () => {
+    setIsBackgroundModalVisible(true);
+  };
+
   const handleOpenTitleModal = () => setShowTitleModal(true);
 
   const handleSaveTitle = async (title: string) => {
@@ -132,13 +138,17 @@ export default function Profile() {
   return (
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
-      <div className="w-full flex justify-center bg-[url('/image/profile/profile-banner.png')] bg-no-repeat bg-cover h-[220px] relative mt-4">
-        {/* <div className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30" >
+      <div className="w-full flex justify-center  bg-no-repeat bg-cover h-[220px] relative mt-4"
+        style={{
+          backgroundImage: `url(${guestInfor?.backgroundCover?.image || "/image/profile/profile-banner.png"})`,
+        }}
+      >
+        <div className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30" onClick={handleUpdateBanner}>
           <div className="flex items-center gap-x-1">
             <ImagePlus size={18} className="text-gray-50" />
             <div className="text-bodyMd text-primary-900">Chỉnh sửa ảnh bìa</div>
           </div>
-        </div> */}
+        </div>
         <div className="absolute left-8 -bottom-8 w-max h-max">
           {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
             <div className="relative">
@@ -355,6 +365,14 @@ export default function Profile() {
         onSave={handleSaveTitle}
       />
       <AvatarConfigModal onSubmit={refetchAvatarConfig} />
+      <BackgroundCoverModal
+        visible={isBackgroundModalVisible}
+        hide={() => setIsBackgroundModalVisible(false)}
+        onSubmit={() => {
+          // Có thể thêm logic refresh data ở đây nếu cần
+          refetchUserInfo();
+        }}
+      />
 
     </div>
   );
