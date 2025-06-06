@@ -43,7 +43,8 @@ export const useUserStore = create<State & Actions>()(
   persist(
     (set, get) => ({
       ...defaultStates,
-      isConnected: () => !!get().jwt && !!get().userInfo && get().userInfo?.blocked === false,
+      isConnected: () =>
+        !!get().jwt && !!get().userInfo && get().userInfo?.blocked === false,
       login: async (body) => {
         const response = await postLogin(body);
         if (!response) {

@@ -23,23 +23,23 @@ export type CertificateHistory = {
   updatedAt: string;
 };
 export type CertificatePdfFieldConfig = {
-  id?: number
-  label?: string
-  value?: string
-  fontSize?: string
-  color?: string
-  fontFamily?: string
-  textAlign?: string
-  fontWeight?: string
-  positionX?: number
-  positionY?: number
-  config?: CertificatePdfConfig
-}
+  id?: number;
+  label?: string;
+  value?: string;
+  fontSize?: string;
+  color?: string;
+  fontFamily?: string;
+  textAlign?: string;
+  fontWeight?: string;
+  positionX?: number;
+  positionY?: number;
+  config?: CertificatePdfConfig;
+};
 
 export type CertificatePdfConfig = {
-  id?: number
-  name?: string
-  backgroundUrl?: string
-  fields?: CertificatePdfFieldConfig[]
-  certificates?: Certificate[]
-}
+  id?: number;
+  name?: string;
+  backgroundUrl?: string;
+  fields?: CertificatePdfFieldConfig[];
+  certificates?: Certificate[];
+};

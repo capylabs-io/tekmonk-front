@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/common/Input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  ReqGetAchievementHistory
-} from "@/requests/achievement";
+import { ReqGetAchievementHistory } from "@/requests/achievement";
 import Image from "next/image";
 import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
@@ -109,9 +107,7 @@ export function TitleSelectModal({
                 <div className="border border-gray-30 rounded-md p-4">
                   <div className="flex items-center gap-3 cursor-pointer">
                     <Image
-                      src={
-                        "/image/leaderboard/gold-medal.png"
-                      }
+                      src={"/image/leaderboard/gold-medal.png"}
                       alt="badge"
                       width={32}
                       height={32}
@@ -119,9 +115,7 @@ export function TitleSelectModal({
                     <span className="flex-1 text-gray-900 text-base">
                       Thường dân
                     </span>
-                    <RadioGroupItem
-                      value={"Thường dân"}
-                    />
+                    <RadioGroupItem value={"Thường dân"} />
                   </div>
                   <div className="border border-gray-20 h-[1px] my-2 w-full"></div>
                   {data?.data && data.data.length > 0 ? (
@@ -133,7 +127,6 @@ export function TitleSelectModal({
                       )
                       .map((t, index) => (
                         <>
-
                           <div
                             key={t.id}
                             className="flex items-center gap-3 cursor-pointer"

@@ -6,7 +6,7 @@ import {
   TwitterShareButton,
   LinkedinShareButton,
   WhatsappShareButton,
-  TelegramShareButton
+  TelegramShareButton,
 } from "react-share";
 import { Button } from "./button/Button";
 import {
@@ -18,7 +18,7 @@ import {
   Share2,
   MessageSquare,
   Send,
-  X
+  X,
 } from "lucide-react";
 import { useState } from "react";
 import {
@@ -43,7 +43,7 @@ export default function Share({
   description = "",
   hashtags = [],
   className = "",
-  image = ""
+  image = "",
 }: ShareProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +63,7 @@ export default function Share({
           url,
         });
       } catch (error) {
-        console.error('Error sharing:', error);
+        console.error("Error sharing:", error);
       }
     }
   };
@@ -75,40 +75,40 @@ export default function Share({
       component: FacebookShareButton,
       props: {
         url,
-        hashtag: hashtags.length > 0 ? '#' + hashtags[0] : undefined,
-        quote: title ? `${title} - ${description}` : description
-      }
+        hashtag: hashtags.length > 0 ? "#" + hashtags[0] : undefined,
+        quote: title ? `${title} - ${description}` : description,
+      },
     },
     {
       name: "Twitter",
       icon: Twitter,
       component: TwitterShareButton,
-      props: { url, title, hashtags }
+      props: { url, title, hashtags },
     },
     {
       name: "LinkedIn",
       icon: Linkedin,
       component: LinkedinShareButton,
-      props: { url, title, summary: description }
+      props: { url, title, summary: description },
     },
     {
       name: "WhatsApp",
       icon: MessageSquare,
       component: WhatsappShareButton,
-      props: { url, title }
+      props: { url, title },
     },
     {
       name: "Telegram",
       icon: Send,
       component: TelegramShareButton,
-      props: { url, title }
+      props: { url, title },
     },
     {
       name: "Email",
       icon: Mail,
       component: EmailShareButton,
-      props: { url, subject: title, body: description }
-    }
+      props: { url, subject: title, body: description },
+    },
   ];
 
   return (
@@ -124,18 +124,26 @@ export default function Share({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-md bg-white">
           <DialogHeader>
-            <DialogTitle className="text-center text-lg font-semibold">Chia sẻ bài viết</DialogTitle>
+            <DialogTitle className="text-center text-lg font-semibold">
+              Chia sẻ bài viết
+            </DialogTitle>
           </DialogHeader>
           <div className="h-[1px] bg-gray-300 w-full my-2"></div>
           <div className="grid grid-cols-3 gap-4">
-            {shareButtons.map(({ name, icon: Icon, component: ShareButton, props }) => (
-              <ShareButton key={name} {...props} className="flex flex-col items-center gap-2 h-auto px-3 py-2 transition-colors">
-                <Icon className="h-6 w-6 text-primary-70" />
-                <span className="text-xs text-gray-600">{name}</span>
-              </ShareButton>
-            ))}
+            {shareButtons.map(
+              ({ name, icon: Icon, component: ShareButton, props }) => (
+                <ShareButton
+                  key={name}
+                  {...props}
+                  className="flex flex-col items-center gap-2 h-auto px-3 py-2 transition-colors"
+                >
+                  <Icon className="h-6 w-6 text-primary-70" />
+                  <span className="text-xs text-gray-600">{name}</span>
+                </ShareButton>
+              )
+            )}
 
-            {typeof navigator.share === 'function' && (
+            {typeof navigator.share === "function" && (
               <div
                 className="flex flex-col items-center gap-2 h-auto px-3 py-2 cursor-pointer"
                 onClick={handleWebShare}
@@ -150,7 +158,9 @@ export default function Share({
               onClick={handleCopyLink}
             >
               <Link className="h-6 w-6 text-primary-70" />
-              <span className="text-xs text-gray-600">{isCopied ? 'Đã sao chép' : 'Sao chép link'}</span>
+              <span className="text-xs text-gray-600">
+                {isCopied ? "Đã sao chép" : "Sao chép link"}
+              </span>
             </div>
           </div>
         </DialogContent>

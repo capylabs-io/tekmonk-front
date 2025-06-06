@@ -14,20 +14,19 @@ type Props = {
   type?: string;
 };
 
-
 const IconShowBannerHiring = ({ type }: Props) => {
   const backgroundText = useMemo(() => {
     switch (type) {
       case "hiring":
-        return "/image/landing/background-hiring-text.png"
+        return "/image/landing/background-hiring-text.png";
       case "event":
-        return "/image/landing/background-event-text.png"
+        return "/image/landing/background-event-text.png";
       case "shop":
-        return "/image/landing/background-store-text.png"
+        return "/image/landing/background-store-text.png";
       default:
-        return ""
+        return "";
     }
-  }, [type])
+  }, [type]);
   return (
     <>
       <Image
@@ -35,14 +34,18 @@ const IconShowBannerHiring = ({ type }: Props) => {
         src="/image/landing/human1.png"
         width={type === "shop" ? 180 : 323}
         height={type === "shop" ? 220 : 220}
-        className={`object-contain absolute ${type === "shop" ? "bottom-[5px] right-4" : "-bottom-[120px] -right-10"} z-10 lg:block`}
+        className={`object-contain absolute ${
+          type === "shop" ? "bottom-[5px] right-4" : "-bottom-[120px] -right-10"
+        } z-10 lg:block`}
       />
       <Image
         alt="icon-left"
         src="/image/landing/left-top-stars.png"
         width={type === "shop" ? 60 : 89}
         height={type === "shop" ? 76 : 87}
-        className={`object-contain absolute ${type === "shop" ? "left-10 top-10" : "left-20 top-20"} z-0 lg:block`}
+        className={`object-contain absolute ${
+          type === "shop" ? "left-10 top-10" : "left-20 top-20"
+        } z-0 lg:block`}
       />
 
       <Image
@@ -57,14 +60,18 @@ const IconShowBannerHiring = ({ type }: Props) => {
         src="/image/landing/top-right-stars.png"
         width={120}
         height={120}
-        className={`object-contain absolute ${type === "shop" ? "lg:hidden" : "lg:block"} z-0`}
+        className={`object-contain absolute ${
+          type === "shop" ? "lg:hidden" : "lg:block"
+        } z-0`}
       />
       <Image
         alt="icon-right"
         src="/image/landing/bottom-left-stars.png"
         width={type === "shop" ? 30 : 54}
         height={type === "shop" ? 20 : 38}
-        className={`object-contain absolute ${type === "shop" ? "left-24 bottom-10" : "left-[300px] bottom-[120px]"} z-0 lg:block`}
+        className={`object-contain absolute ${
+          type === "shop" ? "left-24 bottom-10" : "left-[300px] bottom-[120px]"
+        } z-0 lg:block`}
       />
     </>
   );
@@ -76,8 +83,9 @@ export const BannerCard = ({ children, className, bgImage, type }: Props) => {
       <div
         className="h-full bg-cover bg-no-repeat bg-center flex flex-col items-center justify-center gap-9 overflow-hidden"
         style={{
-          backgroundImage: `url(${bgImage || "/image/landing/background-cover.png"
-            })`,
+          backgroundImage: `url(${
+            bgImage || "/image/landing/background-cover.png"
+          })`,
         }}
       >
         {children}

@@ -1,37 +1,47 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@/components/common/Tabs";
-import { Button } from '../common/button/Button';
-import Image from 'next/image';
-import { useUserAvatarStore } from '@/store/UserAvatarStore';
-import { cn } from '@/lib/utils';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import qs from 'qs';
-import { useUserStore } from '@/store/UserStore';
-import { ReqGetAvatarConfig, ReqUpdateAvatarConfig } from '@/requests/avatar-config';
-import { ReqGetUserShopItems } from '@/requests/shop-item-user';
-import { AvatarConfig } from '@/types/common-types';
-import { ReqGetShopItems } from '@/requests/shopItem';
-import classNames from 'classnames';
-import { CheckCircle2 } from 'lucide-react';
-import { useSnackbarStore } from '@/store/SnackbarStore';
-import { AvatarLayer } from './AvatarLayer';
-import { AvatarItem } from './AvatarItem';
+import { Button } from "../common/button/Button";
+import Image from "next/image";
+import { useUserAvatarStore } from "@/store/UserAvatarStore";
+import { cn } from "@/lib/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import qs from "qs";
+import { useUserStore } from "@/store/UserStore";
+import {
+  ReqGetAvatarConfig,
+  ReqUpdateAvatarConfig,
+} from "@/requests/avatar-config";
+import { ReqGetUserShopItems } from "@/requests/shop-item-user";
+import { AvatarConfig } from "@/types/common-types";
+import { ReqGetShopItems } from "@/requests/shopItem";
+import classNames from "classnames";
+import { CheckCircle2 } from "lucide-react";
+import { useSnackbarStore } from "@/store/SnackbarStore";
+import { AvatarLayer } from "./AvatarLayer";
+import { AvatarItem } from "./AvatarItem";
 
 type Props = {
-  onSubmit?: () => void,
-  onClose?: () => void
-}
+  onSubmit?: () => void;
+  onClose?: () => void;
+};
 export const AvatarConfigModal = ({ onSubmit }: Props) => {
-  const [isShowing, hide] = useUserAvatarStore((state) => [state.isShowing, state.hide])
-  const [userInfo, getMe] = useUserStore((state) => [
-    state.userInfo, state.getMe
+  const [isShowing, hide] = useUserAvatarStore((state) => [
+    state.isShowing,
+    state.hide,
   ]);
-  const [showSuccess, showError] = useSnackbarStore((state) => [state.success, state.error])
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
+  const [showSuccess, showError] = useSnackbarStore((state) => [
+    state.success,
+    state.error,
+  ]);
   const [currentAvatar, setCurrentAvatar] = useState<AvatarConfig | null>({
     frontHair: null,
     backHair: null,
@@ -40,20 +50,27 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
     eye: null,
     theme: null,
     special: null,
-  })
+  });
   const { data: dataAvatarConfig } = useQuery({
     queryKey: ["avatar-config", userInfo?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
               $eq: Number(userInfo?.id),
-            }
+            },
           },
         },
-
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
@@ -68,7 +85,7 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
       const queryString = qs.stringify({
         filters: {
           type: {
-            $eq: 'default',
+            $eq: "default",
           },
         },
         populate: "*",
@@ -109,15 +126,18 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
         eye: currentAvatar?.eye,
         theme: currentAvatar?.theme,
         special: currentAvatar?.special,
-      }
+      };
       if (dataAvatarConfig?.[0]?.id) {
-        const res = await ReqUpdateAvatarConfig(Number(dataAvatarConfig?.[0]?.id), data);
+        const res = await ReqUpdateAvatarConfig(
+          Number(dataAvatarConfig?.[0]?.id),
+          data
+        );
         return res;
       }
     },
     onSuccess: () => {
       // Cập nhật state currentAvatar sau khi mutation thành công
-      setCurrentAvatar(prev => ({
+      setCurrentAvatar((prev) => ({
         ...prev,
         frontHair: currentAvatar?.frontHair,
         backHair: currentAvatar?.backHair,
@@ -128,14 +148,17 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
         special: currentAvatar?.special,
       }));
       getMe();
-      hide()
-      onSubmit && onSubmit()
-      showSuccess("Cập nhật ảnh đại diện thành công", "Vui lòng xem lại ảnh đại diện của bạn");
+      hide();
+      onSubmit && onSubmit();
+      showSuccess(
+        "Cập nhật ảnh đại diện thành công",
+        "Vui lòng xem lại ảnh đại diện của bạn"
+      );
     },
     onError: (error) => {
       console.log("Error: ", error);
       showError("Cập nhật ảnh đại diện thất bại", "Vui lòng thử lại sau");
-    }
+    },
   });
   // const handleResetDefault = useCallback(() => {
   //   if (!dataDefaultShopItem) return;
@@ -151,356 +174,447 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
   // }, [dataDefaultShopItem])
   useEffect(() => {
     if (dataAvatarConfig && dataAvatarConfig.length > 0) {
-      setCurrentAvatar(dataAvatarConfig[0])
+      setCurrentAvatar(dataAvatarConfig[0]);
     }
-  }, [dataAvatarConfig])
+  }, [dataAvatarConfig]);
   useEffect(() => {
     getMe();
-  }, [])
+  }, []);
   const userAvatarConfig = useMemo(() => {
-    return (
-      currentAvatar ?
-        <AvatarLayer avatarConfig={currentAvatar} customClassName="w-[200px] h-[200px] rounded-xl" /> :
-        <div className="border-2 flex justify-center items-end border-gray-30 rounded-xl relative overflow-hidden w-[200px] h-[200px] ">
-          <Image src="/image/profile/avatar-x2.png" className='self-end z-[2] absolute' height={200} width={200} alt='pic'>
-          </Image>
-        </div>
-    )
-  }, [currentAvatar])
+    return currentAvatar ? (
+      <AvatarLayer
+        avatarConfig={currentAvatar}
+        customClassName="w-[200px] h-[200px] rounded-xl"
+      />
+    ) : (
+      <div className="border-2 flex justify-center items-end border-gray-30 rounded-xl relative overflow-hidden w-[200px] h-[200px] ">
+        <Image
+          src="/image/profile/avatar-x2.png"
+          className="self-end z-[2] absolute"
+          height={200}
+          width={200}
+          alt="pic"
+        ></Image>
+      </div>
+    );
+  }, [currentAvatar]);
   const dateUserByCategory = (category: string) => {
-    return dataUser && dataUser?.data.length > 0 ? dataUser?.data?.filter(item => item.shop_item.category?.code === category) : []
-  }
+    return dataUser && dataUser?.data.length > 0
+      ? dataUser?.data?.filter(
+          (item) => item.shop_item.category?.code === category
+        )
+      : [];
+  };
 
-  const clothContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          <AvatarItem
-            onItemClick={() => {
-              setCurrentAvatar(prev => ({
-                ...prev,
-                cloth: dataDefaultShopItem?.find(item => item.category.code === 'CLOTH'),
-                special: null,
-              }))
-            }}
-            isActive={currentAvatar?.cloth?.id === dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.id}
-            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'CLOTH')?.image || ''}
-            isDefault
-          />
-          {
-            dateUserByCategory('CLOTH').length > 0 && dateUserByCategory('CLOTH').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      cloth: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.cloth?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                />
-              )
-            })
-          }
+  const clothContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            <AvatarItem
+              onItemClick={() => {
+                setCurrentAvatar((prev) => ({
+                  ...prev,
+                  cloth: dataDefaultShopItem?.find(
+                    (item) => item.category.code === "CLOTH"
+                  ),
+                  special: null,
+                }));
+              }}
+              isActive={
+                currentAvatar?.cloth?.id ===
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "CLOTH"
+                )?.id
+              }
+              imageUrl={
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "CLOTH"
+                )?.image || ""
+              }
+              isDefault
+            />
+            {dateUserByCategory("CLOTH").length > 0 &&
+              dateUserByCategory("CLOTH").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        cloth: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={currentAvatar?.cloth?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const frontHairContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const frontHairContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
 
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          <AvatarItem
-            onItemClick={() => {
-              setCurrentAvatar(prev => ({
-                ...prev,
-                frontHair: dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR'),
-                special: null,
-              }))
-            }}
-            isActive={currentAvatar?.frontHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.id}
-            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'FRONT_HAIR')?.image || ''}
-            isDefault
-            isAllowClothBackground
-          />
-          {
-            dateUserByCategory('FRONT_HAIR').length > 0 && dateUserByCategory('FRONT_HAIR').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      frontHair: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.frontHair?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                  isAllowClothBackground
-                />
-              )
-            })
-          }
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            <AvatarItem
+              onItemClick={() => {
+                setCurrentAvatar((prev) => ({
+                  ...prev,
+                  frontHair: dataDefaultShopItem?.find(
+                    (item) => item.category.code === "FRONT_HAIR"
+                  ),
+                  special: null,
+                }));
+              }}
+              isActive={
+                currentAvatar?.frontHair?.id ===
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "FRONT_HAIR"
+                )?.id
+              }
+              imageUrl={
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "FRONT_HAIR"
+                )?.image || ""
+              }
+              isDefault
+              isAllowClothBackground
+            />
+            {dateUserByCategory("FRONT_HAIR").length > 0 &&
+              dateUserByCategory("FRONT_HAIR").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        frontHair: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={
+                      currentAvatar?.frontHair?.id === item.shop_item.id
+                    }
+                    imageUrl={item.shop_item.image || ""}
+                    isAllowClothBackground
+                  />
+                );
+              })}
+          </div>
+        </div>
+      </div>
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const backHairContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
 
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            <AvatarItem
+              onItemClick={() => {
+                setCurrentAvatar((prev) => ({
+                  ...prev,
+                  backHair: dataDefaultShopItem?.find(
+                    (item) => item.category.code === "BACK_HAIR"
+                  ),
+                  special: null,
+                }));
+              }}
+              isActive={
+                currentAvatar?.backHair?.id ===
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "BACK_HAIR"
+                )?.id
+              }
+              imageUrl={
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "BACK_HAIR"
+                )?.image || ""
+              }
+              isDefault
+              isAllowClothBackground
+              isBackHair
+            />
+            {dateUserByCategory("BACK_HAIR").length > 0 &&
+              dateUserByCategory("BACK_HAIR").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        backHair: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={currentAvatar?.backHair?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                    isAllowClothBackground
+                    isBackHair
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const backHairContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const eyeContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            <AvatarItem
+              onItemClick={() => {
+                setCurrentAvatar((prev) => ({
+                  ...prev,
+                  eye: dataDefaultShopItem?.find(
+                    (item) => item.category.code === "EYE"
+                  ),
+                  special: null,
+                }));
+              }}
+              isActive={
+                currentAvatar?.eye?.id ===
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "EYE"
+                )?.id
+              }
+              imageUrl={
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "EYE"
+                )?.image || ""
+              }
+              isDefault
+              isAllowClothBackground
+            />
 
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          <AvatarItem
-            onItemClick={() => {
-              setCurrentAvatar(prev => ({
-                ...prev,
-                backHair: dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR'),
-                special: null,
-              }))
-            }}
-            isActive={currentAvatar?.backHair?.id === dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.id}
-            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'BACK_HAIR')?.image || ''}
-            isDefault
-            isAllowClothBackground
-            isBackHair
-          />
-          {
-            dateUserByCategory('BACK_HAIR').length > 0 && dateUserByCategory('BACK_HAIR').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      backHair: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.backHair?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                  isAllowClothBackground
-                  isBackHair
-                />
-              )
-            })
-          }
+            {dateUserByCategory("EYE").length > 0 &&
+              dateUserByCategory("EYE").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        eye: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={currentAvatar?.eye?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                    isAllowClothBackground
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const eyeContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          <AvatarItem
-            onItemClick={() => {
-              setCurrentAvatar(prev => ({
-                ...prev,
-                eye: dataDefaultShopItem?.find(item => item.category.code === 'EYE'),
-                special: null,
-              }))
-            }}
-            isActive={currentAvatar?.eye?.id === dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.id}
-            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'EYE')?.image || ''}
-            isDefault
-            isAllowClothBackground
-          />
-
-          {
-            dateUserByCategory('EYE').length > 0 && dateUserByCategory('EYE').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      eye: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.eye?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                  isAllowClothBackground
-                />
-              )
-            })
-          }
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const mouthContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            <AvatarItem
+              onItemClick={() => {
+                setCurrentAvatar((prev) => ({
+                  ...prev,
+                  mouth: dataDefaultShopItem?.find(
+                    (item) => item.category.code === "MOUTH"
+                  ),
+                  special: null,
+                }));
+              }}
+              isActive={
+                currentAvatar?.mouth?.id ===
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "MOUTH"
+                )?.id
+              }
+              imageUrl={
+                dataDefaultShopItem?.find(
+                  (item) => item.category.code === "MOUTH"
+                )?.image || ""
+              }
+              isDefault
+              isAllowClothBackground
+            />
+            {dateUserByCategory("MOUTH").length > 0 &&
+              dateUserByCategory("MOUTH").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        mouth: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={currentAvatar?.mouth?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                    isAllowClothBackground
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const mouthContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          <AvatarItem
-            onItemClick={() => {
-              setCurrentAvatar(prev => ({
-                ...prev,
-                mouth: dataDefaultShopItem?.find(item => item.category.code === 'MOUTH'),
-                special: null,
-              }))
-            }}
-            isActive={currentAvatar?.mouth?.id === dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.id}
-            imageUrl={dataDefaultShopItem?.find(item => item.category.code === 'MOUTH')?.image || ''}
-            isDefault
-            isAllowClothBackground
-          />
-          {
-            dateUserByCategory('MOUTH').length > 0 && dateUserByCategory('MOUTH').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      mouth: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.mouth?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                  isAllowClothBackground
-                />
-              )
-            })
-          }
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const themeContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            {dateUserByCategory("THEME").length > 0 &&
+              dateUserByCategory("THEME").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        theme: item.shop_item,
+                        special: null,
+                      }));
+                    }}
+                    isActive={currentAvatar?.theme?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const themeContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          {
-            dateUserByCategory('THEME').length > 0 && dateUserByCategory('THEME').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      theme: item.shop_item,
-                      special: null,
-                    }))
-                  }}
-                  isActive={currentAvatar?.theme?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                />
-              )
-            })
-          }
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
+  const specialContent = useMemo(
+    () => (
+      <div className="flex gap-6 h-full">
+        {userAvatarConfig}
+        <div className="w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto">
+          <div className="grid grid-cols-3 gap-4 h-max">
+            {dateUserByCategory("SPECIAL").length > 0 &&
+              dateUserByCategory("SPECIAL").map((item) => {
+                return (
+                  <AvatarItem
+                    key={item.id}
+                    onItemClick={() => {
+                      setCurrentAvatar((prev) => ({
+                        ...prev,
+                        special: item.shop_item,
+                      }));
+                    }}
+                    isActive={currentAvatar?.special?.id === item.shop_item.id}
+                    imageUrl={item.shop_item.image || ""}
+                  />
+                );
+              })}
+          </div>
         </div>
       </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
-  const specialContent = useMemo(() => (
-    <div className='flex gap-6 h-full'>
-      {userAvatarConfig}
-      <div className='w-[calc(100%-200px)] h-full p-4 bg-gray-10 rounded-2xl border-2 border-gray-30 overflow-y-auto'>
-        <div className='grid grid-cols-3 gap-4 h-max'>
-          {
-            dateUserByCategory('SPECIAL').length > 0 && dateUserByCategory('SPECIAL').map((item) => {
-              return (
-                <AvatarItem
-                  key={item.id}
-                  onItemClick={() => {
-                    setCurrentAvatar(prev => ({
-                      ...prev,
-                      special: item.shop_item
-                    }))
-                  }}
-                  isActive={currentAvatar?.special?.id === item.shop_item.id}
-                  imageUrl={item.shop_item.image || ''}
-                />
-              )
-            })
-          }
-        </div>
-      </div>
-    </div>
-  ), [currentAvatar, dateUserByCategory])
+    ),
+    [currentAvatar, dateUserByCategory]
+  );
   const tabs = [
     {
       value: "cloth",
       title: "Trang phục",
-      content: clothContent
+      content: clothContent,
     },
     {
       value: "frontHair",
       title: "Tóc trước",
-      content: frontHairContent
+      content: frontHairContent,
     },
     {
       value: "backHair",
       title: "Tóc sau",
-      content: backHairContent
+      content: backHairContent,
     },
     {
       value: "eye",
       title: "Mắt",
-      content: eyeContent
+      content: eyeContent,
     },
     {
       value: "mouth",
       title: "Miệng",
-      content: mouthContent
+      content: mouthContent,
     },
     {
       value: "theme",
       title: "Ảnh nền",
-      content: themeContent
+      content: themeContent,
     },
     {
       value: "special",
       title: "Đặc biệt",
-      content: specialContent
+      content: specialContent,
     },
-  ]
+  ];
 
-  return isShowing && (
-    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
-      <div className="relative mx-auto w-max flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto p-6">
-        <div className='text-HeadingSm'>Tuỳ chỉnh ảnh đại diện</div>
-        <Tabs defaultValue="cloth" className="w-full h-full overflow-y-auto mt-2">
-          <TabsList className="w-full border-b border-gray-200 !justify-start">
-            {
-              tabs.map((tab, index) => (
-
-                <TabsTrigger key={tab.value + index} value={tab.value}>{tab.title}</TabsTrigger>
-              ))
-            }
-          </TabsList>
-          {
-            tabs.map((tab, index) => (
-              <TabsContent key={tab.value + index} value={tab.value} className='h-[calc(100%-40px)] overflow-y-auto'>{tab.content}</TabsContent>
-            ))
-          }
-        </Tabs>
-        <hr className="border-t border-gray-30" />
-        <div className="flex justify-between w-ful p-4">
-          <Button className=" !bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]" onClick={hide}
-            style={{
-              boxShadow:
-                "0px 4px 0px #ebe4ec"
-            }}>
-            <div className="!text-sm !font-normal">Thoát</div>
-          </Button>
-          <div className="flex gap-2 items-center">
-            {/* <Button className="w-[150px] !font-medium border border-primary-70"
+  return (
+    isShowing && (
+      <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/60">
+        <div className="relative mx-auto w-max flex flex-col h-[80%] rounded-3xl bg-white overflow-y-auto p-6">
+          <div className="text-HeadingSm">Tuỳ chỉnh ảnh đại diện</div>
+          <Tabs
+            defaultValue="cloth"
+            className="w-full h-full overflow-y-auto mt-2"
+          >
+            <TabsList className="w-full border-b border-gray-200 !justify-start">
+              {tabs.map((tab, index) => (
+                <TabsTrigger key={tab.value + index} value={tab.value}>
+                  {tab.title}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            {tabs.map((tab, index) => (
+              <TabsContent
+                key={tab.value + index}
+                value={tab.value}
+                className="h-[calc(100%-40px)] overflow-y-auto"
+              >
+                {tab.content}
+              </TabsContent>
+            ))}
+          </Tabs>
+          <hr className="border-t border-gray-30" />
+          <div className="flex justify-between w-ful p-4">
+            <Button
+              className=" !bg-gray-00 border border-gray-20 !text-primary-95 w-[100px]"
+              onClick={hide}
+              style={{
+                boxShadow: "0px 4px 0px #ebe4ec",
+              }}
+            >
+              <div className="!text-sm !font-normal">Thoát</div>
+            </Button>
+            <div className="flex gap-2 items-center">
+              {/* <Button className="w-[150px] !font-medium border border-primary-70"
               onClick={handleResetDefault}
               style={{
                 boxShadow:
@@ -508,15 +622,19 @@ export const AvatarConfigModal = ({ onSubmit }: Props) => {
               }}>
               <div className="!text-sm !font-normal">Đặt lại</div>
             </Button> */}
-            <Button className="w-[150px] !font-medium border border-primary-70" onClick={updateAvatarConfig} style={{
-              boxShadow:
-                "0px 4px 0px #9a1595"
-            }}>
-              <div className="!text-sm !font-normal">Xác nhận</div>
-            </Button>
+              <Button
+                className="w-[150px] !font-medium border border-primary-70"
+                onClick={updateAvatarConfig}
+                style={{
+                  boxShadow: "0px 4px 0px #9a1595",
+                }}
+              >
+                <div className="!text-sm !font-normal">Xác nhận</div>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
+    )
+  );
+};

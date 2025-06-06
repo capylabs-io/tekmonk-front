@@ -2,9 +2,16 @@ import { Metadata } from "next";
 import qs from "qs";
 import { findPost } from "@/requests/post";
 import { getTextFromHTML } from "@/lib/utils";
-import { METADATA_SHARE_TEXT, METADATA_SHARE_TITLE } from "@/contants/metadata/config";
+import {
+  METADATA_SHARE_TEXT,
+  METADATA_SHARE_TITLE,
+} from "@/contants/metadata/config";
 
-export async function generateMetadata({ params }: { params: { id: number } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: number };
+}): Promise<Metadata> {
   try {
     const { id } = params;
     const queryString = qs.stringify({
@@ -59,4 +66,4 @@ export async function generateMetadata({ params }: { params: { id: number } }): 
       description: METADATA_SHARE_TEXT,
     };
   }
-} 
+}

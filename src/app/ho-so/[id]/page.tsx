@@ -20,7 +20,15 @@ import { useUserStore } from "@/store/UserStore";
 import { PostType, PostTypeEnum } from "@/types/posts";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get } from "lodash";
-import { Dot, Edit, Edit2, ImagePlus, Settings, Share2, SquareUser } from "lucide-react";
+import {
+  Dot,
+  Edit,
+  Edit2,
+  ImagePlus,
+  Settings,
+  Share2,
+  SquareUser,
+} from "lucide-react";
 import moment from "moment";
 import { useParams } from "next/navigation";
 import qs from "qs";
@@ -48,27 +56,38 @@ export default function Profile() {
   const { data: guestInfor, refetch: refetchUserInfo } = useGetUserQueryById(
     id as string
   );
-  const [userInfo, getMe] = useUserStore((state) => [state.userInfo, state.getMe]);
+  const [userInfo, getMe] = useUserStore((state) => [
+    state.userInfo,
+    state.getMe,
+  ]);
   const [success] = useSnackbarStore((state) => [state.success]);
   const queryClient = useQueryClient();
   const [dataMission, setDataMission] = useState<Mission[] | Achievement[]>([]);
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [showTitleModal, setShowTitleModal] = useState(false);
-  const [isBackgroundModalVisible, setIsBackgroundModalVisible] = useState(false);
+  const [isBackgroundModalVisible, setIsBackgroundModalVisible] =
+    useState(false);
 
   const { data: dataAvatarConfig, refetch: refetchAvatarConfig } = useQuery({
     queryKey: ["avatar-config", guestInfor?.id],
     queryFn: async () => {
       const queryString = qs.stringify({
-        populate: ["frontHair", "backHair", "cloth", "mouth", "eye", "theme", "special"],
+        populate: [
+          "frontHair",
+          "backHair",
+          "cloth",
+          "mouth",
+          "eye",
+          "theme",
+          "special",
+        ],
         filters: {
           user: {
             id: {
               $eq: Number(guestInfor?.id),
-            }
+            },
           },
         },
-
       });
       const res = await ReqGetAvatarConfig(queryString);
       return res.data;
@@ -121,14 +140,16 @@ export default function Profile() {
 
   const handleSaveTitle = async (title: string) => {
     try {
-      await ReqUpdateUser(userInfo?.id?.toString() || "", { specialName: title });
+      await ReqUpdateUser(userInfo?.id?.toString() || "", {
+        specialName: title,
+      });
       success("Hồ sơ cá nhân ", "Cập nhật danh hiệu thành công");
       setShowTitleModal(false);
       queryClient.invalidateQueries({ queryKey: ["custom-posts"] });
     } catch (error) {
       console.log("Error ", error);
     } finally {
-      refetchUserInfo()
+      refetchUserInfo();
     }
   };
 
@@ -138,23 +159,38 @@ export default function Profile() {
   return (
     <div className="w-full">
       <div className="text-SubheadLg text-gray-95 px-4">Hồ sơ cá nhân</div>
-      <div className="w-full flex justify-center  bg-no-repeat bg-cover h-[220px] relative mt-4"
+      <div
+        className="w-full flex justify-center  bg-no-repeat bg-cover h-[220px] relative mt-4"
         style={{
-          backgroundImage: `url(${guestInfor?.backgroundCover?.image || "/image/profile/profile-banner.png"})`,
+          backgroundImage: `url(${
+            guestInfor?.backgroundCover?.image ||
+            "/image/profile/profile-banner.png"
+          })`,
         }}
       >
-        <div className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30" onClick={handleUpdateBanner}>
+        <div
+          className="absolute top-2 right-6 bg-white border-2 p-2 rounded-lg cursor-pointer border-gray-30"
+          onClick={handleUpdateBanner}
+        >
           <div className="flex items-center gap-x-1">
             <ImagePlus size={18} className="text-gray-50" />
-            <div className="text-bodyMd text-primary-900">Chỉnh sửa ảnh bìa</div>
+            <div className="text-bodyMd text-primary-900">
+              Chỉnh sửa ảnh bìa
+            </div>
           </div>
         </div>
         <div className="absolute left-8 -bottom-8 w-max h-max">
           {dataAvatarConfig && dataAvatarConfig.length > 0 ? (
             <div className="relative">
-              <AvatarLayer avatarConfig={dataAvatarConfig[0]} customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full" />
+              <AvatarLayer
+                avatarConfig={dataAvatarConfig[0]}
+                customClassName="h-[152px] w-[152px] relative p-3 !border-[5px] !border-white !rounded-full"
+              />
               {userInfo && userInfo.id === guestInfor?.id && (
-                <div className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50" onClick={showAvatarModal}>
+                <div
+                  className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50"
+                  onClick={showAvatarModal}
+                >
                   <LuUserRoundPen size={18} className="text-primary-900" />
                 </div>
               )}
@@ -163,7 +199,10 @@ export default function Profile() {
             <div className="relative">
               <div className="border-[5px] border-white p-3 rounded-full flex flex-col bg-[#FEF0C7] bg-[url('/image/profile/avatar-x2.png')] items-center justify-center h-[152px] w-[152px]" />
               {userInfo && userInfo.id === guestInfor?.id && (
-                <div className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50" onClick={showAvatarModal}>
+                <div
+                  className="absolute bottom-2 right-2 flex items-center bg-white  border-2 p-2 justify-center cursor-pointer border-gray-30 hover:bg-gray-10 transition-all duration-300 rounded-full z-50"
+                  onClick={showAvatarModal}
+                >
                   <LuUserRoundPen size={18} className="text-primary-900" />
                 </div>
               )}
@@ -172,7 +211,6 @@ export default function Profile() {
         </div>
       </div>
       <div className="w-full pt-14 px-6 relative">
-
         <CommonButton
           outlined
           className="border-2 border-gray-30 rounded-lg !px-2 !py-1 text-sm flex items-center absolute top-4 right-6"
@@ -197,7 +235,6 @@ export default function Profile() {
         </div>
 
         <div className="flex gap-x-2 mt-3">
-
           {userInfo && userInfo.id === guestInfor?.id && (
             <CommonButton
               outlined
@@ -205,8 +242,15 @@ export default function Profile() {
               onClick={handleOpenTitleModal}
             >
               <div className="flex items-center gap-x-1">
-                <Image src="/image/icon/crown.png" alt="setting" width={18} height={18} />
-                <div className="text-bodyMd text-primary-900">Cài đặt danh hiệu</div>
+                <Image
+                  src="/image/icon/crown.png"
+                  alt="setting"
+                  width={18}
+                  height={18}
+                />
+                <div className="text-bodyMd text-primary-900">
+                  Cài đặt danh hiệu
+                </div>
               </div>
             </CommonButton>
           )}
@@ -229,12 +273,13 @@ export default function Profile() {
               >
                 <div className="flex items-center gap-x-1">
                   <Settings size={18} className="text-gray-50" />
-                  <div className="text-bodyMd text-primary-900">Thông tin hồ sơ</div>
+                  <div className="text-bodyMd text-primary-900">
+                    Thông tin hồ sơ
+                  </div>
                 </div>
               </CommonButton>
             </>
           )}
-
         </div>
       </div>
       <Tabs defaultValue="personal" className="w-full mt-5">
@@ -282,74 +327,92 @@ export default function Profile() {
           </div> */}
         </TabsContent>
         <TabsContent value="new" className="overflow-y-auto">
-          {myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).length > 0 &&
-            myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).map((item: PostType, index: number) => (
-              <>
-                <div className="px-8 relative">
-                  <div className="text-sm text-gray-500 absolute top-2 right-8">
-                    {moment(get(item, "createdAt", ""))
-                      .format("DD/MM/YYYY")
-                      .toString()}
+          {myPosts &&
+            myPosts.data.filter(
+              (item: PostType) => item.type === PostTypeEnum.POST
+            ).length > 0 &&
+            myPosts.data
+              .filter((item: PostType) => item.type === PostTypeEnum.POST)
+              .map((item: PostType, index: number) => (
+                <>
+                  <div className="px-8 relative">
+                    <div className="text-sm text-gray-500 absolute top-2 right-8">
+                      {moment(get(item, "createdAt", ""))
+                        .format("DD/MM/YYYY")
+                        .toString()}
+                    </div>
+                    <Post
+                      isAllowClickDetail
+                      data={item}
+                      imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                      thumbnailUrl={get(item, "thumbnail") || ""}
+                      userName={guestInfor?.username || "User"}
+                      specialName={get(item, "postedBy.specialName", "")}
+                      postContent={get(item, "content", "")}
+                      postName={get(item, "name", "")}
+                      createdAt={moment(get(item, "createdAt", ""))
+                        .format("DD/MM/YYYY")
+                        .toString()}
+                      likedCount={get(item, "likeCount", 0).toString() || "0"}
+                      commentCount={
+                        get(item, "commentCount", 0).toString() || "0"
+                      }
+                    />
                   </div>
-                  <Post
-                    isAllowClickDetail
-                    data={item}
-                    imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                    thumbnailUrl={get(item, "thumbnail") || ""}
-                    userName={guestInfor?.username || "User"}
-                    specialName={get(item, "postedBy.specialName", "")}
-                    postContent={get(item, "content", "")}
-                    postName={get(item, "name", "")}
-                    createdAt={moment(get(item, "createdAt", ""))
-                      .format("DD/MM/YYYY")
-                      .toString()}
-                    likedCount={get(item, "likeCount", 0).toString() || "0"}
-                    commentCount={
-                      get(item, "commentCount", 0).toString() || "0"
-                    }
-                  />
-                </div>
-                {index !== myPosts.data.length - 1 && (
-                  <hr className="border-t border-gray-200 my-4" />
-                )}
-              </>
-            ))}
-          {myPosts?.data.length === 0 || (myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.POST).length === 0) && <CommonEmptyState />}
+                  {index !== myPosts.data.length - 1 && (
+                    <hr className="border-t border-gray-200 my-4" />
+                  )}
+                </>
+              ))}
+          {myPosts?.data.length === 0 ||
+            (myPosts &&
+              myPosts.data.filter(
+                (item: PostType) => item.type === PostTypeEnum.POST
+              ).length === 0 && <CommonEmptyState />)}
         </TabsContent>
         <TabsContent value="project" className="overflow-y-auto">
-          {myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).length > 0 &&
-            myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).map((item: PostType, index: number) => (
-              <>
-                <div className="px-8 relative">
-                  <div className="text-sm text-gray-500 absolute top-2 right-8">
-                    {moment(get(item, "createdAt", ""))
-                      .format("DD/MM/YYYY")
-                      .toString()}
+          {myPosts &&
+            myPosts.data.filter(
+              (item: PostType) => item.type === PostTypeEnum.PROJECT
+            ).length > 0 &&
+            myPosts.data
+              .filter((item: PostType) => item.type === PostTypeEnum.PROJECT)
+              .map((item: PostType, index: number) => (
+                <>
+                  <div className="px-8 relative">
+                    <div className="text-sm text-gray-500 absolute top-2 right-8">
+                      {moment(get(item, "createdAt", ""))
+                        .format("DD/MM/YYYY")
+                        .toString()}
+                    </div>
+                    <Post
+                      isAllowClickDetail
+                      data={item}
+                      imageUrl="bg-[url('/image/home/profile-pic.png')]"
+                      thumbnailUrl={get(item, "thumbnail") || ""}
+                      userName={guestInfor?.username || "User"}
+                      specialName={get(item, "postedBy.specialName", "")}
+                      postContent={get(item, "content", "")}
+                      postName={get(item, "name", "")}
+                      createdAt={moment(get(item, "createdAt", ""))
+                        .format("DD/MM/YYYY")
+                        .toString()}
+                      likedCount={get(item, "likeCount", 0).toString() || "0"}
+                      commentCount={
+                        get(item, "commentCount", 0).toString() || "0"
+                      }
+                    />
                   </div>
-                  <Post
-                    isAllowClickDetail
-                    data={item}
-                    imageUrl="bg-[url('/image/home/profile-pic.png')]"
-                    thumbnailUrl={get(item, "thumbnail") || ""}
-                    userName={guestInfor?.username || "User"}
-                    specialName={get(item, "postedBy.specialName", "")}
-                    postContent={get(item, "content", "")}
-                    postName={get(item, "name", "")}
-                    createdAt={moment(get(item, "createdAt", ""))
-                      .format("DD/MM/YYYY")
-                      .toString()}
-                    likedCount={get(item, "likeCount", 0).toString() || "0"}
-                    commentCount={
-                      get(item, "commentCount", 0).toString() || "0"
-                    }
-                  />
-                </div>
-                {index !== myPosts.data.length - 1 && (
-                  <hr className="border-t border-gray-200 my-4" />
-                )}
-              </>
-            ))}
-          {myPosts?.data.length === 0 || (myPosts && myPosts.data.filter((item: PostType) => item.type === PostTypeEnum.PROJECT).length === 0) && <CommonEmptyState />}
+                  {index !== myPosts.data.length - 1 && (
+                    <hr className="border-t border-gray-200 my-4" />
+                  )}
+                </>
+              ))}
+          {myPosts?.data.length === 0 ||
+            (myPosts &&
+              myPosts.data.filter(
+                (item: PostType) => item.type === PostTypeEnum.PROJECT
+              ).length === 0 && <CommonEmptyState />)}
         </TabsContent>
       </Tabs>
 
@@ -373,7 +436,6 @@ export default function Profile() {
           refetchUserInfo();
         }}
       />
-
     </div>
   );
 }

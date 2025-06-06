@@ -84,8 +84,7 @@ export const InventoryContent = () => {
         <BannerCard className="w-full rounded-3xl h-[250px]" type="shop">
           <div className="flex flex-col items-center gap-6 z-10 max-w-[300px] text-center">
             <div className="text-HeadingMd text-gray-10">
-              Làm nhiệm vụ
-              Thu thập điểm
+              Làm nhiệm vụ Thu thập điểm
             </div>
             <div className="text-center text-SubheadSm text-gray-10">
               Tuỳ chỉnh hồ sơ cá nhân cùng với các vật phẩm trong cửa hàng
@@ -97,19 +96,21 @@ export const InventoryContent = () => {
       {/* Tabs */}
       <div className="flex border-b border-gray-20 mb-6 px-4">
         <button
-          className={`py-3 px-6 font-medium text-base ${activeTab === "items"
-            ? "border-b-4 border-primary-40 text-primary-95"
-            : "text-gray-50"
-            }`}
+          className={`py-3 px-6 font-medium text-base ${
+            activeTab === "items"
+              ? "border-b-4 border-primary-40 text-primary-95"
+              : "text-gray-50"
+          }`}
           onClick={() => setActiveTab("items")}
         >
           Vật phẩm đã sở hữu
         </button>
         <button
-          className={`py-3 px-6 font-medium text-base ${activeTab === "claimed"
-            ? "border-b-4 border-primary-40 text-primary-95"
-            : "text-gray-50"
-            }`}
+          className={`py-3 px-6 font-medium text-base ${
+            activeTab === "claimed"
+              ? "border-b-4 border-primary-40 text-primary-95"
+              : "text-gray-50"
+          }`}
           onClick={() => setActiveTab("claimed")}
         >
           Mã quy đổi vật phẩm
@@ -132,11 +133,11 @@ export const InventoryContent = () => {
                     transition={{
                       duration: 0.3,
                       delay: index * 0.1,
-                      ease: "easeOut"
+                      ease: "easeOut",
                     }}
                     whileHover={{
                       scale: 1.05,
-                      transition: { duration: 0.2 }
+                      transition: { duration: 0.2 },
                     }}
                   >
                     <CardItem
@@ -147,7 +148,6 @@ export const InventoryContent = () => {
                       onClick={() => handleItemClick(item)}
                     />
                   </motion.div>
-
                 ))}
               </div>
             ) : (
@@ -157,17 +157,18 @@ export const InventoryContent = () => {
               // </div>
             )}
 
-            {myItems && myItems.data.length > 0 &&
+            {myItems && myItems.data.length > 0 && (
               <div className="flex w-full mx-auto">
                 <CommonPagination
                   currentPage={page}
                   itemsPerPage={pageSize}
-                  totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                  totalItems={get(myItems, "meta?.pagination?.total") || 0}
                   showDetails={false}
                   onPageChange={(page) => setPage(page)}
                   onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
                 />
-              </div>}
+              </div>
+            )}
           </div>
         )}
 
@@ -175,8 +176,8 @@ export const InventoryContent = () => {
         {activeTab === "claimed" && (
           <div className="mt-2">
             {claimedItems &&
-              claimedItems.data &&
-              claimedItems.data.length > 0 ? (
+            claimedItems.data &&
+            claimedItems.data.length > 0 ? (
               <div className="px-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {claimedItems.data.map((item, index: number) => (
                   <motion.div
@@ -186,12 +187,12 @@ export const InventoryContent = () => {
                     transition={{
                       duration: 0.3,
                       delay: index * 0.1,
-                      ease: "easeOut"
+                      ease: "easeOut",
                     }}
                     className="hover:cursor-pointer py-2"
                     whileHover={{
                       scale: 1.05,
-                      transition: { duration: 0.2 }
+                      transition: { duration: 0.2 },
                     }}
                   >
                     <BillCard item={item} />
@@ -204,19 +205,18 @@ export const InventoryContent = () => {
               //   <p className="text-gray-500">Bạn chưa có mã quy đổi nào</p>
               // </div>
             )}
-            {
-              myItems && myItems.data.length > 0 &&
+            {myItems && myItems.data.length > 0 && (
               <div className="flex w-full mx-auto">
                 <CommonPagination
                   currentPage={page}
                   itemsPerPage={pageSize}
-                  totalItems={get(myItems, 'meta?.pagination?.total') || 0}
+                  totalItems={get(myItems, "meta?.pagination?.total") || 0}
                   showDetails={false}
                   onPageChange={(page) => setPage(page)}
                   onItemsPerPageChange={(pageSize) => setPageSize(pageSize)}
                 />
               </div>
-            }
+            )}
           </div>
         )}
       </div>
@@ -294,6 +294,6 @@ export const InventoryContent = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div >
+    </div>
   );
 };

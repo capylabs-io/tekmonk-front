@@ -32,8 +32,8 @@ export type AchievementFormData = {
   title: string;
   icon: File | null;
   type: string;
-  content: string
-}
+  content: string;
+};
 
 type Props = {
   open: boolean;
@@ -41,8 +41,11 @@ type Props = {
   onSubmit: (data: AchievementFormData) => void;
 };
 
-
-export const CreateAchievementDialog = ({ open, onOpenChange, onSubmit }: Props) => {
+export const CreateAchievementDialog = ({
+  open,
+  onOpenChange,
+  onSubmit,
+}: Props) => {
   const [success, error] = useSnackbarStore((state) => [
     state.success,
     state.error,
@@ -81,11 +84,11 @@ export const CreateAchievementDialog = ({ open, onOpenChange, onSubmit }: Props)
     onOpenChange(open);
   };
   const handleSelectChange = (value: string) => {
-    setValue('type', value)
-  }
+    setValue("type", value);
+  };
   const handleImageUpload = (file: File | null) => {
-    if (file) setValue("icon", file as any)
-  }
+    if (file) setValue("icon", file as any);
+  };
   return (
     <Dialog open={open} onOpenChange={handleDialogChange}>
       <DialogContent className="w-[680px] bg-white">
@@ -127,7 +130,9 @@ export const CreateAchievementDialog = ({ open, onOpenChange, onSubmit }: Props)
                     customInputClassNames="text-sm !max-h-[50px] !items-start"
                     contentImageUpload={
                       <>
-                        <p className="flex items-center gap-2 text-base  !font-light text-gray-70 w-full justify-start"><Plus size={16}></Plus>Thêm ảnh</p>
+                        <p className="flex items-center gap-2 text-base  !font-light text-gray-70 w-full justify-start">
+                          <Plus size={16}></Plus>Thêm ảnh
+                        </p>
                       </>
                     }
                   />
@@ -135,13 +140,24 @@ export const CreateAchievementDialog = ({ open, onOpenChange, onSubmit }: Props)
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="min-w-[160px] text-SubheadMd">Loại hành động</div>
-                  <CommonSelect className="w-full" selectClassName="rounded-xl h-[50px] bg-grey-50 border border-grey-300" placeholder="Chọn loại thành tích" options={[]} value={getValues('type')} onChange={handleSelectChange} />
+                  <div className="min-w-[160px] text-SubheadMd">
+                    Loại hành động
+                  </div>
+                  <CommonSelect
+                    className="w-full"
+                    selectClassName="rounded-xl h-[50px] bg-grey-50 border border-grey-300"
+                    placeholder="Chọn loại thành tích"
+                    options={[]}
+                    value={getValues("type")}
+                    onChange={handleSelectChange}
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-[160px] text-SubheadMd">Số lượng yêu cầu</div>
+                  <div className="w-[160px] text-SubheadMd">
+                    Số lượng yêu cầu
+                  </div>
                   <Controller
                     name="type"
                     control={control}
@@ -227,7 +243,6 @@ export const CreateAchievementDialog = ({ open, onOpenChange, onSubmit }: Props)
               </div>
 
               {/* Category Field */}
-
             </div>
           </form>
         </FormProvider>

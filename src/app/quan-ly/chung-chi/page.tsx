@@ -12,82 +12,76 @@ import { useState } from "react";
 import { useCertificate } from "@/hooks/useCertificate";
 import { CreateCertificateModal } from "@/components/certificate/CreateCertificateModal";
 
-
 export default function Page() {
-  const { totalPage,
+  const {
+    totalPage,
     totalDocs,
     limit,
     page,
     isOpenCreateModal,
     setLimit,
     setPage,
-    setIsOpenCreateModal } = useCertificate()
+    setIsOpenCreateModal,
+  } = useCertificate();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [textSearch, setTextSearch] = useState("");
   const handleSearch = () => {
     setSearchQuery(textSearch);
   };
-  const columns: ColumnDef<AchievementFormData>[] =
-    [
-      {
-        header: 'STT',
-        cell: ({ row }) => <span>{row.index + 1}</span>,
-
-      },
-      {
-        header: 'Mã',
-        cell: ({ row }) => (
-          <div className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
-            style={{
-              backgroundImage: `url(${row.original?.icon})`
-            }}>
-
+  const columns: ColumnDef<AchievementFormData>[] = [
+    {
+      header: "STT",
+      cell: ({ row }) => <span>{row.index + 1}</span>,
+    },
+    {
+      header: "Mã",
+      cell: ({ row }) => (
+        <div
+          className="bg-center bg-no-repeat bg-cover h-[80px] rounded-xl w-[130px]"
+          style={{
+            backgroundImage: `url(${row.original?.icon})`,
+          }}
+        ></div>
+      ),
+    },
+    {
+      header: "Tên chứng chỉ",
+      cell: ({ row }) => <span>{row.original.title}</span>,
+    },
+    {
+      header: "Thuộc khoá học",
+      cell: ({ row }) => <div>{row.original.type}</div>,
+    },
+    {
+      id: "action",
+      header: "",
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Edit className="h-4 w-4" color="#7C6C80" />
+            </button>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Add edit handler here
+              }}
+            >
+              <Trash2 className="h-4 w-4" color="#7C6C80" />
+            </button>
           </div>
-        ),
+        );
       },
-      {
-        header: 'Tên chứng chỉ',
-        cell: ({ row }) => <span>{row.original.title}</span>,
-      },
-      {
-        header: 'Thuộc khoá học',
-        cell: ({ row }) => <div>
-          {
-            row.original.type
-          }
-        </div>
-      },
-      {
-        id: 'action',
-        header: '',
-        cell: ({ row }) => {
-          return (
-            <div className="flex gap-2">
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Edit className="h-4 w-4" color="#7C6C80" />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Add edit handler here
-                }}
-              >
-                <Trash2 className="h-4 w-4" color="#7C6C80" />
-              </button>
-            </div>
-          );
-        },
-      },
-    ]
-
+    },
+  ];
 
   return (
     <>
@@ -142,8 +136,13 @@ export default function Page() {
           />
         </div>
       </div>
-      <CreateCertificateModal open={isOpenCreateModal} onOpenChange={(value) => { setIsOpenCreateModal(value) }} onSubmit={() => { }} />
-
+      <CreateCertificateModal
+        open={isOpenCreateModal}
+        onOpenChange={(value) => {
+          setIsOpenCreateModal(value);
+        }}
+        onSubmit={() => {}}
+      />
     </>
   );
 }

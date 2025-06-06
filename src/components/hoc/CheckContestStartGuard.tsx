@@ -12,15 +12,15 @@ import { useSnackbarStore } from "@/store/SnackbarStore";
 import { useLoadingStore } from "@/store/LoadingStore";
 import { useCustomRouter } from "../common/router/CustomRouter";
 
-
 export default function CheckContestStartGuard({ children }: any) {
   const router = useCustomRouter();
 
   //use state
   const [isSubmitted, setIsSubmitted] = useState(false);
   //
-  const [contestGroupStage, setContestGroupStage] =
-    useState<ContestGroupStage | undefined>(undefined);
+  const [contestGroupStage, setContestGroupStage] = useState<
+    ContestGroupStage | undefined
+  >(undefined);
   const [isValid, setIsValid] = useState<boolean>(false);
 
   //use store
@@ -45,14 +45,15 @@ export default function CheckContestStartGuard({ children }: any) {
 
   const fetchContestGroupStage = async () => {
     if (!candidateNumber) {
-      warning("Không thành công", "Không tìm thấy số báo danh, vui lòng đăng nhập lại");
+      warning(
+        "Không thành công",
+        "Không tìm thấy số báo danh, vui lòng đăng nhập lại"
+      );
       router.push("/");
       return;
     }
     try {
-      const data = await getContestGroupStageByCandidateNumber(
-        candidateNumber
-      );
+      const data = await getContestGroupStageByCandidateNumber(candidateNumber);
       console.log("guard stage", data);
       if (!!data) {
         setContestGroupStage(data);
@@ -79,18 +80,21 @@ export default function CheckContestStartGuard({ children }: any) {
 
   const reloadData = async () => {
     await getme();
-  }
+  };
 
   const fetAllData = async () => {
     try {
       show();
       await reloadData();
       if (!data) {
-        warning("Không thành công", "Tài khoản của bạn không thuộc vòng chung kết");
+        warning(
+          "Không thành công",
+          "Tài khoản của bạn không thuộc vòng chung kết"
+        );
         hide();
         router.push("/");
         return;
-      };
+      }
       const checkIsSubmited = await isExistContestSubmission();
       if (checkIsSubmited) {
         warning("Không thành công", "Bạn đã nộp bài thi");
@@ -115,12 +119,11 @@ export default function CheckContestStartGuard({ children }: any) {
     } finally {
       hide();
     }
-  }
+  };
 
   useEffect(() => {
     fetAllData();
   }, []);
 
   return isValid ? children : <div>Loading</div>;
-};
-
+}

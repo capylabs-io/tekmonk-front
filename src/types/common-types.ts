@@ -379,4 +379,4 @@ export type AvatarConfig = {
   eye?: ShopItem | null;
   theme?: ShopItem | null;
   special?: ShopItem | null;
-}
+};

@@ -46,7 +46,11 @@ export const CertificateDialog = ({
         {data.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {data.map((certificate) => {
-              let imgUrl = get(certificate, "certificate.certificatePdfConfig.backgroundUrl", "");
+              let imgUrl = get(
+                certificate,
+                "certificate.certificatePdfConfig.backgroundUrl",
+                ""
+              );
               if (imgUrl == null || imgUrl == "") {
                 imgUrl = "/image/app-logox5.png";
               }
@@ -67,7 +71,10 @@ export const CertificateDialog = ({
                       {get(certificate, "certificate.name", "")}
                     </div>
                     <div className="text-BodyXs text-gray-600">
-                      Tên khoá học: <span className="text-gray-95 font-medium">{get(certificate, "certificate.course.name", "")}</span>
+                      Tên khoá học:{" "}
+                      <span className="text-gray-95 font-medium">
+                        {get(certificate, "certificate.course.name", "")}
+                      </span>
                     </div>
                     <div className="flex items-center text-BodyXs text-gray-600">
                       <span className="mr-1">Hoàn thành:</span>

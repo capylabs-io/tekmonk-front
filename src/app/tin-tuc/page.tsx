@@ -32,7 +32,7 @@ export default function News() {
     }
   };
 
-  // use query 
+  // use query
   const {
     data,
     isLoading,
@@ -90,7 +90,6 @@ export default function News() {
           "w-full container mx-auto mt-16 grid grid-cols-3 gap-12 pt-[28px] pb-[64px] overflow-y-auto min-h-[calc(100vh-100px)]"
         )}
       >
-
         <div className="lg:col-span-2 col-span-3">
           {randomNews?.data && randomNews?.data?.length > 0 ? (
             <>
@@ -98,8 +97,7 @@ export default function News() {
               <div className="w-full h-[1px] bg-gray-20 my-6"></div>
               <FeaturedNewsComponent
                 data={
-                  (data ? data.pages.flatMap((page) => page.data) : []) ||
-                  []
+                  (data ? data.pages.flatMap((page) => page.data) : []) || []
                 }
                 onLoadMore={handleLoadMoreContent}
                 isFetchingNextPage={isFetchingNextPage}
@@ -114,9 +112,7 @@ export default function News() {
                   width={300}
                   height={200}
                 />
-                <div className="text-BodyLg text-gray-95">
-                  Không có dữ liệu
-                </div>
+                <div className="text-BodyLg text-gray-95">Không có dữ liệu</div>
                 <div className="text-BodyMd text-gray-70">
                   Chúng tôi sẽ sớm cập nhật thông tin mới
                 </div>
@@ -133,7 +129,7 @@ export default function News() {
             onChange={setSearchValue}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                router.push(`${ROUTE.SEARCH_NEWS}?value=${searchValue}`)
+                router.push(`${ROUTE.SEARCH_NEWS}?value=${searchValue}`);
               }
             }}
           />
@@ -228,10 +224,11 @@ const ShowCarouselItemsComponent = ({ data }: { data: TNews[] }) => {
         {data.map((article, index) => (
           <button
             key={article.id}
-            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${index === carouselIndex
-              ? "bg-primary-60"
-              : "bg-primary-30 hover:cursor-pointer"
-              }`}
+            className={`h-2 min-w-2 rounded-full p-0 transition-all hover:scale-125 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              index === carouselIndex
+                ? "bg-primary-60"
+                : "bg-primary-30 hover:cursor-pointer"
+            }`}
             onClick={() => {
               setCarouselIndex(index);
               api?.scrollTo(index);
@@ -308,9 +305,16 @@ const FeaturedNewsComponent = ({
                 <div className="flex-1 flex flex-col gap-2 overflow-hidden h-full">
                   <div className="flex gap-2">
                     {newsItem.tags?.split(",").map((tag, index) => (
-                      <CommonTag onClick={() => {
-                        router.push(`${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`)
-                      }} key={index}>{tag.trim()}</CommonTag>
+                      <CommonTag
+                        onClick={() => {
+                          router.push(
+                            `${ROUTE.SEARCH_NEWS}?value=${tag.trim()}`
+                          );
+                        }}
+                        key={index}
+                      >
+                        {tag.trim()}
+                      </CommonTag>
                     ))}
                   </div>
                   <div className="flex flex-col gap-2 flex-grow">
@@ -320,7 +324,7 @@ const FeaturedNewsComponent = ({
                       dangerouslySetInnerHTML={{
                         __html: (get(newsItem, "title", "") || "")
                           .replace(/<[^>]+>/g, "")
-                          .trim()
+                          .trim(),
                       }}
                     ></div>
 
@@ -328,9 +332,10 @@ const FeaturedNewsComponent = ({
                       className="text-BodyMd text-gray-95 max-h-12 line-clamp-3 overflow-hidden hover:cursor-pointer"
                       onClick={() => handleRedirect(newsItem.id)}
                       dangerouslySetInnerHTML={{
-                        __html:
-                          get(newsItem, "content", "")
-                            .replace(/<[^>]+>/g, "")
+                        __html: get(newsItem, "content", "").replace(
+                          /<[^>]+>/g,
+                          ""
+                        ),
                       }}
                     ></div>
                   </div>
@@ -352,9 +357,7 @@ const FeaturedNewsComponent = ({
               <div className="w-full h-[1px] bg-gray-20 my-4"></div>
             </>
           ))}
-        {data && data.length === 0 && (
-          <CommonEmptyState />
-        )}
+        {data && data.length === 0 && <CommonEmptyState />}
       </div>
 
       {isFetchingNextPage ? (
@@ -404,7 +407,7 @@ const SuggestComponent = ({ data }: { data: TNews[] }) => {
               dangerouslySetInnerHTML={{
                 __html: (get(newsItem, "title", "") || "")
                   .replace(/<[^>]+>/g, "")
-                  .trim()
+                  .trim(),
               }}
             ></div>
           </div>

@@ -46,7 +46,9 @@ export const ActionGuard = ({
       <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
         <DialogContent className="sm:max-w-md bg-white">
           <DialogHeader>
-            <DialogTitle className="text-center text-lg font-semibold">Đăng nhập</DialogTitle>
+            <DialogTitle className="text-center text-lg font-semibold">
+              Đăng nhập
+            </DialogTitle>
           </DialogHeader>
           <div className="p-4 text-center">
             <p className="mb-4">Bạn cần đăng nhập để thực hiện {actionName}</p>
@@ -60,7 +62,7 @@ export const ActionGuard = ({
               <CommonButton
                 onClick={() => {
                   setShowLoginDialog(false);
-                  router.push('/dang-nhap');
+                  router.push("/dang-nhap");
                 }}
               >
                 Đăng nhập
@@ -71,4 +73,4 @@ export const ActionGuard = ({
       </Dialog>
     </>
   );
-}; 
+};

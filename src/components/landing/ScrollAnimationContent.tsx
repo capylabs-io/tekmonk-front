@@ -1,17 +1,22 @@
-"use client"
+"use client";
 
-import { useRef, useState, useEffect, type ReactNode } from "react"
-import { motion, useInView, useAnimation } from "framer-motion"
+import { useRef, useState, useEffect, type ReactNode } from "react";
+import { motion, useInView, useAnimation } from "framer-motion";
 
-type AnimationType = "fade-up" | "slide-right" | "slide-left" | "scale-up" | "stagger-fade"
+type AnimationType =
+  | "fade-up"
+  | "slide-right"
+  | "slide-left"
+  | "scale-up"
+  | "stagger-fade";
 
 interface ScrollAnimateInProps {
-  children: ReactNode
-  animation: AnimationType
-  className?: string
-  threshold?: number | "some" | "all" // Can be a number between 0-1 or "some"/"all"
-  once?: boolean
-  delay?: number
+  children: ReactNode;
+  animation: AnimationType;
+  className?: string;
+  threshold?: number | "some" | "all"; // Can be a number between 0-1 or "some"/"all"
+  once?: boolean;
+  delay?: number;
 }
 
 // Animation variants
@@ -36,7 +41,7 @@ const animations = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
   },
-}
+};
 
 export function ScrollAnimateIn({
   children,
@@ -46,28 +51,28 @@ export function ScrollAnimateIn({
   once = false,
   delay = 0,
 }: ScrollAnimateInProps) {
-  const controls = useAnimation()
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { amount: threshold, once })
-  const [initialized, setInitialized] = useState(false)
+  const controls = useAnimation();
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { amount: threshold, once });
+  const [initialized, setInitialized] = useState(false);
 
   // Set to hidden on first mount and then animate when in view
   useEffect(() => {
     if (!initialized) {
-      controls.set("hidden")
-      setInitialized(true)
+      controls.set("hidden");
+      setInitialized(true);
     }
-  }, [controls, initialized])
+  }, [controls, initialized]);
 
   // Animate when in view
   useEffect(() => {
     if (isInView) {
-      controls.start("visible")
+      controls.start("visible");
     }
-  }, [isInView, controls])
+  }, [isInView, controls]);
 
   // Handle staggered children
-  const staggerChildren = animation === "stagger-fade" ? 0.1 : 0
+  const staggerChildren = animation === "stagger-fade" ? 0.1 : 0;
 
   return (
     <motion.div
@@ -87,24 +92,27 @@ export function ScrollAnimateIn({
         <div className={className}>
           {Array.isArray(children)
             ? children.map((child, index) => (
-              <motion.div
-                key={index}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.1 }}
-                className="stagger-child"
-              >
-                {child}
-              </motion.div>
-            ))
+                <motion.div
+                  key={index}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: index * 0.1,
+                  }}
+                  className="stagger-child"
+                >
+                  {child}
+                </motion.div>
+              ))
             : children}
         </div>
       ) : (
         children
       )}
     </motion.div>
-  )
+  );
 }
-
