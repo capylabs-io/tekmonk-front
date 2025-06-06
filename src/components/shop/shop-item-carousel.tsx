@@ -34,7 +34,7 @@ export const ShopItemCarousel = ({
     );
   }, [items]);
 
-  return filteredItems.length > 0 && (
+  return items.length > 0 && (
     <div className="text-primary-900 mt-4">
       <div className="w-full flex justify-between items-center">
         <div
