@@ -30,7 +30,7 @@ export const ShopItemCarousel = ({
 
   const filteredItems = useMemo(() => {
     return items.filter(
-      (item) => item.type !== ShopItemEnum.DEFAULT || !item.isHidden
+      (item) => item.type !== ShopItemEnum.DEFAULT && !item.isHidden
     );
   }, [items]);
 
